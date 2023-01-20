@@ -60,14 +60,12 @@ any short description
 4. Create files corresponding to each folder
 
 ### Identifly missing flolders
-```bash
-# Master Class
-You will find information in the master class.
- 
-## Documentation
-[Nest](https://docs.nestjs.com/) 
+>
+>You will find information in the Master class.
+>
+>[Nest Documentation](https://docs.nestjs.com/)
 
-```
+
 ### Create files corresponding to each folder
 ```
 $ nest --help
