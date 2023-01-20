@@ -45,7 +45,33 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## License
+## how to deliver the workshop
+```bash
+# Title of the delivery
+Workshop - any short description
 
-Nest is [MIT licensed](LICENSE).
+# Body of the delivery
+any short description
+```
+
+## Workshop
+1. Identify missing folders
+2. Create missing folders
+4. Create files corresponding to each folder
+
+### Identifly missing flolders
+```bash
+# Master Class
+You will find information in the master class.
+ 
+## Documentation
+[Nest](https://docs.nestjs.com/) 
+
+```
+### Create files corresponding to each folder
+```
+$ nest --help
+```
+
+
 
