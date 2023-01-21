@@ -45,31 +45,25 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## how to deliver the workshop
-```bash
+## How to deliver the workshop
+
+```
 # Title of the delivery
-Workshop - any short description
+[Workshop Week 1 - Day 1] - Nest (Estructura de proyecto)
 
 # Body of the delivery
-any short description
+[Any short description]
 ```
 
 ## Workshop
-1. Identify missing folders
-2. Create missing folders
-4. Create files corresponding to each folder
 
-### Identifly missing flolders
->
->You will find information in the Master class.
->
->[Nest Documentation](https://docs.nestjs.com/)
+The following are the guidelines that should be taken into account for the development of the workshop to be submitted:
 
+1. Identify missing folders.
+2. Create missing folders.
+3. Create files corresponding to each folder.
 
-### Create files corresponding to each folder
-```
-$ nest --help
-```
+To identify the missing folders, you can use the documentation in the following link:
+[Nest documentation](https://docs.nestjs.com/).
 
-
-
+Please use the information from the following link to create the corresponding files in each folder using the [Nest CLI](https://docs.nestjs.com/cli/overview).
