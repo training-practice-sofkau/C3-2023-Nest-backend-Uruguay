@@ -6,10 +6,14 @@ import { CustomerModule } from './modules/customer/customer.module';
 import { TransferModule } from './modules/transfer/transfer.module';
 import { DepositModule } from './modules/deposit/deposit.module';
 import { SecurityModule } from './modules/security/security.module';
+import { AccountController } from './controllers/account/account.controller';
+import { CustomerController } from './controllers/customer/customer.controller';
+import { DepositController } from './controllers/deposit/deposit.controller';
+import { TransferController } from './controllers/transfer/transfer.controller';
 
 @Module({
   imports: [AccountModule, CustomerModule, TransferModule, DepositModule, SecurityModule],
-  controllers: [SecurityController],
+  controllers: [SecurityController, AccountController, CustomerController, DepositController, TransferController],
   providers: [AccountService],
 })
 export class AppModule {}
