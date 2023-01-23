@@ -67,3 +67,6 @@ To identify the missing folders, you can use the documentation in the following 
 [Nest documentation](https://docs.nestjs.com/).
 
 Please use the information from the following link to create the corresponding files in each folder using the [Nest CLI](https://docs.nestjs.com/cli/overview).
+
+### Important note
+Do not forget that for this workshop, you should make at least 2 commits properly documented (title and message body).
