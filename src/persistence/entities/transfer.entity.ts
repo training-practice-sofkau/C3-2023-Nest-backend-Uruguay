@@ -8,6 +8,6 @@ import { AccountEntity } from './account.entity';
      income: AccountEntity;
      amount: number;
      reason: string;
-     dateTime: Date;
-     deletedAt?: Date;
+     dateTime: Date | number;
+     deletedAt?: Date | number;
  }

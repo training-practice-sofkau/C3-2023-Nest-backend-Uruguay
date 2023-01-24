@@ -11,5 +11,5 @@ export class AccountEntity implements AccountModel{
   accountType: AccountTypeEntity;
   balance: number;
   state = true;
-  deletedAt?: Date;
+  deletedAt?: Date | number;
 }

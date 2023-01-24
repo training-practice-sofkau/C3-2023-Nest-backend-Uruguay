@@ -10,7 +10,7 @@ export class CustomerEntity implements CustomerModel {
     phone: string;
     avatarURL?: string;
     state = true;
-    deletedAt?: number | Date;
+    deletedAt?: Date | number;
     
 }
 
