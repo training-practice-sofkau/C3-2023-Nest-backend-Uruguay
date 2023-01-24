@@ -1,1 +1,1 @@
-
+export * from './decorators.decorator';
