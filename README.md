@@ -49,7 +49,7 @@ $ npm run start:prod
 
 ```bash
 # Title of the delivery
-[Workshop Week 1 - Day 2] - POO (Programación Orientada a Objetos)
+[Workshop Week 1 - Day 2] - POO (Programación Orientada a Objetos) 
 
 # Body of the delivery
 [Any short description]
