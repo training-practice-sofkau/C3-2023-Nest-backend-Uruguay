@@ -1,9 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { Repository } from "./base";
 import { DepositEntity } from '../entities';
+import { IRepository } from "./interfaces";
 
 @Injectable()
-export class DepositRepository extends Repository<DepositEntity> {
+export class DepositRepository extends Repository<DepositEntity>  implements IRepository<DepositEntity>{
     register(entity: DepositEntity): DepositEntity {
         throw new Error("Method not implemented.");
     }
