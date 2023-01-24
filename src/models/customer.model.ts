@@ -1,4 +1,4 @@
-import { DocumentTypeModel } from "./document-type.model";
+import { DocumentTypeModel } from "../models";
 
 export interface CustomerModel {
     id: string;
