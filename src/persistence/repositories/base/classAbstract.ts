@@ -2,10 +2,28 @@
 //No puede ser instanciada directamente
 //Definimos una clase Base en la jerarquía de clases 
 
-export abstract class Base{
-    abstract register(): void;
-    abstract update(): void;
-    abstract delete(): void;
-    abstract findAll(): void;
-    abstract findOneById(): void;
+import { InterfaceRepo } from "../interfaces/InterfaceRepo";
+
+export abstract class Base<T> implements InterfaceRepo<T>{
+    
+       private readonly database: Array<T>;
+    
+       constructor() {
+         this.database = new Array<T>();
+       }
+    register(entity: T): T {
+        throw new Error("Method not implemented.");
+    }
+    update(entity: T, id: string): T {
+        throw new Error("Method not implemented.");
+    }
+    delete(id: string, soft?: boolean | undefined): void {
+        throw new Error("Method not implemented.");
+    }
+    findAll([]: Iterable<any>): T {
+        throw new Error("Method not implemented.");
+    }
+    findOneById(id: string): T {
+        throw new Error("Method not implemented.");
+    }
 }

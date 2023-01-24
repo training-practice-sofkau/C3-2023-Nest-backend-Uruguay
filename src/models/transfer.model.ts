@@ -1,4 +1,4 @@
-import { AccountModel } from "./account.models";
+import { AccountModel } from "./account.model";
 
 export interface TransferModel {
     trf_id: string,

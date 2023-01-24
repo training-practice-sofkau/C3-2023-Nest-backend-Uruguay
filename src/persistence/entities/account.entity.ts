@@ -1,5 +1,5 @@
 import { CustomerModel, AccountTypeModel } from 'src/models';
-import { AccountModel } from '../../models/account.models';
+import { AccountModel } from '../../models/account.model';
 import { AccountTypeEntity } from './accountTypeEntity';
 import { CustomerEntity } from './customer.entity';
 export class AccountEntity implements AccountModel{
