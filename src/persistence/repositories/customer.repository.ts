@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { CustomerEntity } from '../entities';
+import { IRepositoriesGlobal } from './interfaces/repositories-global.interface';
 
 @Injectable()
-export class CustomerRepository {
-  private readonly database: Array<CustomerEntity>;
+export class CustomerRepository implements IRepositoriesGlobal<CustomerEntity>  {
+  private readonly database: Array<CustomerEntity>;// coleccion de clientes 
 
   constructor() {
     this.database = new Array<CustomerEntity>();

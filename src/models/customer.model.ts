@@ -1,4 +1,5 @@
 import { DocumentTypeModel } from "./document-type.model";
+
 //Se crea la inteface para los clientes 
 export interface CustomerModel {
     id: string;

@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { DocumentTypeEntity } from '../entities';
+import { IRepositoriesGlobal } from './interfaces/repositories-global.interface';
 
 @Injectable()
-export class DocumentTypeRepository {
-  private readonly database: Array<DocumentTypeEntity>;
+export class DocumentTypeRepository{
+  private readonly database: Array<DocumentTypeEntity>;//coleccion de documentos
 
   constructor() {
     this.database = new Array<DocumentTypeEntity>();
