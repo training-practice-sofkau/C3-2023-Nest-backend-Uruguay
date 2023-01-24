@@ -1,7 +1,6 @@
 import { DocumentTypeModel } from "../models";
 
-export interface CustomerModel {
-    id: string;
+export interface CustomerModel extends BaseModel  {
     documentType: DocumentTypeModel;
     document: string;
     fullName: string;
@@ -9,6 +8,4 @@ export interface CustomerModel {
     phone: string;
     password: string;
     avatarUrl?: string;
-    state: boolean;
-    daletedAt?: Date | number;
 }

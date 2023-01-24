@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { CustomerEntity } from '../entities';
+import { BaseRepositories } from './base';
 
 @Injectable()
-export class CustomerRepository {
+export class CustomerRepository  extends  BaseRepositories <CustomerEntity> {
   private readonly database: Array<CustomerEntity>;
 
   constructor() {
-    this.database = new Array<CustomerEntity>();
+    super();
+     this.database = new Array<CustomerEntity>();
   }
 
   register(entity: CustomerEntity): CustomerEntity {

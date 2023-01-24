@@ -9,6 +9,7 @@ export class TransferEntity implements TransferModel  {
     transferAmount: number;
     transferReason: string;
     dateTime: Date;
+    state: boolean ;
     daletedAt?: Date | number;
     
 }

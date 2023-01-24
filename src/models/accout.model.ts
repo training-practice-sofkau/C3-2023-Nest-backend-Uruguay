@@ -1,10 +1,7 @@
 import { CustomerModel, AccountTypeModel } from "../models";
 
-export interface AccountModel {
-    id: string;
+export interface AccountModel extends BaseModel {
     outcome: CustomerModel;
     accountTypeId: AccountTypeModel;
     acc_Balance: number;
-    state: boolean;
-    daletedAt?: Date | number;
 }
