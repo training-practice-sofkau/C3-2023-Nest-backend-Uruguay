@@ -1,5 +1,5 @@
 export interface DocumentTypeModel {
-    id: string;
-    name: string;
-    state: boolean;
+    doctp_id: string;
+    doctp_name: string;
+    doctp_state: boolean;
 }
