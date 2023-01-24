@@ -1,6 +1,6 @@
 import { RepositoryMethodsInterface } from "../interfaces";
 
-export abstract class BankInternalControl <T> implements RepositoryMethodsInterface<T>  {
+export abstract class BankInternalControl <T>  {
     
     protected readonly database: Array<T>;
 
@@ -8,7 +8,7 @@ export abstract class BankInternalControl <T> implements RepositoryMethodsInterf
         this.database = new Array<T>();
     }       
     
-    register(entity: T): T {
+    /* register(entity: T): T {
         throw new Error("Method not implemented.");
     }
 
@@ -27,6 +27,6 @@ export abstract class BankInternalControl <T> implements RepositoryMethodsInterf
     findOneById(id: string): T {
         throw new Error("Method not implemented.");
     }        
-    
+     */
     
 }
