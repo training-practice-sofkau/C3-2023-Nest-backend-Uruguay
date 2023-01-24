@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from './base/repository.base';
 import { AccountTypeEntity } from '../entities/account-type.entity';
-import { IRepository } from './interfaces';
+import { IRepository } from './interfaces/repository.interface';
 
 @Injectable()
 export class AccountTypeRepository extends Repository<AccountTypeEntity> implements IRepository<AccountTypeEntity>{
