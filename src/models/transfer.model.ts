@@ -2,9 +2,9 @@ import { AccountModel } from './account.model';
 
 export interface TransferModel {
     id: string;
-    outcome:string;
+    outcome:AccountModel;
     income: AccountModel;
-    amount: AccountModel;
+    amount: number;
     reason: string;
     dateTime: Date | number;
     deletedAt?: Date | number;
