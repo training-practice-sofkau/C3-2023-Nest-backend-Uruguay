@@ -1,1 +1,5 @@
-export class TypeBankAccountModel {}
+export class TypeBankAccountModel {
+
+
+    
+}
