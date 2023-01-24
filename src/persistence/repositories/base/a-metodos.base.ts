@@ -1,6 +1,6 @@
 import { IMetodosInterface } from '../interfaces/i-metodos.interface';
 export abstract class AMetodosAbstract<T> implements IMetodosInterface<T> {
-    private readonly database: T[];
+    protected readonly database: T[];
 
     constructor() {
         this.database = new Array<T>();
