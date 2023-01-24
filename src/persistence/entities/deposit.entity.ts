@@ -8,6 +8,7 @@ export class DepositEntity implements DepositModel{
     accountid: AccountEntity;
     amount: number;
     date_time: Date;
+    
     daletedAt?: number | Date ; 
     
 }

@@ -1,6 +1,7 @@
-interface BaseModel {
-    id: string;
-    name?: string;
-    state: boolean;
-    daletedAt?: Date | number;
-}
+export interface BaseRepositories<tipo> {
+     findAll(): tipo[];
+     findOneById(id: string): tipo;
+     register(entity: tipo): tipo;
+     update(id: string, entity: tipo): tipo;
+     delete(id: string): void;
+  }

@@ -1,24 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { DepositEntity } from '../entities/deposit.entity';
-import { BaseRepositories } from "./base";
+import { BaseRepo } from "./base/base-abstract-Repos";
 
 
 @Injectable()
-export class DepositRepository  extends  BaseRepositories <DepositEntity> {
-    findAll(): DepositEntity[] {
-        throw new Error("Method not implemented.");
-    }
-    findOneById(id: string): DepositEntity {
-        throw new Error("Method not implemented.");
-    }
-    register(entity: DepositEntity): DepositEntity {
-        throw new Error("Method not implemented.");
-    }
-    update(id: string, entity: DepositEntity): DepositEntity {
-        throw new Error("Method not implemented.");
-    }
-    delete(id: string): void {
-        throw new Error("Method not implemented.");
-    }
+export class DepositRepository  extends BaseRepo<DepositEntity> {
 
 }
