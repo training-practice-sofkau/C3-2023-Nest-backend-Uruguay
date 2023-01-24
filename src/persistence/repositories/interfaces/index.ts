@@ -1,1 +1,1 @@
-export * from './services.interface';
+export * from './repositoryMethods.interface';
