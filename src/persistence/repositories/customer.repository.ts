@@ -1,31 +1,34 @@
 import { Injectable } from '@nestjs/common';
 import { CustomerEntity } from '../entities';
+import { InterfaceRepo } from './interfaces/InterfaceRepo';
+
+
 
 @Injectable()
-export class CustomerRepository {
+//Si implementamos InterfaceRepo con T como CustomerEntity creamos el registrer de tipo
+// CustomerEntity haciendo uso de implements InterfaceRepo<CustomerEntity> luego de la class
+
+export class CustomerRepository implements InterfaceRepo<CustomerEntity>{
+
   private readonly database: Array<CustomerEntity>;
 
   constructor() {
     this.database = new Array<CustomerEntity>();
   }
-
   register(entity: CustomerEntity): CustomerEntity {
-    throw new Error('This method is not implemented');
+    throw new Error('Method not implemented.');
   }
-
-  update(id: string, entity: CustomerEntity): CustomerEntity {
-    throw new Error('This method is not implemented');
+  update(entity: CustomerEntity, id: string): CustomerEntity {
+    throw new Error('Method not implemented.');
   }
-
-  delete(id: string, soft?: boolean): void {
-    throw new Error('This method is not implemented');
+  delete(id: string, soft?: boolean | undefined): void {
+    throw new Error('Method not implemented.');
   }
-
-  findAll(): CustomerEntity[] {
-    throw new Error('This method is not implemented');
+  findAll([]: Iterable<any>): CustomerEntity {
+    throw new Error('Method not implemented.');
   }
-
   findOneById(id: string): CustomerEntity {
-    throw new Error('This method is not implemented');
+    throw new Error('Method not implemented.');
   }
+ 
 }
