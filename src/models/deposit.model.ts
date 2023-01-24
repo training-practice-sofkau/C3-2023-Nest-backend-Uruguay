@@ -1,4 +1,4 @@
-export interface DepositoModel{
+export interface DepositModel{
     id: string;
     accountId: string;
     amount: number;

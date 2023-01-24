@@ -9,5 +9,4 @@ export class AccountEntity implements AccountModel{
     balance: number;
     state: boolean;
     deletedAt: number | Date;
-
 }
