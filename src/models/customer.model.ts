@@ -1,8 +1,8 @@
 import { DocumentTypeModel } from "./document-type.model";
-
+//Se crea la inteface para los clientes 
 export interface CustomerModel {
     id: string;
-    documentType: DocumentTypeModel;
+    documentType: DocumentTypeModel;//DocumentTypeModel , es un tipo de dato que nosotros creamos
     document: string;
     fullName: string;
     email: string;
