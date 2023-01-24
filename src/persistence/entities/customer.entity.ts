@@ -1,10 +1,9 @@
+import { DocumentTypeEntity } from './document-type.entity';
 import { CustomerModel } from '../../models';
-import { DocumentTypeEntity } from './';
 
 import { v4 as uuid } from 'uuid';
 
-export class CustomerEntity implements CustomerModel{   
-    id = uuid();
+export class CustomerEntity implements CustomerModel{
     documentType: DocumentTypeEntity;
     document: string;
     fullName: string;
@@ -12,8 +11,9 @@ export class CustomerEntity implements CustomerModel{
     phone: string;
     password: string;
     avatarUrl?: string ;
-    state = true;
-    
-    daletedAt?: Date | number ;
+    id = uuid()
+    state: boolean;
+    deletedAt?: number | Date ;   
+ 
 }
 
