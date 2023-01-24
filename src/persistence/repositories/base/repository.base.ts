@@ -3,7 +3,7 @@ import { IRepository } from "../interfaces/repository.interface";
 export abstract class Repository<T> implements IRepository<T>{
 
     private readonly database: Array<T>;
-
+    
     constructor() {
       this.database = new Array<T>();
     }
