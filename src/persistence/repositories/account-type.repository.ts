@@ -1,15 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { AccountTypeEntity } from "../entities";
+import { AMetodosAbstract } from './base/a-metodos.base';
 
 
 @Injectable()
-export class AccountTypeRepository {
-    private readonly database: Array<AccountTypeEntity>
+export class AccountTypeRepository extends AMetodosAbstract<AccountTypeEntity> {
 
-    constructor() {
-        this.database = new Array<AccountTypeEntity>();
-    }
-    
     register(entity: AccountTypeEntity): AccountTypeEntity{
         throw new Error('This method is not implemented');
     }
