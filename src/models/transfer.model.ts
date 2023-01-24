@@ -1,4 +1,5 @@
 import { AccountModel } from './account.model';
+
 export interface TransferModel {
     id: string;
     outcome: AccountModel;
@@ -6,5 +7,5 @@ export interface TransferModel {
     amount: number;
     reason: string;
     dateTime: Date;
-    deletedAt: Date;
+    deletedAt?: Date;
 }
