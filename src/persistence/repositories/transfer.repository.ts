@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common/decorators";
-import { TransferEntity } from '../entities/transfer.entity';
-import { RepositoryMethodsInterface } from "./interfaces";
-import { BankInternalControl } from './base/BankInternalControl';
+import { TransferEntity } from '../entities';
+import { BankInternalControl } from './base';
 
 @Injectable()
 export class TransferRepository extends BankInternalControl<TransferEntity> {
