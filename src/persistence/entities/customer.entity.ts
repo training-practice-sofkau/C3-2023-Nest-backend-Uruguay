@@ -15,3 +15,4 @@ export class CustomerEntity implements CustomerModel{
     state = true;
     daletedAt?: Date | number ;
 }
+
