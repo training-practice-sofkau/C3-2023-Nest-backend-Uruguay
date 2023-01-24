@@ -1,4 +1,4 @@
-export abstract class BankAccountModel {
+export class BankAccountModel {
 
     
     acc_id : number;
@@ -7,11 +7,7 @@ export abstract class BankAccountModel {
     balance: number;
     daletedAt?: Date | number ;
     
+
     
-    algunMetodoAbstracto() {
-        throw new Error("Esto es un metodo abstracto");
-    }
-
-
 
 }
