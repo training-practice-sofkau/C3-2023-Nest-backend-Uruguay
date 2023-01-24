@@ -1,1 +1,1 @@
-export * from './class.base';
+export * from './base-abstract-Repos';

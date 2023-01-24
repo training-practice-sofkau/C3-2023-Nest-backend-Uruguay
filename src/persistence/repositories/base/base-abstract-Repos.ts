@@ -2,7 +2,7 @@ import { BaseRepositories } from "../interfaces/interface.base";
 
 export abstract class BaseRepo<Type> implements BaseRepositories <Type> {
 
-private readonly database: Array<Type>;
+protected readonly database: Array<Type>;
 constructor() {
    this.database = new Array<Type>();
 }findAll(): Type[] {
