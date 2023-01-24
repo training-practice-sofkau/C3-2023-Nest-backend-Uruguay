@@ -1,19 +1,17 @@
-import { CustomerModel } from '../../models';
+import { CustomerModel, DocumentTypeModel } from '../../models';
 import { DocumentTypeEntity } from './';
 
 import { v4 as uuid } from 'uuid';
 
 export class CustomerEntity implements CustomerModel{
-    fullname: string;
-    deletedAt?: number | Date | undefined;   
     id = uuid();
-    documentType: DocumentTypeEntity;
+    documentType: DocumentTypeModel;
     document: string;
-    fullName: string;
+    fullname: string;
     email: string;
     phone: string;
     password: string;
-    avatarUrl?: string ;
+    avatarUrl?: string | undefined;
     state = true;
-    daletedAt?: Date | number ;
+    deletedAt?: number | Date | undefined;
 }
