@@ -6,8 +6,7 @@ export abstract class BankInternalControl <T> implements RepositoryMethodsInterf
 
     constructor(){        
         this.database = new Array<T>();
-    }   
-    
+    }       
     
     register(entity: T): T {
         throw new Error("Method not implemented.");
