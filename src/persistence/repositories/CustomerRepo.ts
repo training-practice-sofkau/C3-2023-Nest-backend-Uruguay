@@ -1,20 +1,18 @@
 import { Injectable } from "@nestjs/common";
-import { CustomerModel } from "src/models/customer-model/customer-model";
+import { CustomerEntity } from "src/models/customer-model/i-customer-model";
+import { AbstracRepo } from "./base/abtrac-repo";
 
 
 @Injectable()
-export class CustomerRepo {
-    private readonly database: Array<CustomerModel>;
+export class CustomerRepo extends AbstracRepo<CustomerEntity>{
+   
 
-    constructor() {
-      this.database = new Array<CustomerModel>();
-    }
-  
-    register(entity: CustomerModel): CustomerModel {
+   
+    register(entity: CustomerEntity): CustomerEntity {
       throw new Error('This method is not implemented');
     }
   
-    update(id: string, entity: CustomerModel): CustomerModel {
+    update(id: string, entity: CustomerEntity): CustomerEntity {
       throw new Error('This method is not implemented');
     }
   
@@ -22,11 +20,11 @@ export class CustomerRepo {
       throw new Error('This method is not implemented');
     }
   
-    findAll(): CustomerModel[] {
+    findAll(): CustomerEntity[] {
       throw new Error('This method is not implemented');
     }
   
-    findOneById(id: string): CustomerModel {
+    findOneById(id: string): CustomerEntity {
       throw new Error('This method is not implemented');
     }
 

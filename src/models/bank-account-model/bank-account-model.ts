@@ -8,6 +8,4 @@ export class BankAccountModel {
     daletedAt?: Date | number ;
     
 
-    
-
 }

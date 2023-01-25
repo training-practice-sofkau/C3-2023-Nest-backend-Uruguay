@@ -1,10 +1,10 @@
 import { v4 as uuid } from 'uuid';
 
-export class DocumentTypeModel {
+export interface DocumentTypeModel {
 
-    id = uuid();
+    id: string;
     name: string;
-    state = true;
+    state : boolean;
     
 }
 
