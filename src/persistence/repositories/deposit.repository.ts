@@ -1,9 +1,6 @@
-import { Injectable } from "@nestjs/common";
-import { DepositEntity } from '../entities/deposit.entity';
-import { BaseRepo } from "./base/base-abstract-Repos";
-
+import { Injectable } from '@nestjs/common';
+import { DepositEntity } from '../entities';
+import { BaseRepo } from '../';
 
 @Injectable()
-export class DepositRepository  extends BaseRepo<DepositEntity> {
-
-}
+export class DepositRepository extends BaseRepo<DepositEntity> {}

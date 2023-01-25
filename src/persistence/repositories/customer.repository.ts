@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CustomerEntity } from '../entities';
-import { BaseRepo } from './base/base-abstract-Repos';
+import { BaseRepo } from '../';
 
 @Injectable()
-export class CustomerRepository  extends BaseRepo<CustomerEntity> {
-
-  
-}
+export class CustomerRepository extends BaseRepo<CustomerEntity> {}

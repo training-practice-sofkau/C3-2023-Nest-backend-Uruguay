@@ -1,6 +1,4 @@
-import { AccountTypeEntity } from '../entities/accountType.entity';
-import { BaseRepo } from './base/base-abstract-Repos';
+import { AccountTypeEntity } from '../entities';
+import { BaseRepo } from '../';
 
-export class AccountTypeRepository  extends BaseRepo<AccountTypeEntity> {
-
-}
+export class AccountTypeRepository extends BaseRepo<AccountTypeEntity> {}

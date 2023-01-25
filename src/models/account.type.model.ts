@@ -1,2 +1,1 @@
-export interface AccountTypeModel extends BaseModel  {
-}
+export interface AccountTypeModel extends BaseModel {}

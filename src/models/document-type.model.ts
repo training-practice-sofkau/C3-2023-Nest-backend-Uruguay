@@ -1,3 +1,1 @@
-export interface DocumentTypeModel  extends BaseModel  {
- 
-}
+export interface DocumentTypeModel extends BaseModel {}
