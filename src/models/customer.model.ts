@@ -1,7 +1,7 @@
-import { DocumentTypeModel } from "./document-type.model";
-import { IGeneral } from '../persistence/repositories/interfaces';
+import { DocumentTypeModel } from ".";
 
-export interface CustomerModel extends IGeneral {
+export interface CustomerModel {
+    id: string;
     documentType: DocumentTypeModel;
     document: string;
     fullName: string;
@@ -10,4 +10,5 @@ export interface CustomerModel extends IGeneral {
     password: string;
     avatarUrl: string | null;
     state: boolean;
+    deletedAt: Date | number | null;
 }

@@ -1,2 +1,0 @@
-
-export * from './deposit.controller';

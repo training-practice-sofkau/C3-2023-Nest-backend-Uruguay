@@ -1,10 +1,11 @@
-import { IGeneral } from '../persistence/repositories/interfaces';
-import { AccountModel } from './account.model';
+import { AccountModel } from '.';
 
-export interface TransferModel extends IGeneral {
+export interface TransferModel {
+    id: string;
     outcome: AccountModel;
     income: AccountModel;
     balance: number;
     reason: string;
     dateTime: Date | number;
+    deletedAt: Date | number | null;
 }

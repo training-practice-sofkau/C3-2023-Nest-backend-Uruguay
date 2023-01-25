@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { GeneralCRUD } from './base/GeneralCRUD.base';
 import { DocumentTypeEntity } from '../entities';
-import { TypesCRUD } from './base/TypesCRUD.base';
 
 @Injectable()
-export class DocumentTypeRepository extends TypesCRUD implements DocumentTypeEntity {
-  private readonly database: Array<DocumentTypeEntity>;
+export class DocumentTypeRepository extends GeneralCRUD<DocumentTypeEntity> {
 
   constructor() {
     super();
-    this.database = new Array<DocumentTypeEntity>();
   }
 }

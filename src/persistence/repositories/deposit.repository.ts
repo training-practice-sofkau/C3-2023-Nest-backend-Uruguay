@@ -1,16 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { DepositEntity, AccountEntity } from '../entities';
 import { GeneralCRUD } from './base/GeneralCRUD.base';
+import { DepositEntity } from '../entities/deposit.entity';
 
 @Injectable()
-export class DepositRepository extends GeneralCRUD implements DepositEntity {
-  private readonly database: Array<DepositEntity>;
-  account: AccountEntity;
-  amount: number;
-  dateTime: number | Date;
+export class DepositRepository extends GeneralCRUD<DepositEntity> {
 
   constructor() {
     super();
-    this.database = new Array<DepositEntity>();
   }
 }

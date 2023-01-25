@@ -1,4 +1,5 @@
-import { ITypes } from "../persistence/repositories/interfaces/ITypes.interface";
-
-export interface AccountTypeModel extends ITypes {
+export interface AccountTypeModel {
+    id: string;
+    name: string;
+    state: boolean;
 }
