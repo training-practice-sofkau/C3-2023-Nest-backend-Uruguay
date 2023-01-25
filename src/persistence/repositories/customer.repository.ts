@@ -1,6 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { CustomerEntity } from '../entities';
-import { BaseRepo } from '../';
+import { BaseRepositories } from '../';
 
 @Injectable()
-export class CustomerRepository extends BaseRepo<CustomerEntity> {}
+export class CustomerRepository implements BaseRepositories<CustomerEntity> {
+    findAll(): CustomerEntity[] {
+        throw new Error('Method not implemented.');
+    }
+    findOneById(id: string): CustomerEntity {
+        throw new Error('Method not implemented.');
+    }
+    register(entity: CustomerEntity): CustomerEntity {
+        throw new Error('Method not implemented.');
+    }
+    update(id: string, entity: CustomerEntity): CustomerEntity {
+        throw new Error('Method not implemented.');
+    }
+    delete(id: string): void {
+        throw new Error('Method not implemented.');
+    }
+}
