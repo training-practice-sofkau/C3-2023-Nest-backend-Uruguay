@@ -1,10 +1,10 @@
 
-import { ICustomerModel } from 'src/models/customer-model/i-customer-model';
-import { v4 as uuid } from 'uuid';
+import { ICustomerModel } from 'src/models/i-customer-model';
 import { DocumentTypeEntity } from './document-type-entity';
+import { v4 as uuid } from 'uuid';
 
-export class CustomerEntity implements ICustomerModel{   
-    
+export class CustomerEntity implements ICustomerModel {
+
     protected id = uuid();
     protected documentType: DocumentTypeEntity;
     protected document: string;
@@ -12,9 +12,11 @@ export class CustomerEntity implements ICustomerModel{
     protected email: string;
     protected phone: string;
     protected password: string;
-    protected avatarUrl?: string ;
-    protected state = true;
+    protected avatarUrl?: string;
+    protected state : boolean;
     protected daletedAt?: Date | number;
-    
+
+
+    //Duda Get and Set
 
 }

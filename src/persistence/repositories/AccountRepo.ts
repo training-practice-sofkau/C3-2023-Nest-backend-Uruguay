@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { BankAccountModel } from "src/models/bank-account-model/bank-account-model";
+import { BankAccountModel } from "src/models/bank-account-model";
 
 
 @Injectable()

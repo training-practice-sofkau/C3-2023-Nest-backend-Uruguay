@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { CustomerEntity } from "src/models/customer-model/i-customer-model";
 import { AbstracRepo } from "./base/abtrac-repo";
+import { CustomerEntity } from "../entities/customer-entity";
 
 
 @Injectable()

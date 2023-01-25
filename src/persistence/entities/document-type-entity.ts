@@ -1,7 +1,7 @@
-import { DocumentTypeModel } from "src/models/document-type-model/document-type-model";
+import { IDocumentTypeModel } from "src/models/i-document-type-model";
 import { v4 as uuid } from 'uuid';
 
-export class DocumentTypeEntity implements DocumentTypeModel{
+export class DocumentTypeEntity implements IDocumentTypeModel{
 
     id = uuid();
     name: string;
