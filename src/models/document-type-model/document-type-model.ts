@@ -1,3 +1,4 @@
+import { v4 as uuid } from 'uuid';
 
 export class DocumentTypeModel {
 
@@ -6,7 +7,5 @@ export class DocumentTypeModel {
     state = true;
     
 }
-function uuid() {
-    throw new Error("Function not implemented.");
-}
+
 

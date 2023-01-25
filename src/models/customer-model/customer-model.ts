@@ -1,10 +1,12 @@
-import { iCustomer } from "src/Interfaces/iCustomer";
+
 import { DocumentTypeModel } from "../document-type-model/document-type-model";
 import { AbstracCustomers } from "../AbstractClass/AbstracCustomer";
+import { v4 as uuid } from 'uuid';
 
-export class CustomerModel extends AbstracCustomers implements iCustomer{
+
+export class CustomerModel extends AbstracCustomers{
    
-
+    ids = uuid();
     private id : number;
     private documentType: DocumentTypeModel;
     private document: string;
@@ -40,9 +42,5 @@ export class CustomerModel extends AbstracCustomers implements iCustomer{
 
 
 }
-
-
-
-
 
 
