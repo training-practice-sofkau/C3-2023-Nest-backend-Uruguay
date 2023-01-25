@@ -1,4 +1,4 @@
-export interface IRepository<T> {
+export interface IRepository<T> {  //Maneja un cualquier tipo de objeto, T es un objeto generico
     
     register(entity: T): T;
 

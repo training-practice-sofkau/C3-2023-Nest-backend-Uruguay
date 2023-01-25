@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { AbstracRepo } from "./base/abtrac-repo";
+import { AbstracRepo } from "./repo-base/abtrac-repo";
 import { CustomerEntity } from "../entities/customer-entity";
 
 
