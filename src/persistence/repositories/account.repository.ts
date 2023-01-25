@@ -20,7 +20,9 @@ export class AccountRepository extends BankInternalControl <AccountEntity> imple
     }
 
     findAll(): AccountEntity[] {
-        throw new Error("Method not implemented.");
+        
+        return this.database;
+        
     }
 
     findOneById(id: string): AccountEntity {

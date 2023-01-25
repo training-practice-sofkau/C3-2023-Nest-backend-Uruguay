@@ -19,7 +19,9 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
     }
 
     findAll(): CustomerEntity[] {
-        throw new Error('Method not implemented.');
+        
+        return this.database;
+        
     }
 
     findOneById(id: string): CustomerEntity {

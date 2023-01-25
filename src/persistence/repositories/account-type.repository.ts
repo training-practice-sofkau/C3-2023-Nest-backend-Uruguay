@@ -19,7 +19,9 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
     }
 
     findAll(): AccountTypeEntity[] {
-        throw new Error("Method not implemented.");
+
+        return this.database;
+        
     }
 
     findOneById(id: string): AccountTypeEntity {

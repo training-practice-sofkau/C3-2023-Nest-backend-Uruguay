@@ -19,7 +19,9 @@ export class DepositRepository extends BankInternalControl <DepositEntity> imple
     }
     
     findAll(): DepositEntity[] {
-        throw new Error('Method not implemented.');
+        
+        return this.database;
+        
     }
     
     findOneById(id: string): DepositEntity {

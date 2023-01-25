@@ -19,7 +19,9 @@ export class DocumentTypeRepository extends BankInternalControl <DocumentTypeEnt
     }
     
     findAll(): DocumentTypeEntity[] {
-        throw new Error('Method not implemented.');
+        
+        return this.database;
+        
     }
     
     findOneById(id: string): DocumentTypeEntity {

@@ -19,7 +19,9 @@ export class TransferRepository extends BankInternalControl<TransferEntity> impl
     }
 
     findAll(): TransferEntity[] {
-        throw new Error("Method not implemented.");
+        
+        return this.database;
+        
     }
 
     findOneById(id: string): TransferEntity {
