@@ -47,26 +47,22 @@ $ npm run start:prod
 
 ## How to deliver the workshop
 
-```
+```bash
 # Title of the delivery
-[Workshop Week 1 - Day 1] - Nest (Estructura de proyecto)
+[Workshop Week 1 - Day 2] - POO (Programación Orientada a Objetos)
 
 # Body of the delivery
 [Any short description]
 ```
 
-## Workshop
-
+### Workshop
 The following are the guidelines that should be taken into account for the development of the workshop to be submitted:
 
-1. Identify missing folders.
-2. Create missing folders.
-3. Create files corresponding to each folder.
+1. Develop the corresponding models taking into account the model-entity-relationships.
+2. Develop the relevant entities with respect to the self-developed model.
+3. Develop a repository for each model created.
 
-To identify the missing folders, you can use the documentation in the following link:
-[Nest documentation](https://docs.nestjs.com/).
-
-Please use the information from the following link to create the corresponding files in each folder using the [Nest CLI](https://docs.nestjs.com/cli/overview).
+Remember to develop the necessary abstract classes and the required interfaces (minimum 1 interface and minimum 1 abstract class).
 
 ### Important note
-Do not forget that for this workshop, you should make at least 2 commits properly documented (title and message body).
+Do not forget that for this workshop, you should make at least 4 commits properly documented (title and message body).
