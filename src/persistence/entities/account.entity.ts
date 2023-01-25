@@ -1,8 +1,7 @@
 import { AccountModel } from '../../models';
-import { CustomerEntity } from './customer.entity';
-import { AccountTypeEntity } from './account-type.entity';
-import { v4 as uuid } from 'uuid';
+import { AccountTypeEntity, CustomerEntity } from '.';
 import { GeneralCRUD } from '../repositories';
+import { v4 as uuid } from 'uuid';
 
 export class AccountEntity extends GeneralCRUD<AccountModel> implements AccountModel{ 
     id = uuid();

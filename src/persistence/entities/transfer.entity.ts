@@ -1,6 +1,6 @@
 import { TransferModel } from '../../models';
+import { AccountEntity } from '.';
 import { GeneralCRUD } from '../repositories';
-import { AccountEntity } from './account.entity';
 import { v4 as uuid } from 'uuid';
 
 export class TransferEntity extends GeneralCRUD<TransferModel> implements TransferModel {

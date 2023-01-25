@@ -1,6 +1,6 @@
 import { CustomerModel } from '../../models';
+import { DocumentTypeEntity } from '.';
 import { GeneralCRUD } from '../repositories';
-import { DocumentTypeEntity } from './';
 import { v4 as uuid } from 'uuid';
 
 export class CustomerEntity extends GeneralCRUD<CustomerModel> implements CustomerModel {

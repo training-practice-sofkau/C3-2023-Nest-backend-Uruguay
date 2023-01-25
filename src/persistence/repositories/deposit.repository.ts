@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { GeneralCRUD } from './base/GeneralCRUD.base';
-import { DepositEntity } from '../entities/deposit.entity';
+import { GeneralCRUD } from './base';
+import { DepositEntity } from '../entities';
 
 @Injectable()
 export class DepositRepository extends GeneralCRUD<DepositEntity> {

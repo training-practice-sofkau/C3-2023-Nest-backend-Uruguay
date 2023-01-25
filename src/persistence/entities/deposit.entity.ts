@@ -1,6 +1,6 @@
 import { DepositModel } from '../../models';
+import { AccountEntity } from '.';
 import { GeneralCRUD } from '../repositories';
-import { AccountEntity } from './account.entity';
 import { v4 as uuid } from 'uuid';
 
 export class DepositEntity extends GeneralCRUD<DepositModel> implements DepositModel {

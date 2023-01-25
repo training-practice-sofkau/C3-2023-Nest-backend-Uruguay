@@ -1,4 +1,4 @@
-import { IGeneral } from '../interfaces/IGeneral.interface';
+import { IGeneral } from '../interfaces';
 
 export abstract class GeneralCRUD<T> implements IGeneral<T> {
     protected readonly database: Array<T>;

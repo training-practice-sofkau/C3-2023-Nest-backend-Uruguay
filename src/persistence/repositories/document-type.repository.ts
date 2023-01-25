@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { GeneralCRUD } from './base/GeneralCRUD.base';
+import { GeneralCRUD } from './base';
 import { DocumentTypeEntity } from '../entities';
 
 @Injectable()
