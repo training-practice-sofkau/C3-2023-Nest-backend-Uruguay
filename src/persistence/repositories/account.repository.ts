@@ -58,13 +58,13 @@ export class AccountRepository
 
     findByState(state: boolean): AccountEntity[] {
         return this.database.filter(
-            (item) => item.state === state,
+            (item) => item.state === state && typeof item.daletedAt === 'undefined',
         );
     }
 
     findByCustomer(customerId: string): AccountEntity[] {
         const currentEntity = this.database.filter(
-            (item) => item.customerId.id === customerId,
+            (item) => item.customerId.id === customerId && typeof item.daletedAt === 'undefined',
         );
         if (currentEntity) return currentEntity;
         else throw new NotFoundException();
@@ -72,7 +72,7 @@ export class AccountRepository
 
     findByAccountType(accountTypeId: string): AccountEntity[] {
         const currentEntity = this.database.filter(
-            (item) => item.accountTypeId.id === accountTypeId,
+            (item) => item.accountTypeId.id === accountTypeId && typeof item.daletedAt === 'undefined',
         );
         if (currentEntity) return currentEntity;
         else throw new NotFoundException();

@@ -61,7 +61,7 @@ export class CustomerRepository
     document: string,
   ): CustomerEntity {
     const currentEntity = this.database.find(
-      (item) => item.documentType.id === documentTypeId && item.document === document,
+      (item) => item.documentType.id === documentTypeId && item.document === document && typeof item.daletedAt === 'undefined',
   );
   if (currentEntity) return currentEntity;
   else throw new NotFoundException();
@@ -69,7 +69,7 @@ export class CustomerRepository
 
   findOneByEmail(email: string): CustomerEntity {
     const currentEntity = this.database.find(
-      (item) => item.email === email,
+      (item) => item.email === email && typeof item.daletedAt === 'undefined',
   );
   if (currentEntity) return currentEntity;
   else throw new NotFoundException();
@@ -77,7 +77,7 @@ export class CustomerRepository
 
   findOneByPhone(phone: string): CustomerEntity {
     const currentEntity = this.database.find(
-      (item) => item.phone === phone,
+      (item) => item.phone === phone && typeof item.daletedAt === 'undefined',
   );
   if (currentEntity) return currentEntity;
   else throw new NotFoundException();
@@ -85,13 +85,13 @@ export class CustomerRepository
 
   findByState(state: boolean): CustomerEntity[] {
     return this.database.filter(
-      (item) => item.state === state,
+      (item) => item.state === state && typeof item.daletedAt === 'undefined',
   );
   }
 
   findByFullName(fullName: string): CustomerEntity[] {
     const currentEntity = this.database.filter(
-      (item) => item.fullName === fullName,
+      (item) => item.fullName === fullName && typeof item.daletedAt === 'undefined',
   );
   if (currentEntity) return currentEntity;
   else throw new NotFoundException();
