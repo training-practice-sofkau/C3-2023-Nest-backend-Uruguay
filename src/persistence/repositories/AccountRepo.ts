@@ -1,20 +1,20 @@
 import { Injectable } from "@nestjs/common";
-import { BankAccountModel } from "src/models/i-account-model";
+import { IAccountModel } from "src/models/i-account-model";
 
 
 @Injectable()
 export class AccountRepo{
-    private readonly database: Array<BankAccountModel>;
+    private readonly database: Array<IAccountModel>;
 
     constructor() {
-      this.database = new Array<BankAccountModel>();
+      this.database = new Array<IAccountModel>();
     }
   
-    register(entity: BankAccountModel): BankAccountModel {
+    register(entity: IAccountModel): IAccountModel {
       throw new Error('This method is not implemented');
     }
   
-    update(id: string, entity: BankAccountModel): BankAccountModel {
+    update(id: string, entity: IAccountModel): IAccountModel {
       throw new Error('This method is not implemented');
     }
   
@@ -22,11 +22,11 @@ export class AccountRepo{
       throw new Error('This method is not implemented');
     }
   
-    findAll(): BankAccountModel[] {
+    findAll(): IAccountModel[] {
       throw new Error('This method is not implemented');
     }
   
-    findOneById(id: string): BankAccountModel {
+    findOneById(id: string): IAccountModel {
       throw new Error('This method is not implemented');
     }
 

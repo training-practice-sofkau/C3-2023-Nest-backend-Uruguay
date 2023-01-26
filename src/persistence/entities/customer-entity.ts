@@ -16,7 +16,4 @@ export class CustomerEntity implements ICustomerModel {
     state : boolean;
     daletedAt?: Date | number;
 
-
-    //Duda Get and Set
-
 }

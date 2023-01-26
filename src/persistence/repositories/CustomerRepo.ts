@@ -23,29 +23,25 @@ export class CustomerRepo extends BaseRepository<CustomerEntity> implements IRep
         ...entity,
         id,
       } as CustomerEntity;
-    else throw new NotFoundException();
+    else throw new NotFoundException('Lo siento, nada por aqui =(');
     return this.database[indexCurrentEntity];
+  }
+
+  findAll(): CustomerEntity[] {
+    return this.database.filter((item) => typeof item.daletedAt === 'undefined');
+  }
+
+  findOneById(id: string): CustomerEntity {
+    const currentEntity = this.database.find((item) => item.id === id && typeof item.daletedAt === 'undefined');
+    if (currentEntity) return currentEntity;
+    else throw new NotFoundException('Lo siento, nada por aqui =(');
   }
 
   delete(id: string, soft?: boolean | undefined): void {
     throw new Error('Method not implemented.');
   }
 
-  findAll(): CustomerEntity[] {
-    return this.database.filter(
-      (item) => typeof item.daletedAt === 'undefined', //??
-    );
-  }
-
-  findOneById(id: string): CustomerEntity {
-    const currentEntity = this.database.find(
-      (item) => item.id === id && typeof item.daletedAt === 'undefined',
-    );
-    if (currentEntity) return currentEntity;
-    else throw new NotFoundException();
-  }
-
-  //**PROPIOS DE LA ENTIDAD -->
+  //**METODOS PROPIOS DE LA ENTIDAD -->
 
   findOneByEmailAndPassword(email: string, password: string): boolean {
     const indexCurrentEntity = this.database.findIndex(
@@ -57,29 +53,56 @@ export class CustomerRepo extends BaseRepository<CustomerEntity> implements IRep
     return indexCurrentEntity >= -1 ? true : false;
   }
 
+
+
   findOneByDocumentTypeAndDocument(
     documentTypeId: string,
     document: string,
   ): CustomerEntity {
-    throw new Error('This method is not implemented');
+    const currentEntity = this.database.find(
+      (item) => item.documentType.id === documentTypeId && item.document === document && typeof item.daletedAt === 'undefined',
+  );
+  if (currentEntity) return currentEntity;
+  else throw new NotFoundException();
   }
+
+
 
   findOneByEmail(email: string): CustomerEntity {
-
-
-    throw new Error('This method is not implemented');
+    const currentEntity = this.database.find(
+      (item) => item.email === email && typeof item.daletedAt === 'undefined',
+  );
+  if (currentEntity) return currentEntity;
+  else throw new NotFoundException();
   }
+
+
 
   findOneByPhone(phone: string): CustomerEntity {
-    throw new Error('This method is not implemented');
+    const currentEntity = this.database.find(
+      (item) => item.phone === phone && typeof item.daletedAt === 'undefined',
+  );
+  if (currentEntity) return currentEntity;
+  else throw new NotFoundException();
   }
+
+
+
 
   findByState(state: boolean): CustomerEntity[] {
-    throw new Error('This method is not implemented');
+    return this.database.filter(
+      (item) => item.state === state && typeof item.daletedAt === 'undefined',
+  );
   }
 
+
+
   findByFullName(fullName: string): CustomerEntity[] {
-    throw new Error('This method is not implemented');
+    const currentEntity = this.database.filter(
+      (item) => item.fullName === fullName && typeof item.daletedAt === 'undefined',
+  );
+  if (currentEntity) return currentEntity;
+  else throw new NotFoundException();
   }
 }
 
