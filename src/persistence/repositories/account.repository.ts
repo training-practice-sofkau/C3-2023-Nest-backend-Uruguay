@@ -13,7 +13,7 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> {
 
   update(id: string, entity: AccountEntity): AccountEntity {
     const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.deletedAt === 'undefined',
+      (item) => item.id === id && typeof item.deletedAt === undefined
     );
     if (indexCurrentEntity >= 0)
       this.database[indexCurrentEntity] = {
@@ -56,7 +56,7 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> {
 
   findAll(): AccountEntity[] {
     let finded = this.database.filter(
-        (item) => typeof item.deletedAt === 'undefined',
+        (item) => typeof item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException;
     return finded;
@@ -66,7 +66,7 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> {
     let finded = this.database.find(
         (item) => 
           item.id === id &&
-          typeof item.deletedAt === 'undefined'
+          typeof item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException;
     return finded;
@@ -76,7 +76,7 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> {
     let finded = this.database.filter(
         (item) => 
           item.state === state &&
-          typeof item.deletedAt === 'undefined'
+          typeof item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException;
     return finded;
@@ -86,7 +86,7 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> {
     let finded = this.database.filter(
         (item) => 
           item.customer.id === customerId &&
-          typeof item.deletedAt === 'undefined'
+          typeof item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException;
     return finded;
@@ -96,7 +96,7 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> {
     let finded = this.database.find(
         (item) => 
           item.accountType.id === accountTypeId &&
-          typeof item.deletedAt === 'undefined'
+          typeof item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException;
     return finded;

@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { GeneralCRUD } from './base';
 import { CustomerEntity } from '../entities';
+import { Customer } from '../../interfaces/customer/customer.interface';
 
 @Injectable()
 export class CustomerRepository extends GeneralCRUD<CustomerEntity> {
@@ -13,7 +14,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> {
 
   update(id: string, entity: CustomerEntity): CustomerEntity {
     const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.deletedAt === 'undefined',
+      (item) => item.id === id && typeof item.deletedAt === undefined
     );
     if (indexCurrentEntity >= 0)
       this.database[indexCurrentEntity] = {
@@ -56,7 +57,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> {
 
   findAll(): CustomerEntity[] {
     let finded = this.database.filter(
-      (item) => typeof item.deletedAt === 'undefined',
+      (item) => typeof item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException()
     return finded
@@ -66,7 +67,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> {
     let finded = this.database.find(
       (item) => 
         item.id === id &&
-        typeof item.deletedAt === 'undefined'
+        typeof item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException()
     return finded
@@ -77,7 +78,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> {
       (item) =>
         item.email === email &&
         item.password === password &&
-        typeof item.deletedAt === 'undefined'
+        typeof item.deletedAt === undefined
     );
     return indexCurrentEntity >= -1 ? true : false;
   }
@@ -87,7 +88,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> {
       (item) => 
         item.documentType.id === documentTypeId &&
         item.document === document &&
-        typeof item.deletedAt === 'undefined'
+        typeof item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException;
     return finded;
@@ -97,7 +98,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> {
     let finded = this.database.find(
       (item) => 
         item.email === email &&
-        typeof item.deletedAt === 'undefined'
+        typeof item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException;
     return finded;
@@ -107,7 +108,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> {
     let finded = this.database.find(
       (item) => 
         item.phone === phone &&
-        typeof item.deletedAt === 'undefined'
+        typeof item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException;
     return finded;
@@ -117,17 +118,19 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> {
     let finded = this.database.filter(
       (item) => 
         item.state === state &&
-        typeof item.deletedAt === 'undefined'
+        typeof item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException;
     return finded;
   }
 
   findByFullName(fullName: string): CustomerEntity {
-    let finded = this.database.find(
-      (item) => 
-        item.fullName === fullName &&
-        typeof item.deletedAt === 'undefined'
+    let finded: CustomerEntity | undefined
+    this.database.forEach((item) => {
+        if (item.fullName === fullName && typeof item.deletedAt === undefined){
+          finded = item
+        }
+      }
     );
     if (finded === undefined) throw new NotFoundException;
     return finded;

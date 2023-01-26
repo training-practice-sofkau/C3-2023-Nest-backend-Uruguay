@@ -13,7 +13,7 @@ export class TransferRepository extends GeneralCRUD<TransferEntity> {
 
   update(id: string, entity: TransferEntity): TransferEntity {
     const indexCurrentEntity = this.database.findIndex(
-        (item) => item.id === id && typeof item.deletedAt === 'undefined',
+        (item) => item.id === id && typeof item.deletedAt === undefined
     );
     if (indexCurrentEntity >= 0)
       this.database[indexCurrentEntity] = {
@@ -44,7 +44,7 @@ export class TransferRepository extends GeneralCRUD<TransferEntity> {
 
   findAll(): TransferEntity[] {
     let finded = this.database.filter(
-        (item) => typeof item.deletedAt === 'undefined',
+        (item) => typeof item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException;
     return finded;
@@ -54,7 +54,7 @@ export class TransferRepository extends GeneralCRUD<TransferEntity> {
     let finded = this.database.find(
       (item) => 
         item.id === id &&
-        typeof item.deletedAt === 'undefined'
+        typeof item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException;
     return finded;
@@ -64,7 +64,7 @@ export class TransferRepository extends GeneralCRUD<TransferEntity> {
     let finded = this.database.filter(
       (item) => 
         item.outcome.id === accountId &&
-        typeof item.deletedAt === 'undefined' &&
+        typeof item.deletedAt === undefined &&
         item.dateTime >= dateInit &&
         item.dateTime <= dateEnd
     );
@@ -76,7 +76,7 @@ export class TransferRepository extends GeneralCRUD<TransferEntity> {
     let finded = this.database.filter(
         (item) => 
           item.income.id === accountId &&
-          typeof item.deletedAt === 'undefined' &&
+          typeof item.deletedAt === undefined &&
           item.dateTime >= dateInit &&
           item.dateTime <= dateEnd
       );

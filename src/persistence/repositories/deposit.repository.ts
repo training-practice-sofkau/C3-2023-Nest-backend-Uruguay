@@ -13,7 +13,7 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> {
 
   update(id: string, entity: DepositEntity): DepositEntity {
     const indexCurrentEntity = this.database.findIndex(
-        (item) => item.id === id && typeof item.deletedAt === 'undefined',
+        (item) => item.id === id && typeof item.deletedAt === undefined
     );
     if (indexCurrentEntity >= 0)
       this.database[indexCurrentEntity] = {
@@ -44,7 +44,7 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> {
 
   findAll(): DepositEntity[] {
     let finded = this.database.filter(
-        (item) => typeof item.deletedAt === 'undefined',
+        (item) => typeof item.deletedAt === undefined,
     );
     if (finded === undefined) throw new NotFoundException;
     return finded;
@@ -54,7 +54,7 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> {
     let finded = this.database.find(
         (item) => 
           item.id === id &&
-          typeof item.deletedAt === 'undefined'
+          typeof item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException;
     return finded;
@@ -64,7 +64,7 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> {
     let finded = this.database.filter(
         (item) => 
           item.account.id === accountId &&
-          typeof item.deletedAt === 'undefined'
+          typeof item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException;
     return finded;
@@ -73,7 +73,7 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> {
   findByDataRange(dateInit: Date | number, dateEnd: Date | number): DepositEntity[] {
     let finded = this.database.filter(
         (item) => 
-          typeof item.deletedAt === 'undefined' &&
+          typeof item.deletedAt === undefined &&
           item.dateTime >= dateInit &&
           item.dateTime <= dateEnd
     );
