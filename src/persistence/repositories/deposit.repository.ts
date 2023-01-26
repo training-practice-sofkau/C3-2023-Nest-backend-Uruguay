@@ -71,6 +71,13 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> {
   }
 
   findByDataRange(dateInit: Date | number, dateEnd: Date | number): DepositEntity[] {
-    throw new Error('This method is not implemented');
+    let finded = this.database.filter(
+        (item) => 
+          typeof item.deletedAt === 'undefined' &&
+          item.dateTime >= dateInit &&
+          item.dateTime <= dateEnd
+    );
+    if (finded === undefined) throw new NotFoundException;
+    return finded
   }
 }
