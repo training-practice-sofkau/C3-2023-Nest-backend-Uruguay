@@ -35,21 +35,22 @@ export class AccountTypeRepository
           this.update(id, customer);
         } else {
           const index = this.database.findIndex(
-            (item) => item.id === id && (item.deletedAt ?? true) === true,
-          );
+            (item) => item.id === id && (item.deletedAt ?? true) === true);
           this.database.splice(index, 1);
         }
       }
 
-    findAll(): AccountTypeEntity[] {
-        return this.database.filter(
-            (item) => typeof item.deletedAt === 'undefined',
-          );
-    }
+      findAll(): AccountTypeEntity[] {
+        return this.database.filter((item) => item.deletedAt === undefined);
+      }
     
-    findOneById(id: string): AccountTypeEntity {
-    throw new Error('Method not implemented.');
-}
+      findOneById(id: string): AccountTypeEntity {
+        const account = this.database.find(
+          (item) => item.id === id && (item.deletedAt ?? true) === true,
+        );
+        if (account) return account;
+        else throw new NotFoundException("El id no existe en base de datos");
+      }
 
 
     findByState(state: boolean): AccountTypeEntity[] {

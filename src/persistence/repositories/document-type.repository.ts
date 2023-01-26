@@ -41,13 +41,15 @@ export class DocumentTypeRepository
   }
 
   findAll(): DocumentTypeEntity[] {
-    return this.database.filter(
-      (item) => typeof item.deletedAt === 'undefined',
-    );
+    return this.database.filter((item) => item.deletedAt === undefined);
   }
 
   findOneById(id: string): DocumentTypeEntity {
-    throw new Error('This method is not implemented');
+    const document = this.database.find(
+      (item) => item.id === id && (item.deletedAt ?? true) === true,
+    );
+    if (document) return document;
+    else throw new NotFoundException("El id no existe en base de datos");
   }
 
   findByState(state: boolean): DocumentTypeEntity[] {

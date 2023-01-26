@@ -51,14 +51,15 @@ export class AccountRepository
     }
 
     findAll(): AccountEntity[] {
-        return this.database.filter(
-            (item) => typeof item.deletedAt === 'undefined',
-          );
-    }
+        return this.database.filter((item) => item.deletedAt === undefined);
+      }
 
-    findOneById(id: string): AccountEntity {
-        throw new Error('This method is not implemented');
-    }
+      findOneById(id: string): AccountEntity {
+        const account = this.database.find(
+          (item) => item.id === id && (item.deletedAt ?? true) === true);
+        if (account) return account;
+        else throw new NotFoundException("El id no existe en base de datos");
+      }
 
     findByState(state: boolean): AccountEntity[] {
         throw new Error('This method is not implemented');

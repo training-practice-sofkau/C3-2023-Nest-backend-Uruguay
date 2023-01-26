@@ -38,14 +38,17 @@ export class DepositRepository
           this.database.splice(index, 1);
         }
       }
-    findAll(): depositEntity[] {
-        return this.database.filter(
-            (item) => typeof item.deletedAt === 'undefined',
-          );
-    }
-    findOneById(id: string): depositEntity {
-        throw new Error('Method not implemented.');
-    }
+      findAll(): depositEntity[] {
+        return this.database.filter((item) => item.deletedAt === undefined);
+      }
+
+      findOneById(id: string): depositEntity {
+    const deposit = this.database.find(
+      (item) => item.id === id && (item.deletedAt ?? true) === true);
+    if (deposit) return deposit;
+    else throw new NotFoundException("El id no existe en base de datos");
+      }
+
     findByAccountType(accountTypeId: string): AccountEntity[] {
         throw new Error('This method is not implemented');
     }

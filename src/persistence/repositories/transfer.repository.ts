@@ -48,8 +48,12 @@ export class TransferRepository
     }
     
     findOneById(id: string): transferEntity {
-        throw new Error('Method not implemented.');
-    }
+        const transfer = this.database.find(
+          (item) => item.id === id && (item.deletedAt ?? true) === true,
+        );
+        if (transfer) return transfer;
+        else throw new NotFoundException("El id no existe en base de datos");
+      }
 
     findOutcomeByDataRange(
         accountId: string,
