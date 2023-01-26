@@ -1,12 +1,12 @@
+import { AccountTypeModel } from '../../models';
+
 import { v4 as uuid } from 'uuid';
 
-import { DocumentTypeModel } from '../../models';
-
-export class DocumentTypeEntity implements DocumentTypeModel{
+export class AccountTypeEntity implements AccountTypeModel{
     private _id = uuid();
     private _name: string;
     private _state = true;
-
+    
     public get id() {
         return this._id;
     }
