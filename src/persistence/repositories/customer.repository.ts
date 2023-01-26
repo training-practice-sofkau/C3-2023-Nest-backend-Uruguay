@@ -12,7 +12,7 @@ export class CustomerRepository
     const indexCurrentEntity = this.database.findIndex(
       (item) => item.id === entity.id,
     );
-    if (indexCurrentEntity != -1) throw new NotFoundException();
+    if (indexCurrentEntity != -1) throw new Error('The Customer already exists');
 
     this.database.push(entity);
     return this.database.at(-1) ?? entity;

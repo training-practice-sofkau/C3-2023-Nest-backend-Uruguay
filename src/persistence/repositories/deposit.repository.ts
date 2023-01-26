@@ -20,12 +20,17 @@ export class DepositRepository
 
   update(id: string, entity: DepositEntity): DepositEntity {
     const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === entity.id
+      (item) => item.id === id && typeof item.deletedAt === 'undefined',
     );
-    if (indexCurrentEntity != -1) throw new NotFoundException();
+    if (indexCurrentEntity === -1) throw new NotFoundException();
 
-    this.database.push(entity);
-    return this.database.at(-1) ?? entity;
+    this.database[indexCurrentEntity] = {
+      ...this.database[indexCurrentEntity],
+      ...entity,
+      id,
+    } as DepositEntity;
+
+    return this.database[indexCurrentEntity];
   }
 
   delete(id: string, soft?: boolean | undefined): void {
