@@ -1,28 +1,39 @@
-import { Injectable } from "@nestjs/common";
-import { AccountTypeEntity } from "../entities";
-import { AMetodosAbstract } from './base/a-metodos.base';
+import { Injectable } from '@nestjs/common';
 
+import { AccountTypeEntity } from '../entities';
+import { BaseRepository } from './base';
+import { AccountTypeRepositoryInterface } from './interfaces';
 
 @Injectable()
-export class AccountTypeRepository extends AMetodosAbstract<AccountTypeEntity> {
+export class AccountTypeRepository
+    extends BaseRepository<AccountTypeEntity>
+    implements AccountTypeRepositoryInterface {
 
-    register(entity: AccountTypeEntity): AccountTypeEntity{
-        throw new Error('This method is not implemented');
+    register(entity: AccountTypeEntity): AccountTypeEntity {
+        throw new Error('Method not implemented.');
     }
-    
+
     update(id: string, entity: AccountTypeEntity): AccountTypeEntity {
-        throw new Error('This method is not implemented');
+        throw new Error('Method not implemented.');
     }
-    
-    delete(id: string, soft?: boolean): void {
-        throw new Error('This method is not implemented');
+
+    delete(id: string, soft?: boolean | undefined): void {
+        throw new Error('Method not implemented.');
     }
-    
+
     findAll(): AccountTypeEntity[] {
+        throw new Error('Method not implemented.');
+    }
+
+    findOneById(id: string): AccountTypeEntity {
+        throw new Error('Method not implemented.');
+    }
+
+    findByState(state: boolean): AccountTypeEntity[] {
         throw new Error('This method is not implemented');
     }
-    
-    findOneById(id: string): AccountTypeEntity {
+
+    findByName(name: string): AccountTypeEntity[] {
         throw new Error('This method is not implemented');
     }
 }

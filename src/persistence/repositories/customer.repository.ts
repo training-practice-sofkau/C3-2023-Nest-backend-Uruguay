@@ -1,27 +1,81 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+
 import { CustomerEntity } from '../entities';
-import { AMetodosAbstract } from './base/a-metodos.base';
+import { BaseRepository } from './base';
+import { CustomerRepositoryInterface } from './interfaces';
 
 @Injectable()
-export class CustomerRepository extends AMetodosAbstract<CustomerEntity>{
+export class CustomerRepository
+  extends BaseRepository<CustomerEntity>
+  implements CustomerRepositoryInterface {
 
   register(entity: CustomerEntity): CustomerEntity {
-    throw new Error('This method is not implemented');
+    this.database.push(entity);
+    return this.database.at(-1) ?? entity;
   }
 
   update(id: string, entity: CustomerEntity): CustomerEntity {
-    throw new Error('This method is not implemented');
+    const indexCurrentEntity = this.database.findIndex(
+      (item) => item.id === id && typeof item.daletedAt === 'undefined',
+    );
+    if (indexCurrentEntity >= 0)
+      this.database[indexCurrentEntity] = {
+        ...this.database[indexCurrentEntity],
+        ...entity,
+        id,
+      } as CustomerEntity;
+    else throw new NotFoundException();
+    return this.database[indexCurrentEntity];
   }
 
-  delete(id: string, soft?: boolean): void {
-    throw new Error('This method is not implemented');
+  delete(id: string, soft?: boolean | undefined): void {
+    throw new Error('Method not implemented.');
   }
 
   findAll(): CustomerEntity[] {
-    throw new Error('This method is not implemented');
+    return this.database.filter(
+      (item) => typeof item.daletedAt === 'undefined',
+    );
   }
 
   findOneById(id: string): CustomerEntity {
+    const currentEntity = this.database.find(
+      (item) => item.id === id && typeof item.daletedAt === 'undefined',
+    );
+    if (currentEntity) return currentEntity;
+    else throw new NotFoundException();
+  }
+
+  findOneByEmailAndPassword(email: string, password: string): boolean {
+    const indexCurrentEntity = this.database.findIndex(
+      (item) =>
+        item.email === email &&
+        item.password === password &&
+        typeof item.daletedAt === 'undefined',
+    );
+    return indexCurrentEntity >= -1 ? true : false;
+  }
+
+  findOneByDocumentTypeAndDocument(
+    documentTypeId: string,
+    document: string,
+  ): CustomerEntity {
+    throw new Error('This method is not implemented');
+  }
+
+  findOneByEmail(email: string): CustomerEntity {
+    throw new Error('This method is not implemented');
+  }
+
+  findOneByPhone(phone: string): CustomerEntity {
+    throw new Error('This method is not implemented');
+  }
+
+  findByState(state: boolean): CustomerEntity[] {
+    throw new Error('This method is not implemented');
+  }
+
+  findByFullName(fullName: string): CustomerEntity[] {
     throw new Error('This method is not implemented');
   }
 }

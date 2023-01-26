@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
+
 import { DocumentTypeEntity } from '../entities';
-import { AMetodosAbstract } from './base/a-metodos.base';
+import { BaseRepository } from './base';
+import { DocumentTypeRepositoryInterface } from './interfaces';
 
 @Injectable()
-export class DocumentTypeRepository extends AMetodosAbstract<DocumentTypeEntity>{
+export class DocumentTypeRepository
+  extends BaseRepository<DocumentTypeEntity>
+  implements DocumentTypeRepositoryInterface {
 
   register(entity: DocumentTypeEntity): DocumentTypeEntity {
     throw new Error('This method is not implemented');
@@ -22,6 +26,14 @@ export class DocumentTypeRepository extends AMetodosAbstract<DocumentTypeEntity>
   }
 
   findOneById(id: string): DocumentTypeEntity {
+    throw new Error('This method is not implemented');
+  }
+
+  findByState(state: boolean): DocumentTypeEntity[] {
+    throw new Error('This method is not implemented');
+  }
+
+  findByName(name: string): DocumentTypeEntity[] {
     throw new Error('This method is not implemented');
   }
 }
