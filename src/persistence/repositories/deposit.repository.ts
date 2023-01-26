@@ -32,11 +32,11 @@ export class DepositRepository extends Base<DepositEntity> implements CRUD<Depos
   }
 
   private hardDelete(index: number): void {
-    throw new Error('This method is not implemented');
+    this.database.splice(index, 1);
   }
 
   private softDelete(index: number): void {
-    throw new Error('This method is not implemented');
+    this.database[index].deleted_at = Date.now()
   }
 
   findAll(): DepositEntity[] {
@@ -72,7 +72,6 @@ export class DepositRepository extends Base<DepositEntity> implements CRUD<Depos
     const currentEntity1: DepositEntity[] = this.database.filter(
       (item) => item.date_time >= dateInit && item.date_time <= dateEnd && typeof item.deleted_at === 'undefined',
     )
-    
       if (currentEntity1) return currentEntity1;
       else throw new Error('Datos de no encontrados');
         

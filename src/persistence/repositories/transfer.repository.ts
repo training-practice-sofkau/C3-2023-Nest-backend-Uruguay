@@ -46,7 +46,7 @@ private hardDelete(index: number): void {
 }
 
 private softDelete(index: number): void {
-    throw new Error('This method is not implemented');
+  this.database[index].deleted_at = Date.now()
 }
 
 findAll(): TransferEntity[] {

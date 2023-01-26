@@ -26,7 +26,14 @@ export class DocumentTypeRepository  extends Base<DocumentTypeEntity> implements
   }
 
   delete(id: string, soft?: boolean | undefined): void {
-    throw new Error('This method is not implemented');
+        const index = this.database.findIndex(
+        (item) => item.id === id
+      );
+      if (index == -1){
+      throw new DocumentTypeEntity();
+      }
+
+      this.database.splice(index, 1);
   }
 
   findAll(): DocumentTypeEntity[] {

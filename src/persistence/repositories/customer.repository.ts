@@ -35,7 +35,7 @@ export class CustomerRepository extends Base<CustomerEntity> implements CRUD<Cus
       const index = this.database.findIndex(
         (item) => item.id === id && (item.daletedAt ?? true) === true,
       );
-      this.database.splice(index, 1);
+      //this.database.splice(index, 1);
     }
   }
 
