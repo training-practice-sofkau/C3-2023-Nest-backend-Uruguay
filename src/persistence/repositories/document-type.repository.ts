@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { DocumentTypeEntity } from '../entities';
 import { Base } from './base/base.abstract';
 import { CRUD } from './interfaces/crud.interface';
@@ -30,19 +30,34 @@ export class DocumentTypeRepository  extends Base<DocumentTypeEntity> implements
   }
 
   findAll(): DocumentTypeEntity[] {
-    throw new Error('This method is not implemented');
+    if (this.database.length == 0) {
+      throw new Error('No se encontraron elementos');
+      }
+      return this.database
   }
 
   findOneById(id: string): DocumentTypeEntity {
-    throw new Error('This method is not implemented');
+    const currentEntity = this.database.find(
+      (item) => item.id === id
+    );
+    if (currentEntity) return currentEntity;
+    else throw new NotFoundException("Elemento no encontrado");
   }
 
   findByState(state: boolean): DocumentTypeEntity[] {
-    throw new Error('This method is not implemented');
+    const currentEntity: DocumentTypeEntity[] = this.database.filter(
+      (item) => item.state === state
+    );
+    if (currentEntity) return currentEntity;
+    else throw new Error('Datos no encontrados');
   }
 
   findByName(name: string): DocumentTypeEntity[] {
-    throw new Error('This method is not implemented');
+    const currentEntity: DocumentTypeEntity[] = this.database.filter(
+      (item) => item.name === name
+    );
+    if (currentEntity) return currentEntity;
+    else throw new Error('Datos no encontrados')
   }
   
 }
