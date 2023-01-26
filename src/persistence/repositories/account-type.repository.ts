@@ -29,7 +29,9 @@ export class AccountTypeRepository
     }
 
     delete(id: string, soft?: boolean | undefined): void {
-        throw new Error('Method not implemented.');
+        const index = this.database.findIndex(item => item.id === id);
+        if(!index ) throw new NotFoundException;
+        this.database.splice(index, 1);
     }
 
     findAll(): AccountTypeEntity[] {
