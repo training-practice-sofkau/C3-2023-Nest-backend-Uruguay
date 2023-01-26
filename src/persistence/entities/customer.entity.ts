@@ -11,7 +11,7 @@ export class CustomerEntity implements CustomerModel{
     email: string;
     phone: string;
     password: string;
-    avatarUrl?: string ;
+    avatarUrl?: string;
     state = true;
     daletedAt?: Date | number ;
 }
