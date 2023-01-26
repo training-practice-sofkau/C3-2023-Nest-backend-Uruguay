@@ -49,7 +49,7 @@ $ npm run start:prod
 
 ```bash
 # Title of the delivery
-[Workshop Week 1 - Day 2] - Manipulación de colecciones
+[Workshop Week 1 - Day 3] - Manipulación de colecciones
 
 # Body of the delivery
 [Any short description]
