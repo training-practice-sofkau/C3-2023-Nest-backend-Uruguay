@@ -5,6 +5,7 @@ import { AMetodosAbstract } from './base/a-metodos.base';
 
 @Injectable()
 export class AccountRepository extends AMetodosAbstract<AccountEntity>{
+    
     register(entity: AccountEntity): AccountEntity {
         throw new Error('This method is not implemented');
     }
