@@ -27,16 +27,9 @@ export class CustomerRepo extends BaseRepository<CustomerEntity> implements IRep
     return this.database[indexCurrentEntity];
   }
 
-  findAll(): CustomerEntity[] {
-    return this.database.filter((item) => typeof item.daletedAt === 'undefined');
-  }
 
-  findOneById(id: string): CustomerEntity {
-    const currentEntity = this.database.find((item) => item.id === id && typeof item.daletedAt === 'undefined');
-    if (currentEntity) return currentEntity;
-    else throw new NotFoundException('Lo siento, nada por aqui =(');
-  }
 
+  //*****************************************DELETE********************************************* */
 
   private hardDelete(index: number): void {
     this.database.splice(index,1);
@@ -49,8 +42,7 @@ export class CustomerRepo extends BaseRepository<CustomerEntity> implements IRep
   delete(id: string, soft: boolean): void {
 
     const index = this.database.findIndex(obj => obj.id === id);
-    if (!index) throw new NotFoundException ('Lo siento, El index no existe!');
-   
+    
     if(!index ) throw new NotFoundException('Lo siento, no se encontro ese index!');
 
     if (soft) {
@@ -60,19 +52,36 @@ export class CustomerRepo extends BaseRepository<CustomerEntity> implements IRep
     }
 
   }
+  //******************************************************************************************* */
 
+
+
+  findAll(): CustomerEntity[] {
+    return this.database.filter((item) => typeof item.daletedAt === 'undefined');
+  }
+
+  findOneById(id: string): CustomerEntity {
+    const currentEntity = this.database.find((item) => item.id === id && typeof item.daletedAt === 'undefined');
+    if (currentEntity) return currentEntity;
+    else throw new NotFoundException('Lo siento, nada por aqui =(');
+  }
+
+  
   //**METODOS PROPIOS DE LA ENTIDAD -->
 
   findOneByEmailAndPassword(email: string, password: string): boolean {
-    const indexCurrentEntity = this.database.findIndex((item) => item.email === email && item.password === password && typeof item.daletedAt === 'undefined');
-    return indexCurrentEntity >= -1 ? true : false;
+    const IndCurrentEntity = this.database.findIndex((item) => item.email === email && item.password === password && typeof item.daletedAt === 'undefined');
+    let result : boolean = false
+    if (IndCurrentEntity >= -1){
+      result = true
+    }
+    return result
   }
 
 
   findOneByDocumentTypeAndDocument(documentTypeId: string, document: string): CustomerEntity {
     const currentEntity = this.database.find(
-      (item) => item.documentType.id === documentTypeId && typeof item.daletedAt === 'undefined',
-  );
+      (item) => item.documentType.id === documentTypeId && typeof item.daletedAt === 'undefined');
   if (currentEntity) return currentEntity;
   else throw new NotFoundException('Lo siento, nada por aqui =(');
   }
