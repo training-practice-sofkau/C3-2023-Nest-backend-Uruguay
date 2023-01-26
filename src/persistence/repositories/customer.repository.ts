@@ -60,15 +60,27 @@ export class CustomerRepository
     documentTypeId: string,
     document: string,
   ): CustomerEntity {
-    throw new Error('This method is not implemented');
+    const currentEntity = this.database.find(
+      (item) => item.documentType.id === documentTypeId && item.document === document,
+  );
+  if (currentEntity) return currentEntity;
+  else throw new NotFoundException();
   }
 
   findOneByEmail(email: string): CustomerEntity {
-    throw new Error('This method is not implemented');
+    const currentEntity = this.database.find(
+      (item) => item.email === email,
+  );
+  if (currentEntity) return currentEntity;
+  else throw new NotFoundException();
   }
 
   findOneByPhone(phone: string): CustomerEntity {
-    throw new Error('This method is not implemented');
+    const currentEntity = this.database.find(
+      (item) => item.phone === phone,
+  );
+  if (currentEntity) return currentEntity;
+  else throw new NotFoundException();
   }
 
   findByState(state: boolean): CustomerEntity[] {
