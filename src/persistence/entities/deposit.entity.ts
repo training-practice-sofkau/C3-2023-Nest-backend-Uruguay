@@ -8,5 +8,6 @@ export class depositEntity implements depositModel {
   amount: number;
   daletedAt?: number | Date;
   dateTime: number | Date;
+    deletedAt: any;
 
 }
