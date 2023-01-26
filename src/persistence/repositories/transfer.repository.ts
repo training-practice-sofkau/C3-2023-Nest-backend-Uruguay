@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { TransferEntity } from "../entities/transfer.entity";
 import { BaseRepository } from "./base";
 import { TrasnferRepositoryInterface } from "./interfaces";
@@ -6,18 +6,35 @@ import { TrasnferRepositoryInterface } from "./interfaces";
 @Injectable()
 export class TransferRepository
     extends BaseRepository<TransferEntity>
-    implements TrasnferRepositoryInterface{
+    implements TrasnferRepositoryInterface {
 
     register(entity: TransferEntity): TransferEntity {
-        throw new Error('This method is not implemented');
+        this.database.push(entity);
+        return this.database.at(-1) ?? entity;
     }
 
     update(id: string, entity: TransferEntity): TransferEntity {
-        throw new Error('This method is not implemented');
+        const indexCurrentEntity = this.database.findIndex(
+            (item) => item.id === id && typeof item.deletedAt === 'undefined',
+        );
+        if (indexCurrentEntity >= 0)
+            this.database[indexCurrentEntity] = {
+                ...this.database[indexCurrentEntity],
+                ...entity,
+                id,
+            } as TransferEntity;
+        else throw new NotFoundException();
+        return this.database[indexCurrentEntity];
     }
 
     delete(id: string, soft?: boolean): void {
-        throw new Error('This method is not implemented');
+        const indexToDelete = this.database.findIndex(
+            i => i.id === id &&
+                typeof i.deletedAt === 'undefined'
+        )
+        //const indexToDelete = this.database.indexOf(this.findOneById(id))
+        soft ? this.softDelete(indexToDelete) : this.hardDelete(indexToDelete)
+
     }
 
     private hardDelete(index: number): void {
