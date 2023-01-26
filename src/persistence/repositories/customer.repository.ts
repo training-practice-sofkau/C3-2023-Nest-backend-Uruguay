@@ -1,6 +1,6 @@
-import { InternalServerErrorException } from '@nestjs/common';
+import { InternalServerErrorException, NotFoundException } from '@nestjs/common/exceptions';
 import { Injectable } from '@nestjs/common/decorators';
-import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception';
+
 
 import { CustomerEntity } from '../entities';
 import { BankInternalControl } from './base';
@@ -63,7 +63,8 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
         
         try{        
            
-            const targetEntityIndex = this.database.findIndex(entity => entity.id === id); //searchs for the position in the array of the entity with Id
+            const targetEntityIndex = this.database.findIndex(entity => entity.id === id
+                && typeof entity.deletedAt === undefined); //searchs for the position in the array of the entity with Id
 
             if(targetEntityIndex == -1){ // if the result of the search is an -1 (not found)
                 throw new NotFoundException(); // gives and exception
@@ -279,7 +280,8 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
 
         try{ // try to find all entities that matches a given full name
 
-            const searchResult = this.database.filter(entity => entity.fullname === fullName && typeof entity.deletedAt === undefined ) ; //searchs for the position in the array of the entity with Id
+            const searchResult = this.database.filter(entity => entity.fullname === fullName &&
+                typeof entity.deletedAt === undefined ) ; //searchs for the matches
            
             if(searchResult.length <= 0){ // if the result of the search is an -1 (not found)
                 throw new NotFoundException(); // gives and exception
