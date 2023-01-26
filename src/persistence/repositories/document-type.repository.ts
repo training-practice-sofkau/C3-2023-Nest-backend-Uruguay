@@ -16,7 +16,7 @@ export class DocumentTypeRepository
 
   update(id: string, entity: DocumentTypeEntity): DocumentTypeEntity {
     const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.deletedAt === 'undefined',
+      (item) => item.id === id 
     );
     if (indexCurrentEntity >= 0)
       this.database[indexCurrentEntity] = {
@@ -29,17 +29,16 @@ export class DocumentTypeRepository
   }
 
   delete(id: string, soft?: boolean | undefined): void {
-    throw new Error('This method is not implemented');
+    this.database.splice(this.database.findIndex((item) => item.id === id), 1);
   }
 
   findAll(): DocumentTypeEntity[] {
-    return this.database.filter(
-      (item) => typeof item.deletedAt === 'undefined',
-    );  }
+    return this.database 
+   }
 
   findOneById(id: string): DocumentTypeEntity {
     const currentEntity = this.database.find(
-      (item) => item.id === id && typeof item.deletedAt === 'undefined',
+      (item) => item.id === id,
     );
     if (currentEntity) return currentEntity;
     else throw new NotFoundException();
@@ -50,6 +49,9 @@ export class DocumentTypeRepository
   }
 
   findByName(name: string): DocumentTypeEntity[] {
-    throw new Error('This method is not implemented');
-  }
-}
+    const currentEntity = this.database.filter(
+      (item) => item.name === name,
+    );
+    if (currentEntity) 
+    return currentEntity;
+    else throw new NotFoundException();  }  }

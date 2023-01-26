@@ -75,6 +75,10 @@ private softDelete(index: number): void {
     dateInit: Date | number,
     dateEnd: Date | number,
   ): DepositEntity[] {
-    throw new Error('This method is not implemented');
+    let currentEntity = this.database.filter(
+      (item) =>  item.date_time >=  dateInit && item.date_time <= dateEnd );
+      if (currentEntity) 
+      return currentEntity;
+      else throw new NotFoundException();
   }
 }
