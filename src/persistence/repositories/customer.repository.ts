@@ -2,10 +2,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { GeneralCRUD } from './base';
 import { CustomerEntity } from '../entities';
-import { Customer } from '../../interfaces/customer/customer.interface';
+import { IDisableable, INameable, ICustomerRepository } from './interfaces';
 
 @Injectable()
-export class CustomerRepository extends GeneralCRUD<CustomerEntity> {
+export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements ICustomerRepository, IDisableable<CustomerEntity>, INameable<CustomerEntity> {
 
   register(entity: CustomerEntity): CustomerEntity {
     this.database.push(entity);
@@ -115,20 +115,21 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> {
   }
 
   findByState(state: boolean): CustomerEntity[] {
-    let finded = this.database.filter(
-      (item) => 
-        item.state === state &&
-        typeof item.deletedAt === undefined
-    );
+    let finded: CustomerEntity[]
+    finded = this.database.map((value) => {
+      if (value.state === state){
+        return value
+      }
+    }) as CustomerEntity[]
     if (finded === undefined) throw new NotFoundException;
     return finded;
   }
 
-  findByFullName(fullName: string): CustomerEntity {
-    let finded: CustomerEntity | undefined
+  findByName(name: string): CustomerEntity[] {
+    let finded: CustomerEntity[] | undefined
     this.database.forEach((item) => {
-        if (item.fullName === fullName && typeof item.deletedAt === undefined){
-          finded = item
+        if (item.fullName === name && typeof item.deletedAt === undefined){
+          finded = finded?.concat([item]);
         }
       }
     );

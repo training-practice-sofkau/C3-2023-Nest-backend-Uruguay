@@ -1,4 +1,5 @@
 export interface IGeneral<T> {
+
     register(entity: T): T;
 
     update(id: string, entity: T): T;
@@ -8,4 +9,5 @@ export interface IGeneral<T> {
     findAll(): T[];
 
     findOneById(id: string): T;
+
 }

@@ -2,9 +2,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { GeneralCRUD } from './base';
 import { AccountEntity } from '../entities';
+import { IAccountRepository, IDisableable, INameable } from './interfaces';
 
 @Injectable()
-export class AccountRepository extends GeneralCRUD<AccountEntity> {
+export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAccountRepository, IDisableable<AccountEntity>, INameable<AccountEntity> {
 
   register(entity: AccountEntity): AccountEntity {
     this.database.push(entity);
@@ -96,6 +97,16 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> {
     let finded = this.database.find(
         (item) => 
           item.accountType.id === accountTypeId &&
+          typeof item.deletedAt === undefined
+    );
+    if (finded === undefined) throw new NotFoundException;
+    return finded;
+  }
+
+  findByName(name: string): AccountEntity[] {
+    let finded = this.database.filter(
+        (item) => 
+          item.customer.fullName === name &&
           typeof item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException;

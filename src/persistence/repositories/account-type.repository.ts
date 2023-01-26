@@ -2,14 +2,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { GeneralCRUD } from './base';
 import { AccountTypeEntity } from '../entities';
+import { IAccountTypeRepository, IDisableable } from './interfaces';
 
 @Injectable()
-export class AccountTypeRepository extends GeneralCRUD<AccountTypeEntity> {
-
-  register(entity: AccountTypeEntity) : AccountTypeEntity {
-    this.database.push(entity);
-    return this.database.at(-1) ?? entity;
-  }
+export class AccountTypeRepository extends GeneralCRUD<AccountTypeEntity> implements IAccountTypeRepository, IDisableable<AccountTypeEntity> {
 
   update(id: string, entity: AccountTypeEntity): AccountTypeEntity {
     const indexCurrentEntity = this.database.findIndex(

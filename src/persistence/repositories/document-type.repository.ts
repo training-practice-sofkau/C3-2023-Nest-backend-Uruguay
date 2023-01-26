@@ -2,9 +2,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { GeneralCRUD } from './base';
 import { DocumentTypeEntity } from '../entities';
+import { IDisableable, IDocumentTypeRepositoryInterface, INameable } from './interfaces';
 
 @Injectable()
-export class DocumentTypeRepository extends GeneralCRUD<DocumentTypeEntity> {
+export class DocumentTypeRepository extends GeneralCRUD<DocumentTypeEntity> implements IDocumentTypeRepositoryInterface, IDisableable<DocumentTypeEntity>, INameable<DocumentTypeEntity> {
 
   register(entity: DocumentTypeEntity): DocumentTypeEntity {
     this.database.push(entity);
@@ -52,8 +53,8 @@ export class DocumentTypeRepository extends GeneralCRUD<DocumentTypeEntity> {
     return finded;
   }
 
-  findByName(name: string): DocumentTypeEntity {
-    let finded = this.database.find( (item) => item.name === name );
+  findByName(name: string): DocumentTypeEntity[] {
+    let finded = this.database.filter( (item) => item.name === name );
     if (finded === undefined) throw new NotFoundException;
     return finded;
   }
