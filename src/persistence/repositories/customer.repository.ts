@@ -80,11 +80,17 @@ export class CustomerRepository
   }
 
   findOneByPhone(phone: string): CustomerEntity {
-    throw new Error('This method is not implemented');
+    const telefonof = this.database.findIndex(
+      (item) => item.phone == phone && typeof item.deletedAt === "undefined"
+    )
+    return this.database[telefonof];
   }
 
   findByState(state: boolean): CustomerEntity[] {
-    throw new Error('This method is not implemented');
+    const stadof = this.database.filter( //filtra segun una condicion y devuelve un array
+      (item) => item.state == state && typeof item.deletedAt === "undefined"
+    )
+    return stadof;
   }
 
   findByFullName(fullName: string): CustomerEntity[] {
