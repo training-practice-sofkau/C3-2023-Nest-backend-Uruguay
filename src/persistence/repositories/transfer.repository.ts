@@ -16,8 +16,7 @@ export class TransferRepository
 
     update(id: string, entity: transferEntity): transferEntity {
           const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.deletedAt === 'undefined',
-    );
+      (item) => item.id === id && typeof item.deletedAt === 'undefined');
     if (indexCurrentEntity >= 0)
       this.database[indexCurrentEntity] = {
         ...this.database[indexCurrentEntity],

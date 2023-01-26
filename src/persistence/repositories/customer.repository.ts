@@ -16,8 +16,7 @@ export class CustomerRepository
 
   update(id: string, entity: CustomerEntity): CustomerEntity {
     const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.deletedAt === 'undefined',
-    );
+      (item) => item.id === id && typeof item.deletedAt === 'undefined');
     if (indexCurrentEntity >=0 ) 
       this.database[indexCurrentEntity] = {
         ...this.database[indexCurrentEntity],
@@ -54,20 +53,23 @@ export class CustomerRepository
   }
 
   findOneByEmailAndPassword(email: string, password: string): boolean {
-    const indexCurrentEntity = this.database.findIndex(
+    const index = this.database.findIndex(
       (item) =>
         item.email === email &&
         item.password === password &&
-        typeof item.daletedAt === 'undefined',
+        typeof item.deletedAt === 'undefined',
     );
-    return indexCurrentEntity >= -1 ? true : false;
+    return index >= 0 ? true : false;
   }
 
-  findOneByDocumentTypeAndDocument(
-    documentTypeId: string,
-    document: string,
-  ): CustomerEntity {
-    throw new Error('This method is not implemented');
+  findOneByDocumentTypeAndDocument(documentType: string, document: string): boolean {
+    const index = this.database.findIndex(
+      (item) =>
+        item.documentType.id === documentType &&
+        item.document === document &&
+        typeof item.deletedAt === 'undefined',
+    );
+    return index >= 0 ? true : false;
   }
 
   findOneByEmail(email: string): CustomerEntity {
