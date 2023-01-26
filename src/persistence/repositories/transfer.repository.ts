@@ -27,11 +27,22 @@ update(id: string, entity: TransferEntity): TransferEntity {
 }
 
 delete(id: string, soft?: boolean): void {
-    throw new Error('This method is not implemented');
+  const index = this.database.findIndex(
+    (item) => item.id === id
+  );
+  if (index == -1){
+  throw new Error('No se encontraron elementos');
+  }
+if (soft){
+  this.hardDelete(index)
+}else{
+  this.softDelete(index)
+}
+
 }
 
 private hardDelete(index: number): void {
-    throw new Error('This method is not implemented');
+  this.database.splice(index, 1);
 }
 
 private softDelete(index: number): void {

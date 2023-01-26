@@ -45,6 +45,7 @@ export class DocumentTypeRepository  extends Base<DocumentTypeEntity> implements
   }
 
   findByState(state: boolean): DocumentTypeEntity[] {
+    
     const currentEntity: DocumentTypeEntity[] = this.database.filter(
       (item) => item.state === state
     );
