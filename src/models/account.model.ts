@@ -4,5 +4,5 @@ export interface AccountModel{
     accountTypeId: string;
     balance: number;
     state: boolean;
-    deletedAt: Date | number; 
+    deletedAt?: Date | number; 
 }

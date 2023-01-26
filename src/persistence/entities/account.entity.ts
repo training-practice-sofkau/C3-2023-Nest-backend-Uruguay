@@ -7,6 +7,6 @@ export class AccountEntity implements AccountModel{
     customerId: string;
     accountTypeId: string;
     balance: number;
-    state: boolean;
-    deletedAt: number | Date;
+    state = true;
+    deletedAt?: number | Date;
 }
