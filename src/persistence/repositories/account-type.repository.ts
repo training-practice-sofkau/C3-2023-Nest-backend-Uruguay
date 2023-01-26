@@ -32,14 +32,14 @@ export class AccountTypeRepository
 
   findOneById(id: string): AccountTypeEntity {
     const currentEntity = this.database.find(
-        (item) => item.id === id
-      );
-      if (currentEntity) return currentEntity;
-      else throw new NotFoundException();
+      (item) => item.id === id ,
+    );
+    if (currentEntity) return currentEntity;
+    else throw new NotFoundException();
   }
 
   findByState(state: boolean): AccountTypeEntity[] {
-     return this.database.filter((item) => ( state === true ? item.state === true : item.state != true  ));    
+     return this.database.filter((item) => ( state === true ? item.state === true : item.state === false  ));    
   }
   findByName(name: string): AccountTypeEntity[] {
     return this.database.filter((item) => item.name === name);    

@@ -5,3 +5,5 @@ export interface BaseRepositoryInterface<T> {
     findAll(): Array<T>;
     findOneById(id: string): T;
   }
+
+  

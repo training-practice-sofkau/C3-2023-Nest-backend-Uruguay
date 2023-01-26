@@ -1,4 +1,6 @@
-export class BaseRepository<T> {
+import { NotFoundException } from "@nestjs/common";
+
+export class BaseRepository<T>  {
     protected readonly database: Array<T>;
 
     constructor() {
@@ -8,6 +10,5 @@ export class BaseRepository<T> {
         this.database.push(entity);
         return this.database.at(-1) ?? entity;
       }
-
-      
+  
 }

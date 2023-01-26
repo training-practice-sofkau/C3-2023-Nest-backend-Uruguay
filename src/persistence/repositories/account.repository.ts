@@ -38,7 +38,6 @@ export class AccountRepository
         else{
             this.softDelete(index)
                 }
-
     }
 
     private hardDelete(index: number): void {        

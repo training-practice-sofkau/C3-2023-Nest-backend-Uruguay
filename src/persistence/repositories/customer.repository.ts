@@ -77,16 +77,21 @@ export class CustomerRepository
       (item) =>
         item.email === email 
     );
-    return this.database[indexCurrentEntity]    
+
+    if (indexCurrentEntity != 1) {
+    return this.database[indexCurrentEntity]  
 
   }
+  else throw new NotFoundException();
+}
 
-  findOneByPhone(phone: string): CustomerEntity {
-    const indexCurrentEntity = this.database.findIndex(
-      (item) =>
-        item.phone === phone 
-    );
-    return this.database[indexCurrentEntity]      }
+  findOneByPhone(phone: string): CustomerEntity {    
+   const currentEntity = this.database.find(
+    (item) => item.phone === phone && typeof item.deletedAt === 'undefined',
+  );
+  if (currentEntity) return currentEntity;
+  else throw new NotFoundException();
+  }
 
   findByState(state: boolean): CustomerEntity[] {
     return this.database.filter((item) => ( state === true ? item.state === true : typeof item.deletedAt != 'undefined'));    
