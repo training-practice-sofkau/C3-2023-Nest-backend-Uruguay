@@ -1,7 +1,7 @@
 import { AccountTypeEntity } from '../entities';
-import { BaseRepositories } from '../';
+import { AccountTypeRepositoryInterface } from '../';
 
-export class AccountTypeRepository implements BaseRepositories<AccountTypeEntity> {
+export class AccountTypeRepository implements AccountTypeRepositoryInterface {
     findAll(): AccountTypeEntity[] {
         throw new Error('Method not implemented.');
     }

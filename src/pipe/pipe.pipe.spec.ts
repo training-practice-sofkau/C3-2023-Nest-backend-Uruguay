@@ -1,4 +1,4 @@
-import { PipesPipe } from './pipes.pipe';
+import { PipesPipe } from './pipe.pipe';
 
 describe('PipesPipe', () => {
   it('should be defined', () => {
