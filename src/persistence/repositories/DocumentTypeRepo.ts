@@ -33,4 +33,6 @@ export class DocumentTypeRepository extends BaseRepository<DocumentTypeEntity> i
   findByName(name: string): DocumentTypeEntity[] {
     throw new Error('This method is not implemented');
   }
+
+  
 }

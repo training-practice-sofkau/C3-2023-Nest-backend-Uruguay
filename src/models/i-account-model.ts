@@ -1,4 +1,4 @@
-export class BankAccountModel {
+export interface BankAccountModel {
 
     
     acc_id : number;
