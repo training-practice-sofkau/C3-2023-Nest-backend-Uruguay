@@ -28,9 +28,26 @@ export class CustomerRepository
     return this.database[indexCurrentEntity];
   }
 
-  delete(id: string, soft?: boolean | undefined): void {
-    throw new Error('Method not implemented.');
-  }
+  delete(id: string, soft?: boolean): void {
+
+    const index = this.database.findIndex(item => item.id === id);
+
+    if(!index ) throw new NotFoundException;
+
+    if (soft) {
+        this.softDelete(index);
+    } else {
+        this.hardDelete(index);
+    }
+}
+
+private hardDelete(index: number): void {
+    this.database.splice(index, 1);
+}
+
+private softDelete(index: number): void {
+    this.database[index].daletedAt = Date.now();
+}
 
   findAll(): CustomerEntity[] {
     return this.database.filter(

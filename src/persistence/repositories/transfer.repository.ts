@@ -30,15 +30,24 @@ export class TransferRepository
     }
 
     delete(id: string, soft?: boolean): void {
-        throw new Error('This method is not implemented');
+
+        const index = this.database.findIndex(item => item.id === id);
+
+        if(!index ) throw new NotFoundException;
+
+        if (soft) {
+            this.softDelete(index);
+        } else {
+            this.hardDelete(index);
+        }
     }
 
     private hardDelete(index: number): void {
-        throw new Error('This method is not implemented');
+        this.database.splice(index, 1);
     }
 
     private softDelete(index: number): void {
-        throw new Error('This method is not implemented');
+        this.database[index].daletedAt = Date.now();
     }
 
     findAll(): TransferEntity[] {
