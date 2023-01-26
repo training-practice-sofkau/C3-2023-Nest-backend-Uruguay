@@ -1,7 +1,6 @@
-import { AccountTypeEntity } from "./account_type.entity";
-import { CustomerEntity } from "./customer.entity";
+import { AccountTypeEntity, CustomerEntity } from "./";
 import { v4 as uuid } from "uuid";
-import { AccountModel } from '../../models/account.model';
+import { AccountModel } from '../../models/';
 
 
 

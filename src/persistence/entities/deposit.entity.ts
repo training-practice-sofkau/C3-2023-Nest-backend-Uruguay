@@ -1,13 +1,11 @@
-import { AccountModel } from "src/models";
-import { v4 as uuid } from "uuid";
-import { DepositModel } from '../../models/deposit.model';
-import { AccountEntity } from './account.entity';
+import { v4 as uuid } from 'uuid';
+import { DepositModel } from '../../models/';
+import { AccountEntity } from './';
 
-export class DepositEntity implements DepositModel{
-    id = uuid();
-    account: AccountEntity;
-    amount: number;
-    dateTime: Date;
-    deletedAt?: Date | number;
-
+export class DepositEntity implements DepositModel {
+  id = uuid();
+  account: AccountEntity;
+  amount: number;
+  dateTime: Date;
+  deletedAt?: Date | number;
 }
