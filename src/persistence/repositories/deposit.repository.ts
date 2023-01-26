@@ -26,7 +26,12 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> {
   }
 
   delete(id: string, soft?: boolean): void {
-    throw new Error('This method is not implemented');
+    let finded = this.database.findIndex(
+        (item) => 
+          item.id === id
+    );
+    if (finded === undefined) throw new NotFoundException;
+    soft ? this.softDelete(finded) : this.hardDelete(finded);
   }
 
   private hardDelete(index: number): void {

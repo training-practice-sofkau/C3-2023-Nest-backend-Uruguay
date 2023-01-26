@@ -26,7 +26,12 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> {
   }
 
   delete(id: string, soft?: boolean | undefined): void {
-    throw new Error('Method not implemented.');
+    let finded = this.database.findIndex(
+      (item) => 
+        item.id === id
+    );
+    if (finded === undefined) throw new NotFoundException;
+    soft ? this.softDelete(finded) : this.hardDelete(finded);
   }
 
   private hardDelete(index: number): void {

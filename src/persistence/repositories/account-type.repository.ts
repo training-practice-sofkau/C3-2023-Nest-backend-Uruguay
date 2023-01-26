@@ -26,7 +26,12 @@ export class AccountTypeRepository extends GeneralCRUD<AccountTypeEntity> {
   }
 
   delete(id: string, soft?: boolean | undefined): void {
-    this.database.splice(this.database.findIndex((item) => item.id === id), 1);
+    let finded = this.database.findIndex(
+      (item) => 
+        item.id === id
+    );
+    if (finded === undefined) throw new NotFoundException;
+    this.database.splice(finded, 1);
   }
 
   findAll(): AccountTypeEntity[] {
