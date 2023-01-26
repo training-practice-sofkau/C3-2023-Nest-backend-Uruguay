@@ -45,7 +45,9 @@ export class AccountTypeRepository
     }
 
     findByState(state: boolean): AccountTypeEntity[] {
-        throw new Error('This method is not implemented');
+        return this.database.filter(
+            (item) => item.state === state,
+        );
     }
 
     findByName(name: string): AccountTypeEntity[] {

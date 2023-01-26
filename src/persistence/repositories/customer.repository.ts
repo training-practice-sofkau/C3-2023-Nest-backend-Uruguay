@@ -72,7 +72,9 @@ export class CustomerRepository
   }
 
   findByState(state: boolean): CustomerEntity[] {
-    throw new Error('This method is not implemented');
+    return this.database.filter(
+      (item) => item.state === state,
+  );
   }
 
   findByFullName(fullName: string): CustomerEntity[] {

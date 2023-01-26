@@ -45,7 +45,9 @@ export class DocumentTypeRepository
   }
 
   findByState(state: boolean): DocumentTypeEntity[] {
-    throw new Error('This method is not implemented');
+    return this.database.filter(
+      (item) => item.state === state,
+  );
   }
 
   findByName(name: string): DocumentTypeEntity[] {

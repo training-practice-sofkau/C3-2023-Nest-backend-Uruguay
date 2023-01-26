@@ -56,7 +56,9 @@ export class AccountRepository
     }
 
     findByState(state: boolean): AccountEntity[] {
-        throw new Error('This method is not implemented');
+        return this.database.filter(
+            (item) => item.state === state,
+        );
     }
 
     findByCustomer(customerId: string): AccountEntity[] {
