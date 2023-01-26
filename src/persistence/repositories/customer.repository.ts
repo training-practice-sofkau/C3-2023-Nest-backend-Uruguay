@@ -4,7 +4,6 @@ import { CustomerEntity } from '../entities';
 
 import { CustomerRepositoryInterface } from './interfaces';
 import { BaseRepository } from '.';
-import { CustomerEntity } from '../entities/customer.entity';
 
 @Injectable()
 export class CustomerRepository

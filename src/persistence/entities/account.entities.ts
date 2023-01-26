@@ -1,5 +1,6 @@
+import { IAccountModel } from 'src/models';
 import { v4 as uuid } from 'uuid';
-import { IAccountModel } from '../../models/account_type.interface';
+
 
 export class Account implements IAccountModel {
     acc_id = uuid();
