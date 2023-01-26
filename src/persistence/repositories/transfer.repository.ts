@@ -34,23 +34,32 @@ export class TransferRepository
         )
         //const indexToDelete = this.database.indexOf(this.findOneById(id))
         soft ? this.softDelete(indexToDelete) : this.hardDelete(indexToDelete)
-
     }
 
     private hardDelete(index: number): void {
-        throw new Error('This method is not implemented');
+        if (index > -1) {
+            this.database.splice(index, 1)
+        }
     }
 
     private softDelete(index: number): void {
-        throw new Error('This method is not implemented');
+        if (index > -1) {
+            this.database.find(index => index.deletedAt = new Date)
+        }
     }
 
     findAll(): TransferEntity[] {
-        throw new Error('This method is not implemented');
+        return this.database.filter(
+            (item) => typeof item.deletedAt === 'undefined',
+        )
     }
 
     findOneById(id: string): TransferEntity {
-        throw new Error('This method is not implemented');
+        const currentEntity = this.database.find(
+            (item) => item.id === id && typeof item.deletedAt === 'undefined',
+        );
+        if (!currentEntity) throw new NotFoundException()
+        else return currentEntity
     }
 
     findOutcomeByDataRange(
@@ -58,7 +67,13 @@ export class TransferRepository
         dateInit: Date | number,
         dateEnd: Date | number,
     ): TransferEntity[] {
-        throw new Error('This method is not implemented');
+        const currentEntity = this.database.filter(
+            (item) => item.id === accountId
+                && dateInit > item.dateTime
+                && item.dateTime < dateEnd
+        )
+        if (!currentEntity) throw new NotFoundException()
+        else return currentEntity
     }
 
     findIncomeByDataRange(
@@ -66,6 +81,12 @@ export class TransferRepository
         dateInit: Date | number,
         dateEnd: Date | number,
     ): TransferEntity[] {
-        throw new Error('This method is not implemented');
+        const currentEntity = this.database.filter(
+            (item) => item.id === accountId
+                && dateInit > item.dateTime
+                && item.dateTime < dateEnd
+        )
+        if (!currentEntity) throw new NotFoundException()
+        else return currentEntity
     }
 }

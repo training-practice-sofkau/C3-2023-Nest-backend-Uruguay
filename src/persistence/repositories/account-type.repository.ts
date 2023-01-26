@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { AccountTypeEntity } from "../entities/account-type.entity";
 import { BaseRepository } from './base/base.repository';
 import { AccountTypeRepositoryInterface } from "./interfaces";
@@ -14,26 +14,47 @@ export class AccountTypeRepository
         }
     
         update(id: string, entity: AccountTypeEntity): AccountTypeEntity  {
-            throw new Error('Method not implemented.');
+            const indexCurrentEntity = this.database.findIndex(
+            (item) => item.id === id,
+        );
+        if (indexCurrentEntity >= 0)
+            this.database[indexCurrentEntity] = {
+                ...this.database[indexCurrentEntity],
+                ...entity,
+                id,
+            } as AccountTypeEntity;
+        else throw new NotFoundException();
+        return this.database[indexCurrentEntity];
         }
     
         delete(id: string, soft?: boolean | undefined): void {
-            throw new Error('Method not implemented.');
+            const indexToDelete = this.database.findIndex(i => i.id === id)
+            //const indexToDelete = this.database.indexOf(this.findOneById(id))
+            this.database.splice(indexToDelete, 1)
         }
     
         findAll(): AccountTypeEntity[] {
-            throw new Error('Method not implemented.');
+            return this.database
         }
     
         findOneById(id: string): AccountTypeEntity  {
-            throw new Error('Method not implemented.');
+            const currentEntity = this.database.find(
+                (item) => item.id === id)
+            if (!currentEntity) throw new NotFoundException()
+            else return currentEntity
         }
     
         findByState(state: boolean): AccountTypeEntity[] {
-            throw new Error('This method is not implemented');
+            const currentEntity = this.database.filter(
+                (item) => item.state === state)
+            if (!currentEntity) throw new NotFoundException()
+            else return currentEntity
         }
     
         findByName(name: string): AccountTypeEntity[] {
-            throw new Error('This method is not implemented');
+            const currentEntity = this.database.filter(
+                (item) => item.name === name)
+            if (!currentEntity) throw new NotFoundException()
+            else return currentEntity
         }
 }
