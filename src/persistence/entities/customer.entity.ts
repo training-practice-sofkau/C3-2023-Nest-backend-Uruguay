@@ -12,7 +12,7 @@ export class CustomerEntity implements CustomerModel{
     password: string;
     avatarUrl?: string ;
     id = uuid()
-    state: true;
+    state: true  | false;
     deletedAt?: number | Date ;   
  
 }

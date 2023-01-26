@@ -46,7 +46,8 @@ export class AccountRepository
     }
 
     private softDelete(index: number): void {
-        this.database[index].state = true   
+        this.database[index].state = false   
+        this.database[index].deletedAt = Date.now()
      }
 
     findAll(): AccountEntity[] {
@@ -63,7 +64,7 @@ export class AccountRepository
     }
 
     findByState(state: boolean): AccountEntity[] {
-        return this.database.filter((item) => ( state === true ? item.state === true : typeof item.deletedAt != 'undefined'));    
+        return this.database.filter((item) => ( state === true ? item.state === true : item.state !== true ));    
     }
 
     findByCustomer(customerId: string): AccountEntity[] {

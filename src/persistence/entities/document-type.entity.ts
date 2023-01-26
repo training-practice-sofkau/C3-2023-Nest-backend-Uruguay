@@ -5,6 +5,6 @@ import { DocumentTypeModel } from '../../models';
 export class DocumentTypeEntity implements DocumentTypeModel {
   id = uuid();
   name: string;
-  state = true;
+  state: true  | false;
  
 }

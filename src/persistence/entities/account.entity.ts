@@ -7,6 +7,6 @@ export class AccountEntity implements AccountModel {
   accountTypeId: AccountTypeEntity;
   acc_Balance: number;
   id = uuid();
-  state: true;
+  state: true  | false;;
   deletedAt?: number | Date;
 }
