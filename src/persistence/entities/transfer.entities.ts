@@ -1,7 +1,7 @@
 import { transferModel } from '../../models/transfer.model';
 import { v4 as uuid } from 'uuid';
 
-export class transfer implements transferModel{
+export class Transfer implements transferModel{
     trf_id = uuid();
     trf_outcome: string;
     trf_income: string;
