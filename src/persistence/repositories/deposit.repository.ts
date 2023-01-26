@@ -43,7 +43,11 @@ export class DepositRepository
     }
 
     findOneById(id: string): DepositEntity {
-        throw new Error('This method is not implemented');
+        const currentEntity = this.database.find(
+            (item) => item.id === id && typeof item.deletedAt === 'undefined',
+        );
+        if (currentEntity) return currentEntity;
+        else throw new NotFoundException();
     }
 
     findByAccountId(accountId: string): DepositEntity[] {
