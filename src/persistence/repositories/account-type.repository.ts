@@ -35,10 +35,14 @@ export class AccountTypeRepository
     }
 
     findByState(state: boolean): AccountTypeEntity[] {
-        throw new Error('This method is not implemented');
+        const currentEntities = this.database.filter((item) => item.state === state);
+        if (currentEntities) return currentEntities;
+        else throw new NotFoundException();
     }
 
     findByName(name: string): AccountTypeEntity[] {
-        throw new Error('This method is not implemented');
+        const currentEntities = this.database.filter((item) => item.name === name);
+        if (currentEntities) return currentEntities;
+        else throw new NotFoundException();
     }
 }

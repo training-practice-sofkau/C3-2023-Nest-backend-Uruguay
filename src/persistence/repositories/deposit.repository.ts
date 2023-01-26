@@ -20,7 +20,7 @@ export class DepositRepository
 
     delete(id: string, soft?: boolean): void {
         const indexCurrentEntity = this.database.findIndex(
-            (item) => item.id === id && typeof item.deletedAt === 'undefined',
+            (item) => item.id === id && typeof item.deletedAt === 'undefined'
         );
         if(indexCurrentEntity === -1) throw new NotFoundException();
         soft ?
@@ -38,26 +38,32 @@ export class DepositRepository
 
     findAll(): DepositEntity[] {
         return this.database.filter(
-            (item) => typeof item.deletedAt === 'undefined',
-        );
+            (item) => typeof item.deletedAt === 'undefined');
     }
 
     findOneById(id: string): DepositEntity {
         const currentEntity = this.database.find(
-            (item) => item.id === id && typeof item.deletedAt === 'undefined',
-        );
+            (item) => item.id === id && typeof item.deletedAt === 'undefined');
         if (currentEntity) return currentEntity;
-        else throw new NotFoundException();
+        throw new NotFoundException();
     }
 
     findByAccountId(accountId: string): DepositEntity[] {
-        throw new Error('This method is not implemented');
+        const currentEntities = this.database.filter(
+            (item) => item.id === accountId && typeof item.deletedAt === 'undefined');
+        if (currentEntities) return currentEntities;
+        throw new NotFoundException();
     }
 
     findByDataRange(
         dateInit: Date | number,
         dateEnd: Date | number,
     ): DepositEntity[] {
-        throw new Error('This method is not implemented');
+        const deposits = this.database.filter(
+            (deposit) => deposit.dateTime <= dateInit
+            && deposit.dateTime >= dateEnd
+            && typeof deposit.deletedAt === 'undefined');
+        if (deposits) return deposits;
+        throw new NotFoundException();
     }
 }

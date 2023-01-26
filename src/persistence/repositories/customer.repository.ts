@@ -49,7 +49,7 @@ export class CustomerRepository
       (item) => item.id === id && typeof item.deletedAt === 'undefined',
     );
     if (currentEntity) return currentEntity;
-    else throw new NotFoundException();
+    throw new NotFoundException();
   }
 
   findOneByEmailAndPassword(email: string, password: string): boolean {
@@ -70,18 +70,30 @@ export class CustomerRepository
   }
 
   findOneByEmail(email: string): CustomerEntity {
-    throw new Error('This method is not implemented');
+    const currentEntity = this.database.find(
+      (item) => item.email === email && typeof item.deletedAt === 'undefined');
+    if (currentEntity) return currentEntity;
+    throw new NotFoundException();
   }
 
   findOneByPhone(phone: string): CustomerEntity {
-    throw new Error('This method is not implemented');
+    const currentEntity = this.database.find(
+      (item) => item.phone === phone && typeof item.deletedAt === 'undefined');
+    if (currentEntity) return currentEntity;
+    throw new NotFoundException();
   }
 
   findByState(state: boolean): CustomerEntity[] {
-    throw new Error('This method is not implemented');
+    const currentEntities = this.database.filter(
+      (item) => item.state === state && typeof item.deletedAt === 'undefined');
+   if (currentEntities) return currentEntities;
+   throw new NotFoundException();
   }
 
   findByFullName(fullName: string): CustomerEntity[] {
-    throw new Error('This method is not implemented');
+    const currentEntities = this.database.filter(
+      (item) => item.fullName === fullName && typeof item.deletedAt === 'undefined');
+    if (currentEntities) return currentEntities;
+    throw new NotFoundException();
   }
 }

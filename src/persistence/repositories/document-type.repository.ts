@@ -31,14 +31,18 @@ export class DocumentTypeRepository
   findOneById(id: string): DocumentTypeEntity {
     const currentEntity = this.database.find((item) => item.id === id);
     if (currentEntity) return currentEntity;
-    else throw new NotFoundException();
+    throw new NotFoundException();
   }
 
   findByState(state: boolean): DocumentTypeEntity[] {
-    throw new Error('This method is not implemented');
+    const currentEntities = this.database.filter((item) => item.state === state);
+    if (currentEntities) return currentEntities;
+    throw new NotFoundException();
   }
 
   findByName(name: string): DocumentTypeEntity[] {
-    throw new Error('This method is not implemented');
+    const currentEntities = this.database.filter((item) => item.name === name);
+    if (currentEntities) return currentEntities;
+    throw new NotFoundException();
   }
 }

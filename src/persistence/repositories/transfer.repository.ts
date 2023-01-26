@@ -48,7 +48,7 @@ export class TransferRepository
             (item) => item.id === id && typeof item.deletedAt === 'undefined',
         );
         if (currentEntity) return currentEntity;
-        else throw new NotFoundException();
+        throw new NotFoundException();
     }
 
     findOutcomeByDataRange(
@@ -56,7 +56,13 @@ export class TransferRepository
         dateInit: Date | number,
         dateEnd: Date | number,
     ): TransferEntity[] {
-        throw new Error('This method is not implemented');
+        const transfers = this.database.filter(
+            (transfer) => transfer.outcome.id === accountId 
+            && transfer.dateTime >= dateInit
+            && transfer.dateTime <= dateEnd
+            && typeof transfer.deletedAt === 'undefined');
+        if (transfers) return transfers;
+        throw new NotFoundException();
     }
 
     findIncomeByDataRange(
@@ -64,6 +70,12 @@ export class TransferRepository
         dateInit: Date | number,
         dateEnd: Date | number,
     ): TransferEntity[] {
-        throw new Error('This method is not implemented');
+        const transfers = this.database.filter(
+            (transfer) => transfer.income.id === accountId 
+            && transfer.dateTime >= dateInit
+            && transfer.dateTime <= dateEnd
+            && typeof transfer.deletedAt === 'undefined');
+        if (transfers) return transfers;
+        throw new NotFoundException();
     }
 }
