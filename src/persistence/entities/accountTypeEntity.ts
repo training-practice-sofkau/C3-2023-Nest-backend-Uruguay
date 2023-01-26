@@ -1,7 +1,8 @@
 import { v4 as uuid } from 'uuid';
-import { AccountTypeModel } from '../../models/account-type.model';
+import { AccountTypeModel } from '../../models';
+
 export class AccountTypeEntity implements AccountTypeModel{
-    acctp_id = uuid();
-    acctp_name: string;
-    acctp_state: boolean;
+    id = uuid();
+    name: string;
+    state = true;
 }

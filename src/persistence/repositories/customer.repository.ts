@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CustomerEntity } from '../entities';
-import { Base } from './base/classAbstract';
-import { InterfaceRepo } from './interfaces/InterfaceRepo';
-
-
+import { Base } from './base/class-abstract';
 
 @Injectable()
 //Si implementamos InterfaceRepo con T como CustomerEntity creamos el registrer de tipo
@@ -12,5 +9,4 @@ import { InterfaceRepo } from './interfaces/InterfaceRepo';
 export class CustomerRepository extends Base<CustomerEntity>{
 
   
- 
 }

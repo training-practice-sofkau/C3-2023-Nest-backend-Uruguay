@@ -15,6 +15,7 @@ export abstract class Base<T> implements InterfaceRepo<T>{
         throw new Error("Method not implemented.");
     }
     update(entity: T, id: string): T {
+        
         throw new Error("Method not implemented.");
     }
     delete(id: string, soft?: boolean | undefined): void {
