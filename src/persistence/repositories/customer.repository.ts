@@ -32,7 +32,7 @@ export class CustomerRepository
 
     const index = this.database.findIndex(item => item.id === id);
 
-    if(!index ) throw new NotFoundException;
+    if(!index ) throw new NotFoundException();
 
     if (soft) {
         this.softDelete(index);
@@ -59,7 +59,7 @@ private softDelete(index: number): void {
     const currentEntity = this.database.find(
       (itemId) => itemId.id === id && typeof itemId.daletedAt === 'undefined',
     );
-    if(!currentEntity ) throw new NotFoundException;
+    if(!currentEntity ) throw new NotFoundException();
     return currentEntity;
   }
 
@@ -80,7 +80,7 @@ private softDelete(index: number): void {
     const currentEntity = this.database.find(
       (itemDoc) => itemDoc.documentType.id === documentTypeId && itemDoc.document === document && typeof itemDoc.daletedAt === 'undefined',
   );
-  if(!currentEntity ) throw new NotFoundException;
+  if(!currentEntity ) throw new NotFoundException();
   return currentEntity;
   }
 
@@ -88,7 +88,7 @@ private softDelete(index: number): void {
     const currentEntity = this.database.find(
       (itemEmail) => itemEmail.email === email && typeof itemEmail.daletedAt === 'undefined',
   );
-  if(!currentEntity ) throw new NotFoundException;
+  if(!currentEntity ) throw new NotFoundException();
   return currentEntity;
   }
 
@@ -96,7 +96,7 @@ private softDelete(index: number): void {
     const currentEntity = this.database.find(
       (itemPhone) => itemPhone.phone === phone && typeof itemPhone.daletedAt === 'undefined',
   );
-  if(!currentEntity ) throw new NotFoundException;
+  if(!currentEntity ) throw new NotFoundException();
   return currentEntity;
   }
 
@@ -110,7 +110,7 @@ private softDelete(index: number): void {
     const currentEntity = this.database.filter(
       (itemFName) => itemFName.fullName === fullName && typeof itemFName.daletedAt === 'undefined',
   );
-  if(!currentEntity ) throw new NotFoundException;
+  if(!currentEntity ) throw new NotFoundException();
   return currentEntity;
   }
 }

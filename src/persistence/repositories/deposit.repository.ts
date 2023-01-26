@@ -20,19 +20,19 @@ export class DepositRepository
         );
         if (indexCurrentEntity >= 0)
             this.database[indexCurrentEntity] = {
-            ...this.database[indexCurrentEntity],
-            ...entity,
-            id,
+                ...this.database[indexCurrentEntity],
+                ...entity,
+                id,
             } as DepositEntity;
         else throw new NotFoundException();
         return this.database[indexCurrentEntity];
     }
-    
+
     delete(id: string, soft?: boolean): void {
 
         const index = this.database.findIndex(item => item.id === id);
 
-        if(!index ) throw new NotFoundException;
+        if (!index) throw new NotFoundException();
 
         if (soft) {
             this.softDelete(index);
@@ -59,7 +59,7 @@ export class DepositRepository
         const currentEntity = this.database.find(
             (itemId) => itemId.id === id && typeof itemId.daletedAt === 'undefined',
         );
-        if(!currentEntity ) throw new NotFoundException;
+        if (!currentEntity) throw new NotFoundException();
         return currentEntity;
     }
 
@@ -67,7 +67,7 @@ export class DepositRepository
         const currentEntity = this.database.filter(
             (itemId) => itemId.accountId.id === accountId && typeof itemId.daletedAt === 'undefined',
         );
-        if(!currentEntity ) throw new NotFoundException;
+        if (!currentEntity) throw new NotFoundException();
         return currentEntity;
     }
 
@@ -78,7 +78,7 @@ export class DepositRepository
         const currentEntity = this.database.filter(
             (itemDate) => itemDate.dateTime >= dateInit && itemDate.dateTime <= dateEnd && typeof itemDate.daletedAt === 'undefined',
         );
-        if(!currentEntity ) throw new NotFoundException;
+        if (!currentEntity) throw new NotFoundException();
         return currentEntity;
     }
 }

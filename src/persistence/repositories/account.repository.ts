@@ -34,7 +34,7 @@ export class AccountRepository
 
         const index = this.database.findIndex(itemIndex => itemIndex.id === id);
 
-        if(!index ) throw new NotFoundException;
+        if(!index ) throw new NotFoundException();
 
         if (soft) {
             this.softDelete(index);
@@ -61,7 +61,7 @@ export class AccountRepository
         const currentEntity = this.database.find(
             (item) => item.id === id && typeof item.daletedAt === 'undefined',
         );
-        if(!currentEntity ) throw new NotFoundException;
+        if(!currentEntity ) throw new NotFoundException();
         return currentEntity;
     }
 
@@ -75,7 +75,7 @@ export class AccountRepository
         const currentEntity = this.database.filter(
             (item) => item.customerId.id === customerId && typeof item.daletedAt === 'undefined',
         );
-        if(!currentEntity ) throw new NotFoundException;
+        if(!currentEntity ) throw new NotFoundException();
         return currentEntity;
     }
 
@@ -83,7 +83,7 @@ export class AccountRepository
         const currentEntity = this.database.filter(
             (item) => item.accountTypeId.id === accountTypeId && typeof item.daletedAt === 'undefined',
         );
-        if(!currentEntity ) throw new NotFoundException;
+        if(!currentEntity ) throw new NotFoundException();
         return currentEntity;
     }
 }

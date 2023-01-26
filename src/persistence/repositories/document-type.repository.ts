@@ -30,7 +30,7 @@ export class DocumentTypeRepository
 
   delete(id: string, soft?: boolean | undefined): void {
     const index = this.database.findIndex(item => item.id === id);
-    if(!index ) throw new NotFoundException;
+    if(!index ) throw new NotFoundException();
     this.database.splice(index, 1);
   }
 
@@ -42,7 +42,7 @@ export class DocumentTypeRepository
     const currentEntity = this.database.find(
       (itemId) => itemId.id === id,
   );
-  if(!currentEntity ) throw new NotFoundException;
+  if(!currentEntity ) throw new NotFoundException();
   return currentEntity;
   }
 
@@ -56,7 +56,7 @@ export class DocumentTypeRepository
     const currentEntity = this.database.filter(
       (itemName) => itemName.name === name,
   );
-  if(!currentEntity ) throw new NotFoundException;
+  if(!currentEntity ) throw new NotFoundException();
   return currentEntity;
   }
 }

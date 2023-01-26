@@ -33,7 +33,7 @@ export class TransferRepository
 
         const index = this.database.findIndex(item => item.id === id);
 
-        if(!index ) throw new NotFoundException;
+        if(!index ) throw new NotFoundException();
 
         if (soft) {
             this.softDelete(index);
@@ -60,7 +60,7 @@ export class TransferRepository
         const currentEntity = this.database.find(
             (itemId) => itemId.id === id && typeof itemId.daletedAt === 'undefined',
         );
-        if(!currentEntity ) throw new NotFoundException;
+        if(!currentEntity ) throw new NotFoundException();
         return currentEntity;
     }
 
@@ -72,7 +72,7 @@ export class TransferRepository
         const currentEntity = this.database.filter(
             (itemORange) => itemORange.outcome.id === accountId && itemORange.dateTime >= dateInit && itemORange.dateTime <= dateEnd && typeof itemORange.daletedAt === 'undefined',
         );
-        if(!currentEntity ) throw new NotFoundException;
+        if(!currentEntity ) throw new NotFoundException();
         return currentEntity;
     }
 
@@ -84,7 +84,7 @@ export class TransferRepository
         const currentEntity = this.database.filter(
             (itemIRange) => itemIRange.income.id === accountId && itemIRange.dateTime >= dateInit && itemIRange.dateTime <= dateEnd && typeof itemIRange.daletedAt === 'undefined',
         );
-        if(!currentEntity ) throw new NotFoundException;
+        if(!currentEntity ) throw new NotFoundException();
         return currentEntity;
     }
 }
