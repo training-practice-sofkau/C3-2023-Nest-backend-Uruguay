@@ -1,27 +1,75 @@
-import { CRUDRepo } from './interfaces/CRUD.interface';
-import { AccountTypeEntity } from '../entities/account_type.entity';
-export class AccountTypeRepository implements CRUDRepo {
-    
-    private readonly database: Array<AccountTypeEntity>;
+import { AccountTypeEntity } from '../entities/';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { CRUD } from './base/';
+import { AccountTypeRepositoryInterface } from './interfaces/';
 
-    constructor() {
-        this.database = new Array<AccountTypeEntity>;
-    }
-    
-    register(entity: AccountTypeEntity): AccountTypeEntity {
-        throw new Error('Method not implemented.');
-    }
-    update(entity: AccountTypeEntity): AccountTypeEntity {
-        throw new Error('Method not implemented.');
-    }
-    delete(entity: AccountTypeEntity): void {
-        throw new Error('Method not implemented.');
-    }
-    findAll(): AccountTypeEntity[] {
-        throw new Error('Method not implemented.');
-    }
-    findById(id: string): AccountTypeEntity {
-        throw new Error('Method not implemented.');
-    }
+@Injectable()
+export class AccountTypeRepository
+  extends CRUD<AccountTypeEntity>
+  implements AccountTypeRepositoryInterface
+{
+  register(entity: AccountTypeEntity): AccountTypeEntity {
+    const indexCurrentEntity = this.database.findIndex(
+      (item) => item.id === entity.id,
+    );
+    if (indexCurrentEntity != -1) throw new Error('The Account Type already exists');
 
+    this.database.push(entity);
+    return this.database.at(-1) ?? entity;
+  }
+
+  update(id: string, entity: AccountTypeEntity): AccountTypeEntity {
+    const indexCurrentEntity = this.database.findIndex(
+      (item) => item.id === id
+    );
+    if (indexCurrentEntity === -1) throw new NotFoundException();
+
+    this.database[indexCurrentEntity] = {
+      ...this.database[indexCurrentEntity],
+      ...entity,
+      id,
+    } as AccountTypeEntity;
+
+    return this.database[indexCurrentEntity];
+  }
+
+  delete(id: string, soft?: boolean | undefined): void {
+    const indexCurrentEntity = this.database.findIndex(
+      (item) => item.id === id
+    );
+
+    if (indexCurrentEntity == -1) throw new NotFoundException();
+
+    this.hardDelete(indexCurrentEntity);
+  }
+
+  private hardDelete(index: number): void {
+    this.database.splice(index);
+  }
+
+  findAll(): AccountTypeEntity[] {
+    return this.database.map(item => item);
+  }
+
+  findOneById(id: string): AccountTypeEntity {
+    const currentEntity = this.database.find(
+      (item) => item.id === id
+    );
+    if (!currentEntity) throw new NotFoundException();
+
+    return currentEntity;
+  }
+
+  findByState(state: boolean): AccountTypeEntity[] {
+    return this.database.filter(
+      (item) => item.state === state
+    );
+  }
+
+  findByName(name: string): AccountTypeEntity[] {
+    return this.database.filter(
+      (item) =>
+        item.name === name
+    );
+  }
 }
