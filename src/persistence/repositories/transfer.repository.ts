@@ -30,21 +30,29 @@ export class TransferRepository extends GeneralCRUD<TransferEntity> {
   }
 
   private hardDelete(index: number): void {
-    throw new Error('This method is not implemented');
+    this.database.splice(index, 1);
   }
 
   private softDelete(index: number): void {
-    throw new Error('This method is not implemented');
+    this.database[index].deletedAt = Date.now();
   }
 
   findAll(): TransferEntity[] {
-    return this.database.filter(
-      (item) => typeof item.deletedAt === 'undefined',
+    let finded = this.database.filter(
+        (item) => typeof item.deletedAt === 'undefined',
     );
+    if (finded === undefined) throw new NotFoundException;
+    return finded;
   }
 
   findOneById(id: string): TransferEntity {
-    throw new Error('This method is not implemented');
+    let finded = this.database.find(
+        (item) => 
+          item.id === id &&
+          typeof item.deletedAt === 'undefined'
+    );
+    if (finded === undefined) throw new NotFoundException;
+    return finded;
   }
 
   findOutcomeByDataRange(accountId: string, dateInit: Date | number, dateEnd: Date | number): TransferEntity[] {

@@ -30,25 +30,39 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> {
   }
 
   private hardDelete(index: number): void {
-    throw new Error('This method is not implemented');
+    this.database.splice(index, 1);
   }
 
   private softDelete(index: number): void {
-    throw new Error('This method is not implemented');
+    this.database[index].deletedAt = Date.now();
   }
 
   findAll(): DepositEntity[] {
-    return this.database.filter(
-      (item) => typeof item.deletedAt === 'undefined',
+    let finded = this.database.filter(
+        (item) => typeof item.deletedAt === 'undefined',
     );
+    if (finded === undefined) throw new NotFoundException;
+    return finded;
   }
 
   findOneById(id: string): DepositEntity {
-    throw new Error('This method is not implemented');
+    let finded = this.database.find(
+        (item) => 
+          item.id === id &&
+          typeof item.deletedAt === 'undefined'
+    );
+    if (finded === undefined) throw new NotFoundException;
+    return finded;
   }
 
   findByAccountId(accountId: string): DepositEntity[] {
-    throw new Error('This method is not implemented');
+    let finded = this.database.filter(
+        (item) => 
+          item.account.id === accountId &&
+          typeof item.deletedAt === 'undefined'
+    );
+    if (finded === undefined) throw new NotFoundException;
+    return finded;
   }
 
   findByDataRange(dateInit: Date | number, dateEnd: Date | number): DepositEntity[] {

@@ -30,32 +30,70 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> {
   }
 
   private hardDelete(index: number): void {
-    throw new Error('This method is not implemented');
+    this.database.splice(index, 1);
+    // This will be work but the main Repository instance its not exist
+    // MainAccountTypeRepository().delete(this.database[index].accountType.id, false);
+    // And optional deposits remove sentence
+    // MainDepositRepository().findByAccountId(this.database[index].id).forEach(function (value) {
+    //     MainDepositRepository().delete(value.id, false);
+    // });
   }
 
   private softDelete(index: number): void {
-    throw new Error('This method is not implemented');
+    this.database[index].deletedAt = Date.now();
+    // This will be work but the main Repository instance its not exist
+    // MainAccountTypeRepository().delete(this.database[index].accountType.id, true);
+    // And optional deposits remove sentence
+    // MainDepositRepository().findByAccountId(this.database[index].id).forEach(function (value) {
+    //     MainDepositRepository().delete(value.id, true);
+    // });
   }
 
   findAll(): AccountEntity[] {
-    return this.database.filter(
-      (item) => typeof item.deletedAt === 'undefined',
+    let finded = this.database.filter(
+        (item) => typeof item.deletedAt === 'undefined',
     );
+    if (finded === undefined) throw new NotFoundException;
+    return finded;
   }
 
   findOneById(id: string): AccountEntity {
-    throw new Error('This method is not implemented');
+    let finded = this.database.find(
+        (item) => 
+          item.id === id &&
+          typeof item.deletedAt === 'undefined'
+    );
+    if (finded === undefined) throw new NotFoundException;
+    return finded;
   }
 
   findByState(state: boolean): AccountEntity[] {
-    throw new Error('This method is not implemented');
+    let finded = this.database.filter(
+        (item) => 
+          item.state === state &&
+          typeof item.deletedAt === 'undefined'
+    );
+    if (finded === undefined) throw new NotFoundException;
+    return finded;
   }
 
   findByCustomer(customerId: string): AccountEntity[] {
-    throw new Error('This method is not implemented');
+    let finded = this.database.filter(
+        (item) => 
+          item.customer.id === customerId &&
+          typeof item.deletedAt === 'undefined'
+    );
+    if (finded === undefined) throw new NotFoundException;
+    return finded;
   }
 
-  findByAccountType(accountTypeId: string): AccountEntity[] {
-    throw new Error('This method is not implemented');
+  findByAccountType(accountTypeId: string): AccountEntity {
+    let finded = this.database.find(
+        (item) => 
+          item.accountType.id === accountTypeId &&
+          typeof item.deletedAt === 'undefined'
+    );
+    if (finded === undefined) throw new NotFoundException;
+    return finded;
   }
 }

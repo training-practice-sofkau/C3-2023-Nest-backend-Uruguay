@@ -26,22 +26,30 @@ export class AccountTypeRepository extends GeneralCRUD<AccountTypeEntity> {
   }
 
   delete(id: string, soft?: boolean | undefined): void {
-    throw new Error('Method not implemented.');
+    this.database.splice(this.database.findIndex((item) => item.id === id), 1);
   }
 
   findAll(): AccountTypeEntity[] {
-    return this.database;
+    let finded = this.database
+    if (finded === undefined) throw new NotFoundException;
+    return finded;
   }
 
-  findOneById(id: string) : AccountTypeEntity {
-    throw new Error('Method not implemented.');
+  findOneById(id: string): AccountTypeEntity {
+    let finded = this.database.find( (item) => item.id === id );
+    if (finded === undefined) throw new NotFoundException;
+    return finded;
   }
 
   findByState(state: boolean): AccountTypeEntity[] {
-    throw new Error('This method is not implemented');
+    let finded = this.database.filter( (item) => item.state === state );
+    if (finded === undefined) throw new NotFoundException;
+    return finded;
   }
 
-  findByName(name: string): AccountTypeEntity[] {
-    throw new Error('This method is not implemented');
+  findByName(name: string): AccountTypeEntity {
+    let finded = this.database.find( (item) => item.name === name );
+    if (finded === undefined) throw new NotFoundException;
+    return finded;
   }
 }

@@ -26,22 +26,30 @@ export class DocumentTypeRepository extends GeneralCRUD<DocumentTypeEntity> {
   }
 
   delete(id: string, soft?: boolean | undefined): void {
-    throw new Error('This method is not implemented');
+    this.database.splice(this.database.findIndex((item) => item.id === id), 1);
   }
 
   findAll(): DocumentTypeEntity[] {
-    return this.database;
+    let finded = this.database;
+    if (finded === undefined) throw new NotFoundException;
+    return finded;
   }
 
   findOneById(id: string): DocumentTypeEntity {
-    throw new Error('This method is not implemented');
+    let finded = this.database.find( (item) => item.id === id );
+    if (finded === undefined) throw new NotFoundException;
+    return finded;
   }
 
   findByState(state: boolean): DocumentTypeEntity[] {
-    throw new Error('This method is not implemented');
+    let finded = this.database.filter( (item) => item.state === state );
+    if (finded === undefined) throw new NotFoundException;
+    return finded;
   }
 
-  findByName(name: string): DocumentTypeEntity[] {
-    throw new Error('This method is not implemented');
+  findByName(name: string): DocumentTypeEntity {
+    let finded = this.database.find( (item) => item.name === name );
+    if (finded === undefined) throw new NotFoundException;
+    return finded;
   }
 }
