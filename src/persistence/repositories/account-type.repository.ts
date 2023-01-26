@@ -29,7 +29,7 @@ export class AccountTypeRepository
     }
 
     delete(id: string, soft?: boolean | undefined): void {
-        const index = this.database.findIndex(item => item.id === id);
+        const index = this.database.findIndex(itemDel => itemDel.id === id);
         if(!index ) throw new NotFoundException;
         this.database.splice(index, 1);
     }
@@ -40,23 +40,23 @@ export class AccountTypeRepository
 
     findOneById(id: string): AccountTypeEntity {
         const currentEntity = this.database.find(
-            (item) => item.id === id,
+            (itemId) => itemId.id === id,
         );
-        if (currentEntity) return currentEntity;
-        else throw new NotFoundException();
+        if(!currentEntity ) throw new NotFoundException;
+        return currentEntity;
     }
 
     findByState(state: boolean): AccountTypeEntity[] {
         return this.database.filter(
-            (item) => item.state === state,
+            (itemState) => itemState.state === state,
         );
     }
 
     findByName(name: string): AccountTypeEntity[] {
         const currentEntity = this.database.filter(
-            (item) => item.name === name,
+            (itemName) => itemName.name === name,
         );
-        if (currentEntity) return currentEntity;
-        else throw new NotFoundException();
+        if(!currentEntity ) throw new NotFoundException;
+        return currentEntity;
     }
 }

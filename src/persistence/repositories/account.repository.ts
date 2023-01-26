@@ -32,7 +32,7 @@ export class AccountRepository
 
     delete(id: string, soft?: boolean): void {
 
-        const index = this.database.findIndex(item => item.id === id);
+        const index = this.database.findIndex(itemIndex => itemIndex.id === id);
 
         if(!index ) throw new NotFoundException;
 
@@ -61,8 +61,8 @@ export class AccountRepository
         const currentEntity = this.database.find(
             (item) => item.id === id && typeof item.daletedAt === 'undefined',
         );
-        if (currentEntity) return currentEntity;
-        else throw new NotFoundException();
+        if(!currentEntity ) throw new NotFoundException;
+        return currentEntity;
     }
 
     findByState(state: boolean): AccountEntity[] {
@@ -75,15 +75,15 @@ export class AccountRepository
         const currentEntity = this.database.filter(
             (item) => item.customerId.id === customerId && typeof item.daletedAt === 'undefined',
         );
-        if (currentEntity) return currentEntity;
-        else throw new NotFoundException();
+        if(!currentEntity ) throw new NotFoundException;
+        return currentEntity;
     }
 
     findByAccountType(accountTypeId: string): AccountEntity[] {
         const currentEntity = this.database.filter(
             (item) => item.accountTypeId.id === accountTypeId && typeof item.daletedAt === 'undefined',
         );
-        if (currentEntity) return currentEntity;
-        else throw new NotFoundException();
+        if(!currentEntity ) throw new NotFoundException;
+        return currentEntity;
     }
 }

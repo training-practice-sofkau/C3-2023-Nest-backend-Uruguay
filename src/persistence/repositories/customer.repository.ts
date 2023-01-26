@@ -51,24 +51,24 @@ private softDelete(index: number): void {
 
   findAll(): CustomerEntity[] {
     return this.database.filter(
-      (item) => typeof item.daletedAt === 'undefined',
+      (itemDel) => typeof itemDel.daletedAt === 'undefined',
     );
   }
 
   findOneById(id: string): CustomerEntity {
     const currentEntity = this.database.find(
-      (item) => item.id === id && typeof item.daletedAt === 'undefined',
+      (itemId) => itemId.id === id && typeof itemId.daletedAt === 'undefined',
     );
-    if (currentEntity) return currentEntity;
-    else throw new NotFoundException();
+    if(!currentEntity ) throw new NotFoundException;
+    return currentEntity;
   }
 
   findOneByEmailAndPassword(email: string, password: string): boolean {
     const indexCurrentEntity = this.database.findIndex(
-      (item) =>
-        item.email === email &&
-        item.password === password &&
-        typeof item.daletedAt === 'undefined',
+      (itemEAndP) =>
+        itemEAndP.email === email &&
+        itemEAndP.password === password &&
+        typeof itemEAndP.daletedAt === 'undefined',
     );
     return indexCurrentEntity >= -1 ? true : false;
   }
@@ -78,39 +78,39 @@ private softDelete(index: number): void {
     document: string,
   ): CustomerEntity {
     const currentEntity = this.database.find(
-      (item) => item.documentType.id === documentTypeId && item.document === document && typeof item.daletedAt === 'undefined',
+      (itemDoc) => itemDoc.documentType.id === documentTypeId && itemDoc.document === document && typeof itemDoc.daletedAt === 'undefined',
   );
-  if (currentEntity) return currentEntity;
-  else throw new NotFoundException();
+  if(!currentEntity ) throw new NotFoundException;
+  return currentEntity;
   }
 
   findOneByEmail(email: string): CustomerEntity {
     const currentEntity = this.database.find(
-      (item) => item.email === email && typeof item.daletedAt === 'undefined',
+      (itemEmail) => itemEmail.email === email && typeof itemEmail.daletedAt === 'undefined',
   );
-  if (currentEntity) return currentEntity;
-  else throw new NotFoundException();
+  if(!currentEntity ) throw new NotFoundException;
+  return currentEntity;
   }
 
   findOneByPhone(phone: string): CustomerEntity {
     const currentEntity = this.database.find(
-      (item) => item.phone === phone && typeof item.daletedAt === 'undefined',
+      (itemPhone) => itemPhone.phone === phone && typeof itemPhone.daletedAt === 'undefined',
   );
-  if (currentEntity) return currentEntity;
-  else throw new NotFoundException();
+  if(!currentEntity ) throw new NotFoundException;
+  return currentEntity;
   }
 
   findByState(state: boolean): CustomerEntity[] {
     return this.database.filter(
-      (item) => item.state === state && typeof item.daletedAt === 'undefined',
+      (itemState) => itemState.state === state && typeof itemState.daletedAt === 'undefined',
   );
   }
 
   findByFullName(fullName: string): CustomerEntity[] {
     const currentEntity = this.database.filter(
-      (item) => item.fullName === fullName && typeof item.daletedAt === 'undefined',
+      (itemFName) => itemFName.fullName === fullName && typeof itemFName.daletedAt === 'undefined',
   );
-  if (currentEntity) return currentEntity;
-  else throw new NotFoundException();
+  if(!currentEntity ) throw new NotFoundException;
+  return currentEntity;
   }
 }
