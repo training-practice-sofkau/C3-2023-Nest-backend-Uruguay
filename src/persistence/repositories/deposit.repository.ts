@@ -55,13 +55,21 @@ export class DepositRepository
     }
 
     findByAccountId(accountId: string): DepositEntity[] {
-        throw new Error('This method is not implemented');
+        const currentEntity = this.database.filter(
+            (item) => item.accountId.id === accountId && typeof item.daletedAt === 'undefined',
+        );
+        if (currentEntity) return currentEntity;
+        else throw new NotFoundException();
     }
 
     findByDataRange(
         dateInit: Date | number,
         dateEnd: Date | number,
     ): DepositEntity[] {
-        throw new Error('This method is not implemented');
+        const currentEntity = this.database.filter(
+            (item) => item.dateTime >= dateInit && item.dateTime <= dateEnd && typeof item.daletedAt === 'undefined',
+        );
+        if (currentEntity) return currentEntity;
+        else throw new NotFoundException();
     }
 }
