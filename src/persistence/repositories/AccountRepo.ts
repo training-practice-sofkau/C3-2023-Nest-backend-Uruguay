@@ -18,23 +18,25 @@ export class AccountRepository extends BaseRepository<AccountEntity>  implements
   
 
     update(id: string, entity: AccountEntity): AccountEntity {
+
       const indexCurrentEntity = this.database.findIndex((obj) => obj.id === id && typeof obj.daletedAt === 'undefined');
+
       if (indexCurrentEntity >= 0)
-          this.database[indexCurrentEntity] = {
-          ...this.database[indexCurrentEntity],
-          ...entity,
-          id,
-          } 
-      else throw new NotFoundException();
+          this.database[indexCurrentEntity] = {...this.database[indexCurrentEntity],...entity,id,
+      } 
+      else throw new NotFoundException('Lo siento, nada por aquí =(');
+
       return this.database[indexCurrentEntity];
     }
 
 
     private hardDelete(index: number): void {
+
       this.database.splice(index,1);
     }   
   
     private softDelete(index: number): void {
+      
       this.database[index].daletedAt = Date.now();
     }
 
