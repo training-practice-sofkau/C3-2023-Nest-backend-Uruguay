@@ -1,12 +1,12 @@
 import { Injectable } from "@nestjs/common";
-import { AbstracRepo } from "./repo-base/abtrac-repo";
+import { BaseRepository } from "./repo-base/base-repository";
 import { CustomerEntity } from "../entities/customer-entity";
+import { IRepository } from "./interface/i-base/i-repository";
 
 
 @Injectable()
-export class CustomerRepo extends AbstracRepo<CustomerEntity>{
+export class CustomerRepo extends BaseRepository<CustomerEntity> implements IRepository<CustomerEntity>{ //Consultar??
    
-
    
     register(entity: CustomerEntity): CustomerEntity {
       throw new Error('This method is not implemented');
