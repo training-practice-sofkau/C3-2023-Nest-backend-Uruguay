@@ -6,8 +6,6 @@ import { BankInternalControl } from "./base";
 import { AccountTypeRepositoryInterface } from "./interfaces";
 
 
-
-
 @Injectable()
 export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity> implements AccountTypeRepositoryInterface{
 
@@ -21,12 +19,11 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
         try{ // try to add the entity to the array
             
             const res = this.database.push(entity);            
-            return this.database[res-1]; // all good, returns the new added entity 
+            return this.database.at(-1) ?? entity; // all good, returns the new entity 
 
         } catch (err){ // something went wrong, push didn't work
 
             throw new InternalServerErrorException(`Internal Error! (${err})`)
-
         }
     }
 
@@ -45,7 +42,7 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
                 throw new NotFoundException(); // gives and exception
             }
 
-            this.database[targetEntityIndex] = {...this.database[targetEntityIndex], ...entity} as AccountTypeEntity; // update existing entity
+            this.database[targetEntityIndex] = {...this.database[targetEntityIndex], ...entity, id: id} as AccountTypeEntity; // update existing entity
 
             return this.database[targetEntityIndex]; // all good, returning update existing entity
 
@@ -70,7 +67,7 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
                 throw new NotFoundException(); // gives and exception
             }  
             
-            //TODO: implement Permanent deletion ( this entity hasn't logical delete )
+            this.database.splice(targetEntityIndex); // Physical delete ( this entity hasn't logical delete )
             
 
         } catch (err){// something wrong happened
@@ -93,7 +90,6 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
         } catch (err){// something wrong happened
 
             throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
-
         }
     }
 
@@ -120,12 +116,49 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
         }
     }    
 
+    /**
+     * Find in the database all the entities with a given state
+     * @param state value to check
+     * @returns array of elements or an exception
+     */
     findByState(state: boolean): AccountTypeEntity[] {
-        throw new Error('This method is not implemented');
+
+        try{ // try to find all entities with a given state
+
+            const searchResult = this.database.filter(entity => entity.state === state); 
+            
+            if( searchResult.length <= 0){ // if the result of the search is empty
+                throw new NotFoundException(); // gives and exception
+            }
+
+            return searchResult; // all good, return the entity 
+
+        }catch(err){ // something wrong happened
+
+            throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
+        }
     }
 
+    /**
+     * Searchs in the DB all de account with a given name
+     * @param name name of the account
+     * @returns array of entities with that name or an exception
+     */
     findByName(name: string): AccountTypeEntity[] {
-        throw new Error('This method is not implemented');
+        
+        try{ // try to find all entities of a given Type
+
+            const searchResult = this.database.filter(entity => entity.name === name); //searchs for entities that matches the criteria
+           
+            if( searchResult.length <= 0){ // if the result of the search is empty
+                throw new NotFoundException(); // gives and exception
+            }
+            return searchResult; // all good, return the entity 
+
+        }catch(err){ // something wrong happened
+
+            throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
+        }
     }
 
 }

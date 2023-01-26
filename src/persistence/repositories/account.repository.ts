@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common/decorators";
 import { InternalServerErrorException, NotFoundException } from "@nestjs/common/exceptions";
 
-
 import { AccountEntity } from '../entities';
 import { BankInternalControl } from "./base";
 import { AccountRepositoryInterface } from './interfaces';
