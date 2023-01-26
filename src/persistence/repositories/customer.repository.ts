@@ -78,6 +78,10 @@ export class CustomerRepository
   }
 
   findByFullName(fullName: string): CustomerEntity[] {
-    throw new Error('This method is not implemented');
+    const currentEntity = this.database.filter(
+      (item) => item.fullName === fullName,
+  );
+  if (currentEntity) return currentEntity;
+  else throw new NotFoundException();
   }
 }

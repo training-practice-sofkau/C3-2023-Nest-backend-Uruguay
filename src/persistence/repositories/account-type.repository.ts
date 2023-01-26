@@ -51,6 +51,10 @@ export class AccountTypeRepository
     }
 
     findByName(name: string): AccountTypeEntity[] {
-        throw new Error('This method is not implemented');
+        const currentEntity = this.database.filter(
+            (item) => item.name === name,
+        );
+        if (currentEntity) return currentEntity;
+        else throw new NotFoundException();
     }
 }
