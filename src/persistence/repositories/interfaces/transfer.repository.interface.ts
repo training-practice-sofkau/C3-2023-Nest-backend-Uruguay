@@ -1,5 +1,5 @@
-import { ICRUD } from './base/CRUD.interface';
-import { TransferEntity } from '../../entities/transfer.entity';
+import { ICRUD } from './base/';
+import { TransferEntity } from '../../entities/';
 
 export interface TransferRepositoryInterface extends ICRUD<TransferEntity> {
 

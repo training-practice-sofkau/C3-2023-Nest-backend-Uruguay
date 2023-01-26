@@ -1,6 +1,6 @@
-import { ICRUD } from './base/CRUD.interface';
-import { AccountEntity } from '../../entities/account.entity';
-import { FindStateInterface } from './base/find-state.interface';
+import { ICRUD, FindStateInterface } from './base/';
+import { AccountEntity } from '../../entities/';
+
 export interface AccountRepositoryInterface extends ICRUD<AccountEntity>, FindStateInterface<AccountEntity> {
 
     findByCustomer(customerId: string): AccountEntity[];

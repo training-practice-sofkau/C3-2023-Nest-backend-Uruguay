@@ -1,6 +1,5 @@
-import { ICRUD } from './base/CRUD.interface';
-import { CustomerEntity } from '../../entities/customer.entity';
-import { FindStateInterface } from './base/find-state.interface';
+import { ICRUD, FindStateInterface } from './base/';
+import { CustomerEntity } from '../../entities/';
 
 export interface CustomerRepositoryInterface
   extends ICRUD<CustomerEntity>,

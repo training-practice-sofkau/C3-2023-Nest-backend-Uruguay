@@ -1,5 +1,5 @@
-import { DepositEntity } from '../../entities/deposit.entity';
-import { ICRUD } from './base/CRUD.interface';
+import { DepositEntity } from '../../entities/';
+import { ICRUD } from './base/';
 
 export interface DespositRepositoryInterface extends ICRUD<DepositEntity> {
     findByAccountId(accountId: string): DepositEntity[];
