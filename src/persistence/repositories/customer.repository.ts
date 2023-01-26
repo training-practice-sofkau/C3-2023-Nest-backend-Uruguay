@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CustomerEntity } from '../entities/';
-import { CRUD } from './base/';
 import { CustomerRepositoryInterface } from './interfaces/';
+import { BASE } from './base/';
 
 @Injectable()
 export class CustomerRepository
-  extends CRUD<CustomerEntity>
+  extends BASE<CustomerEntity>
   implements CustomerRepositoryInterface
 {
   register(entity: CustomerEntity): CustomerEntity {

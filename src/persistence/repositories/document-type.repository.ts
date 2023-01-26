@@ -1,11 +1,11 @@
-import { CRUD } from './base/';
+import { BASE } from './base';
 import { DocumentTypeEntity } from '../entities';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { DocumentTypeRepositoryInterface } from './interfaces/document-type.repository.interface';
 
 @Injectable()
 export class DocumentTypeRepository
-  extends CRUD<DocumentTypeEntity>
+  extends BASE<DocumentTypeEntity>
   implements DocumentTypeRepositoryInterface
 {
   register(entity: DocumentTypeEntity): DocumentTypeEntity {

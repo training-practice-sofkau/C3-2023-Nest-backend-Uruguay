@@ -1,11 +1,11 @@
 import { TransferEntity } from '../entities/';
-import { CRUD } from './base/';
+import { BASE } from './base/';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { TransferRepositoryInterface } from './interfaces/';
 
 @Injectable()
 export class TransferRepository
-  extends CRUD<TransferEntity>
+  extends BASE<TransferEntity>
   implements TransferRepositoryInterface
 {
   register(entity: TransferEntity): TransferEntity {

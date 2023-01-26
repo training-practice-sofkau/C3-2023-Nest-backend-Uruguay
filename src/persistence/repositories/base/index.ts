@@ -1,2 +1,2 @@
-export * from './CRUDRepo.abstract';
+export * from './base.abstract';
 export * from './types.abstract';

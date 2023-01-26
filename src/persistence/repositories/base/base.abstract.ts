@@ -1,4 +1,4 @@
-export abstract class CRUD<T> {
+export abstract class BASE<T> {
   
   protected readonly database: Array<T>;
 
