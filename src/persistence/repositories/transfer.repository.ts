@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 
 import { TransferRepositoryInterface } from './interfaces/';
 import { BaseRepository } from '.';
@@ -35,6 +35,31 @@ update(id: string, entity: Transfer): Transfer {
     
     return entity;
 }
+
+//-----------------------------------------------------------------------------------------------------
+
+
+delete(id: string, soft?: boolean): void {
+    const indexdelete = this.database.findIndex(index => index.trf_id === id && typeof index.trf_delete_at === `undefined`);
+    soft ? this.softDelete(indexdelete) : this.hardDelete(indexdelete);
+ }
+ 
+ private hardDelete(index: number): void {
+ 
+     if (index < 0 ){
+         throw new NotAcceptableException(`No se aceptan valores negativos`);
+       }
+       this.database.splice(index,1);
+ }
+ 
+ private softDelete(index: number): void {
+ 
+     if (index < 0){
+         throw new NotAcceptableException(`No se aceptan valores negativos`);
+     }
+     //this.database.find(index => index.trf_delete_at = new Date); No me deja me da error
+     this.database[index].trf_delete_at = new Date; 
+ }
 //-----------------------------------------------------------------------------------------------------
 
 findAll(): Transfer[] {
@@ -57,13 +82,13 @@ findOneById(id: string): Transfer {
 
 //-----------------------------------------------------------------------------------------------------
 
-    findOutcomeByDataRange(
-        accountId: string,
-        dateInit: Date | number,
-        dateEnd: Date | number,
-    ): Transfer[] {
-        throw new Error('This method is not implemented');
-    }
+findOutcomeByDataRange(
+    accountId: string,
+    dateInit: Date | number,
+    dateEnd: Date | number,
+): Transfer[] {
+    throw new Error('This method is not implemented');
+}
 
 //-----------------------------------------------------------------------------------------------------
 
@@ -75,23 +100,5 @@ findIncomeByDataRange(
     throw new Error('This method is not implemented');
 }
 
-delete(id: string, soft?: boolean): void {
-    throw new Error('This method is not implemented');
-}
 
-private hardDelete(index: number): void {
-
-    const indexTransfer = this.database[index];
-    
-    if (indexTransfer === -1) {
-      throw new NotFoundException(`Customer with id ${id} not found`);
-    }
-
-    this.customers.splice(index, 1);
-    return true;
-}
-
-private softDelete(index: number): void {
-    throw new Error('This method is not implemented');
-}
 }

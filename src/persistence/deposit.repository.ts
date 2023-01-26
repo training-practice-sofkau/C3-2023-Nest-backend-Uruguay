@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 
 
 import { DepositRepositoryInterface } from './interfaces/';
@@ -74,22 +74,32 @@ export class DepositRepository
           return cpAccountId;
     }
 
-    findByDataRange(
-        dateInit: Date | number,
-        dateEnd: Date | number,
-    ): Deposit[] {
-        throw new Error('This method is not implemented');
+delete(id: string, soft?: boolean): void {
+    const indexdelete = this.database.findIndex(index => index.dep_id === id && typeof index.dep_delete_at === `undefined`);
+    soft ? this.softDelete(indexdelete) : this.hardDelete(indexdelete);
+}
+
+private hardDelete(index: number): void {
+   
+    if (index < 0 ){
+        throw new NotAcceptableException(`No se aceptan valores negativos`);
+      }
+      this.database.splice(index,1);
+    
+}
+
+private softDelete(index: number): void {
+    if (index < 0){
+        throw new NotAcceptableException(`No se aceptan valores negativos`);
     }
 
-    delete(id: string, soft?: boolean): void {
-        throw new Error('This method is not implemented');
-    }
+    this.database[index].dep_delete_at = new Date; 
 
-    private hardDelete(index: number): void {
-        throw new Error('This method is not implemented');
-    }
+}
 
-    private softDelete(index: number): void {
-        throw new Error('This method is not implemented');
-    }
+findByDataRange(dateInit: Date | number,dateEnd: Date | number,): Deposit[] {
+
+}
+
+    
 }

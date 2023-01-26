@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { BaseRepository } from './repositories/base/base.repository';
 import { AccountTypeModel } from './entities/account.type.entities';
 import { AccountTypeRepositoryInterface } from './repositories/interfaces/account-type-repository.interface';
@@ -30,7 +30,28 @@ update(id: string, entity: AccountTypeModel) {
 }
 
 delete(id: string, soft?: boolean | undefined): void {
-    throw new Error('Method not implemented.');
+  const indexdelete = this.database.findIndex(index => index.acctp_id === id && typeof index.acctp_deletd_at === `undefined`);
+  soft ? this.softDelete(indexdelete) : this.hardDelete(indexdelete);
+}
+
+private hardDelete(index: number): void {
+   
+  if (index < 0 ){
+      throw new NotAcceptableException(`No se aceptan valores negativos`);
+    }
+    this.database.splice(index,1);
+  
+}
+
+private softDelete(index: number): void {
+  if (index < 0){
+      throw new NotAcceptableException(`No se aceptan valores negativos`);
+  }
+  
+  //this.database.find(index => index.acctp_deletd_at = new Date);
+
+  this.database[index].acctp_deletd_at = new Date; 
+
 }
 
 findAll(): AccountTypeModel[] {
