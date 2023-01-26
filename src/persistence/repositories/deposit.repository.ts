@@ -9,9 +9,7 @@ export class DepositRepository
   implements DespositRepositoryInterface
 {
   register(entity: DepositEntity): DepositEntity {
-    const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === entity.id
-    );
+    const indexCurrentEntity = this.findIndex(entity.id);
     if (indexCurrentEntity != -1) throw new Error('The Desposit already exists');
 
     this.database.push(entity);
@@ -19,9 +17,7 @@ export class DepositRepository
   }
 
   update(id: string, entity: DepositEntity): DepositEntity {
-    const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.deletedAt === 'undefined',
-    );
+    const indexCurrentEntity = this.findIndex(id);
     if (indexCurrentEntity === -1) throw new NotFoundException();
 
     this.database[indexCurrentEntity] = {
@@ -34,9 +30,7 @@ export class DepositRepository
   }
 
   delete(id: string, soft?: boolean | undefined): void {
-    const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.deletedAt === 'undefined',
-    );
+    const indexCurrentEntity = this.findIndex(id);
 
     if (indexCurrentEntity == -1) throw new NotFoundException();
 
@@ -81,6 +75,12 @@ export class DepositRepository
   ): DepositEntity[] {
     return this.database.filter(
       (item) => item.dateTime >= dateInit && item.dateTime <= dateEnd && typeof item.deletedAt === 'undefined',
+    );
+  }
+
+  private findIndex(id: string): number {
+    return this.database.findIndex(
+      (item) => item.id === id && typeof item.deletedAt === 'undefined',
     );
   }
 }

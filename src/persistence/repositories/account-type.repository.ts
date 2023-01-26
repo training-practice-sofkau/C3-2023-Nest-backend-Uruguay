@@ -9,9 +9,7 @@ export class AccountTypeRepository
   implements AccountTypeRepositoryInterface
 {
   register(entity: AccountTypeEntity): AccountTypeEntity {
-    const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === entity.id,
-    );
+    const indexCurrentEntity = this.findIndex(entity.id)
     if (indexCurrentEntity != -1) throw new Error('The Account Type already exists');
 
     this.database.push(entity);
@@ -19,9 +17,7 @@ export class AccountTypeRepository
   }
 
   update(id: string, entity: AccountTypeEntity): AccountTypeEntity {
-    const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id
-    );
+    const indexCurrentEntity = this.findIndex(id);
     if (indexCurrentEntity === -1) throw new NotFoundException();
 
     this.database[indexCurrentEntity] = {
@@ -34,9 +30,7 @@ export class AccountTypeRepository
   }
 
   delete(id: string): void {
-    const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id
-    );
+    const indexCurrentEntity = this.findIndex(id);
 
     if (indexCurrentEntity == -1) throw new NotFoundException();
 
@@ -66,6 +60,12 @@ export class AccountTypeRepository
     return this.database.filter(
       (item) =>
         item.name === name
+    );
+  }
+
+  private findIndex(id: string): number {
+    return this.database.findIndex(
+      (item) => item.id === id
     );
   }
 }

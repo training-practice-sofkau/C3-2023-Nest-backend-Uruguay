@@ -9,19 +9,16 @@ export class CustomerRepository
   implements CustomerRepositoryInterface
 {
   register(entity: CustomerEntity): CustomerEntity {
-    const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === entity.id,
-    );
-    if (indexCurrentEntity != -1) throw new Error('The Customer already exists');
+    const indexCurrentEntity = this.findIndex(entity.id);
+    if (indexCurrentEntity != -1)
+      throw new Error('The Customer already exists');
 
     this.database.push(entity);
     return this.database.at(-1) ?? entity;
   }
 
   update(id: string, entity: CustomerEntity): CustomerEntity {
-    const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.deletedAt === 'undefined',
-    );
+    const indexCurrentEntity = this.findIndex(id);
     if (indexCurrentEntity === -1) throw new NotFoundException();
 
     this.database[indexCurrentEntity] = {
@@ -34,13 +31,13 @@ export class CustomerRepository
   }
 
   delete(id: string, soft?: boolean | undefined): void {
-    const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.deletedAt === 'undefined',
-    );
+    const indexCurrentEntity = this.findIndex(id);
 
     if (indexCurrentEntity == -1) throw new NotFoundException();
 
-    soft ? this.softDelete(indexCurrentEntity) : this.hardDelete(indexCurrentEntity);
+    soft
+      ? this.softDelete(indexCurrentEntity)
+      : this.hardDelete(indexCurrentEntity);
   }
 
   private hardDelete(index: number): void {
@@ -119,6 +116,12 @@ export class CustomerRepository
     return this.database.filter(
       (item) =>
         item.fullName === fullName && typeof item.deletedAt === 'undefined',
+    );
+  }
+
+  private findIndex(id: string): number {
+    return this.database.findIndex(
+      (item) => item.id === id && typeof item.deletedAt === 'undefined',
     );
   }
 }

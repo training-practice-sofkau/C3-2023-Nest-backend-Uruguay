@@ -9,9 +9,7 @@ export class AccountRepository
   implements AccountRepositoryInterface
 {
   register(entity: AccountEntity): AccountEntity {
-    const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === entity.id,
-    );
+    const indexCurrentEntity = this.findIndex(entity.id);
     if (indexCurrentEntity != -1) throw new Error('The Account already exists');
 
     this.database.push(entity);
@@ -19,9 +17,7 @@ export class AccountRepository
   }
 
   update(id: string, entity: AccountEntity): AccountEntity {
-    const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.deletedAt === 'undefined',
-    );
+    const indexCurrentEntity = this.findIndex(id);
     if (indexCurrentEntity === -1) throw new NotFoundException();
 
     this.database[indexCurrentEntity] = {
@@ -34,9 +30,7 @@ export class AccountRepository
   }
 
   delete(id: string, soft?: boolean | undefined): void {
-    const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.deletedAt === 'undefined',
-    );
+    const indexCurrentEntity = this.findIndex(id);
 
     if (indexCurrentEntity == -1) throw new NotFoundException();
 
@@ -81,6 +75,12 @@ export class AccountRepository
   findByAccountType(accountTypeId: string): AccountEntity[] {
     return this.database.filter(
       (item) => item.accountType.id === accountTypeId && typeof item.deletedAt === 'undefined',
+    );
+  }
+
+  private findIndex(id: string): number {
+    return this.database.findIndex(
+      (item) => item.id === id && typeof item.deletedAt === 'undefined',
     );
   }
 }

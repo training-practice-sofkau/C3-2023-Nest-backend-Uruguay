@@ -9,9 +9,7 @@ export class DocumentTypeRepository
   implements DocumentTypeRepositoryInterface
 {
   register(entity: DocumentTypeEntity): DocumentTypeEntity {
-    const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === entity.id,
-    );
+    const indexCurrentEntity = this.findIndex(entity.id);
     if (indexCurrentEntity != -1) throw new Error('The Document Type already exists');
 
     this.database.push(entity);
@@ -19,9 +17,7 @@ export class DocumentTypeRepository
   }
 
   update(id: string, entity: DocumentTypeEntity): DocumentTypeEntity {
-    const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id
-    );
+    const indexCurrentEntity = this.findIndex(id);
     if (indexCurrentEntity === -1) throw new NotFoundException();
 
     this.database[indexCurrentEntity] = {
@@ -34,9 +30,7 @@ export class DocumentTypeRepository
   }
 
   delete(id: string): void {
-    const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id
-    );
+    const indexCurrentEntity = this.findIndex(id);
 
     if (indexCurrentEntity == -1) throw new NotFoundException();
 
@@ -66,6 +60,12 @@ export class DocumentTypeRepository
     return this.database.filter(
       (item) =>
         item.name === name
+    );
+  }
+
+  private findIndex(id: string): number {
+    return this.database.findIndex(
+      (item) => item.id === id
     );
   }
 }

@@ -9,9 +9,7 @@ export class TransferRepository
   implements TransferRepositoryInterface
 {
   register(entity: TransferEntity): TransferEntity {
-    const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === entity.id,
-    );
+    const indexCurrentEntity = this.findIndex(entity.id);
     if (indexCurrentEntity != -1) throw new Error('The Transfer already exists');
 
     this.database.push(entity);
@@ -19,9 +17,7 @@ export class TransferRepository
   }
 
   update(id: string, entity: TransferEntity): TransferEntity {
-    const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.deletedAt === 'undefined',
-    );
+    const indexCurrentEntity = this.findIndex(id);
     if (indexCurrentEntity === -1) throw new NotFoundException();
 
     this.database[indexCurrentEntity] = {
@@ -34,9 +30,7 @@ export class TransferRepository
   }
 
   delete(id: string, soft?: boolean | undefined): void {
-    const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.deletedAt === 'undefined',
-    );
+    const indexCurrentEntity = this.findIndex(id);
 
     if (indexCurrentEntity == -1) throw new NotFoundException();
 
@@ -83,6 +77,12 @@ export class TransferRepository
   ): TransferEntity[] {
     return this.database.filter(
       (item) => item.income.id === accountId && item.dateTime >= dateInit && item.dateTime <= dateEnd && typeof item.deletedAt === 'undefined',
+    );
+  }
+
+  private findIndex(id: string): number {
+    return this.database.findIndex(
+      (item) => item.id === id && typeof item.deletedAt === 'undefined',
     );
   }
 }
