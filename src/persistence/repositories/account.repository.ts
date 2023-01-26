@@ -5,6 +5,7 @@ import { BaseRepository } from './base';
 import { AccountRepositoryInterface } from './interfaces';
 
 
+
 @Injectable()
 export class AccountRepository
     extends BaseRepository<AccountEntity>
@@ -62,7 +63,11 @@ export class AccountRepository
     }
 
     findByCustomer(customerId: string): AccountEntity[] {
-        throw new Error('This method is not implemented');
+        const currentEntity = this.database.filter(
+            (item) => item.customerId.id === customerId,
+        );
+        if (currentEntity) return currentEntity;
+        else throw new NotFoundException();
     }
 
     findByAccountType(accountTypeId: string): AccountEntity[] {
