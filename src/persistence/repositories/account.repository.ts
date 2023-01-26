@@ -30,7 +30,7 @@ export class AccountRepository
     delete(id: string, soft?: boolean): void {
         const indexToDelete = this.database.findIndex(
             i => i.id === id &&
-            typeof i.deletedAt === 'undefined',
+            typeof i.deletedAt === 'undefined'
             )
         //const indexToDelete = this.database.indexOf(this.findOneById(id))
         soft ? this.softDelete(indexToDelete) : this.hardDelete(indexToDelete)
@@ -38,13 +38,13 @@ export class AccountRepository
 
     private hardDelete(index: number): void {
         if (index > -1) {
-            this.database.
+            this.database.splice(index, 1)
         }
     }
 
     private softDelete(index: number): void {
         if (index > -1) {
-            this.database.splice(index, 1)
+            this.database.find(index => index.deletedAt = new Date)
         }
     }
 
@@ -58,23 +58,31 @@ export class AccountRepository
         const currentEntity = this.database.find(
             (item) => item.id === id && typeof item.deletedAt === 'undefined',
         );
-        if (currentEntity) return currentEntity;
-        else throw new NotFoundException();
+        if (!currentEntity) throw new NotFoundException()
+        else return currentEntity
     }
 
     findByState(state: boolean): AccountEntity[] {
-        const currentEntity = this.database.find(
+        const currentEntity = this.database.filter(
             (item) => item.state === state && typeof item.deletedAt === 'undefined',
         )
-        if (currentEntity) return currentEntity
-        else throw new NotFoundException()
+        if (!currentEntity) throw new NotFoundException()
+        else return currentEntity
     }
 
     findByCustomer(customerId: string): AccountEntity[] {
-        throw new Error('This method is not implemented');
+        const currentEntity = this.database.filter(
+            (item) => item.customer.id === customerId && typeof item.deletedAt === 'undefined',
+        )
+        if (!currentEntity) throw new NotFoundException()
+        else return currentEntity
     }
 
     findByAccountType(accountTypeId: string): AccountEntity[] {
-        throw new Error('This method is not implemented');
+        const currentEntity = this.database.filter(
+            (item) => item.accountType.id === accountTypeId && typeof item.deletedAt === 'undefined',
+        )
+        if (!currentEntity) throw new NotFoundException()
+        else return currentEntity
     }
 }
