@@ -7,7 +7,9 @@ import { RepositoryMethodsInterface } from "./interfaces";
 export class TransferRepository extends BankInternalControl<TransferEntity> implements RepositoryMethodsInterface<TransferEntity> {
 
     register(entity: TransferEntity): TransferEntity {
-        throw new Error("Method not implemented.");
+
+        //this.database.push(entity);
+        
     }
 
     update(id: string, entity: TransferEntity): TransferEntity {
@@ -21,7 +23,7 @@ export class TransferRepository extends BankInternalControl<TransferEntity> impl
     findAll(): TransferEntity[] {
         
         return this.database;
-        
+
     }
 
     findOneById(id: string): TransferEntity {

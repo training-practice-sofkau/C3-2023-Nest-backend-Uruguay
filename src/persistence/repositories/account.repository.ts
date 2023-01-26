@@ -8,7 +8,9 @@ import { RepositoryMethodsInterface } from "./interfaces";
 export class AccountRepository extends BankInternalControl <AccountEntity> implements RepositoryMethodsInterface<AccountEntity>  {
 
     register(entity: AccountEntity): AccountEntity {
-        throw new Error("Method not implemented.");
+        
+        //this.database.push(entity);
+        
     }
 
     update(id: string, entity: AccountEntity): AccountEntity {

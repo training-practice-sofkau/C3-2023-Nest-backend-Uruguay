@@ -7,7 +7,9 @@ import { RepositoryMethodsInterface } from './interfaces';
 export class DocumentTypeRepository extends BankInternalControl <DocumentTypeEntity> implements RepositoryMethodsInterface<DocumentTypeEntity>{
     
     register(entity: DocumentTypeEntity): DocumentTypeEntity {
-        throw new Error('Method not implemented.');
+        
+        //this.database.push(entity);
+        
     }
     
     update(id: string, entity: DocumentTypeEntity): DocumentTypeEntity {
@@ -21,7 +23,7 @@ export class DocumentTypeRepository extends BankInternalControl <DocumentTypeEnt
     findAll(): DocumentTypeEntity[] {
         
         return this.database;
-        
+
     }
     
     findOneById(id: string): DocumentTypeEntity {
