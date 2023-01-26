@@ -37,7 +37,11 @@ export class DocumentTypeRepository
   }
 
   findOneById(id: string): DocumentTypeEntity {
-    throw new Error('This method is not implemented');
+    const currentEntity = this.database.find(
+      (item) => item.id === id,
+  );
+  if (currentEntity) return currentEntity;
+  else throw new NotFoundException();
   }
 
   findByState(state: boolean): DocumentTypeEntity[] {
