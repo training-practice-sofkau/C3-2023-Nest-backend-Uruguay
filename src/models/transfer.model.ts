@@ -7,5 +7,5 @@ export interface TransferModel {
     balance: number;
     reason: string;
     dateTime: Date | number;
-    deletedAt: Date | number | null;
+    deletedAt?: Date | number;
 }

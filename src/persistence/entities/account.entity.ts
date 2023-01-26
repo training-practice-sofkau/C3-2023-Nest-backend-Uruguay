@@ -9,5 +9,5 @@ export class AccountEntity extends GeneralCRUD<AccountModel> implements AccountM
     accountType: AccountTypeEntity;
     balance: number;
     state: boolean;
-    deletedAt: number | Date | null;  
+    deletedAt?: number | Date;  
 }

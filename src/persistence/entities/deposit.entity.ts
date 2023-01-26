@@ -8,5 +8,5 @@ export class DepositEntity extends GeneralCRUD<DepositModel> implements DepositM
     account: AccountEntity;
     amount: number;
     dateTime: Date | number ;
-    deletedAt: number | Date | null;  
+    deletedAt?: number | Date;  
 }

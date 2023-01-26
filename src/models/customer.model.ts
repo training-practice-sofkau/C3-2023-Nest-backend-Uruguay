@@ -8,7 +8,7 @@ export interface CustomerModel {
     email: string;
     phone: string;
     password: string;
-    avatarUrl: string | null;
+    avatarUrl?: string;
     state: boolean;
-    deletedAt: Date | number | null;
+    deletedAt?: Date | number;
 }

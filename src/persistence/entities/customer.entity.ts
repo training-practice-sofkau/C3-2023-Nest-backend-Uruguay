@@ -11,7 +11,7 @@ export class CustomerEntity extends GeneralCRUD<CustomerModel> implements Custom
     email: string;
     phone: string;
     password: string;
-    avatarUrl: string | null ;
+    avatarUrl?: string;
     state = true;
-    deletedAt: number | Date | null;  
+    deletedAt?: number | Date;  
 }

@@ -10,5 +10,5 @@ export class TransferEntity extends GeneralCRUD<TransferModel> implements Transf
     balance: number;
     reason: string;
     dateTime: Date | number;
-    deletedAt: number | Date | null;  
+    deletedAt?: number | Date;  
 }
