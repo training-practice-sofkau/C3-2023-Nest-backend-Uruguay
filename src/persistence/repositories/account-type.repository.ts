@@ -9,11 +9,12 @@ export class AccountTypeRepository
     extends BaseRepository<AccountTypeEntity>
     implements AccountTypeRepositoryInterface {
 
-    register(entity: AccountTypeEntity) {
-        throw new Error('Method not implemented.');
+    register(entity: AccountTypeEntity): AccountTypeEntity {
+        this.database.push(entity);
+        return this.database.at(-1) ?? entity;
     }
 
-    update(id: string, entity: AccountTypeEntity) {
+    update(id: string, entity: AccountTypeEntity): AccountTypeEntity {
         throw new Error('Method not implemented.');
     }
 
@@ -25,7 +26,7 @@ export class AccountTypeRepository
         throw new Error('Method not implemented.');
     }
 
-    findOneById(id: string) {
+    findOneById(id: string): AccountTypeEntity {
         throw new Error('Method not implemented.');
     }
 

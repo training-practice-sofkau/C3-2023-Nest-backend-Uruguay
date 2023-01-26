@@ -10,7 +10,8 @@ export class DepositRepository
     implements DepositRepositoryInterface {
 
     register(entity: DepositEntity): DepositEntity {
-        throw new Error('This method is not implemented');
+        this.database.push(entity);
+        return this.database.at(-1) ?? entity;
     }
 
     update(id: string, entity: DepositEntity): DepositEntity {
