@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { AccountTypeEntity } from '../entities';
 
 import { BaseRepository } from './base';
@@ -6,29 +6,44 @@ import { AccountTypeRepositoryInterface } from './interfaces';
 
 @Injectable()
 export class AccountTypeRepository
-    extends BaseRepository<AccountTypeEntity>
-    implements AccountTypeRepositoryInterface {
-    register(entity: AccountTypeEntity): AccountTypeEntity {
-        throw new Error('Method not implemented.');
-    }
-    update(id: string, entity: AccountTypeEntity): AccountTypeEntity {
-        throw new Error('Method not implemented.');
-    }
-    delete(id: string, soft?: boolean | undefined): void {
-        throw new Error('Method not implemented.');
-    }
-    findAll(): AccountTypeEntity[] {
-        throw new Error('Method not implemented.');
-    }
-    findOneById(id: string): AccountTypeEntity {
-        throw new Error('Method not implemented.');
-    }
+  extends BaseRepository<AccountTypeEntity>
+  implements AccountTypeRepositoryInterface
+{
 
-    findByState(state: boolean): AccountTypeEntity[] {
-        throw new Error('This method is not implemented');
-    }
-
-    findByName(name: string): AccountTypeEntity[] {
-        throw new Error('This method is not implemented');
-    }
+  update(id: string, entity: AccountTypeEntity): AccountTypeEntity {
+    const indexCurrentEntity = this.database.findIndex(
+      (item) => item.id === id 
+    );
+    if (indexCurrentEntity >= 0)
+      this.database[indexCurrentEntity] = {
+        ...this.database[indexCurrentEntity],
+        ...entity,
+        id,
+      } as AccountTypeEntity;
+    else throw new NotFoundException();
+    return this.database[indexCurrentEntity];
+  }
+  delete(id: string, soft?: boolean | undefined): void {
+    this.database.splice(this.database.findIndex((item) => item.id === id), 1);
+  }
+  findAll(): AccountTypeEntity[] {
+    return this.database  
 }
+
+  findOneById(id: string): AccountTypeEntity {
+    const currentEntity = this.database.find(
+        (item) => item.id === id
+      );
+      if (currentEntity) return currentEntity;
+      else throw new NotFoundException();
+  }
+
+  findByState(state: boolean): AccountTypeEntity[] {
+     return this.database.filter((item) => ( state === true ? item.state === true : item.state != true  ));    
+  }
+  findByName(name: string): AccountTypeEntity[] {
+    return this.database.filter((item) => item.name === name);    
+}
+}
+
+

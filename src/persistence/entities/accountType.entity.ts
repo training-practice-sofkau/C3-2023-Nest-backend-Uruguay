@@ -5,6 +5,6 @@ import { AccountTypeModel } from '../../models';
 export class AccountTypeEntity implements AccountTypeModel{
     id = uuid();
     state: true;
-    deletedAt?: number | Date ;   
+    name: string;   
 
 }

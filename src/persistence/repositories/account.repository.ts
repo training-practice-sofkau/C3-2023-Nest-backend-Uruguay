@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { AccountEntity } from '../entities';
 
 import { BaseRepository } from './base';
@@ -10,11 +10,22 @@ export class AccountRepository
     extends BaseRepository<AccountEntity>
     implements AccountRepositoryInterface {
     register(entity: AccountEntity): AccountEntity {
-        throw new Error('This method is not implemented');
+        this.database.push(entity);
+        return this.database.at(-1) ?? entity;
     }
 
     update(id: string, entity: AccountEntity): AccountEntity {
-        throw new Error('This method is not implemented');
+        const indexCurrentEntity = this.database.findIndex(
+            (item) => item.id === id && typeof item.deletedAt === 'undefined',
+          );
+          if (indexCurrentEntity >= 0)
+            this.database[indexCurrentEntity] = {
+              ...this.database[indexCurrentEntity],
+              ...entity,
+              id,
+            } as AccountEntity;
+          else throw new NotFoundException();
+          return this.database[indexCurrentEntity];
     }
 
     delete(id: string, soft?: boolean): void {       
@@ -30,15 +41,20 @@ export class AccountRepository
     }
 
     findAll(): AccountEntity[] {
-        throw new Error('This method is not implemented');
-    }
+        return this.database.filter(
+            (item) => typeof item.deletedAt === 'undefined',
+          );    }
 
     findOneById(id: string): AccountEntity {
-        throw new Error('This method is not implemented');
+        const currentEntity = this.database.find(
+            (item) => item.id === id && typeof item.deletedAt === 'undefined',
+          );
+          if (currentEntity) return currentEntity;
+          else throw new NotFoundException();
     }
 
     findByState(state: boolean): AccountEntity[] {
-        throw new Error('This method is not implemented');
+        return this.database.filter((item) => ( state === true ? item.state === true : typeof item.deletedAt != 'undefined'));    
     }
 
     findByCustomer(customerId: string): AccountEntity[] {

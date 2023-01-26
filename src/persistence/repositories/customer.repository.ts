@@ -72,7 +72,7 @@ export class CustomerRepository
   }
 
   findByState(state: boolean): CustomerEntity[] {
-    throw new Error('This method is not implemented');
+    return this.database.filter((item) => ( state === true ? item.state === true : typeof item.deletedAt != 'undefined'));    
   }
 
   findByFullName(fullName: string): CustomerEntity[] {

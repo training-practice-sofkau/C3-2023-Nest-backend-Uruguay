@@ -10,5 +10,5 @@ export class TransferEntity implements TransferModel {
   transferReason: string;
   dateTime: Date;
   state: true;
-  daletedAt?: Date | number;
+  deletedAt?: Date | number;
 }
