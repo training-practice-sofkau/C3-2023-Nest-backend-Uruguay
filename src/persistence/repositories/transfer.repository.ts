@@ -52,19 +52,35 @@ export class TransferRepository extends GeneralCRUD<TransferEntity> {
 
   findOneById(id: string): TransferEntity {
     let finded = this.database.find(
-        (item) => 
-          item.id === id &&
-          typeof item.deletedAt === 'undefined'
+      (item) => 
+        item.id === id &&
+        typeof item.deletedAt === 'undefined'
     );
     if (finded === undefined) throw new NotFoundException;
     return finded;
   }
 
   findOutcomeByDataRange(accountId: string, dateInit: Date | number, dateEnd: Date | number): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    let finded = this.database.filter(
+      (item) => 
+        item.outcome.id === accountId &&
+        typeof item.deletedAt === 'undefined' &&
+        item.dateTime >= dateInit &&
+        item.dateTime <= dateEnd
+    );
+    if (finded === undefined) throw new NotFoundException;
+    return finded
   }
 
   findIncomeByDataRange(accountId: string, dateInit: Date | number, dateEnd: Date | number): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    let finded = this.database.filter(
+        (item) => 
+          item.income.id === accountId &&
+          typeof item.deletedAt === 'undefined' &&
+          item.dateTime >= dateInit &&
+          item.dateTime <= dateEnd
+      );
+      if (finded === undefined) throw new NotFoundException;
+      return finded
   }
 }
