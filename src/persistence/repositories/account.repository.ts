@@ -29,16 +29,25 @@ export class AccountRepository
     }
 
     delete(id: string, soft?: boolean): void {       
-        throw new Error('This method is not implemented');
+        const index = this.database.findIndex((item) => item.id === id);
+
+        if (soft === true) {
+
+            this.hardDelete(index)
+        }
+        else{
+            this.softDelete(index)
+                }
+
     }
 
-    private hardDelete(index: number): void {
-        throw new Error('This method is not implemented');
+    private hardDelete(index: number): void {        
+        this.database.splice(index, 1);
     }
 
     private softDelete(index: number): void {
-        throw new Error('This method is not implemented');
-    }
+        this.database[index].state = true   
+     }
 
     findAll(): AccountEntity[] {
         return this.database.filter(
