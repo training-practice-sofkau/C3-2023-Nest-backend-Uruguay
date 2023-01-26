@@ -1,15 +1,15 @@
 import { IAccountModel } from "src/models/i-account-model";
+import { v4 as uuid } from 'uuid';
 
 export class AccountEntity implements IAccountModel {
-    state: boolean;
-
-    acc_id : number;
-    customer_id : number;
-    type_Account_id : number;
+    
+    id = uuid();
+    customerId : string;
+    accountTypeId : number;
     balance: number;
+    state = true;
     daletedAt?: Date | number ;
     
-
     // Get and Set
 
 }

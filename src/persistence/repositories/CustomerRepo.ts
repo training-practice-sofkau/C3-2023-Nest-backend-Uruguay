@@ -61,17 +61,16 @@ export class CustomerRepo extends BaseRepository<CustomerEntity> implements IRep
 
   //**METODOS PROPIOS DE LA ENTIDAD -->
   findOneByEmailAndPassword(email: string, password: string): boolean {
-    const IndCurrentEntity = this.database.findIndex((obj) => obj.email === email && obj.password === password && typeof obj.daletedAt === 'undefined');
+    const index = this.database.findIndex((obj) => obj.email === email && obj.password === password && typeof obj.daletedAt === 'undefined');
     let result : boolean = false
-    if (IndCurrentEntity >= -1){
+    if (index > -1){
       result = true
     }
     return result
   }
 
   findOneByDocumentTypeAndDocument(documentTypeId: string, document: string): CustomerEntity {
-    const currentEntity = this.database.find(
-      (obj) => obj.documentType.id === documentTypeId && typeof obj.daletedAt === 'undefined');
+    const currentEntity = this.database.find((obj) => obj.documentType.id === documentTypeId && typeof obj.daletedAt === 'undefined');
   if (currentEntity) return currentEntity;
   else throw new NotFoundException('Lo siento, nada por aqui =(');
   }
