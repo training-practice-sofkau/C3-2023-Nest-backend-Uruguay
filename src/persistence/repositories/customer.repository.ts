@@ -5,8 +5,6 @@ import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception
 import { CustomerEntity } from '../entities';
 import { BankInternalControl } from './base';
 import { CustomerRepositoryInterface } from './interfaces';
-import { DocumentTypeModel } from '../../models/document-type.model';
-
 
 @Injectable()
 export class CustomerRepository extends BankInternalControl<CustomerEntity> implements CustomerRepositoryInterface {
@@ -65,7 +63,7 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
         
         try{        
            
-            const targetEntityIndex = this.database.findIndex(data => data.id === id); //searchs for the position in the array of the entity with Id
+            const targetEntityIndex = this.database.findIndex(entity => entity.id === id); //searchs for the position in the array of the entity with Id
 
             if(targetEntityIndex == -1){ // if the result of the search is an -1 (not found)
                 throw new NotFoundException(); // gives and exception
