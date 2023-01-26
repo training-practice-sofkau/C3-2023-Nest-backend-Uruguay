@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common/decorators';
 import { InternalServerErrorException, NotFoundException } from '@nestjs/common/exceptions';
+
 import { DocumentTypeEntity } from '../entities';
 import { BankInternalControl } from './base';
-import { RepositoryMethodsInterface } from './interfaces';
+import { DocumentTypeRepositoryInterface } from './interfaces';
+
 
 @Injectable()
-export class DocumentTypeRepository extends BankInternalControl <DocumentTypeEntity> implements RepositoryMethodsInterface<DocumentTypeEntity>{
+export class DocumentTypeRepository extends BankInternalControl <DocumentTypeEntity> implements DocumentTypeRepositoryInterface{
     
     /**
      * Adds a new DocumentType entity to the Array of DocumentTypes
@@ -88,7 +90,6 @@ export class DocumentTypeRepository extends BankInternalControl <DocumentTypeEnt
             throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
 
         }
-
     }
     
     /**
@@ -97,7 +98,7 @@ export class DocumentTypeRepository extends BankInternalControl <DocumentTypeEnt
      * @returns entity that matches the Id, if not present, it gives an NotFoundException
      */
     findOneById(id: string): DocumentTypeEntity {
-        
+
         try{ // try to find an entity with a given Id
 
             const index = this.database.findIndex(entity => entity.id === id); //searchs for the position in the array of the entity with Id
@@ -114,4 +115,11 @@ export class DocumentTypeRepository extends BankInternalControl <DocumentTypeEnt
         }
     }
     
+    findByState(state: boolean): DocumentTypeEntity[] {
+        throw new Error('This method is not implemented');
+      }
+    
+      findByName(name: string): DocumentTypeEntity[] {
+        throw new Error('This method is not implemented');
+      }
 }

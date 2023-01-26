@@ -8,7 +8,7 @@ export class TransferRepository extends BankInternalControl<TransferEntity> impl
 
     register(entity: TransferEntity): TransferEntity {
 
-        //this.database.push(entity);
+        return entity;
         
     }
 
@@ -20,6 +20,14 @@ export class TransferRepository extends BankInternalControl<TransferEntity> impl
         throw new Error("Method not implemented.");
     }
 
+    private hardDelete(index: number): void {
+        throw new Error('This method is not implemented');
+    }
+
+    private softDelete(index: number): void {
+        throw new Error('This method is not implemented');
+    }
+
     findAll(): TransferEntity[] {
         
         return this.database;
@@ -29,4 +37,20 @@ export class TransferRepository extends BankInternalControl<TransferEntity> impl
     findOneById(id: string): TransferEntity {
         throw new Error("Method not implemented.");
     }     
+
+    findOutcomeByDataRange(
+        accountId: string,
+        dateInit: Date | number,
+        dateEnd: Date | number,
+    ): TransferEntity[] {
+        throw new Error('This method is not implemented');
+    }
+
+    findIncomeByDataRange(
+        accountId: string,
+        dateInit: Date | number,
+        dateEnd: Date | number,
+    ): TransferEntity[] {
+        throw new Error('This method is not implemented');
+    }
 }

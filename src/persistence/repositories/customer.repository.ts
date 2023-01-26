@@ -4,10 +4,11 @@ import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception
 
 import { CustomerEntity } from '../entities';
 import { BankInternalControl } from './base';
-import { RepositoryMethodsInterface } from './interfaces';
+import { CustomerRepositoryInterface } from './interfaces';
+
 
 @Injectable()
-export class CustomerRepository extends BankInternalControl<CustomerEntity> implements RepositoryMethodsInterface<CustomerEntity> {
+export class CustomerRepository extends BankInternalControl<CustomerEntity> implements CustomerRepositoryInterface {
 
     /**
      * Adds a new Customer entity to the Array of customer
@@ -130,4 +131,37 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
 
         }
     }  
+
+    findOneByEmailAndPassword(email: string, password: string): boolean {
+        const indexCurrentEntity = this.database.findIndex(
+          (item) =>
+            item.email === email &&
+            item.password === password &&
+            typeof item.deletedAt === 'undefined',
+        );
+        return indexCurrentEntity >= -1 ? true : false;
+      }
+    
+      findOneByDocumentTypeAndDocument(
+        documentTypeId: string,
+        document: string,
+      ): CustomerEntity {
+        throw new Error('This method is not implemented');
+      }
+
+      findOneByEmail(email: string): CustomerEntity {
+        throw new Error('This method is not implemented');
+      }
+
+      findOneByPhone(phone: string): CustomerEntity {
+        throw new Error('This method is not implemented');
+      }
+
+      findByState(state: boolean): CustomerEntity[] {
+        throw new Error('This method is not implemented');
+      }
+
+      findByFullName(fullName: string): CustomerEntity[] {
+        throw new Error('This method is not implemented');
+      }
 }

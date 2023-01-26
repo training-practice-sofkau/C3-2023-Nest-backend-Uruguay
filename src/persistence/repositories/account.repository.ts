@@ -1,15 +1,17 @@
 import { Injectable } from "@nestjs/common/decorators";
+
+
 import { AccountEntity } from '../entities';
 import { BankInternalControl } from "./base";
-import { RepositoryMethodsInterface } from "./interfaces";
+import { AccountRepositoryInterface } from './interfaces';
 
 
 @Injectable()
-export class AccountRepository extends BankInternalControl <AccountEntity> implements RepositoryMethodsInterface<AccountEntity>  {
+export class AccountRepository extends BankInternalControl <AccountEntity> implements AccountRepositoryInterface  {
 
     register(entity: AccountEntity): AccountEntity {
         
-        //this.database.push(entity);
+        return entity;
         
     }
 
@@ -21,6 +23,15 @@ export class AccountRepository extends BankInternalControl <AccountEntity> imple
         throw new Error("Method not implemented.");
     }
 
+    private hardDelete(index: number): void {
+        throw new Error('This method is not implemented');
+    }
+
+    private softDelete(index: number): void {
+        throw new Error('This method is not implemented');
+    }
+
+
     findAll(): AccountEntity[] {
         
         return this.database;
@@ -31,5 +42,15 @@ export class AccountRepository extends BankInternalControl <AccountEntity> imple
         throw new Error("Method not implemented.");
     }    
     
-    
+    findByState(state: boolean): AccountEntity[] {
+        throw new Error('This method is not implemented');
+    }
+
+    findByCustomer(customerId: string): AccountEntity[] {
+        throw new Error('This method is not implemented');
+    }
+
+    findByAccountType(accountTypeId: string): AccountEntity[] {
+        throw new Error('This method is not implemented');
+    }
 }

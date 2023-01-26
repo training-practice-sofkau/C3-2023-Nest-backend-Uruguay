@@ -1,11 +1,15 @@
 import { Injectable } from "@nestjs/common";
 import { InternalServerErrorException, NotFoundException } from '@nestjs/common/exceptions';
-import { AccountTypeEntity } from "../entities/account-type.entity";
+
+import { AccountTypeEntity } from "../entities";
 import { BankInternalControl } from "./base";
-import { RepositoryMethodsInterface } from "./interfaces";
+import { AccountTypeRepositoryInterface } from "./interfaces";
+
+
+
 
 @Injectable()
-export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity> implements RepositoryMethodsInterface<AccountTypeEntity>{
+export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity> implements AccountTypeRepositoryInterface{
 
     /**
      * Adds a new AccountType Entity to the Array of Accounts
@@ -41,7 +45,7 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
                 throw new NotFoundException(); // gives and exception
             }
 
-            this.database[targetEntityIndex] = {...this.database[targetEntityIndex], ...entity}; // update existing entity
+            this.database[targetEntityIndex] = {...this.database[targetEntityIndex], ...entity} as AccountTypeEntity; // update existing entity
 
             return this.database[targetEntityIndex]; // all good, returning update existing entity
 
@@ -115,4 +119,13 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
             throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
         }
     }    
+
+    findByState(state: boolean): AccountTypeEntity[] {
+        throw new Error('This method is not implemented');
+    }
+
+    findByName(name: string): AccountTypeEntity[] {
+        throw new Error('This method is not implemented');
+    }
+
 }

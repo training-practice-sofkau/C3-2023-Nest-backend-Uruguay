@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common/decorators';
 import { DepositEntity } from '../entities';
 import { BankInternalControl } from './base';
-import { RepositoryMethodsInterface } from './interfaces';
+import { DepositRepositoryInterface } from './interfaces';
 
 @Injectable()
-export class DepositRepository extends BankInternalControl <DepositEntity> implements RepositoryMethodsInterface<DepositEntity> {
+export class DepositRepository extends BankInternalControl<DepositEntity> implements DepositRepositoryInterface {
     
     register(entity: DepositEntity): DepositEntity {
        
-        //this.database.push(entity);
+        return entity;
         
     }
     
@@ -18,6 +18,14 @@ export class DepositRepository extends BankInternalControl <DepositEntity> imple
     
     delete(id: string, soft?: boolean | undefined): void {
         throw new Error('Method not implemented.');
+    }
+
+    private hardDelete(index: number): void {
+        throw new Error('This method is not implemented');
+    }
+
+    private softDelete(index: number): void {
+        throw new Error('This method is not implemented');
     }
     
     findAll(): DepositEntity[] {
@@ -29,5 +37,15 @@ export class DepositRepository extends BankInternalControl <DepositEntity> imple
     findOneById(id: string): DepositEntity {
         throw new Error('Method not implemented.');
     }
-    
+ 
+    findByAccountId(accountId: string): DepositEntity[] {
+        throw new Error('This method is not implemented');
+    }
+
+    findByDataRange(
+        dateInit: Date | number,
+        dateEnd: Date | number,
+    ): DepositEntity[] {
+        throw new Error('This method is not implemented');
+    }
 }
