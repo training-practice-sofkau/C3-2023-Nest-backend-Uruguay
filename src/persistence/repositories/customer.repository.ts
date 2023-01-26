@@ -10,7 +10,7 @@ import { RepositoryMethodsInterface } from './interfaces';
 export class CustomerRepository extends BankInternalControl<CustomerEntity> implements RepositoryMethodsInterface<CustomerEntity> {
 
     /**
-     * Adds a new entity to the Array
+     * Adds a new Customer entity to the Array of customer
      * @param entity new object to be inserted in the array
      * @returns new entity added
      */
@@ -21,7 +21,7 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
             const res = this.database.push(entity);
             
             if(res < 0 ){ //push didn't return new array lenght (something wrong happened)
-                throw new Error("Error creating new customer!");                
+                throw new Error("Error creating new Customer!");                
             }
             
             return entity; // all good, the new entity was created
@@ -34,7 +34,7 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
     }
 
     /**
-     * Modify the data of the entity that matches a given Id
+     * Modify the data of the Customer that matches a given Id
      * @param id unique key identifier
      * @param entity object that provides the new updated data 
      */
@@ -61,11 +61,11 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
     }
 
     /**
-     * Delete the entity that matches a given Id
+     * Delete the Customer that matches a given Id
      * @param id unique key identifier
      * @param soft sets the deletion method to use (true = logical / false = permanent)
      */
-    delete(id: string, soft?: boolean): void {
+    delete(id: string, soft?: boolean | undefined): void {
         
         try{        
            
@@ -94,7 +94,7 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
     }
 
     /**
-     * Returns the content of the array of CustomerEntities
+     * Returns the content of the array of Customers
      * @returns Array of entities 
      */
     findAll(): CustomerEntity[] {
@@ -120,7 +120,7 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
 
         try{ // try to find an entity with a given Id
 
-            const index = this.database.findIndex(data => data.id === id); //searchs for the position in the array of the entity with Id
+            const index = this.database.findIndex(entity => entity.id === id); //searchs for the position in the array of the entity with Id
 
             if(index == -1){ // if the result of the search is an -1 (not found)
                 throw new NotFoundException(); // gives and exception
