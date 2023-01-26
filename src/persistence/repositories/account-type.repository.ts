@@ -52,7 +52,7 @@ export class AccountTypeRepository
         else throw new NotFoundException("El id no existe en base de datos");
       }
 
-
+   
     findByState(state: boolean): AccountTypeEntity[] {
         throw new Error('This method is not implemented');
     }

@@ -73,7 +73,10 @@ export class CustomerRepository
   }
 
   findOneByEmail(email: string): CustomerEntity {
-    throw new Error('This method is not implemented');
+    const emailf = this.database.findIndex(
+      (item) => item.email == email && typeof item.deletedAt === "undefined"
+    )
+    return this.database[emailf]
   }
 
   findOneByPhone(phone: string): CustomerEntity {
