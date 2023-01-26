@@ -1,7 +1,7 @@
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
-import { BaseRepository } from './repositories/base/base.repository';
-import { AccountTypeModel } from './entities/account.type.entities';
-import { AccountTypeRepositoryInterface } from './repositories/interfaces/account-type-repository.interface';
+import { BaseRepository } from './base/base.repository';
+import { AccountTypeModel } from '../entities/account.type.entities';
+import { AccountTypeRepositoryInterface } from './interfaces/account-type-repository.interface';
 
 
 
