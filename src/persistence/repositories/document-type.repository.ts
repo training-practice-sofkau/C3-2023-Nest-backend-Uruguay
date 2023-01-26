@@ -40,23 +40,23 @@ export class DocumentTypeRepository
 
   findOneById(id: string): DocumentTypeEntity {
     const currentEntity = this.database.find(
-      (item) => item.id === id,
+      (itemId) => itemId.id === id,
   );
-  if (currentEntity) return currentEntity;
-  else throw new NotFoundException();
+  if(!currentEntity ) throw new NotFoundException;
+  return currentEntity;
   }
 
   findByState(state: boolean): DocumentTypeEntity[] {
     return this.database.filter(
-      (item) => item.state === state,
+      (itemState) => itemState.state === state,
   );
   }
 
   findByName(name: string): DocumentTypeEntity[] {
     const currentEntity = this.database.filter(
-      (item) => item.name === name,
+      (itemName) => itemName.name === name,
   );
-  if (currentEntity) return currentEntity;
-  else throw new NotFoundException();
+  if(!currentEntity ) throw new NotFoundException;
+  return currentEntity;
   }
 }

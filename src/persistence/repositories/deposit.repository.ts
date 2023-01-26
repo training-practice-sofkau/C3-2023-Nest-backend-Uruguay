@@ -57,18 +57,18 @@ export class DepositRepository
 
     findOneById(id: string): DepositEntity {
         const currentEntity = this.database.find(
-            (item) => item.id === id && typeof item.daletedAt === 'undefined',
+            (itemId) => itemId.id === id && typeof itemId.daletedAt === 'undefined',
         );
-        if (currentEntity) return currentEntity;
-        else throw new NotFoundException();
+        if(!currentEntity ) throw new NotFoundException;
+        return currentEntity;
     }
 
     findByAccountId(accountId: string): DepositEntity[] {
         const currentEntity = this.database.filter(
-            (item) => item.accountId.id === accountId && typeof item.daletedAt === 'undefined',
+            (itemId) => itemId.accountId.id === accountId && typeof itemId.daletedAt === 'undefined',
         );
-        if (currentEntity) return currentEntity;
-        else throw new NotFoundException();
+        if(!currentEntity ) throw new NotFoundException;
+        return currentEntity;
     }
 
     findByDataRange(
@@ -76,9 +76,9 @@ export class DepositRepository
         dateEnd: Date | number,
     ): DepositEntity[] {
         const currentEntity = this.database.filter(
-            (item) => item.dateTime >= dateInit && item.dateTime <= dateEnd && typeof item.daletedAt === 'undefined',
+            (itemDate) => itemDate.dateTime >= dateInit && itemDate.dateTime <= dateEnd && typeof itemDate.daletedAt === 'undefined',
         );
-        if (currentEntity) return currentEntity;
-        else throw new NotFoundException();
+        if(!currentEntity ) throw new NotFoundException;
+        return currentEntity;
     }
 }

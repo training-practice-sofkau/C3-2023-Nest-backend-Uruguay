@@ -52,16 +52,16 @@ export class TransferRepository
 
     findAll(): TransferEntity[] {
         return this.database.filter(
-            (item) => typeof item.daletedAt === 'undefined',
+            (itemAll) => typeof itemAll.daletedAt === 'undefined',
         );
     }
 
     findOneById(id: string): TransferEntity {
         const currentEntity = this.database.find(
-            (item) => item.id === id && typeof item.daletedAt === 'undefined',
+            (itemId) => itemId.id === id && typeof itemId.daletedAt === 'undefined',
         );
-        if (currentEntity) return currentEntity;
-        else throw new NotFoundException();
+        if(!currentEntity ) throw new NotFoundException;
+        return currentEntity;
     }
 
     findOutcomeByDataRange(
@@ -70,10 +70,10 @@ export class TransferRepository
         dateEnd: Date | number,
     ): TransferEntity[] {
         const currentEntity = this.database.filter(
-            (item) => item.outcome.id === accountId && item.dateTime >= dateInit && item.dateTime <= dateEnd && typeof item.daletedAt === 'undefined',
+            (itemORange) => itemORange.outcome.id === accountId && itemORange.dateTime >= dateInit && itemORange.dateTime <= dateEnd && typeof itemORange.daletedAt === 'undefined',
         );
-        if (currentEntity) return currentEntity;
-        else throw new NotFoundException();
+        if(!currentEntity ) throw new NotFoundException;
+        return currentEntity;
     }
 
     findIncomeByDataRange(
@@ -82,9 +82,9 @@ export class TransferRepository
         dateEnd: Date | number,
     ): TransferEntity[] {
         const currentEntity = this.database.filter(
-            (item) => item.income.id === accountId && item.dateTime >= dateInit && item.dateTime <= dateEnd && typeof item.daletedAt === 'undefined',
+            (itemIRange) => itemIRange.income.id === accountId && itemIRange.dateTime >= dateInit && itemIRange.dateTime <= dateEnd && typeof itemIRange.daletedAt === 'undefined',
         );
-        if (currentEntity) return currentEntity;
-        else throw new NotFoundException();
+        if(!currentEntity ) throw new NotFoundException;
+        return currentEntity;
     }
 }
