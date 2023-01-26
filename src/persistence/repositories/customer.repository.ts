@@ -29,7 +29,9 @@ export class CustomerRepository
   }
 
   delete(id: string, soft?: boolean | undefined): void {
-    throw new Error('Method not implemented.');
+    const indexToDelete = this.database.findIndex(i => i.id === id)
+    //const indexToDelete = this.database.indexOf(this.findOneById(id))
+    this.database.splice(indexToDelete, 1)
   }
 
   findAll(): CustomerEntity[] {

@@ -30,8 +30,8 @@ export class AccountRepository
     delete(id: string, soft?: boolean): void {
         const indexToDelete = this.database.findIndex(
             i => i.id === id &&
-            typeof i.deletedAt === 'undefined'
-            )
+                typeof i.deletedAt === 'undefined'
+        )
         //const indexToDelete = this.database.indexOf(this.findOneById(id))
         soft ? this.softDelete(indexToDelete) : this.hardDelete(indexToDelete)
     }

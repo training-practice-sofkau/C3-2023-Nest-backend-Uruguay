@@ -49,7 +49,7 @@ $ npm run start:prod
 
 ```bash
 # Title of the delivery
-[Workshop Week 1 - Day 2] - POO (Programación Orientada a Objetos)
+[Workshop Week 1 - Day 3] - POO (Programación Orientada a Objetos)
 
 # Body of the delivery
 [Any short description]
@@ -58,11 +58,10 @@ $ npm run start:prod
 ### Workshop
 The following are the guidelines that should be taken into account for the development of the workshop to be submitted:
 
-1. Develop the corresponding models taking into account the model-entity-relationships.
-2. Develop the relevant entities with respect to the self-developed model.
-3. Develop a repository for each model created.
+1. Code all the proposed repositories along with their respective methods.
+2. The methods should be worked with different filters, reduce, map, among others.
 
-Remember to develop the necessary abstract classes and the required interfaces (minimum 1 interface and minimum 1 abstract class).
+Do not forget to consult the information from the following link for the development of your workshop: Arrays into JavaScript.
 
 ### Important note
-Do not forget that for this workshop, you should make at least 4 commits properly documented (title and message body).
+Do not forget that for this workshop, you should make at least 5 commits properly documented (title and message body).
