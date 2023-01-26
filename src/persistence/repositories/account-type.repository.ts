@@ -36,7 +36,7 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
        
         try{        
            
-            const targetEntityIndex = this.database.findIndex(data => data.id === id); //searchs for the position in the array of the entity with Id
+            const targetEntityIndex = this.database.findIndex(entity => entity.id === id); //searchs for the position in the array of the entity with Id
 
             if(targetEntityIndex == -1){ // if the result of the search is an -1 (not found)
                 throw new NotFoundException(); // gives and exception
@@ -61,7 +61,7 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
         
         try{        
            
-            const targetEntityIndex = this.database.findIndex(data => data.id === id); //searchs for the position in the array of the entity with Id
+            const targetEntityIndex = this.database.findIndex(entity => entity.id === id); //searchs for the position in the array of the entity with Id
 
             if(targetEntityIndex == -1){ // if the result of the search is an -1 (not found)
                 throw new NotFoundException(); // gives and exception
@@ -146,7 +146,7 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
      */
     findByName(name: string): AccountTypeEntity[] {
         
-        try{ // try to find all entities of a given Type
+        try{ // try to find all entities of a given Name
 
             const searchResult = this.database.filter(entity => entity.name === name); //searchs for entities that matches the criteria
            
