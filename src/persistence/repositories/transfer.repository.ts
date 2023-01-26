@@ -1,25 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { DocumentTypeEntity } from '../entities';
+import { transferEntity } from '../entities';
 import { BaseRepository } from './base/base.repository';
 import { InterfaceRepo } from './interfaces/InterfaceRepo';
 
 @Injectable()
-export class DocumentTypeRepository
-  extends BaseRepository<DocumentTypeEntity> implements InterfaceRepo<DocumentTypeEntity>
+export class transferRepository
+  extends BaseRepository<transferEntity> implements InterfaceRepo<transferEntity>
 {
-  register(entity: DocumentTypeEntity): DocumentTypeEntity {
+  register(entity: transferEntity): transferEntity {
     throw new Error('Method not implemented.');
   }
-  update(entity: DocumentTypeEntity, id: string): DocumentTypeEntity {
+  update(entity: transferEntity, id: string): transferEntity {
     throw new Error('Method not implemented.');
   }
   delete(id: string, soft?: boolean | undefined): void {
     throw new Error('Method not implemented.');
   }
-  findAll(): DocumentTypeEntity[] {
+  findAll(): transferEntity[] {
     throw new Error('Method not implemented.');
   }
-  findOneById(id: string): DocumentTypeEntity {
+  findOneById(id: string): transferEntity {
     throw new Error('Method not implemented.');
   }
 
