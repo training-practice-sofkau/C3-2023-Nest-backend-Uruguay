@@ -10,7 +10,8 @@ export class AccountTypeRepository
     implements AccountTypeRepositoryInterface {
 
     register(entity: AccountTypeEntity): AccountTypeEntity {
-        throw new Error('Method not implemented.');
+        this.database.push(entity);
+        return this.database.at(-1) ?? entity;
     }
 
     update(id: string, entity: AccountTypeEntity): AccountTypeEntity {

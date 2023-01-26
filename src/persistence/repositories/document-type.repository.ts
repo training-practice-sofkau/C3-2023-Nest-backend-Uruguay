@@ -10,7 +10,8 @@ export class DocumentTypeRepository
   implements DocumentTypeRepositoryInterface {
 
   register(entity: DocumentTypeEntity): DocumentTypeEntity {
-    throw new Error('This method is not implemented');
+    this.database.push(entity);
+    return this.database.at(-1) ?? entity;
   }
 
   update(id: string, entity: DocumentTypeEntity): DocumentTypeEntity {
