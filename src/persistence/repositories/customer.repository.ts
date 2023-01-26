@@ -66,7 +66,13 @@ export class CustomerRepository
     documentTypeId: string,
     document: string,
   ): CustomerEntity {
-    throw new Error('This method is not implemented');
+    const currentEntity = this.database.find(
+      (item) =>
+      item.documentType.id === documentTypeId
+      && item.document === document
+      && typeof item.deletedAt === 'undefined');
+    if (currentEntity) return currentEntity;
+    throw new NotFoundException();
   }
 
   findOneByEmail(email: string): CustomerEntity {

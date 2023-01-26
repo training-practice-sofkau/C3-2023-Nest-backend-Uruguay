@@ -15,8 +15,14 @@ export class AccountTypeRepository
     }
 
     update(id: string, entity: AccountTypeEntity): AccountTypeEntity {
-        throw new Error('Method not implemented.');
-    }
+        const indexCurrentEntity = this.database.findIndex((item) => item.id === id);
+        if (indexCurrentEntity === -1) throw new NotFoundException();
+        return this.database[indexCurrentEntity] = {
+            ...this.database[indexCurrentEntity],
+            ...entity,
+            id,
+          } as AccountTypeEntity;
+      }
 
     delete(id: string, soft?: boolean | undefined): void {
         const indexCurrentEntity = this.database.findIndex((item) => item.id === id);

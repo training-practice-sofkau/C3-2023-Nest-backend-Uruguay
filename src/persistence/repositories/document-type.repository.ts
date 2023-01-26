@@ -15,7 +15,13 @@ export class DocumentTypeRepository
   }
 
   update(id: string, entity: DocumentTypeEntity): DocumentTypeEntity {
-    throw new Error('This method is not implemented');
+    const indexCurrentEntity = this.database.findIndex((item) => item.id === id);
+    if (indexCurrentEntity === -1) throw new NotFoundException();
+    return this.database[indexCurrentEntity] = {
+        ...this.database[indexCurrentEntity],
+        ...entity,
+        id,
+      } as DocumentTypeEntity;
   }
 
   delete(id: string, soft?: boolean | undefined): void {
