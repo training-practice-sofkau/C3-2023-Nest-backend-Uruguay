@@ -42,7 +42,9 @@ export class AccountRepository
     }
 
     findAll(): AccountEntity[] {
-        throw new Error('This method is not implemented');
+        return this.database.filter(
+            (item) => typeof item.daletedAt === 'undefined',
+        );
     }
 
     findOneById(id: string): AccountEntity {

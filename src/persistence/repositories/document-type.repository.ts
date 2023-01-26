@@ -33,7 +33,7 @@ export class DocumentTypeRepository
   }
 
   findAll(): DocumentTypeEntity[] {
-    throw new Error('This method is not implemented');
+    return this.database;
   }
 
   findOneById(id: string): DocumentTypeEntity {
