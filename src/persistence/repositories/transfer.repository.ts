@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
+import { TransferEntity } from '../entities';
 import { BaseRepository } from './base';
 import { TransferRepositoryInterface } from './interfaces/';
 

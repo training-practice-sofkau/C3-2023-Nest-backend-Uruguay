@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
+import { DepositEntity } from '../entities';
 import { BaseRepository } from './base';
 import { DepositRepositoryInterface } from './interfaces/';
 

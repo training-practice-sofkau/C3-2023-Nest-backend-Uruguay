@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
+import { AccountTypeEntity } from '../entities';
 import { BaseRepository } from './base';
 import { AccountTypeRepositoryInterface } from './interfaces';
 
