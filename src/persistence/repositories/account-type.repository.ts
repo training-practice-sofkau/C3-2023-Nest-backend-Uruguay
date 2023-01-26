@@ -25,7 +25,7 @@ export class AccountTypeRepository
     }
 
     findAll(): AccountTypeEntity[] {
-        throw new Error('Method not implemented.');
+        return this.database;
     }
 
     findOneById(id: string): AccountTypeEntity {

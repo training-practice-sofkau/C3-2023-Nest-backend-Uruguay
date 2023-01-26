@@ -38,7 +38,9 @@ export class TransferRepository
     }
 
     findAll(): TransferEntity[] {
-        throw new Error('This method is not implemented');
+        return this.database.filter(
+            (item) => typeof item.deletedAt === 'undefined',
+        );
     }
 
     findOneById(id: string): TransferEntity {

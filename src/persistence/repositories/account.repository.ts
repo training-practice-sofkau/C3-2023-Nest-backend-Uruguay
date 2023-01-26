@@ -25,20 +25,22 @@ export class AccountRepository
         );
         if(indexCurrentEntity === -1) throw new NotFoundException();
         soft ?
-        this.database[indexCurrentEntity].deletedAt = Date.now() :
-        this.database.splice(indexCurrentEntity, 1);
+        this.softDelete(indexCurrentEntity) :
+        this.hardDelete(indexCurrentEntity);
     }
 
     private hardDelete(index: number): void {
-        throw new Error('This method is not implemented');
+        this.database.splice(index, 1);
     }
 
     private softDelete(index: number): void {
-        throw new Error('This method is not implemented');
+        this.database[index].deletedAt = Date.now();
     }
 
     findAll(): AccountEntity[] {
-        throw new Error('This method is not implemented');
+        return this.database.filter(
+            (item) => typeof item.deletedAt === 'undefined',
+          );
     }
 
     findOneById(id: string): AccountEntity {
