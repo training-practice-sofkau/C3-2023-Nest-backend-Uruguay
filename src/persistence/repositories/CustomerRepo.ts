@@ -37,72 +37,73 @@ export class CustomerRepo extends BaseRepository<CustomerEntity> implements IRep
     else throw new NotFoundException('Lo siento, nada por aqui =(');
   }
 
-  delete(id: string, soft?: boolean | undefined): void {
-    throw new Error('Method not implemented.');
+
+  private hardDelete(index: number): void {
+    this.database.splice(index,1);
+  }   
+
+  private softDelete(index: number): void {
+    this.database[index].daletedAt = Date.now();
+  }
+
+  delete(id: string, soft: boolean): void {
+
+    const index = this.database.findIndex(obj => obj.id === id);
+    if (!index) throw new NotFoundException ('Lo siento, El index no existe!');
+   
+    if(!index ) throw new NotFoundException('Lo siento, no se encontro ese index!');
+
+    if (soft) {
+        this.softDelete(index);
+    } else {
+        this.hardDelete(index);
+    }
+
   }
 
   //**METODOS PROPIOS DE LA ENTIDAD -->
 
   findOneByEmailAndPassword(email: string, password: string): boolean {
-    const indexCurrentEntity = this.database.findIndex(
-      (item) =>
-        item.email === email &&
-        item.password === password &&
-        typeof item.daletedAt === 'undefined',
-    );
+    const indexCurrentEntity = this.database.findIndex((item) => item.email === email && item.password === password && typeof item.daletedAt === 'undefined');
     return indexCurrentEntity >= -1 ? true : false;
   }
 
 
-
-  findOneByDocumentTypeAndDocument(
-    documentTypeId: string,
-    document: string,
-  ): CustomerEntity {
+  findOneByDocumentTypeAndDocument(documentTypeId: string, document: string): CustomerEntity {
     const currentEntity = this.database.find(
-      (item) => item.documentType.id === documentTypeId && item.document === document && typeof item.daletedAt === 'undefined',
+      (item) => item.documentType.id === documentTypeId && typeof item.daletedAt === 'undefined',
   );
   if (currentEntity) return currentEntity;
-  else throw new NotFoundException();
+  else throw new NotFoundException('Lo siento, nada por aqui =(');
   }
 
 
 
   findOneByEmail(email: string): CustomerEntity {
-    const currentEntity = this.database.find(
-      (item) => item.email === email && typeof item.daletedAt === 'undefined',
+    const currentEntity = this.database.find((item) => item.email === email && typeof item.daletedAt === 'undefined',
   );
   if (currentEntity) return currentEntity;
-  else throw new NotFoundException();
+  else throw new NotFoundException('Lo siento, nada por aqui =(');
   }
 
 
 
   findOneByPhone(phone: string): CustomerEntity {
-    const currentEntity = this.database.find(
-      (item) => item.phone === phone && typeof item.daletedAt === 'undefined',
-  );
+    const currentEntity = this.database.find((item) => item.phone === phone && typeof item.daletedAt === 'undefined');
   if (currentEntity) return currentEntity;
-  else throw new NotFoundException();
+  else throw new NotFoundException('Lo siento, nada por aqui =(');
   }
-
-
 
 
   findByState(state: boolean): CustomerEntity[] {
-    return this.database.filter(
-      (item) => item.state === state && typeof item.daletedAt === 'undefined',
-  );
+    return this.database.filter((item) => item.state === state && typeof item.daletedAt === 'undefined');
   }
 
 
-
   findByFullName(fullName: string): CustomerEntity[] {
-    const currentEntity = this.database.filter(
-      (item) => item.fullName === fullName && typeof item.daletedAt === 'undefined',
-  );
+    const currentEntity = this.database.filter((item) => item.fullName === fullName && typeof item.daletedAt === 'undefined');
   if (currentEntity) return currentEntity;
-  else throw new NotFoundException();
+  else throw new NotFoundException('Lo siento, nada por aqui =(');
   }
 }
 

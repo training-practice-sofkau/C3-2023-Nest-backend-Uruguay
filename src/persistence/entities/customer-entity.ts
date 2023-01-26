@@ -14,6 +14,6 @@ export class CustomerEntity implements ICustomerModel {
     password: string;
     avatarUrl?: string;
     state : boolean;
-    daletedAt?: Date | number;
+    daletedAt?: Date | number; //Si esta indefino no fue borrado
 
 }
