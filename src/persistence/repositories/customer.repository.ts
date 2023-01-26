@@ -10,7 +10,7 @@ export class CustomerRepository
 {
   register(entity: CustomerEntity): CustomerEntity {
     const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === entity.id
+      (item) => item.id === entity.id,
     );
     if (indexCurrentEntity != -1) throw new NotFoundException();
 
@@ -34,7 +34,21 @@ export class CustomerRepository
   }
 
   delete(id: string, soft?: boolean | undefined): void {
-    throw new Error('Method not implemented.');
+    const indexCurrentEntity = this.database.findIndex(
+      (item) => item.id === id && typeof item.deletedAt === 'undefined',
+    );
+
+    if (indexCurrentEntity == -1) throw new NotFoundException();
+
+    soft ? this.softDelete(indexCurrentEntity) : this.hardDelete(indexCurrentEntity);
+  }
+
+  private hardDelete(index: number): void {
+    this.database.splice(index);
+  }
+
+  private softDelete(index: number): void {
+    this.database[index].deletedAt = Date.now();
   }
 
   findAll(): CustomerEntity[] {
@@ -67,10 +81,13 @@ export class CustomerRepository
     document: string,
   ): CustomerEntity {
     const currentEntity = this.database.find(
-      (item) => item.documentType.id === documentTypeId && item.document === document && typeof item.deletedAt === 'undefined',
+      (item) =>
+        item.documentType.id === documentTypeId &&
+        item.document === document &&
+        typeof item.deletedAt === 'undefined',
     );
     if (!currentEntity) throw new NotFoundException();
-    
+
     return currentEntity;
   }
 
@@ -79,7 +96,7 @@ export class CustomerRepository
       (item) => item.email === email && typeof item.deletedAt === 'undefined',
     );
     if (!currentEntity) throw new NotFoundException();
-    
+
     return currentEntity;
   }
 
@@ -88,7 +105,7 @@ export class CustomerRepository
       (item) => item.phone === phone && typeof item.deletedAt === 'undefined',
     );
     if (!currentEntity) throw new NotFoundException();
-    
+
     return currentEntity;
   }
 
@@ -100,7 +117,8 @@ export class CustomerRepository
 
   findByFullName(fullName: string): CustomerEntity[] {
     return this.database.filter(
-      (item) => item.fullName === fullName && typeof item.deletedAt === 'undefined',
+      (item) =>
+        item.fullName === fullName && typeof item.deletedAt === 'undefined',
     );
   }
 }
