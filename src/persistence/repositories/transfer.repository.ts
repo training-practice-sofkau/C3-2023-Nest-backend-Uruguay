@@ -71,9 +71,10 @@ export class TransferRepository
             (item) => item.id === accountId
                 && dateInit > item.dateTime
                 && item.dateTime < dateEnd
+                && typeof item.deletedAt === "undefined"
         )
         if (!currentEntity) throw new NotFoundException()
-        else return currentEntity
+        else return currentEntity.filter(item => item.outcome)
     }
 
     findIncomeByDataRange(
@@ -85,8 +86,9 @@ export class TransferRepository
             (item) => item.id === accountId
                 && dateInit > item.dateTime
                 && item.dateTime < dateEnd
+                && typeof item.deletedAt === "undefined"
         )
         if (!currentEntity) throw new NotFoundException()
-        else return currentEntity
+        else return currentEntity.filter(item => item.income)
     }
 }
