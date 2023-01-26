@@ -30,6 +30,7 @@ export class CustomerRepository
     else throw new NotFoundException();
     return this.database[indexCurrentEntity];
   }
+  
 //-----------------------------------------------------------------------------------------------------
   delete(id: string, soft?: boolean | undefined): void {
     throw new Error('Method not implemented.');

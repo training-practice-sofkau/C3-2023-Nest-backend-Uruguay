@@ -51,13 +51,23 @@ export class TransferRepository
 //-----------------------------------------------------------------------------------------------------
 
     findAll(): Transfer[] {
-        throw new Error('This method is not implemented');
+        return this.database.filter(
+            (item) => typeof item.trf_delete_at === 'undefined',
+        );
     }
+
 //-----------------------------------------------------------------------------------------------------
 
     findOneById(id: string): Transfer {
-        throw new Error('This method is not implemented');
+        const currentEntity = this.database.find(
+        (item) => item.trf_id === id && typeof item.trf_delete_at === 'undefined',
+        );
+        if(!currentEntity) {
+            throw new NotFoundException(`id : ${id} no found `);
+        }
+        return currentEntity;
     }
+    
 //-----------------------------------------------------------------------------------------------------
 
     findOutcomeByDataRange(
