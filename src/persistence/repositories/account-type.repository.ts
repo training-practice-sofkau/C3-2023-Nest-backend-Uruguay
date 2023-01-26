@@ -11,8 +11,9 @@ export class AccountTypeRepository
     extends BaseRepository<Account>
     implements AccountTypeRepositoryInterface {
 
-register(entity: Account): void {
+register(entity: Account): Account {
     this.database.push(entity);
+    return  this.database.at(-1) ?? entity;
 }
 
 update(id: string, entity: Account):Account{

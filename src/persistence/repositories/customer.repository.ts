@@ -62,7 +62,7 @@ export class CustomerRepository
         item.password === password &&
         typeof item.daletedAt === 'undefined',
     );
-    return indexCurrentEntity >= -1 ? true : false;
+    return indexCurrentEntity > -1 ? true : false;
   }
 
 //-----------------------------------------------------------------------------------------------------
@@ -77,7 +77,7 @@ export class CustomerRepository
       (indexCurrentEntity) =>
       indexCurrentEntity.documentType.id === documentTypeId &&
       indexCurrentEntity.document === document &&
-        typeof indexCurrentEntity.daletedAt === 'undefined',
+      typeof indexCurrentEntity.daletedAt === 'undefined',
     );
     if(!indexCurrentEntity){
       throw new NotFoundException(`No se encontraron los datos`);
