@@ -20,11 +20,7 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
             
             const res = this.database.push(entity);
             
-            if(res < 0 ){ //push didn't return new array lenght (something wrong happened)
-                throw new Error("Error creating new Customer!");                
-            }
-            
-            return entity; // all good, the new entity was created
+            return this.database[res-1]; // all good, returns the new added entity 
 
         } catch (err){ // something went wrong, push didn't work
 

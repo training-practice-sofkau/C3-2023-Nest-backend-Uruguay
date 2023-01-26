@@ -1,4 +1,5 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
+import { InternalServerErrorException, NotFoundException } from '@nestjs/common/exceptions';
 import { AccountTypeEntity } from "../entities/account-type.entity";
 import { BankInternalControl } from "./base";
 import { RepositoryMethodsInterface } from "./interfaces";
@@ -7,7 +8,7 @@ import { RepositoryMethodsInterface } from "./interfaces";
 export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity> implements RepositoryMethodsInterface<AccountTypeEntity>{
 
     /**
-     * Adds a new Account Entity to the Array of Accounts
+     * Adds a new AccountType Entity to the Array of Accounts
      * @param entity new object to be inserted in the array
      * @returns new entity added
      */
@@ -15,24 +16,18 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
         
         try{ // try to add the entity to the array
             
-            const res = this.database.push(entity);
-            
-            if(res < 0 ){ //push didn't return new array lenght (something wrong happened)
-                throw new Error("Error creating new Account!");                
-            }
-            
-            return entity; // all good, the new entity was created
+            const res = this.database.push(entity);            
+            return this.database[res-1]; // all good, returns the new added entity 
 
         } catch (err){ // something went wrong, push didn't work
 
             throw new InternalServerErrorException(`Internal Error! (${err})`)
 
         }
-
     }
 
     /**
-     * Modify the data of the Account that matches a given Id
+     * Modify the data of the AccountType that matches a given Id
      * @param id unique key identifier
      * @param entity object that provides the new updated data 
      */
@@ -49,17 +44,15 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
             this.database[targetEntityIndex] = {...this.database[targetEntityIndex], ...entity}; // update existing entity
 
             return this.database[targetEntityIndex]; // all good, returning update existing entity
-            
 
         } catch (err){// something wrong happened
 
             throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
-
         }        
     }
 
     /**
-     * Delete the Account that matches a given Id
+     * Delete the AccountType that matches a given Id
      * @param id unique key identifier
      * @param soft sets the deletion method to use (true = logical / false = permanent)
      */
@@ -73,16 +66,8 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
                 throw new NotFoundException(); // gives and exception
             }  
             
-            if(typeof soft === undefined || soft === true){
-
-                    //TODO: Logical Delete
-
-            }
-            else if(typeof soft !== undefined || soft === false){
-
-                //TODO: Permanent Delete
-                
-            }
+            //TODO: implement Permanent deletion ( this entity hasn't logical delete )
+            
 
         } catch (err){// something wrong happened
 
@@ -92,7 +77,7 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
     }
 
     /**
-     * Returns the content of the array of Accounts
+     * Returns the content of the array of AccountTypes
      * @returns Array of entities 
      */
     findAll(): AccountTypeEntity[] {
@@ -106,7 +91,6 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
             throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
 
         }
-
     }
 
     /**
@@ -129,7 +113,6 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
         }catch(err){ // something wrong happened
 
             throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
-
         }
     }    
 }
