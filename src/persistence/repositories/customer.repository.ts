@@ -16,7 +16,7 @@ export class CustomerRepository
 
   update(id: string, entity: CustomerEntity): CustomerEntity {
     const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.daletedAt === 'undefined',
+      (item) => item.id === id && typeof item.deletedAt === 'undefined',
     );
     if (indexCurrentEntity >= 0)
       this.database[indexCurrentEntity] = {
@@ -29,18 +29,24 @@ export class CustomerRepository
   }
 
   delete(id: string, soft?: boolean | undefined): void {
-    throw new Error('Method not implemented.');
+    const indexCurrentEntity = this.database.findIndex(
+      (item) => item.id === id && typeof item.deletedAt === 'undefined',
+    );
+    if(indexCurrentEntity === -1) throw new NotFoundException();
+    soft ?
+    this.database[indexCurrentEntity].deletedAt = Date.now() :
+    this.database.splice(indexCurrentEntity, 1);
   }
 
   findAll(): CustomerEntity[] {
     return this.database.filter(
-      (item) => typeof item.daletedAt === 'undefined',
+      (item) => typeof item.deletedAt === 'undefined',
     );
   }
 
   findOneById(id: string): CustomerEntity {
     const currentEntity = this.database.find(
-      (item) => item.id === id && typeof item.daletedAt === 'undefined',
+      (item) => item.id === id && typeof item.deletedAt === 'undefined',
     );
     if (currentEntity) return currentEntity;
     else throw new NotFoundException();
@@ -51,7 +57,7 @@ export class CustomerRepository
       (item) =>
         item.email === email &&
         item.password === password &&
-        typeof item.daletedAt === 'undefined',
+        typeof item.deletedAt === 'undefined',
     );
     return indexCurrentEntity >= -1 ? true : false;
   }

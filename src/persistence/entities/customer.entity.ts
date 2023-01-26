@@ -13,7 +13,7 @@ export class CustomerEntity implements CustomerModel{
     private _password: string;
     private _avatarUrl?: string | undefined;
     private _state = true;
-    private _daletedAt?: Date | number | undefined;
+    private _deletedAt?: Date | number | undefined;
 
     public get id() {
         return this._id;
@@ -69,10 +69,10 @@ export class CustomerEntity implements CustomerModel{
     public set state(value) {
         this._state = value;
     }
-    public get daletedAt(): Date | number | undefined {
-        return this._daletedAt;
+    public get deletedAt(): Date | number | undefined {
+        return this._deletedAt;
     }
-    public set daletedAt(value: Date | number | undefined) {
-        this._daletedAt = value;
+    public set deletedAt(value: Date | number | undefined) {
+        this._deletedAt = value;
     }
 }

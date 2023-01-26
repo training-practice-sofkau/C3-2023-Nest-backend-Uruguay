@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { AccountEntity } from '../entities';
 import { BaseRepository } from './base';
@@ -20,7 +20,13 @@ export class AccountRepository
     }
 
     delete(id: string, soft?: boolean): void {
-        throw new Error('This method is not implemented');
+        const indexCurrentEntity = this.database.findIndex(
+            (item) => item.id === id && typeof item.deletedAt === 'undefined',
+        );
+        if(indexCurrentEntity === -1) throw new NotFoundException();
+        soft ?
+        this.database[indexCurrentEntity].deletedAt = Date.now() :
+        this.database.splice(indexCurrentEntity, 1);
     }
 
     private hardDelete(index: number): void {

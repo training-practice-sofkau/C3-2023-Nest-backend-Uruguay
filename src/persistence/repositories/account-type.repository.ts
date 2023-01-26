@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { AccountTypeEntity } from '../entities';
 import { BaseRepository } from './base';
@@ -19,7 +19,9 @@ export class AccountTypeRepository
     }
 
     delete(id: string, soft?: boolean | undefined): void {
-        throw new Error('Method not implemented.');
+        const indexCurrentEntity = this.database.findIndex((item) => item.id === id);
+          if(indexCurrentEntity === -1) throw new NotFoundException();
+          this.database.splice(indexCurrentEntity, 1);
     }
 
     findAll(): AccountTypeEntity[] {
