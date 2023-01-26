@@ -15,7 +15,7 @@ export class CustomerRepo extends BaseRepository<CustomerEntity> implements IRep
 
   update(id: string, entity: CustomerEntity): CustomerEntity {
     const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.daletedAt === 'undefined',
+      (obj) => obj.id === id && typeof obj.daletedAt === 'undefined',
     );
     if (indexCurrentEntity >= 0)
       this.database[indexCurrentEntity] = {
@@ -26,10 +26,6 @@ export class CustomerRepo extends BaseRepository<CustomerEntity> implements IRep
     else throw new NotFoundException('Lo siento, nada por aqui =(');
     return this.database[indexCurrentEntity];
   }
-
-
-
-  //*****************************************DELETE********************************************* */
 
   private hardDelete(index: number): void {
     this.database.splice(index,1);
@@ -52,25 +48,20 @@ export class CustomerRepo extends BaseRepository<CustomerEntity> implements IRep
     }
 
   }
-  //******************************************************************************************* */
-
-
 
   findAll(): CustomerEntity[] {
-    return this.database.filter((item) => typeof item.daletedAt === 'undefined');
+    return this.database.filter((obj) => typeof obj.daletedAt === 'undefined');
   }
 
   findOneById(id: string): CustomerEntity {
-    const currentEntity = this.database.find((item) => item.id === id && typeof item.daletedAt === 'undefined');
+    const currentEntity = this.database.find((obj) => obj.id === id && typeof obj.daletedAt === 'undefined');
     if (currentEntity) return currentEntity;
     else throw new NotFoundException('Lo siento, nada por aqui =(');
   }
 
-  
   //**METODOS PROPIOS DE LA ENTIDAD -->
-
   findOneByEmailAndPassword(email: string, password: string): boolean {
-    const IndCurrentEntity = this.database.findIndex((item) => item.email === email && item.password === password && typeof item.daletedAt === 'undefined');
+    const IndCurrentEntity = this.database.findIndex((obj) => obj.email === email && obj.password === password && typeof obj.daletedAt === 'undefined');
     let result : boolean = false
     if (IndCurrentEntity >= -1){
       result = true
@@ -78,39 +69,32 @@ export class CustomerRepo extends BaseRepository<CustomerEntity> implements IRep
     return result
   }
 
-
   findOneByDocumentTypeAndDocument(documentTypeId: string, document: string): CustomerEntity {
     const currentEntity = this.database.find(
-      (item) => item.documentType.id === documentTypeId && typeof item.daletedAt === 'undefined');
+      (obj) => obj.documentType.id === documentTypeId && typeof obj.daletedAt === 'undefined');
   if (currentEntity) return currentEntity;
   else throw new NotFoundException('Lo siento, nada por aqui =(');
   }
 
-
-
   findOneByEmail(email: string): CustomerEntity {
-    const currentEntity = this.database.find((item) => item.email === email && typeof item.daletedAt === 'undefined',
+    const currentEntity = this.database.find((obj) => obj.email === email && typeof obj.daletedAt === 'undefined',
   );
   if (currentEntity) return currentEntity;
   else throw new NotFoundException('Lo siento, nada por aqui =(');
   }
 
-
-
   findOneByPhone(phone: string): CustomerEntity {
-    const currentEntity = this.database.find((item) => item.phone === phone && typeof item.daletedAt === 'undefined');
+    const currentEntity = this.database.find((obj) => obj.phone === phone && typeof obj.daletedAt === 'undefined');
   if (currentEntity) return currentEntity;
   else throw new NotFoundException('Lo siento, nada por aqui =(');
   }
 
-
   findByState(state: boolean): CustomerEntity[] {
-    return this.database.filter((item) => item.state === state && typeof item.daletedAt === 'undefined');
+    return this.database.filter((obj) => obj.state === state && typeof obj.daletedAt === 'undefined');
   }
 
-
   findByFullName(fullName: string): CustomerEntity[] {
-    const currentEntity = this.database.filter((item) => item.fullName === fullName && typeof item.daletedAt === 'undefined');
+    const currentEntity = this.database.filter((obj) => obj.fullName === fullName && typeof obj.daletedAt === 'undefined');
   if (currentEntity) return currentEntity;
   else throw new NotFoundException('Lo siento, nada por aqui =(');
   }
