@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { DocumentTypeEntity } from '../entities';
 import { BaseRepository } from './base';
@@ -15,7 +15,17 @@ export class DocumentTypeRepository
   }
 
   update(id: string, entity: DocumentTypeEntity): DocumentTypeEntity {
-    throw new Error('This method is not implemented');
+    const indexCurrentEntity = this.database.findIndex(
+      (item) => item.id === id,
+    );
+    if (indexCurrentEntity >= 0)
+      this.database[indexCurrentEntity] = {
+        ...this.database[indexCurrentEntity],
+        ...entity,
+        id,
+      } as DocumentTypeEntity;
+    else throw new NotFoundException();
+    return this.database[indexCurrentEntity];
   }
 
   delete(id: string, soft?: boolean | undefined): void {

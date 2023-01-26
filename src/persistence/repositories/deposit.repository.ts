@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { DepositEntity } from '../entities';
 import { BaseRepository } from './base';
@@ -15,7 +15,17 @@ export class DepositRepository
     }
 
     update(id: string, entity: DepositEntity): DepositEntity {
-        throw new Error('This method is not implemented');
+        const indexCurrentEntity = this.database.findIndex(
+            (item) => item.id === id && typeof item.daletedAt === 'undefined',
+        );
+        if (indexCurrentEntity >= 0)
+            this.database[indexCurrentEntity] = {
+            ...this.database[indexCurrentEntity],
+            ...entity,
+            id,
+            } as DepositEntity;
+        else throw new NotFoundException();
+        return this.database[indexCurrentEntity];
     }
 
     delete(id: string, soft?: boolean): void {
