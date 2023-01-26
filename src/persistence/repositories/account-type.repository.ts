@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { GeneralCRUD } from './base';
 import { AccountTypeEntity } from '../entities';
@@ -11,8 +11,18 @@ export class AccountTypeRepository extends GeneralCRUD<AccountTypeEntity> {
     return this.database.at(-1) ?? entity;
   }
 
-  update(id: string, entity: AccountTypeEntity) : AccountTypeEntity{
-    throw new Error('Method not implemented.');
+  update(id: string, entity: AccountTypeEntity): AccountTypeEntity {
+    const indexCurrentEntity = this.database.findIndex(
+        (item) => item.id === id,
+    );
+    if (indexCurrentEntity >= 0)
+      this.database[indexCurrentEntity] = {
+        ...this.database[indexCurrentEntity],
+        ...entity,
+        id,
+      } as AccountTypeEntity;
+    else throw new NotFoundException;
+    return this.database[indexCurrentEntity];
   }
 
   delete(id: string, soft?: boolean | undefined): void {
@@ -20,7 +30,7 @@ export class AccountTypeRepository extends GeneralCRUD<AccountTypeEntity> {
   }
 
   findAll(): AccountTypeEntity[] {
-    throw new Error('Method not implemented.');
+    return this.database;
   }
 
   findOneById(id: string) : AccountTypeEntity {
