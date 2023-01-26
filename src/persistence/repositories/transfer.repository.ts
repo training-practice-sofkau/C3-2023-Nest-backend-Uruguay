@@ -60,7 +60,11 @@ export class TransferRepository
         dateInit: Date | number,
         dateEnd: Date | number,
     ): TransferEntity[] {
-        throw new Error('This method is not implemented');
+        const currentEntity = this.database.filter(
+            (item) => item.outcome.id === accountId && item.dateTime >= dateInit && item.dateTime <= dateEnd && typeof item.daletedAt === 'undefined',
+        );
+        if (currentEntity) return currentEntity;
+        else throw new NotFoundException();
     }
 
     findIncomeByDataRange(
@@ -68,6 +72,10 @@ export class TransferRepository
         dateInit: Date | number,
         dateEnd: Date | number,
     ): TransferEntity[] {
-        throw new Error('This method is not implemented');
+        const currentEntity = this.database.filter(
+            (item) => item.income.id === accountId && item.dateTime >= dateInit && item.dateTime <= dateEnd && typeof item.daletedAt === 'undefined',
+        );
+        if (currentEntity) return currentEntity;
+        else throw new NotFoundException();
     }
 }
