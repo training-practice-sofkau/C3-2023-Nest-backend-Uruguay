@@ -33,18 +33,14 @@ export class DocumentTypeRepository
     return this.database[indexCurrentEntity];
   }
 
-  delete(id: string, soft?: boolean | undefined): void {
+  delete(id: string): void {
     const indexCurrentEntity = this.database.findIndex(
       (item) => item.id === id
     );
 
     if (indexCurrentEntity == -1) throw new NotFoundException();
 
-    this.hardDelete(indexCurrentEntity);
-  }
-
-  private hardDelete(index: number): void {
-    this.database.splice(index);
+    this.database.splice(indexCurrentEntity);
   }
 
   findAll(): DocumentTypeEntity[] {

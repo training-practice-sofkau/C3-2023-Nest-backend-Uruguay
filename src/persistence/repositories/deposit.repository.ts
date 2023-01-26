@@ -1,18 +1,18 @@
 import { DepositEntity } from '../entities/';
-import { CRUD } from './base/';
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BASE } from './base/';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { DespositRepositoryInterface } from './interfaces/';
 
 @Injectable()
 export class DepositRepository
-  extends CRUD<DepositEntity>
+  extends BASE<DepositEntity>
   implements DespositRepositoryInterface
 {
   register(entity: DepositEntity): DepositEntity {
     const indexCurrentEntity = this.database.findIndex(
       (item) => item.id === entity.id
     );
-    if (indexCurrentEntity != -1) throw new ConflictException(); //Cambiar la excepcion
+    if (indexCurrentEntity != -1) throw new Error('The Desposit already exists');
 
     this.database.push(entity);
     return this.database.at(-1) ?? entity;
