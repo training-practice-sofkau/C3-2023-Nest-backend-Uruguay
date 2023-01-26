@@ -98,6 +98,11 @@ private softDelete(index: number): void {
 }
 
 findByDataRange(dateInit: Date | number,dateEnd: Date | number,): Deposit[] {
+    const rango  = this.database.filter( item => item.dep_date_time >= dateInit && item.dep_date_time <= dateEnd && typeof  item.dep_delete_at === `undefined`);
+    if(typeof rango === `undefined`){
+        throw new NotFoundException();
+    }
+    return rango;
 
 }
 

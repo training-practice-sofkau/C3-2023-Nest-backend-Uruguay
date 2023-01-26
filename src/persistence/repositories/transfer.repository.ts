@@ -87,18 +87,26 @@ findOutcomeByDataRange(
     dateInit: Date | number,
     dateEnd: Date | number,
 ): Transfer[] {
-    throw new Error('This method is not implemented');
+    const rango  = this.database.filter(item => item.trf_id === accountId && item.trf_date_time>=dateInit && item.trf_date_time === dateEnd && typeof  item.trf_delete_at === `undefined`);
+    if(typeof rango === `undefined`){
+        throw new NotFoundException();
+    }
+    return rango;
 }
 
 //-----------------------------------------------------------------------------------------------------
 
-findIncomeByDataRange(
-    accountId: string,
-    dateInit: Date | number,
-    dateEnd: Date | number,
-    ): Transfer[] {
-    throw new Error('This method is not implemented');
+findIncomeByDataRange(accountId: string,dateInit: Date | number,dateEnd: Date | number): Transfer[] {
+    const rango  = this.database.filter(item => item.trf_id === accountId 
+        && item.trf_date_time>=dateInit && 
+        item.trf_date_time <= dateEnd &&
+        typeof  item.trf_delete_at === `undefined`);
+    if(typeof rango === `undefined`){
+        throw new NotFoundException();
+    }
+    return rango;
 }
+
 
 
 }

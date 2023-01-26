@@ -119,11 +119,11 @@ findByAccountType(accountTypeId: string): Account[] {
 }
 
 delete(id: string, soft?: boolean | undefined): void {
-  throw new Error('Method not implemented.');
+  const indexdelete = this.database.findIndex(index => index.acc_id === id && typeof index.acc_delete_at === `undefined`);
+    soft ? this.softDelete(indexdelete) : this.hardDelete(indexdelete);
 }
 
 private hardDelete(index: number): void {
-//Lo borro directo del arreglo
   if (index < 0 ){
     throw new NotAcceptableException(`No se aceptan valores negativos`);
   }
@@ -131,7 +131,10 @@ private hardDelete(index: number): void {
 }
 
 private softDelete(index: number): void {
-//Lo borro asignandole a delete_at un Date
+  if (index < 0){
+    throw new NotAcceptableException(`No se aceptan valores negativos`);
+  }
+  this.database[index].acc_delete_at = new Date;
   
 }
 

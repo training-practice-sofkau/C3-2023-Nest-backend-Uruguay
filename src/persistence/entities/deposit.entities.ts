@@ -7,6 +7,6 @@ export class Deposit implements DepositModel  {
     dep_id = uuid();
     account_id: string;
     dep_amount: number;
-    dep_date_time: boolean;
+    dep_date_time: Date;
     dep_delete_at: Date;
 }
