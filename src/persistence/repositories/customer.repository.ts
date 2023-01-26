@@ -29,7 +29,7 @@ export class CustomerRepository
   }
 
   delete(id: string, soft?: boolean | undefined): void {
-    throw new Error('Method not implemented.');
+    this.database.splice(this.database.findIndex((item) => item.id === id), 1);
   }
 
   findAll(): CustomerEntity[] {
@@ -60,16 +60,33 @@ export class CustomerRepository
     documentTypeId: string,
     document: string,
   ): CustomerEntity {
-    throw new Error('This method is not implemented');
+    const indexCurrentEntity = this.database.findIndex(
+      (item) =>
+        item.documentType.id === documentTypeId &&
+        item.document === document &&
+        typeof item.deletedAt === 'undefined',
+    );
+    return this.database[indexCurrentEntity]    
+
+
   }
 
   findOneByEmail(email: string): CustomerEntity {
-    throw new Error('This method is not implemented');
+    
+    const indexCurrentEntity = this.database.findIndex(
+      (item) =>
+        item.email === email 
+    );
+    return this.database[indexCurrentEntity]    
+
   }
 
   findOneByPhone(phone: string): CustomerEntity {
-    throw new Error('This method is not implemented');
-  }
+    const indexCurrentEntity = this.database.findIndex(
+      (item) =>
+        item.phone === phone 
+    );
+    return this.database[indexCurrentEntity]      }
 
   findByState(state: boolean): CustomerEntity[] {
     return this.database.filter((item) => ( state === true ? item.state === true : typeof item.deletedAt != 'undefined'));    
