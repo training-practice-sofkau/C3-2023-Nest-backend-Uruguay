@@ -46,7 +46,7 @@ export class DocumentTypeRepository
   }
 
   findByState(state: boolean): DocumentTypeEntity[] {
-    return this.database.filter((item) => ( state === true ? item.state === true : typeof item.deletedAt != 'undefined'));    
+    return this.database.filter((item) => ( state === true ? item.state === true : item.state === false));    
   }
 
   findByName(name: string): DocumentTypeEntity[] {

@@ -28,17 +28,27 @@ export class DepositRepository
     return this.database[indexCurrentEntity];
   }
 
-  delete(id: string, soft?: boolean): void {
-    throw new Error('This method is not implemented');
-  }
+  delete(id: string, soft?: boolean): void {       
+    const index = this.database.findIndex((item) => item.id === id);
 
-  private hardDelete(index: number): void {
-    throw new Error('This method is not implemented');
-  }
+    if (soft === true) {
 
-  private softDelete(index: number): void {
-    throw new Error('This method is not implemented');
-  }
+        this.hardDelete(index)
+    }
+    else{
+        this.softDelete(index)
+            }
+
+}
+
+private hardDelete(index: number): void {        
+    this.database.splice(index, 1);
+}
+
+private softDelete(index: number): void {
+    this.database[index].state = false   
+    this.database[index].deletedAt = Date.now()
+ }
 
   findAll(): DepositEntity[] {
     return this.database.filter(
@@ -54,8 +64,12 @@ export class DepositRepository
   }
 
   findByAccountId(accountId: string): DepositEntity[] {
-    throw new Error('This method is not implemented');
-  }
+    const currentEntity = this.database.filter(
+      (item) => item.accountid.id === accountId,
+    );
+    if (currentEntity) 
+    return currentEntity;
+    else throw new NotFoundException();   }
 
   findByDataRange(
     dateInit: Date | number,
