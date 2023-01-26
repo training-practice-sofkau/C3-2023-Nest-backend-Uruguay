@@ -1,31 +1,55 @@
 import { Injectable } from '@nestjs/common';
+import { basename } from 'path';
 import { DocumentTypeEntity } from '../entities';
-import { CRUD } from './interfaces/crud';
+import { Base } from './base/base.abstract';
+import { CRUD } from './interfaces/crud.interface';
+import { AccountEntity } from '../entities/account.entity';
+import { AccountTypeEntity } from '../entities/account-type.entity';
+
+
 @Injectable()
-export class DocumentTypeRepository implements CRUD<DocumentTypeEntity>{
-  private readonly database: Array<DocumentTypeEntity>;
+export class AccountTypeRepository extends Base<AccountTypeEntity> implements CRUD<AccountTypeEntity>{
 
-  constructor() {
-    this.database = new Array<DocumentTypeEntity>();
+
+  register(entity: AccountTypeEntity): AccountTypeEntity {
+    this.database.push(entity);
+    return this.database.at(-1) ?? entity;
   }
 
-  register(entity: DocumentTypeEntity): DocumentTypeEntity {
-    throw new Error('This method is not implemented');
+  update(id: string, entity: AccountTypeEntity): AccountTypeEntity {
+    const indexCurrentEntity = this.database.findIndex(
+      (item) => item.id === id,
+    );
+    if (indexCurrentEntity >= 0)
+      this.database[indexCurrentEntity] = {
+        ...this.database[indexCurrentEntity],
+        ...entity,
+        id,
+      } as DocumentTypeEntity;
+    else throw new DocumentTypeEntity();
+    return this.database[indexCurrentEntity];
   }
-
-  update(id: string, entity: DocumentTypeEntity): DocumentTypeEntity {
-    throw new Error('This method is not implemented');
   }
 
   delete(id: string, soft?: boolean | undefined): void {
+    throw new Error('Method not implemented.');
+  }
+
+  findAll(): AccountTypeEntity[] {
+    throw new Error('Method not implemented.');
+  }
+
+  findOneById(id: string): AccountTypeEntity{
+    throw new Error('Method not implemented.');
+  }
+
+  findByState(state: boolean): AccountTypeEntity[] {
     throw new Error('This method is not implemented');
   }
 
-  findAll(): DocumentTypeEntity[] {
+  findByName(name: string): AccountTypeEntity[] {
     throw new Error('This method is not implemented');
   }
 
-  findOneById(id: string): DocumentTypeEntity {
-    throw new Error('This method is not implemented');
-  }
+
 }

@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { DocumentTypeModel } from '../../models';
 
 export class DocumentTypeEntity implements DocumentTypeModel{
-    private _id = uuid();
+    protected _id = uuid();
     public get id() {
         return this._id;
     }
@@ -11,7 +11,7 @@ export class DocumentTypeEntity implements DocumentTypeModel{
         this._id = value;
     }
     
-    private _name: string;
+    protected _name: string;
     public get name(): string {
         return this._name;
     }
@@ -19,7 +19,7 @@ export class DocumentTypeEntity implements DocumentTypeModel{
         this._name = value;
     }
 
-    private _state = true;
+    protected _state = true;
     public get state() {
         return this._state;
     }

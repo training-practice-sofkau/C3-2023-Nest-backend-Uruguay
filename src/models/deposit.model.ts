@@ -1,6 +1,7 @@
 import { AccountModel } from "../models";
 
-export interface CustomerModel {
+export interface DepositModel {
+    
     id: string;
     account_id: AccountModel;
     amount: number;

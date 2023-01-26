@@ -2,7 +2,7 @@ import { AccountModel, TransferModel } from "../../models";
 import { v4 as uuid } from 'uuid';
 
 export class TransferEntity implements TransferModel{
-    private _id = uuid();
+    protected _id = uuid();
     public get id() {
         return this._id;
     }
@@ -10,23 +10,23 @@ export class TransferEntity implements TransferModel{
         this._id = value;
     }
 
-    private _outcome_id: AccountModel;
+    protected _outcome_id: AccountModel;
     public get outcome_id(): AccountModel {
         return this._outcome_id;
     }
-    public set outcome_id(value: AccountModel) {
+    protected set outcome_id(value: AccountModel) {
         this._outcome_id = value;
     }
 
-    private _income_id: AccountModel;
+    protected _income_id: AccountModel;
     public get income_id(): AccountModel {
         return this._income_id;
     }
-    public set income_id(value: AccountModel) {
+    protected set income_id(value: AccountModel) {
         this._income_id = value;
     }
 
-    private _amount: number;
+    protected _amount: number;
     public get amount(): number {
         return this._amount;
     }
@@ -34,7 +34,7 @@ export class TransferEntity implements TransferModel{
         this._amount = value;
     }
 
-    private _reason: string;
+    protected _reason: string;
     public get reason(): string {
         return this._reason;
     }
@@ -42,7 +42,7 @@ export class TransferEntity implements TransferModel{
         this._reason = value;
     }
 
-    private _date_time: number | Date;
+    protected _date_time: number | Date;
     public get date_time(): number | Date {
         return this._date_time;
     }
@@ -50,11 +50,11 @@ export class TransferEntity implements TransferModel{
         this._date_time = value;
     }
 
-    private _deleted_at: number | Date;
+    protected _deleted_at: number | Date;
     public get deleted_at(): number | Date {
         return this._deleted_at;
     }
-    public set deleted_at(value: number | Date) {
+    protected set deleted_at(value: number | Date) {
         this._deleted_at = value;
     }
 
