@@ -1,4 +1,6 @@
 import { DocumentTypeEntity } from '../../entities/document-type.entity';
-import { ICRUD } from './base/CRUD.interface';
+import { ICRUD, TypesMethodsInterface } from './base/';
 
-export interface DocumentTypeRepositoryInterface extends ICRUD<DocumentTypeEntity>{}
+export interface DocumentTypeRepositoryInterface extends ICRUD<DocumentTypeEntity>, TypesMethodsInterface<DocumentTypeEntity> {
+
+}
