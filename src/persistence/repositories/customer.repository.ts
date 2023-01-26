@@ -5,8 +5,8 @@ import { CRUD } from './interfaces/crud.interface';
 
 @Injectable()
 export class CustomerRepository extends Base<CustomerEntity> implements CRUD<CustomerEntity> {
- 
-  
+
+
   register(entity: CustomerEntity): CustomerEntity {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;
@@ -40,22 +40,23 @@ export class CustomerRepository extends Base<CustomerEntity> implements CRUD<Cus
   }
 
   findAll(): CustomerEntity[] {
-   
+
     if (this.database.length == 0) {
-    throw new Error('No se encontraron elementos');
+      throw new Error('No se encontraron elementos');
     }
     return this.database.filter(
       (item) => typeof item.daletedAt === 'undefined',
-   );
+    );
   }
 
   findOneById(id: string): CustomerEntity {
-    
+
     const currentEntity = this.database.find(
       (item) => item.id === id && typeof item.daletedAt === 'undefined',
     );
     if (currentEntity) return currentEntity;
     else throw new NotFoundException("Elemento no encontrado");
+
   }
 
   findOneByEmailAndPassword(email: string, password: string): boolean {
@@ -71,19 +72,19 @@ export class CustomerRepository extends Base<CustomerEntity> implements CRUD<Cus
   findOneByDocumentTypeAndDocument(
     documentTypeId: string,
     document: string,): CustomerEntity {
-      const currentEntity = this.database.find(
-        (item) => item.id === documentTypeId || item.document == document && typeof item.daletedAt === 'undefined',
-      );
-      if (currentEntity) return currentEntity;
-      else throw new Error('No se encontro el documento');
+    const currentEntity = this.database.find(
+      (item) => item.id === documentTypeId && item.document == document
+    );
+    if (currentEntity) return currentEntity;
+    else throw new Error('No se encontro el documento');
   }
 
   findOneByEmail(email: string): CustomerEntity {
-      const currentEntity = this.database.find(
-        (item) => item.email === email && typeof item.daletedAt === 'undefined',
-      );
-      if (currentEntity) return currentEntity;
-      else throw new Error('No se encontro el email');
+    const currentEntity = this.database.find(
+      (item) => item.email === email && typeof item.daletedAt === 'undefined',
+    );
+    if (currentEntity) return currentEntity;
+    else throw new Error('No se encontro el email');
   }
 
   findOneByPhone(phone: string): CustomerEntity {
@@ -110,5 +111,5 @@ export class CustomerRepository extends Base<CustomerEntity> implements CRUD<Cus
     else throw new Error('Datos de no encontrados');
   }
 
- 
+
 }
