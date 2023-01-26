@@ -16,13 +16,13 @@ export class CustomerRepository
 
   update(id: string, entity: CustomerEntity): CustomerEntity {
     const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.deletedAt === 'undefined',
+      (item) => item.id === id && typeof item.deletedAt === 'undefined'
     );
     if (indexCurrentEntity >= 0)
       this.database[indexCurrentEntity] = {
         ...this.database[indexCurrentEntity],
         ...entity,
-        id,
+        id
       } as CustomerEntity;
     else throw new NotFoundException();
     return this.database[indexCurrentEntity];
@@ -30,7 +30,7 @@ export class CustomerRepository
 
   delete(id: string, soft?: boolean | undefined): void {
     const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.deletedAt === 'undefined',
+      (item) => item.id === id && typeof item.deletedAt === 'undefined'
     );
     if(indexCurrentEntity === -1) throw new NotFoundException();
     soft ?
@@ -40,13 +40,13 @@ export class CustomerRepository
 
   findAll(): CustomerEntity[] {
     return this.database.filter(
-      (item) => typeof item.deletedAt === 'undefined',
+      (item) => typeof item.deletedAt === 'undefined'
     );
   }
 
   findOneById(id: string): CustomerEntity {
     const currentEntity = this.database.find(
-      (item) => item.id === id && typeof item.deletedAt === 'undefined',
+      (item) => item.id === id && typeof item.deletedAt === 'undefined'
     );
     if (currentEntity) return currentEntity;
     throw new NotFoundException();
@@ -57,9 +57,9 @@ export class CustomerRepository
       (item) =>
         item.email === email &&
         item.password === password &&
-        typeof item.deletedAt === 'undefined',
+        typeof item.deletedAt === 'undefined'
     );
-    return indexCurrentEntity >= -1 ? true : false;
+    return indexCurrentEntity === -1 ? false : true;
   }
 
   findOneByDocumentTypeAndDocument(

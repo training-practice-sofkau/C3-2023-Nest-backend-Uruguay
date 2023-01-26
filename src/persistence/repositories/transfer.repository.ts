@@ -24,17 +24,17 @@ export class TransferRepository
             ...this.database[indexCurrentEntity],
             ...entity,
             id,
-          } as TransferEntity;
-      }
+        } as TransferEntity;
+    }
 
     delete(id: string, soft?: boolean): void {
         const indexCurrentEntity = this.database.findIndex(
             (item) => item.id === id && typeof item.deletedAt === 'undefined',
         );
-        if(indexCurrentEntity === -1) throw new NotFoundException();
+        if (indexCurrentEntity === -1) throw new NotFoundException();
         soft ?
-        this.softDelete(indexCurrentEntity) :
-        this.hardDelete(indexCurrentEntity);
+            this.softDelete(indexCurrentEntity) :
+            this.hardDelete(indexCurrentEntity);
     }
 
     private hardDelete(index: number): void {
@@ -65,10 +65,10 @@ export class TransferRepository
         dateEnd: Date | number,
     ): TransferEntity[] {
         const transfers = this.database.filter(
-            (transfer) => transfer.outcome.id === accountId 
-            && transfer.dateTime >= dateInit
-            && transfer.dateTime <= dateEnd
-            && typeof transfer.deletedAt === 'undefined');
+            (transfer) => transfer.outcome.id === accountId
+                && transfer.dateTime >= dateInit
+                && transfer.dateTime <= dateEnd
+                && typeof transfer.deletedAt === 'undefined');
         if (transfers) return transfers;
         throw new NotFoundException();
     }
@@ -79,10 +79,10 @@ export class TransferRepository
         dateEnd: Date | number,
     ): TransferEntity[] {
         const transfers = this.database.filter(
-            (transfer) => transfer.income.id === accountId 
-            && transfer.dateTime >= dateInit
-            && transfer.dateTime <= dateEnd
-            && typeof transfer.deletedAt === 'undefined');
+            (transfer) => transfer.income.id === accountId
+                && transfer.dateTime >= dateInit
+                && transfer.dateTime <= dateEnd
+                && typeof transfer.deletedAt === 'undefined');
         if (transfers) return transfers;
         throw new NotFoundException();
     }
