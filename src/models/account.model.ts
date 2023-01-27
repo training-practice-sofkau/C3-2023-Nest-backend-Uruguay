@@ -1,10 +1,10 @@
-import { CustomerModel } from "./customer.model";
-import { AccountTypeModel } from "./account-type.model";
-import { IGeneral } from '../persistence/repositories/interfaces';
+import { AccountTypeModel, CustomerModel } from ".";
 
-export interface AccountModel extends IGeneral {
+export interface AccountModel {
+    id: string;
     customer: CustomerModel;
     accountType: AccountTypeModel;
     balance: number;
     state: boolean;
+    deletedAt?: Date | number;
 }

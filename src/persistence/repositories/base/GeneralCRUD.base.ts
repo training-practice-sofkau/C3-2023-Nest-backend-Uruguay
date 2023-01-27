@@ -1,26 +1,26 @@
-import { IGeneral } from '../interfaces/IGeneral.interface';
+import { PaginatorModel } from '../../../models';
+import { IGeneral } from '../interfaces';
 
-export abstract class GeneralCRUD implements IGeneral{
-    id: string;
-    deletedAt: number | Date | null;
+export abstract class GeneralCRUD<T> implements IGeneral<T> {
+    protected readonly database: Array<T>;
 
-    register(entity: IGeneral): IGeneral {
-        throw new Error('This method is not implemented');
-      }
-    
-    update(id: string, entity: IGeneral): IGeneral {
-        throw new Error('This method is not implemented');
-      }
-    
-    delete(id: string, soft?: boolean): void {
-        throw new Error('This method is not implemented');
-      }
-    
-    findAll(): IGeneral[] {
-        throw new Error('This method is not implemented');
-      }
-    
-    findOneById(id: string): IGeneral {
-        throw new Error('This method is not implemented');
-      }
+    constructor(){
+      this.database = new Array<T>();
+    }
+
+    register(entity: T): T {
+        throw new Error('Method not implemented.');
+    }
+    update(id: string, entity: T): T {
+        throw new Error('Method not implemented.');
+    }
+    delete(id: string, soft?: boolean | undefined): void {
+        throw new Error('Method not implemented.');
+    }
+    findAll(paginator: PaginatorModel): T[] {
+        throw new Error('Method not implemented.');
+    }
+    findOneById(id: string): T {
+        throw new Error('Method not implemented.');
+    }
 }

@@ -1,5 +1,6 @@
 import { TransferModel } from '../../models';
-import { AccountEntity } from './account.entity';
+import { AccountEntity } from '.';
+
 import { v4 as uuid } from 'uuid';
 
 export class TransferEntity implements TransferModel {
@@ -9,5 +10,5 @@ export class TransferEntity implements TransferModel {
     balance: number;
     reason: string;
     dateTime: Date | number;
-    deletedAt: number | Date | null;  
+    deletedAt?: number | Date;  
 }

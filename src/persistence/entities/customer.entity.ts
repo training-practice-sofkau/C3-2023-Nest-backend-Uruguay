@@ -1,5 +1,6 @@
 import { CustomerModel } from '../../models';
-import { DocumentTypeEntity } from './';
+import { DocumentTypeEntity } from '.';
+
 import { v4 as uuid } from 'uuid';
 
 export class CustomerEntity implements CustomerModel {
@@ -10,7 +11,7 @@ export class CustomerEntity implements CustomerModel {
     email: string;
     phone: string;
     password: string;
-    avatarUrl: string | null ;
+    avatarUrl?: string;
     state = true;
-    deletedAt: number | Date | null;  
+    deletedAt?: number | Date;  
 }

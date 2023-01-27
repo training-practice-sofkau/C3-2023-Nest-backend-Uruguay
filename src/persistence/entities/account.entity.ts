@@ -1,6 +1,6 @@
 import { AccountModel } from '../../models';
-import { CustomerEntity } from './customer.entity';
-import { AccountTypeEntity } from './account-type.entity';
+import { AccountTypeEntity, CustomerEntity } from '.';
+
 import { v4 as uuid } from 'uuid';
 
 export class AccountEntity implements AccountModel{ 
@@ -9,5 +9,5 @@ export class AccountEntity implements AccountModel{
     accountType: AccountTypeEntity;
     balance: number;
     state: boolean;
-    deletedAt: number | Date | null;  
+    deletedAt?: number | Date;  
 }

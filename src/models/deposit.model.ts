@@ -1,8 +1,9 @@
-import { AccountModel } from './account.model';
-import { IGeneral } from '../persistence/repositories/interfaces';
+import { AccountModel } from '.';
 
-export interface DepositModel extends IGeneral {
+export interface DepositModel {
+    id: string;
     account: AccountModel;
     amount: number;
     dateTime: Date | number;
+    deletedAt?: Date | number;
 }
