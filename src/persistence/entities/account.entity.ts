@@ -1,13 +1,13 @@
-import { AccountModel} from 'src/models';
+import { AccountModel, AccountTypeModel, CustomerModel} from 'src/models';
 import { v4 as uuid } from 'uuid';
-import { CustomerEntity, AccountTypeEntity } from '../entities';
+
 
 export class AccountEntity implements AccountModel {
   id = uuid();
-  accountType: AccountTypeEntity;
-  name: string;
-  customer: CustomerEntity;
+  customer: CustomerModel;
+  accountType: AccountTypeModel;
   balance: number;
-  state = true;
+  state: boolean;
   deletedAt?: number | Date;
+
 }

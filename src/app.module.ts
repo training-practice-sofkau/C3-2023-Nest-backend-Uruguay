@@ -1,34 +1,36 @@
 import { Module } from '@nestjs/common';
 import { SecurityController } from './controllers';
 import { AccountService } from './services';
-import { AccountController } from './account/account.controller';
-import { CustomerController } from './controllers/customer/customer.controller';
-import { TransfersController } from './controllers/transfers/transfers.controller';
-import { DepositController } from './controllers/deposit/deposit.controller';
-import { AccountsService } from './accounts/accounts.service';
-import { DepositService } from './deposit/deposit.service';
-import { CustomerService } from './customer/customer.service';
-import { TransfersService } from './transfers/transfers.service';
-import { AccountService } from './account/account.service';
-import { AccountService } from './services/account/account.service';
-import { AuthModule } from './modules/auth/auth.module';
-import { AccountService } from './services/account/account.service';
+import { CustomerService } from './services/customer/customer.service';
+import { DepositService } from './services/deposit/deposit.service';
+import { SecurityService } from './services/security/security.service';
+import { TransferService } from './services/transfer/transfer.service';
+import { AccountRepository } from './persistence/repositories/account.repository';
+import { AccountTypeRepository } from './persistence/repositories/account-type.repository';
+import { CustomerRepository } from './persistence/repositories/customer.repository';
+import { DepositRepository } from './persistence/repositories/deposit.repository';
+import { DocumentTypeRepository } from './persistence/repositories/document-type.repository';
+import { TransferRepository } from './persistence/repositories/transfer.repository';
 
 @Module({
-  imports: [AuthModule],
-  controllers: [
-    SecurityController,
-    AccountController,
-    CustomerController,
-    TransfersController,
-    DepositController,
-  ],
+  imports: [],
+  controllers: [SecurityController],
   providers: [
     AccountService,
-    AccountsService,
-    DepositService,
     CustomerService,
-    TransfersService,
+    DepositService,
+    SecurityService,
+    TransferService,
+
+
+    //Repositorios (?)
+    AccountRepository,
+    AccountTypeRepository,
+    CustomerRepository,
+    DepositRepository,
+    DocumentTypeRepository,
+    TransferRepository
+
   ],
 })
-export class AppModule {}
+export class AppModule { }

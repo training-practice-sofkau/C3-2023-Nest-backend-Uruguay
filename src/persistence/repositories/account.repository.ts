@@ -81,4 +81,9 @@ export class AccountRepository
     )
     return accountT;
     }
+
+    buscarEstado(AccountId : string): boolean{
+      let id = this.database.findIndex((objeto)=>objeto.id = AccountId) 
+      return this.database[id].state //entro id
+    } 
 }
