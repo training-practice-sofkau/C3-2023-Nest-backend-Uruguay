@@ -130,14 +130,7 @@ export class AccountService {
    * @memberof AccountService
    */
   getAccountType(accountId: string): AccountTypeEntity {
-    const currentEntity = this.database.find(
-      (item: { accountType: { id: string } }) =>
-        item.accountType.id === accountId,
-    );
-    if (currentEntity != null) {
-      throw new NotFoundException();
-    }
-    return currentEntity;
+    return this.AccountTypeRepository.searchByAttributesforOne("id", accountId);
   }
 
   /**

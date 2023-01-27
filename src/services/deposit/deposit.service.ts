@@ -9,9 +9,7 @@ import { DepositRepository } from '../../persistence/repositories/deposit.reposi
 @Injectable()
 export class DepositService {
   [x: string]: any;
-  constructor(
-    private readonly DepositRepository: DepositRepository,
-  ) {}
+  constructor(private readonly DepositRepository: DepositRepository) {}
   /**
    * Crear un deposito
    *
@@ -20,14 +18,11 @@ export class DepositService {
    * @memberof DepositService
    */
   createDeposit(deposit: DepositModel): DepositEntity {
-
     const newDeposit = new DepositEntity();
     newDeposit.amount = deposit.amount;
     newDeposit.date_time = new Date();
     newDeposit.state = true;
     return this.accountRepository.register(newDeposit);
-
-
   }
 
   /**
@@ -37,7 +32,7 @@ export class DepositService {
    * @memberof DepositService
    */
   deleteDeposit(depositId: string): void {
-   this.DepositRepository.delete(depositId)
+    this.DepositRepository.delete(depositId);
   }
 
   /**
@@ -54,18 +49,21 @@ export class DepositService {
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): DepositEntity[] {
-     let deposit =  this.DepositRepository.searchByAttributes("id", depositId)
+    let deposit = this.DepositRepository.searchByAttributes('id', depositId);
 
-    if(dataRange) 
-    {
-      let {dateInit, dateEnd} = dataRange
-      deposit = deposit.filter(deposit => deposit.date_time)
+    if (dataRange) {
+      let { dateInit, dateEnd = Date.now() } = dataRange;
+      deposit = deposit.filter(
+        (deposit) =>
+          deposit.date_time.getTime() >= dateInit &&
+          deposit.date_time.getTime() <= dateEnd,
+      );
     }
 
-     if(pagination){
-      let  {offset= 0, limit = 0 } = pagination
-      deposit = deposit.slice(offset, offset + limit );      
-     }
-     return deposit
+    if (pagination) {
+      let { offset = 0, limit = 0 } = pagination;
+      deposit = deposit.slice(offset, offset + limit);
+    }
+    return deposit;
   }
 }

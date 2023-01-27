@@ -66,6 +66,7 @@ import { AccountModel } from '../../models/account.model';
       const customer = this.customerRepository.register(newCustomer);
   
       if (customer) {
+        const jwt = require('jsonwebtoken');
         const accountType = new AccountTypeEntity();
         accountType.id = 'Falta el ID por defecto del tipo de cuenta';
         const newAccount = {
