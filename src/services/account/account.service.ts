@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { IAccountModel } from 'src/models/i-account-model';
 import { AccountEntity } from 'src/persistence/entities/account-entity';
 import { AccountTypeEntity } from 'src/persistence/entities/account-type-entity';
@@ -12,8 +12,8 @@ export class AccountService {
 
 
     constructor(private readonly accountRepository: AccountRepository,
-                private readonly accountTypeRepository: AccountTypeRepository,
-                private readonly customerRepository : CustomerRepo ) {
+        private readonly accountTypeRepository: AccountTypeRepository,
+        private readonly customerRepository: CustomerRepo) {
     }
 
     /**
@@ -38,8 +38,8 @@ export class AccountService {
      * @memberof AccountService
      */
     getBalance(accountId: string): number {
-       // return this.getAccount(accountId).balance;
-       return this.accountRepository.findOneById(accountId).balance   
+        // return this.getAccount(accountId).balance;
+        return this.accountRepository.findOneById(accountId).balance
     }
 
     /**
@@ -50,10 +50,13 @@ export class AccountService {
      * @memberof AccountService
      */
     addBalance(accountId: string, amount: number): void {
-        const now = this.accountRepository.findOneById(accountId);
-        now.balance = now.balance + amount;
-        this.accountRepository.update(accountId, now) 
-       
+
+        const currentEntity = this.accountRepository.findOneById(accountId);
+
+        currentEntity.balance = currentEntity.balance + amount;
+        
+        this.accountRepository.update(accountId, currentEntity)
+
     }
 
 
@@ -64,16 +67,22 @@ export class AccountService {
      * @param {number} amount
      * @memberof AccountService
      */
-    removeBalance(accountId: string, amount: number, removeAll?: boolean): void {
+    removeBalance(accountId: string, amount: number): void {
 
-        if (this.verifyAmountIntoBalance(accountId, amount)) throw new Error('Not enough funds');
+        const currentEntity = this.accountRepository.findOneById(accountId);
 
-        if (removeAll) this.cleanBalance(accountId);
+        if (currentEntity.balance < amount) {
 
-        const account = this.getAccount(accountId);
-        account.balance -= amount;
+            throw new NotAcceptableException('Lo siento, no dispone de ese saldo!')
 
-        this.accountRepository.update(accountId, account);
+        } else {
+
+            currentEntity.balance = currentEntity.balance - amount;
+
+            this.accountRepository.update(accountId, currentEntity)
+        }
+
+
     }
 
     private cleanBalance(accountId: string): number {
@@ -89,11 +98,14 @@ export class AccountService {
      * @memberof AccountService
      */
     verifyAmountIntoBalance(accountId: string, amount: number): boolean {
-        if (this.getAccount(accountId).balance < amount) {
-            return true
-        }
 
-        return false;
+        const currentEntity = this.accountRepository.findOneById(accountId);
+
+        if (currentEntity.balance < amount || currentEntity.balance < 1) {
+
+            throw new NotAcceptableException('Lo siento, no dispone de ese saldo!')
+
+        } else return true;
     }
 
     /**
@@ -104,7 +116,10 @@ export class AccountService {
      * @memberof AccountService
      */
     getState(accountId: string): boolean {
-        return this.getAccount(accountId).state;
+
+        const currentEntity = this.accountRepository.findOneById(accountId);
+
+        return currentEntity.state;
     }
 
     /**
@@ -115,7 +130,12 @@ export class AccountService {
      * @memberof AccountService
      */
     changeState(accountId: string, state: boolean): void {
-        this.getAccount(accountId).state = state;
+
+        const currentEntity = this.accountRepository.findOneById(accountId);
+
+        currentEntity.state = state;
+
+        this.accountRepository.update(accountId, currentEntity)
     }
 
     /**
@@ -126,6 +146,7 @@ export class AccountService {
      * @memberof AccountService
      */
     getAccountType(accountId: string): AccountTypeEntity {
+
         return this.getAccount(accountId).accountTypeId;
     }
 
