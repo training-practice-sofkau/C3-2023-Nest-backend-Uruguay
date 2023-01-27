@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ForbiddenException } from '@nestjs/common/exceptions';
+import { BadRequestException, ForbiddenException, HttpException } from '@nestjs/common/exceptions';
 
 import { AccountModel } from 'src/models';
 import { AccountEntity, AccountTypeEntity } from 'src/persistence/entities';
@@ -44,7 +44,14 @@ export class AccountService {
    * @memberof AccountService
    */
   addBalance(accountId: string, amount: number): void {
-    this.accountRepository.findOneById(accountId).balance += amount;
+    try {
+      let accountUpdated = this.accountRepository.findOneById(accountId);
+      accountUpdated.balance += amount;
+      this.accountRepository.update(accountId, accountUpdated);
+
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   /**
@@ -55,11 +62,18 @@ export class AccountService {
    * @memberof AccountService
    */
   removeBalance(accountId: string, amount: number): void {
-    if (this.verifyAmountIntoBalance(accountId, amount)) {
-      this.accountRepository.findOneById(accountId).balance -= amount;
-    }
-    else {
-      throw new ForbiddenException('The amount to remove cannot be greater than the balance');
+    try {
+      if (this.verifyAmountIntoBalance(accountId, amount)) {
+        let accountUpdated = this.accountRepository.findOneById(accountId);
+        accountUpdated.balance -= amount;
+        this.accountRepository.update(accountId, accountUpdated);
+      }
+      else {
+        throw new ForbiddenException('The amount to remove cannot be greater than the balance');
+      }
+      
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -97,7 +111,14 @@ export class AccountService {
    * @memberof AccountService
    */
   changeState(accountId: string, state: boolean): void {
-    this.accountRepository.findOneById(accountId).state = state;
+    try {
+      let accountUpdated = this.accountRepository.findOneById(accountId);
+      accountUpdated.state = state;
+      this.accountRepository.update(accountId, accountUpdated);
+
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   /**
@@ -123,8 +144,18 @@ export class AccountService {
     accountId: string,
     accountTypeId: string,
   ): AccountTypeEntity {
-    return this.accountRepository.findOneById(accountId).accountType =
-    this.accountTypeRepository.findOneById(accountTypeId);
+    try {
+      let accountUpdated = this.accountRepository.findOneById(accountId);
+      let newAccountType = this.accountTypeRepository.findOneById(accountTypeId);
+      accountUpdated.accountType = newAccountType;
+
+      this.accountRepository.update(accountId, accountUpdated);
+
+      return newAccountType;
+
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   /**
