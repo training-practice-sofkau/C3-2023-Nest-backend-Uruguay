@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { AccountEntity } from '../entities/account.entity';
 import { depositEntity } from '../entities/deposit.entity';
 
 import { BaseRepository } from './base';
@@ -32,7 +31,7 @@ export class DepositRepository
         this.softDelete(index)
       } else {
         const index = this.database.findIndex(
-          (item) => item.id === id && (item.deletedAt ?? true) === true,
+          (item) => item.id === id
         );
         this.hardDelete(index) // le paso el index para que llame a la funcion
       }

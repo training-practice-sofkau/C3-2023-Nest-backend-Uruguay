@@ -5,7 +5,7 @@ export interface depositModel {
      account: AccountModel,
      amount: number,
      dateTime : Date | number,
-     daletedAt?: Date | number;
+     deletedAt?: Date | number;
    }
 
    

@@ -6,6 +6,5 @@ export class DocumentTypeEntity implements DocumentTypeModel{
     id = uuid();
     name: string;
     state = true;
-  daletedAt: any;
-  deletedAt: any;
+
 }

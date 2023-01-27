@@ -28,25 +28,20 @@ export class DocumentTypeRepository
   }
 
   delete(id: string, soft?: boolean): void {
-    const customer = this.findOneById(id);
-    if (soft === undefined) {
-      customer.deletedAt = Date.now();
-      this.update(id, customer);
-    } else {
       const index = this.database.findIndex(
-        (item) => item.id === id && (item.deletedAt ?? true) === true,
+        (item) => item.id === id 
       );
       this.database.splice(index, 1);
-    }
+    
   }
 
   findAll(): DocumentTypeEntity[] {
-    return this.database.filter((item) => item.deletedAt === undefined);
+    return this.database
   }
 
   findOneById(id: string): DocumentTypeEntity {
     const document = this.database.find(
-      (item) => item.id === id && (item.deletedAt ?? true) === true,
+      (item) => item.id === id 
     );
     if (document) return document;
     else throw new NotFoundException("El id no existe en base de datos");
@@ -54,7 +49,7 @@ export class DocumentTypeRepository
 
   findByState(state: boolean): DocumentTypeEntity[] {
     const stadof = this.database.filter( //filtra segun una condicion y devuelve un array
-    (item) => item.state == state && typeof item.deletedAt === "undefined"
+    (item) => item.state == state
   )
   return stadof;
   }
