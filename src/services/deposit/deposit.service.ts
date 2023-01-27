@@ -47,6 +47,12 @@ export class DepositService {
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): DepositEntity[] {
-    throw new Error('This method is not implemented');
+     let deposit =  this.DepositRepository.searchDeposit("id", depositId)
+
+     if(pagination){
+      const {offset, limit } = pagination
+      deposit = deposit.slice(offset, offset + limit );      
+     }
+     return deposit
   }
 }
