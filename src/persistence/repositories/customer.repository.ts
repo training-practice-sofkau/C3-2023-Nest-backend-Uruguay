@@ -70,7 +70,7 @@ private softDelete(index: number): void {
         itemEAndP.password === password &&
         typeof itemEAndP.daletedAt === 'undefined',
     );
-    return indexCurrentEntity >= -1 ? true : false;
+    return indexCurrentEntity > -1 ? true : false;
   }
 
   findOneByDocumentTypeAndDocument(
