@@ -45,4 +45,25 @@ export class CustomerService {
     }
     return false;
   }
+  
+  /**
+   * Borrar un cliente
+   *
+   * @param {string} customerId
+   * @memberof CustomerService
+   */
+  deleteCustomer(customerId: string): void {
+    this.customerRepository.delete(customerId);
+  }
+  
+  /**
+   * Borrar un cliente de forma lógica
+   *
+   * @param {string} customerId
+   * @memberof CustomerService
+   */
+  softDeleteCustomer(customerId: string): void {
+    this.customerRepository.delete(customerId, true);
+  }
+
 }
