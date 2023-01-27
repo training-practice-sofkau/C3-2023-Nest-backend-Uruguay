@@ -2,6 +2,7 @@ import { BASE } from './base';
 import { DocumentTypeEntity } from '../entities';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { DocumentTypeRepositoryInterface } from './interfaces/';
+import { PaginationModel } from '../../models/pagination-model.model';
 
 @Injectable()
 export class DocumentTypeRepository
@@ -37,8 +38,13 @@ export class DocumentTypeRepository
     this.database.splice(indexCurrentEntity);
   }
 
-  findAll(): DocumentTypeEntity[] {
-    return this.database.map(item => item);
+  findAll(pagination: PaginationModel): DocumentTypeEntity[] {
+    pagination = {
+      ... {offset: 0, limit: 10},
+      ... pagination
+    }
+
+    return this.database.map(item => item).slice(pagination.offset, pagination.offset + (pagination.limit || 0));
   }
 
   findOneById(id: string): DocumentTypeEntity {

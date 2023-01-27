@@ -2,6 +2,7 @@ import { DepositEntity } from '../entities/';
 import { BASE } from './base/';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { DespositRepositoryInterface } from './interfaces/';
+import { PaginationModel } from '../../models/pagination-model.model';
 
 @Injectable()
 export class DepositRepository
@@ -45,10 +46,12 @@ export class DepositRepository
     this.database[index].deletedAt = Date.now();
   }
 
-  findAll(): DepositEntity[] {
+  findAll(pagination: PaginationModel): DepositEntity[] {
+    const paginations = this.paginationMethod(pagination);
+
     return this.database.filter(
       (item) => typeof item.deletedAt === 'undefined',
-    );
+    ).slice(paginations.offset, paginations.offset + (paginations.limit || 0));
   }
 
   findOneById(id: string): DepositEntity {
@@ -60,7 +63,9 @@ export class DepositRepository
     return currentEntity;
   }
 
-  findByAccountId(accountId: string): DepositEntity[] {
+  findByAccountId(pagination: PaginationModel ,accountId: string): DepositEntity[] {
+    const paginations = this.paginationMethod(pagination);
+
     const currentEntity = this.database.filter(
       (item) => item.account.id === accountId && typeof item.deletedAt === 'undefined',
     );
@@ -70,27 +75,40 @@ export class DepositRepository
   }
 
   findByDataRange(
+    pagination: PaginationModel,
     dateInit: Date | number,
     dateEnd: Date | number,
   ): DepositEntity[] {
+    const paginations = this.paginationMethod(pagination);
+
     return this.database.filter(
       (item) => item.dateTime >= dateInit && item.dateTime <= dateEnd && typeof item.deletedAt === 'undefined',
-    );
+    ).slice(paginations.offset, pagination.offset + (pagination.limit || 0));
   }
 
   findByAccountIdAndDataRange(
+    pagination: PaginationModel,
     accountId: string,
     dateInit: Date | number,
     dateEnd: Date | number,
   ): DepositEntity[]  {
+    const paginations = this.paginationMethod(pagination);
+
     return this.database.filter(
       (item) => item.account.id === accountId && item.dateTime >= dateInit && item.dateTime <= dateEnd && typeof item.deletedAt === 'undefined',
-    );
+    ).slice(paginations.offset, pagination.offset + (pagination.limit || 0));
   }
 
   private findIndex(id: string): number {
     return this.database.findIndex(
       (item) => item.id === id && typeof item.deletedAt === 'undefined',
     );
+  }
+
+  private paginationMethod(pagination: PaginationModel): PaginationModel {
+    return pagination = {
+      ... {offset: 0, limit: 10},
+      ... pagination
+    }
   }
 }

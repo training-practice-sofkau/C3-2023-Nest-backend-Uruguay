@@ -1,3 +1,4 @@
+import { PaginationModel } from '../../../../models/';
 export interface ICRUD<T> {
   register(entity: T): T;
 
@@ -5,7 +6,7 @@ export interface ICRUD<T> {
 
   delete(id: string, soft?: boolean): void;
 
-  findAll(): Array<T>;
+  findAll(pagination: PaginationModel): Array<T>;
   
   findOneById(id: string): T;
 }
