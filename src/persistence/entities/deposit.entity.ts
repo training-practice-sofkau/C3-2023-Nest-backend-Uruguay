@@ -7,6 +7,6 @@ export class DepositEntity implements DepositModel{
     accountId: string;
     amount: number;
     dateTime: Date; //dateTime can be set automatic or must receive data from service??
-    deleteAt: number | Date;
+    deletedAt?: number | Date;
 }
 

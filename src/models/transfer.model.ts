@@ -5,5 +5,5 @@ export interface TransferModel{
     amount: number;
     reason: string;
     dateTime: Date;
-    deletedAt: Date | number;
+    deletedAt?: Date | number;
 }

@@ -10,7 +10,7 @@ export class CustomerEntity implements CustomerModel{
     email: string;
     phone: string;
     password: string;
-    avatarUrl?: string | undefined;
+    avatarUrl?: string;
     state = true;
-    deletedAt?: number | Date | undefined;
+    deletedAt?: number | Date;
 }
