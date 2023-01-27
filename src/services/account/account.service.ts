@@ -112,7 +112,11 @@ export class AccountService { //accountRepositorio(rojo) va a tener todas las fu
    * @memberof AccountService
    */
   getAccountType(accountId: string): AccountTypeEntity {
-    throw new Error('This method is not implemented');
+   let account = new AccountTypeEntity
+    
+    account = this.accountRepository.findOneById(accountId).accountType
+    return account
+    
   }
 
   /**
