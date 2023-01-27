@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InternalServerErrorException } from '@nestjs/common/exceptions';
+import { stat } from 'fs';
 
 import { AccountModel } from 'src/models/account.model';
 import { AccountEntity, AccountTypeEntity, AccountRepository } from 'src/persistence';
@@ -52,7 +53,13 @@ export class AccountService {
    * @memberof AccountService
    */
   removeBalance(accountId: string, amount: number): void {
-    this.accountRepository.updateBalance(accountId, -amount)
+    try {
+      if (this.accountRepository.findOneById(accountId).balance >= amount) {
+        this.accountRepository.updateBalance(accountId, -amount)
+      }
+    } catch (error) {
+      throw new InternalServerErrorException(error)
+    }
   }
 
   /**
@@ -81,7 +88,11 @@ export class AccountService {
    * @memberof AccountService
    */
   getState(accountId: string): boolean {
-    throw new Error('This method is not implemented');
+    try {
+      return this.accountRepository.findOneById(accountId).state
+    } catch (error) {
+      throw new InternalServerErrorException(error)
+    }
   }
 
   /**
@@ -92,7 +103,11 @@ export class AccountService {
    * @memberof AccountService
    */
   changeState(accountId: string, state: boolean): void {
-    throw new Error('This method is not implemented');
+    try {
+      this.accountRepository.findOneById(accountId).state = state
+    } catch (error) {
+
+    }
   }
 
   /**
@@ -103,7 +118,11 @@ export class AccountService {
    * @memberof AccountService
    */
   getAccountType(accountId: string): AccountTypeEntity {
-    throw new Error('This method is not implemented');
+    try {
+      this.accountRepository.findOneById(accountId).accountType
+    } catch (error) {
+
+    }
   }
 
   /**
@@ -128,6 +147,10 @@ export class AccountService {
    * @memberof AccountService
    */
   deleteAccount(accountId: string): void {
-    throw new Error('This method is not implemented');
+    try {
+      this.accountRepository.delete(accountId)
+    } catch (error) {
+      throw new InternalServerErrorException(error)
+    }
   }
 }

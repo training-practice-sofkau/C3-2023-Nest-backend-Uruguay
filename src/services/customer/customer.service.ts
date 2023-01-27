@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 
+import { CustomerRepository } from 'src/persistence';
 import { CustomerModel } from '../../models';
 import { CustomerEntity } from '../../persistence/entities';
 
 @Injectable()
 export class CustomerService {
+  constructor(private readonly customerRepository: CustomerRepository) { }
+
   /**
    * Obtener información de un cliente
    *
@@ -13,7 +16,11 @@ export class CustomerService {
    * @memberof CustomerService
    */
   getCustomerInfo(customerId: string): CustomerEntity {
-    throw new Error('Method not implemented.');
+    try {
+      return this.customerRepository.findOneById(customerId)
+    } catch (error) {
+      throw new InternalServerErrorException(error)
+    }
   }
 
   /**
@@ -25,7 +32,11 @@ export class CustomerService {
    * @memberof CustomerService
    */
   updatedCustomer(id: string, customer: CustomerModel): CustomerEntity {
-    throw new Error('Method not implemented.');
+    try {
+      return this.customerRepository.update(id, customer)
+    } catch (error) {
+      throw new InternalServerErrorException(error)
+    }
   }
 
   /**
@@ -36,6 +47,11 @@ export class CustomerService {
    * @memberof CustomerService
    */
   unsubscribe(id: string): boolean {
-    throw new Error('Method not implemented.');
+    try {
+      this.customerRepository.delete(id)
+      return true ///////////////////////////////////////////
+    } catch (error) {
+      throw new InternalServerErrorException(error)
+    }
   }
 }

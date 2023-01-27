@@ -30,7 +30,6 @@ export class CustomerRepository
 
   delete(id: string, soft?: boolean | undefined): void {
     const indexToDelete = this.database.findIndex(i => i.id === id)
-    //const indexToDelete = this.database.indexOf(this.findOneById(id))
     this.database.splice(indexToDelete, 1)
   }
 
