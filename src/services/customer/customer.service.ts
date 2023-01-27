@@ -8,6 +8,28 @@ import { CustomerRepository } from '../../persistence/repositories';
 export class CustomerService {
 
   constructor(private readonly customerRepository: CustomerRepository) {}
+
+  /**
+   * Crear una cliente
+   *
+   * @param {CustomerModel} account
+   * @return {*}  {CustomerEntity}
+   * @memberof CustomerService
+   */
+  createCustomer(customer: CustomerModel): CustomerEntity {
+    const newACustomer = new CustomerEntity();
+    newACustomer.fullName = customer.fullName;
+    newACustomer.document = customer.document;
+    newACustomer.documentType = customer.documentType;
+    newACustomer.email = customer.email;
+    newACustomer.password = customer.password;
+    newACustomer.phone = customer.phone;
+    newACustomer.avatarUrl = customer.avatarUrl;
+
+
+    return this.customerRepository.register(newACustomer);
+  }
+
   /**
    * Obtener información de un cliente
    *
@@ -16,7 +38,8 @@ export class CustomerService {
    * @memberof CustomerService
    */
   getCustomerInfo(customerId: string): CustomerEntity {
-    return this.customerRepository.findOneById(customerId);
+    const customer = this.customerRepository.findOneById(customerId);
+    return customer;
   }
 
   /**

@@ -16,7 +16,11 @@ export class DepositService {
    * @memberof DepositService
    */
   createDeposit(deposit: DepositModel): DepositEntity {
-    return this.depositRepository.register(deposit);
+    const newDeposit = new DepositEntity();
+    newDeposit.account = deposit.account;
+    newDeposit.amount = deposit.amount;
+
+    return this.depositRepository.register(newDeposit);
   }
 
   /**

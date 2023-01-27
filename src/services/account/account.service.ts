@@ -33,7 +33,8 @@ export class AccountService {
    * @memberof AccountService
    */
   getBalance(accountId: string): number {
-    return this.accountRepository.findOneById(accountId).balance;
+    const account = this.accountRepository.findOneById(accountId);
+    return account.balance;
   }
 
   /**
@@ -45,6 +46,8 @@ export class AccountService {
    */
   addBalance(accountId: string, amount: number): void {
     try {
+      if(amount <= 0) throw new BadRequestException('The amount must be greater than 0');
+
       let accountUpdated = this.accountRepository.findOneById(accountId);
       accountUpdated.balance += amount;
       this.accountRepository.update(accountId, accountUpdated);

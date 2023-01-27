@@ -1,15 +1,17 @@
 // Libraries
 import {
-    Injectable,
-    InternalServerErrorException,
-    UnauthorizedException,
-  } from '@nestjs/common';
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { v4 as uuid } from 'uuid';
   
   // Data transfer objects
 
   
   // Models
-  import { CustomerModel } from '../../models';
+  import { AccountModel, CustomerModel } from '../../models';
   
   // Repositories
   import { CustomerRepository } from '../../persistence/repositories';
@@ -28,6 +30,7 @@ import {
     constructor(
       private readonly customerRepository: CustomerRepository,
       private readonly accountService: AccountService,
+      private readonly jwtTokenService: JwtService
     ) {}
   
     /**
@@ -42,7 +45,7 @@ import {
         user.email,
         user.password,
       );
-      if (answer) return 'Falta retornar un JWT';
+      if (answer) return user.password;
       else throw new UnauthorizedException();
     }
   
@@ -66,15 +69,19 @@ import {
   
       if (customer) {
         const accountType = new AccountTypeEntity();
-        accountType.id = 'Falta el ID por defecto del tipo de cuenta';
-        const newAccount = {
+        accountType.id = uuid(); //'Falta el ID por defecto del tipo de cuenta'
+        
+        const newAccount: AccountModel = {
           customer,
           accountType,
+          id: '',
+          balance: 0,
+          state: true
         };
   
         const account = this.accountService.createAccount(newAccount);
   
-        if (account) return 'Falta retornar un JWT';
+        if (account) return this.jwtTokenService.sign(newAccount);
         else throw new InternalServerErrorException();
       } else throw new InternalServerErrorException();
     }
