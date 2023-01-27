@@ -1,3 +1,7 @@
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 export * from './account';
 export * from './customer';
 export * from './deposit';

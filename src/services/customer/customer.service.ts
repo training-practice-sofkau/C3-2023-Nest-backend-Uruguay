@@ -26,7 +26,6 @@ export class CustomerService {
     newACustomer.phone = customer.phone;
     newACustomer.avatarUrl = customer.avatarUrl;
 
-
     return this.customerRepository.register(newACustomer);
   }
 

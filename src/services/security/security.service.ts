@@ -4,8 +4,8 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { v4 as uuid } from 'uuid';
+import jwt from 'jsonwebtoken';
   
   // Data transfer objects
 
@@ -24,13 +24,13 @@ import { v4 as uuid } from 'uuid';
     AccountTypeEntity,
     CustomerEntity,
   } from '../../persistence/entities';
+import { JsonWebTokenError } from 'jsonwebtoken';
   
   @Injectable()
   export class SecurityService {
     constructor(
       private readonly customerRepository: CustomerRepository,
       private readonly accountService: AccountService,
-      private readonly jwtTokenService: JwtService
     ) {}
   
     /**
@@ -45,7 +45,7 @@ import { v4 as uuid } from 'uuid';
         user.email,
         user.password,
       );
-      if (answer) return user.password;
+      if (answer) return aca va un token;
       else throw new UnauthorizedException();
     }
   
@@ -80,8 +80,10 @@ import { v4 as uuid } from 'uuid';
         };
   
         const account = this.accountService.createAccount(newAccount);
+
+        const token: string = jwt.sign({_id: newAccount.id}, process.env.TOKEN_SECRET || 'tokentest');
   
-        if (account) return this.jwtTokenService.sign(newAccount);
+        if (account) return token;
         else throw new InternalServerErrorException();
       } else throw new InternalServerErrorException();
     }
