@@ -60,6 +60,16 @@ export class TransferRepository
     return currentEntity;
   }
 
+  findByAccountIdAndDataRange(
+    accountId: string,
+    dateInit: Date | number,
+    dateEnd: Date | number,
+  ): TransferEntity[]  {
+    return this.database.filter(
+      (item) => (item.income.id === accountId && item.outcome.id === accountId) && item.dateTime >= dateInit && item.dateTime <= dateEnd && typeof item.deletedAt === 'undefined',
+    );
+  }
+
   findOutcomeByDataRange(
     accountId: string,
     dateInit: Date | number,

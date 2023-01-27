@@ -78,6 +78,16 @@ export class DepositRepository
     );
   }
 
+  findByAccountIdAndDataRange(
+    accountId: string,
+    dateInit: Date | number,
+    dateEnd: Date | number,
+  ): DepositEntity[]  {
+    return this.database.filter(
+      (item) => item.account.id === accountId && item.dateTime >= dateInit && item.dateTime <= dateEnd && typeof item.deletedAt === 'undefined',
+    );
+  }
+
   private findIndex(id: string): number {
     return this.database.findIndex(
       (item) => item.id === id && typeof item.deletedAt === 'undefined',
