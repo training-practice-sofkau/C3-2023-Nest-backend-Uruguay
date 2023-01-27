@@ -29,7 +29,7 @@ export class DocumentTypeRepository
 
   delete(id: string, soft?: boolean): void {
     const customer = this.findOneById(id);
-    if (soft || soft === undefined) {
+    if (soft === undefined) {
       customer.deletedAt = Date.now();
       this.update(id, customer);
     } else {
@@ -53,10 +53,15 @@ export class DocumentTypeRepository
   }
 
   findByState(state: boolean): DocumentTypeEntity[] {
-    throw new Error('This method is not implemented');
+    const stadof = this.database.filter( //filtra segun una condicion y devuelve un array
+    (item) => item.state == state && typeof item.deletedAt === "undefined"
+  )
+  return stadof;
   }
 
   findByName(name: string): DocumentTypeEntity[] {
-    throw new Error('This method is not implemented');
+    const namef = this.database.filter( //filtra segun una condicion y devuelve un array
+    (item) => item.name == name)
+  return namef;
   }
 }

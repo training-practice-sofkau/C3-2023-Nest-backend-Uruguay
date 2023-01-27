@@ -30,23 +30,24 @@ export class AccountRepository
 
     delete(id: string, soft?: boolean): void {
         const customer = this.findOneById(id);
-        if (soft || soft === undefined) {
-          customer.deletedAt = Date.now();
-          this.update(id, customer);
+        if (soft === undefined) {
+          const index = this.database.findIndex(
+            (item) => item.id === id )
+          this.softDelete(index)
         } else {
           const index = this.database.findIndex(
             (item) => item.id === id && (item.deletedAt ?? true) === true,
           );
-          this.database.splice(index, 1);
+          this.hardDelete(index) // le paso el index para que llame a la funcion
         }
       }
 
     private hardDelete(index: number): void {
-        throw new Error('This method is not implemented');
+       this.database.splice(index, 1);
     }
 
     private softDelete(index: number): void {
-        throw new Error('This method is not implemented');
+      this.database[index].deletedAt = Date.now();
     }
 
     findAll(): AccountEntity[] {
@@ -61,14 +62,23 @@ export class AccountRepository
       }
 
     findByState(state: boolean): AccountEntity[] {
-        throw new Error('This method is not implemented');
+        const statef = this.database.filter( //filtra segun una condicion y devuelve un array
+        (item) => item.state == state && typeof item.deletedAt === "undefined"
+      )
+      return statef;
     }
 
     findByCustomer(customerId: string): AccountEntity[] {
-        throw new Error('This method is not implemented');
+        const accountT = this.database.filter( //filtra segun una condicion y devuelve un array
+        (item) => item.customer.id == customerId && typeof item.deletedAt === "undefined"
+      )
+      return accountT;
     }
 
     findByAccountType(accountTypeId: string): AccountEntity[] {
-        throw new Error('This method is not implemented');
+        const accountT = this.database.filter( //filtra segun una condicion y devuelve un array
+      (item) => item.accountType.id == accountTypeId && typeof item.deletedAt === "undefined"
+    )
+    return accountT;
     }
 }

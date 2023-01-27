@@ -26,16 +26,17 @@ export class DepositRepository
           return this.database[indexCurrentEntity];
     }
     delete(id: string, soft?: boolean): void {
-        const customer = this.findOneById(id);
-        if (soft || soft === undefined) {
-          customer.deletedAt = Date.now();
-          this.update(id, customer);
-        } else {
-          const index = this.database.findIndex(
-            (item) => item.id === id && (item.deletedAt ?? true) === true,
-          );
-          this.database.splice(index, 1);
-        }
+      if (soft === undefined) {
+        const index = this.database.findIndex(
+          (item) => item.id === id )
+        this.softDelete(index)
+      } else {
+        const index = this.database.findIndex(
+          (item) => item.id === id && (item.deletedAt ?? true) === true,
+        );
+        this.hardDelete(index) // le paso el index para que llame a la funcion
+      }
+
       }
       findAll(): depositEntity[] {
         return this.database.filter((item) => item.deletedAt === undefined);
@@ -48,20 +49,18 @@ export class DepositRepository
     else throw new NotFoundException("El id no existe en base de datos");
       }
 
-    findByAccountType(accountTypeId: string): AccountEntity[] {
-        throw new Error('This method is not implemented');
+    findByAccountType(accountTypeId: string): depositEntity[] {
+        const accountf = this.database.filter( //filtra segun una condicion y devuelve un array
+      (item) => item.account.id == accountTypeId && typeof item.deletedAt === "undefined"
+    )
+    return accountf;
     }
-    findByCustomer(customerId: string): AccountEntity[] {
-        throw new Error('This method is not implemented');
-    }
-    findByState(state: boolean): AccountEntity[] {
-        throw new Error('This method is not implemented');
-    }
+    
     private softDelete(index: number): void {
-        throw new Error('This method is not implemented');
+      this.database[index].deletedAt = Date.now();
     }
     private hardDelete(index: number): void {
-        throw new Error('This method is not implemented');
+      this.database.splice(index, 1)
     }
 
 }

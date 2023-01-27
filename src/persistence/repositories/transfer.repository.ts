@@ -28,16 +28,16 @@ export class TransferRepository
     }
     
     delete(id: string, soft?: boolean): void {
-        const customer = this.findOneById(id);
-        if (soft || soft === undefined) {
-          customer.deletedAt = Date.now();
-          this.update(id, customer);
-        } else {
-          const index = this.database.findIndex(
-            (item) => item.id === id && (item.deletedAt ?? true) === true,
-          );
-          this.database.splice(index, 1);
-        }
+      const customer = this.findOneById(id);
+      if (soft === undefined) {
+        customer.deletedAt = Date.now(); // Borrado Soft da fecha
+        this.update(id, customer);
+      } else { //Borrado fisico
+        const index = this.database.findIndex(
+          (item) => item.id === id && (item.deletedAt ?? true) === true,
+        );
+        this.database.splice(index, 1);
+      }
       }
     
     findAll(): transferEntity[] {
@@ -54,21 +54,35 @@ export class TransferRepository
         else throw new NotFoundException("El id no existe en base de datos");
       }
 
-    findOutcomeByDataRange(
+     findOutcomeByDataRange(
         accountId: string,
-        dateInit: Date | number,
+        dateInit: Date| number,
         dateEnd: Date | number,
-    ): transferEntity[] {
-        throw new Error('This method is not implemented');
+   ): transferEntity[] {
+        const transfers  = this.database.filter(
+            (transfer) => 
+            transfer.dateTime >= dateInit
+                && transfer.dateTime <= dateEnd
+                && transfer.id == accountId )
+ 
+        if (transfers) return transfers;
+        throw new NotFoundException();
+   
     }
 
     findIncomeByDataRange(
-        accountId: string,
-        dateInit: Date | number,
-        dateEnd: Date | number,
-    ): transferEntity[] {
-        throw new Error('This method is not implemented');
-    }
+      accountId: string,
+      dateInit: Date| number,
+      dateEnd: Date | number,
+ ): transferEntity[] {
+      const transfers  = this.database.filter(
+          (transfer) => 
+          transfer.dateTime <= dateInit
+              && transfer.dateTime >= dateEnd
+              && transfer.id == accountId )
 
-  
+      if (transfers) return transfers;
+      throw new NotFoundException();
+ 
+  }
 }

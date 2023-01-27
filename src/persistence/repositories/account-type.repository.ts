@@ -31,22 +31,22 @@ export class AccountTypeRepository
     delete(id: string, soft?: boolean): void {
         const customer = this.findOneById(id);
         if (soft || soft === undefined) {
-          customer.deletedAt = Date.now();
+       
           this.update(id, customer);
         } else {
           const index = this.database.findIndex(
-            (item) => item.id === id && (item.deletedAt ?? true) === true);
+            (item) => item.id === id);
           this.database.splice(index, 1);
         }
       }
 
       findAll(): AccountTypeEntity[] {
-        return this.database.filter((item) => item.deletedAt === undefined);
+        return this.database;
       }
     
       findOneById(id: string): AccountTypeEntity {
         const account = this.database.find(
-          (item) => item.id === id && (item.deletedAt ?? true) === true,
+          (item) => item.id === id 
         );
         if (account) return account;
         else throw new NotFoundException("El id no existe en base de datos");
@@ -54,10 +54,17 @@ export class AccountTypeRepository
 
    
     findByState(state: boolean): AccountTypeEntity[] {
-        throw new Error('This method is not implemented');
+      const stadof = this.database.filter( //filtra segun una condicion y devuelve un array
+      (item) => item.state == state 
+    )
+    return stadof;
     }
 
     findByName(name: string): AccountTypeEntity[] {
-        throw new Error('This method is not implemented');
-    }
+      const nombrec = this.database.filter( //filtra segun una condicion y devuelve un array
+      (item) => item.name == name 
+    )
+    return nombrec;
+  }
+    
 }
