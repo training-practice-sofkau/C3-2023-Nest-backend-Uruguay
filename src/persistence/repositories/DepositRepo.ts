@@ -24,24 +24,73 @@ export class DepositRepository extends BaseRepository<DepositEntity> implements 
         if (indexCurrentEntity >= 0) this.database[indexCurrentEntity] = {...this.database[indexCurrentEntity],...entity,id,} as DepositEntity;
         
         else throw new NotFoundException('Lo siento, nada por aqui =(');
-        
+
         return this.database[indexCurrentEntity];
     }
 
-
-
-
-    delete(id: string, soft?: boolean | undefined): void {
-        throw new Error("Method not implemented.");
+    
+    private hardDelete(index: number): void {
+        this.database.splice(index, 1);
     }
+
+    private softDelete(index: number): void {
+        this.database[index].deletedAt = Date.now();
+    }
+
+    delete(id: string, soft?: boolean): void {
+
+        const index = this.database.findIndex(item => item.id === id);
+
+        if (!index) throw new NotFoundException('Lo siento, nada por aqui =(');
+
+        if (soft) {
+            this.softDelete(index);
+        } else {
+            this.hardDelete(index);
+        }
+    }
+
+    
+
     findAll(): DepositEntity[] {
-        throw new Error("Method not implemented.");
+        return this.database.filter((item) => typeof item.daletedAt === 'undefined');
     }
+    
+    
+
     findOneById(id: string): DepositEntity {
-        throw new Error("Method not implemented.");
+
+        const currentEntity = this.database.find((itemId) => itemId.id === id && typeof itemId.daletedAt === 'undefined');
+        
+        if (!currentEntity) throw new NotFoundException('Lo siento, nada por aqui =(');
+
+        return currentEntity;
+    
     }
 
 
+
+    findByAccountId(accountId: string): DepositEntity[] {
+
+        const currentEntity = this.database.filter((itemId) => itemId.accountId.id === accountId && typeof itemId.daletedAt === 'undefined');
+        
+        if (!currentEntity) throw new NotFoundException('Lo siento, nada por aqui =(');
+
+        return currentEntity;
+    }
+
+
+
+
+    
+    findByDataRange(dateInit: Date | number, dateEnd: Date | number): DepositEntity[] {
+
+        const currentEntity = this.database.filter((itemDate) => itemDate.dateTime >= dateInit && itemDate.dateTime <= dateEnd && typeof itemDate.daletedAt === 'undefined');
+        
+        if (!currentEntity) throw new NotFoundException('Lo siento, nada por aqui =(');
+        
+        return currentEntity;
+    }
 
     
 }
