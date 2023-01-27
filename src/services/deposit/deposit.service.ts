@@ -8,7 +8,7 @@ import { DepositRepository } from '../../persistence/repositories';
 export class DepositService {
 
 
-  constructor(private readonly depositRepository: DepositRepository) {}
+  constructor(private readonly depositRepository: DepositRepository) { }
 
   /**
    * Make a new Deposit - OK
@@ -18,7 +18,12 @@ export class DepositService {
    * @memberof DepositService
    */
   createDeposit(deposit: DepositModel): DepositEntity {
+
+    const newDeposit = new DepositEntity();
     
+    newDeposit.accountId = deposit.accountId;
+    newDeposit.amount = deposit.amount;
+
     return this.depositRepository.register(deposit);
 
   }
@@ -30,8 +35,8 @@ export class DepositService {
    * @memberof DepositService
    */
   deleteDeposit(depositId: string): void {
-    
-      this.depositRepository.delete(depositId, true); //TODO: Soft Delete by Default,  implement hard/soft selection. 
+
+    this.depositRepository.delete(depositId, true); //TODO: Soft Delete by Default,  implement hard/soft selection. 
   }
 
   /**
@@ -52,6 +57,6 @@ export class DepositService {
     history = this.depositRepository.findByAccountId(accountId);
 
     return history;
-     
+
   }
 }

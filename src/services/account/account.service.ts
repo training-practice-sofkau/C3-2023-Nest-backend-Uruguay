@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { HttpException } from '@nestjs/common/exceptions';
 
 import { AccountModel } from '../../models';
 import { AccountEntity, AccountTypeEntity } from '../../persistence/entities';
@@ -50,6 +51,10 @@ export class AccountService {
    * @memberof AccountService
    */
   addBalance(accountId: string, amount: number): void {
+    
+    if(amount < 0){
+      throw new Error(`Negative amounts are not allowed!`);
+    }
 
     this.accountRepository.addAmountToBalance(accountId, amount);
 
@@ -64,6 +69,11 @@ export class AccountService {
    */
   removeBalance(accountId: string, amount: number): void {
     
+    
+    if(amount < 0){
+      throw new Error(`Negative amounts are not allowed!`);
+    }
+
     if(!this.verifyAmountIntoBalance(accountId, amount)) {
       throw new Error(`Not enough founds in Account Balance!`);
     }

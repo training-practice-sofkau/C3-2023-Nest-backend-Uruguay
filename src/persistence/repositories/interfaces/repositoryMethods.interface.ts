@@ -1,3 +1,4 @@
+import { PaginationModel } from '../../../models/pagination.model';
 export interface RepositoryMethodsInterface<T> {
 
     register(entity: T): T;
@@ -6,7 +7,7 @@ export interface RepositoryMethodsInterface<T> {
 
     delete(id: string, soft?: boolean): void;
 
-    findAll(): T[];
+    findAll(paginator: PaginationModel): T[];
     
     findOneById(id: string): T;
 

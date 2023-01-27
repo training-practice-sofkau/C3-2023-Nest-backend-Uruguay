@@ -2,11 +2,12 @@
 import {Injectable, InternalServerErrorException, UnauthorizedException} from '@nestjs/common';
 
 import { JwtService } from '@nestjs/jwt';
+
   // Data transfer objects
 
 
   // Models
-  import { CustomerModel, AccountModel } from '../../models';
+  import { CustomerModel } from '../../models';
 
   // Repositories
   import { CustomerRepository } from '../../persistence/repositories';
@@ -16,6 +17,9 @@ import { JwtService } from '@nestjs/jwt';
 
   // Entities
   import { AccountTypeEntity, CustomerEntity, AccountEntity } from '../../persistence/entities';
+import { timeStamp } from 'console';
+
+
 
 
 
@@ -24,12 +28,12 @@ import { JwtService } from '@nestjs/jwt';
 
     constructor(
       private readonly customerRepository: CustomerRepository,
-      private readonly accountService: AccountService,
+      private readonly accountService: AccountService,      
       private jwtService: JwtService,
     ) {}
 
     /**
-     * Login to the system - OK
+     * Login to the system -
      *
      * @param {CustomerModel} user
      * @return {*}  {string}
@@ -40,11 +44,8 @@ import { JwtService } from '@nestjs/jwt';
         user.email,
         user.password,
       );
-      if (answer){
-        // The secret token is an very long string almost impossible to guess (may implement a token generator for this!)
-        const JWT_SECRET = "goK!pusp6ThEdURUtRenOwUhAsWUCLheBazl!uJLPlS8EbreWLdrupIwabRAsiBu";
-
-        return this.jwtService.sign(JWT_SECRET); 
+      if (answer){                
+        return this.jwtService.sign({id:user.id, email:user.email});
       } 
       else throw new UnauthorizedException();
     }
@@ -73,14 +74,15 @@ import { JwtService } from '@nestjs/jwt';
         const accountType = new AccountTypeEntity();
         accountType.id = accountType.id;      
 
-        const newAccount: AccountModel = {
-          customer,
-          accountType,
-        };
+        const newAccount = new AccountEntity();
+        
+        newAccount.customerId = customer;
+        newAccount.accountTypeId = accountType;       
 
         const account = this.accountService.createAccount(newAccount);
 
-        if (account) return 'Falta retornar un JWT'; //TODO: JWT
+        if (account) return this.jwtService.sign({id:customer.id});
+        
         else throw new InternalServerErrorException();
       } else throw new InternalServerErrorException();
     }
@@ -92,6 +94,11 @@ import { JwtService } from '@nestjs/jwt';
      * @memberof SecurityService
      */
     signOut(JWToken: string): void {
-      throw new Error('Method not implemented.');
+      
+        //TODO: I didn't find a way to remove JWToken from client side.
+        // Maybe I can make a blacklist of used tokens and check that
+        // the request is not coming from a invalid or already spent token.
+        
+
     }
   }
