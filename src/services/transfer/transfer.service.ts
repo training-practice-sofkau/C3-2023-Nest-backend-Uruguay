@@ -36,7 +36,9 @@ export class TransferService {
    */
   getHistoryOut(accountId: string,pagination?: PaginationModel,dataRange?: string): Transfer[] {//dataRange:DataRangeModel
     const transferHistory = this.TransferRepo.findOutcomeByDataRange(accountId,pagination?.offset,pagination?.limit);
-    
+    const transfercuentaHistory = transferHistory.filter((account) => account.trf_id === accountId);
+    return transfercuentaHistory;
+
   }
 
   /**
@@ -48,12 +50,10 @@ export class TransferService {
    * @return {*}  {TransferEntity[]}
    * @memberof TransferService
    */
-  getHistoryIn(
-    accountId: string,
-    pagination?: PaginationModel,
-    dataRange?: DataRangeModel,
-  ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+  getHistoryIn(accountId: string,pagination?: PaginationModel,dataRange?: string): Transfer[] {//dataRange?: DataRangeModel
+    const transferHistory = this.TransferRepo.findIncomeByDataRange(accountId,pagination?.offset,pagination?.limit);
+    const transfercuentaHistory = transferHistory.filter((account) => account.trf_id === accountId);
+    return transfercuentaHistory;
   }
 
   /**
@@ -65,12 +65,11 @@ export class TransferService {
    * @return {*}  {TransferEntity[]}
    * @memberof TransferService
    */
-  getHistory(
-    accountId: string,
-    pagination: PaginationModel,
-    dataRange?: DataRangeModel,
-  ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+  getHistory(accountId: string,pagination: PaginationModel,dataRange?: string): Transfer[] {//dataRange?: DataRangeModel
+    let InHisotry = this.getHistoryIn(accountId,pagination,dataRange);
+    let outHistory =  this.getHistoryOut(accountId,pagination,dataRange);
+    let TotalHistory = InHisotry.concat(outHistory); 
+    return TotalHistory;
   }
 
   /**
@@ -80,6 +79,6 @@ export class TransferService {
    * @memberof TransferService
    */
   deleteTransfer(transferId: string): void {
-    throw new Error('This method is not implemented');
+    this.TransferRepo.delete(transferId);
   }
 }
