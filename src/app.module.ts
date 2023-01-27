@@ -6,7 +6,7 @@ import { CustomerController } from './controllers/customer/customer.controller';
 import { TransfersController } from './controllers/transfers/transfers.controller';
 import { DepositController } from './controllers/deposit/deposit.controller';
 import { DepositService } from './services/deposit/deposit.service';
-import { TransfersService } from './services/transfers/transfers.service';
+import { TransfersService } from './services/transfer/transfer.service';
 import { CustomerService } from './services/customer/customer.service';
 import { SecurityService } from './services/security/security.service';
 

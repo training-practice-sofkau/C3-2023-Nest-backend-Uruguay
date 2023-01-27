@@ -24,17 +24,17 @@ export class DocumentTypeRepository extends BaseRepository<DocumentTypeEntity> i
   }
 
   private hardDelete(index: number): void {
-    this.database.splice(index,1);
-  } 
+    this.database.splice(index, 1);
+  }
 
-  delete(id: string, hard : boolean | undefined ) :void {
+  delete(id: string, hard: boolean | undefined): void {
     const index = this.database.findIndex(obj => obj.id === id);
 
-    if(!index ) throw new NotFoundException('Lo siento, nada por aqui =(');
-    
+    if (!index) throw new NotFoundException('Lo siento, nada por aqui =(');
+
     if (hard) {
       this.hardDelete(index);
-  } 
+    }
 
   }
 
@@ -43,9 +43,9 @@ export class DocumentTypeRepository extends BaseRepository<DocumentTypeEntity> i
   }
 
   findOneById(id: string): DocumentTypeEntity {
-    const currentEntity = this.database.find ((obj) => obj.id === id);
-  if (currentEntity) return currentEntity; 
-  else throw new NotFoundException('Lo siento, nada por aqui =(');
+    const currentEntity = this.database.find((obj) => obj.id === id);
+    if (currentEntity) return currentEntity;
+    else throw new NotFoundException('Lo siento, nada por aqui =(');
   }
 
   findByState(state: boolean): DocumentTypeEntity[] {
@@ -56,9 +56,9 @@ export class DocumentTypeRepository extends BaseRepository<DocumentTypeEntity> i
 
   findByName(name: string): DocumentTypeEntity[] {
     const currentEntity = this.database.filter((obj) => obj.name === name);
-  if (currentEntity) return currentEntity;
-  else throw new NotFoundException('Lo siento, nada por aqui =(');
+    if (currentEntity) return currentEntity;
+    else throw new NotFoundException('Lo siento, nada por aqui =(');
   }
 
-  
+
 }

@@ -6,8 +6,8 @@ import { IRepository } from "./interface/i-base/i-repository";
 
 @Injectable()
 export class CustomerRepo extends BaseRepository<CustomerEntity> implements IRepository<CustomerEntity>{ //Consultar??
-   
-   
+
+
   register(entity: CustomerEntity): CustomerEntity {
 
     this.database.push(entity);
@@ -20,9 +20,9 @@ export class CustomerRepo extends BaseRepository<CustomerEntity> implements IRep
   update(id: string, entity: CustomerEntity): CustomerEntity {
 
     const indexCurrentEntity = this.database.findIndex((obj) => obj.id === id && typeof obj.daletedAt === 'undefined');
-    
-    if (indexCurrentEntity >= 0) this.database[indexCurrentEntity] = {...this.database[indexCurrentEntity],...entity,id,} as CustomerEntity;
-    
+
+    if (indexCurrentEntity >= 0) this.database[indexCurrentEntity] = { ...this.database[indexCurrentEntity], ...entity, id, } as CustomerEntity;
+
     else throw new NotFoundException('Lo siento, nada por aqui =(');
 
     return this.database[indexCurrentEntity];
@@ -31,8 +31,8 @@ export class CustomerRepo extends BaseRepository<CustomerEntity> implements IRep
 
 
   private hardDelete(index: number): void {
-    this.database.splice(index,1);
-  }   
+    this.database.splice(index, 1);
+  }
 
   private softDelete(index: number): void {
     this.database[index].daletedAt = Date.now();
@@ -41,13 +41,13 @@ export class CustomerRepo extends BaseRepository<CustomerEntity> implements IRep
   delete(id: string, soft: boolean): void {
 
     const index = this.database.findIndex(obj => obj.id === id);
-    
-    if(!index ) throw new NotFoundException('Lo siento, no se encontro ese index!');
+
+    if (!index) throw new NotFoundException('Lo siento, no se encontro ese index!');
 
     if (soft) {
-        this.softDelete(index);
+      this.softDelete(index);
     } else {
-        this.hardDelete(index);
+      this.hardDelete(index);
     }
   }
 
@@ -75,10 +75,10 @@ export class CustomerRepo extends BaseRepository<CustomerEntity> implements IRep
   findOneByEmailAndPassword(email: string, password: string): boolean {
 
     const index = this.database.findIndex((obj) => obj.email === email && obj.password === password && typeof obj.daletedAt === 'undefined');
-    
-    let result : boolean = false
 
-    if (index > -1){
+    let result: boolean = false
+
+    if (index > -1) {
       result = true
     }
     return result
@@ -89,7 +89,7 @@ export class CustomerRepo extends BaseRepository<CustomerEntity> implements IRep
   findOneByDocumentTypeAndDocument(documentTypeId: string, document: string): CustomerEntity {
 
     const currentEntity = this.database.find((obj) => obj.documentType.id === documentTypeId && typeof obj.daletedAt === 'undefined');
-    
+
     if (currentEntity) return currentEntity;
 
     else throw new NotFoundException('Lo siento, nada por aqui =(');
@@ -100,9 +100,9 @@ export class CustomerRepo extends BaseRepository<CustomerEntity> implements IRep
   findOneByEmail(email: string): CustomerEntity {
     const currentEntity = this.database.find((obj) => obj.email === email && typeof obj.daletedAt === 'undefined');
 
-  if (currentEntity) return currentEntity;
+    if (currentEntity) return currentEntity;
 
-  else throw new NotFoundException('Lo siento, nada por aqui =(');
+    else throw new NotFoundException('Lo siento, nada por aqui =(');
   }
 
 
@@ -111,7 +111,7 @@ export class CustomerRepo extends BaseRepository<CustomerEntity> implements IRep
   findOneByPhone(phone: string): CustomerEntity {
 
     const currentEntity = this.database.find((obj) => obj.phone === phone && typeof obj.daletedAt === 'undefined');
-    
+
     if (currentEntity) return currentEntity;
 
     else throw new NotFoundException('Lo siento, nada por aqui =(');
@@ -129,13 +129,13 @@ export class CustomerRepo extends BaseRepository<CustomerEntity> implements IRep
   findByFullName(fullName: string): CustomerEntity[] {
 
     const currentEntity = this.database.filter((obj) => obj.fullName === fullName && typeof obj.daletedAt === 'undefined');
-    
+
     if (currentEntity) return currentEntity;
 
     else throw new NotFoundException('Lo siento, nada por aqui =(');
   }
-  
+
 }
 
-   
+
 
