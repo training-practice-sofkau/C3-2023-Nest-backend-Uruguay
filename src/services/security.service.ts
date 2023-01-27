@@ -16,20 +16,23 @@
   // Entities
   import { AccountTypeEntity, CustomerEntity, AccountEntity } from '../persistence/entities';
   
+  // Jwt
+  import { JwtService } from '@nestjs/jwt';
+  
   @Injectable()
   export class SecurityService {
     constructor(
       private readonly customerRepository: CustomerRepository,
       private readonly accountService: AccountService,
+      private readonly jwtService: JwtService
     ) {}
   
-
     signIn(user: CustomerModel): string {
       const answer = this.customerRepository.findOneByEmailAndPassword(
         user.email,
         user.password,
       );
-      if (answer) return 'Falta retornar un JWT';
+      if (answer) return this.jwtService.sign({id: user.id});
       else throw new UnauthorizedException();
     }
 
@@ -56,7 +59,7 @@
   
         const account = this.accountService.createAccount(newAccount);
   
-        if (account) return 'Falta retornar un JWT';
+        if (account) return this.jwtService.sign({id: account.id});
         else throw new InternalServerErrorException();
       } else throw new InternalServerErrorException();
     }
