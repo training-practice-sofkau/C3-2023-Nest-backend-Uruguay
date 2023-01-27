@@ -37,7 +37,7 @@ export class AccountRepository
                 typeof i.deletedAt === 'undefined'
         )
         //const indexToDelete = this.database.indexOf(this.findOneById(id))
-        soft ? this.softDelete(indexToDelete) : this.hardDelete(indexToDelete)
+        soft ? this.hardDelete(indexToDelete) : this.softDelete(indexToDelete)
     }
 
     private hardDelete(index: number): void {
