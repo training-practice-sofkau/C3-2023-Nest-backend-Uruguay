@@ -43,6 +43,7 @@ export class AccountService {
     const acount = this.accountRepository.findOneById(accountId)
     acount.balance += amount;
     this.accountRepository.update(accountId, acount);
+    //Validar amount negativo
   }
 
   /**

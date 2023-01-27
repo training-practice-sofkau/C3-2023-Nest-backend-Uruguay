@@ -70,7 +70,7 @@ export class TransferService {
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-
+    throw new Error('This method is not implemented');
   }
 
   /**
