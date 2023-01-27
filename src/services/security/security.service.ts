@@ -22,6 +22,9 @@ import {
     AccountTypeEntity,
     CustomerEntity,
   } from '../../persistence/entities';
+  // JWT
+  import * as jwt from "jsonwebtoken"
+import { v4 as uuid } from 'uuid';
   
   @Injectable()
   export class SecurityService {
@@ -29,8 +32,7 @@ import {
       private readonly customerRepository: CustomerRepository,
       private readonly accountService: AccountService,
     ) {}
-  
-    /**
+      /**
      * Identificarse en el sistema
      *
      * @param {CustomerModel} user
@@ -42,7 +44,7 @@ import {
         user.email,
         user.password,
       );
-      if (answer) return 'Falta retornar un JWT';
+      if (answer) return jwt.sign(user, process.env.TOKEN_SECRET || "tokentest");
       else throw new UnauthorizedException();
     }
   
@@ -66,15 +68,14 @@ import {
   
       if (customer) {
         const accountType = new AccountTypeEntity();
-        accountType.id = 'Falta el ID por defecto del tipo de cuenta';
+        accountType.id = uuid();
         const newAccount = {
-          customer,
-          accountType,
+          ...customer,
+          ...accountType,
         };
-  
         const account = this.accountService.createAccount(newAccount);
-  
-        if (account) return 'Falta retornar un JWT';
+        
+        if (account) return jwt.sign(user, process.env.TOKEN_SECRET || "tokentest");
         else throw new InternalServerErrorException();
       } else throw new InternalServerErrorException();
     }
@@ -86,6 +87,5 @@ import {
      * @memberof SecurityService
      */
     signOut(JWToken: string): void {
-      throw new Error('Method not implemented.');
     }
   }
