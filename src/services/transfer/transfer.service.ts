@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
-import { PaginationModel, TransferModel } from '../../models';
+import { DataRangeModel, PaginationModel, TransferModel } from '../../models';
 import { TransferEntity, TransferRepository } from '../../persistence';
 
 @Injectable()
 export class TransferService {
-  constructor(private readonly transferRepository: TransferRepository) {}
+  constructor(private readonly transferRepository: TransferRepository) { }
   /**
    * Crear una transferencia entre cuentas del banco
    *
@@ -36,7 +36,9 @@ export class TransferService {
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    if (dataRange) {
+      return this.transferRepository.findOutcomeByDataRange(accountId, dataRange.dataInit, dataRange.dataFinal);
+    } throw new NotFoundException();
   }
 
   /**
@@ -53,7 +55,9 @@ export class TransferService {
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    if (dataRange) {
+      return this.transferRepository.findIncomeByDataRange(accountId, dataRange.dataInit, dataRange.dataFinal);
+    } throw new NotFoundException()
   }
 
   /**
@@ -70,7 +74,10 @@ export class TransferService {
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    if (dataRange){
+      return this.transferRepository.findIncomeByDataRange(accountId, dataRange.dataInit, dataRange.dataFinal)
+      .concat(this.transferRepository.findOutcomeByDataRange(accountId, dataRange.dataInit, dataRange.dataFinal));
+    } throw new NotFoundException()
   }
 
   /**
