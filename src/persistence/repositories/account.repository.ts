@@ -73,9 +73,19 @@ export class AccountRepository
 
   findByCustomer(customerId: string): AccountEntity[] {
     const currentEntity = this.database.filter(
-      (item) => item.outcome.id === customerId,
+      (item) => item.customer.id === customerId,
     );
     if (currentEntity) return currentEntity;
     else throw new NotFoundException();
+  }
+  
+  getBalance(id: string, amount?: number, deposit?: boolean): number {
+      const index  =  this.database.findIndex((item) => item.id === id);
+      let  accountBalance = this.database[index].acc_Balance
+      if(amount === undefined) {
+      return   accountBalance }
+      const newBalance = (deposit === true ?   accountBalance + amount :  accountBalance - amount)
+      this.database[index].acc_Balance = newBalance
+      return newBalance
   }
 }

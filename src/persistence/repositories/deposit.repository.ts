@@ -81,4 +81,6 @@ export class DepositRepository
     if (currentEntity) return currentEntity;
     else throw new NotFoundException();
   }
+
+  
 }
