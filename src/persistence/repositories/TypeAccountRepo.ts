@@ -20,7 +20,7 @@ export class AccountTypeRepository extends BaseRepository<AccountTypeEntity> imp
 
     update(id: string, entity: AccountTypeEntity): AccountTypeEntity {
 
-      const indexCurrentEntity = this.database.findIndex((item) => item.id === id);
+      const indexCurrentEntity = this.database.findIndex((obj) => obj.id === id);
 
         if (indexCurrentEntity >= 0)this.database[indexCurrentEntity] = {...this.database[indexCurrentEntity],...entity,id,} as AccountTypeEntity;
         
@@ -33,7 +33,7 @@ export class AccountTypeRepository extends BaseRepository<AccountTypeEntity> imp
 
     delete(id: string, soft?: boolean | undefined): void {
 
-        const index = this.database.findIndex(itemDel => itemDel.id === id);
+        const index = this.database.findIndex(objDel => objDel.id === id);
 
         if(!index ) throw new NotFoundException('Lo siento, nada por aqui =(');
 
@@ -49,7 +49,7 @@ export class AccountTypeRepository extends BaseRepository<AccountTypeEntity> imp
 
     findOneById(id: string): AccountTypeEntity {
 
-        const currentEntity = this.database.find((itemId) => itemId.id === id);
+        const currentEntity = this.database.find((objId) => objId.id === id);
 
         if(!currentEntity ) throw new NotFoundException('Lo siento, nada por aqui =(');
 
@@ -59,14 +59,14 @@ export class AccountTypeRepository extends BaseRepository<AccountTypeEntity> imp
 
     findByState(state: boolean): AccountTypeEntity[] {
 
-        return this.database.filter((itemState) => itemState.state === state);
+        return this.database.filter((objState) => objState.state === state);
     }
 
 
 
     findByName(name: string): AccountTypeEntity[] {
 
-        const currentEntity = this.database.filter((itemName) => itemName.name === name);
+        const currentEntity = this.database.filter((objName) => objName.name === name);
         
         if(!currentEntity ) throw new NotFoundException('Lo siento, nada por aqui =(');
 
