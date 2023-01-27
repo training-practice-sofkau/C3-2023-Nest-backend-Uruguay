@@ -3,7 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { GeneralCRUD } from './base';
 import { CustomerEntity } from '../entities';
 import { IDisableable, INameable, ICustomerRepository } from './interfaces';
-import { PaginatorModel } from '../../models';
+import { PaginationModel } from '../../models';
 
 @Injectable()
 export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements ICustomerRepository, IDisableable<CustomerEntity>, INameable<CustomerEntity> {
@@ -56,7 +56,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
     // });
   }
 
-  findAll(paginator: PaginatorModel): CustomerEntity[] {
+  findAll(paginator: PaginationModel): CustomerEntity[] {
     let finded = this.database.filter(
       (item) => typeof item.deletedAt === undefined
     );

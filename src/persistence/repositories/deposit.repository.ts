@@ -3,7 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { GeneralCRUD } from './base';
 import { DepositEntity } from '../entities';
 import { IDepositRepository } from './interfaces';
-import { PaginatorModel } from '../../models';
+import { PaginationModel } from '../../models';
 
 @Injectable()
 export class DepositRepository extends GeneralCRUD<DepositEntity> implements IDepositRepository {
@@ -44,7 +44,7 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> implements IDe
     this.database[index].deletedAt = Date.now();
   }
 
-  findAll(paginator: PaginatorModel): DepositEntity[] {
+  findAll(paginator: PaginationModel): DepositEntity[] {
     let finded = this.database.filter(
         (item) => typeof item.deletedAt === undefined,
     );

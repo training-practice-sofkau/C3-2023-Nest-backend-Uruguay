@@ -1,4 +1,4 @@
-export interface PaginatorModel{
+export interface PaginationModel{
     offset: number,
     limit?: number
 }
