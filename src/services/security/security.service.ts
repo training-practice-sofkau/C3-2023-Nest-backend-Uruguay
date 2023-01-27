@@ -1,10 +1,7 @@
 // Libraries
-import {
-    Injectable,
-    InternalServerErrorException,
-    UnauthorizedException,
-  } from '@nestjs/common';
+import {Injectable, InternalServerErrorException, UnauthorizedException} from '@nestjs/common';
 
+import { JwtService } from '@nestjs/jwt';
   // Data transfer objects
 
 
@@ -18,20 +15,20 @@ import {
   import { AccountService } from '../account';
 
   // Entities
-  import {
-    AccountTypeEntity,
-    CustomerEntity,
-  } from '../../persistence/entities';
+  import { AccountTypeEntity, CustomerEntity } from '../../persistence/entities';
+import { AccountEntity } from '../../persistence/entities/account.entity';
 
   @Injectable()
   export class SecurityService {
+
     constructor(
       private readonly customerRepository: CustomerRepository,
       private readonly accountService: AccountService,
+      private jwtService: JwtService,
     ) {}
 
     /**
-     * Identificarse en el sistema
+     * Login to the system
      *
      * @param {CustomerModel} user
      * @return {*}  {string}
@@ -42,19 +39,23 @@ import {
         user.email,
         user.password,
       );
-      if (answer) return 'Falta retornar un JWT'; //TODO: buscar info sobre JWT
+      if (answer){
+        return this.jwtService.sign(""); 
+      } 
       else throw new UnauthorizedException();
     }
 
     /**
-     * Crear usuario en el sistema
+     * Create a new user
      *
      * @param {CustomerModel} user
      * @return {*}  {string}
      * @memberof SecurityService
      */
     signUp(user: CustomerModel): string {
+
       const newCustomer = new CustomerEntity();
+      
       newCustomer.documentType = user.documentType;
       newCustomer.document = user.document;
       newCustomer.fullname = user.fullname;
@@ -66,7 +67,7 @@ import {
 
       if (customer) {
         const accountType = new AccountTypeEntity();
-        accountType.id = 'Falta el ID por defecto del tipo de cuenta'; //TODO: ???
+        accountType.id = accountType.id;        
         const newAccount = {
           customer,
           accountType,

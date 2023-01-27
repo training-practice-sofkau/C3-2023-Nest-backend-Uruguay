@@ -24,7 +24,7 @@ export class DepositService {
   }
 
   /**
-   * Deletes a deposit - OK
+   * Deletes the deposit that matches the given ID - OK
    *
    * @param {string} depositId
    * @memberof DepositService

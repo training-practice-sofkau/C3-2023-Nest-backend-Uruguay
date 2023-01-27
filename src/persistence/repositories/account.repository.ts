@@ -334,7 +334,7 @@ export class AccountRepository extends BankInternalControl<AccountEntity> implem
 
         try { // try to find all entities with a given CustomerId
 
-            const searchResult = this.database.filter(entity => entity.customerId === customerId &&
+            const searchResult = this.database.filter(entity => entity.customerId.id === customerId &&
                 typeof entity.deletedAt === undefined); //searchs for entities that matches the criteria
 
             if (searchResult.length <= 0) { // if the result of the search is empty

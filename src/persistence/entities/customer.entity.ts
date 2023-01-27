@@ -1,10 +1,11 @@
-import { CustomerModel, DocumentTypeModel } from '../../models';
-
 import { v4 as uuid } from 'uuid';
+import { CustomerModel } from '../../models';
+import { DocumentTypeEntity } from '.';
+
 
 export class CustomerEntity implements CustomerModel{
     id = uuid();
-    documentType: DocumentTypeModel;
+    documentType: DocumentTypeEntity;
     document: string;
     fullname: string;
     email: string;

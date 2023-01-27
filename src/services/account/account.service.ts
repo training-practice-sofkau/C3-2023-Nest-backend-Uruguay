@@ -13,7 +13,7 @@ export class AccountService {
       ) {}
     
    /**
-   * Crear una nueva cuenta - OK
+   * Create a new account - OK
    *
    * @param {AccountModel} account
    * @return {*}  {AccountEntity}
@@ -145,7 +145,7 @@ export class AccountService {
   }
 
   /**
-   * Borrar una cuenta - OK
+   * Deletes the account that matches the given ID - OK
    *
    * @param {string} accountId
    * @memberof AccountService

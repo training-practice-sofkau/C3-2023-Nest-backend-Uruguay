@@ -1,11 +1,12 @@
 import { AccountModel } from '../../models';
 
 import { v4 as uuid } from 'uuid';
-import { AccountTypeEntity } from './account-type.entity';
+
+import { CustomerEntity,AccountTypeEntity } from '.';
 
 export class AccountEntity implements AccountModel{
-    id: string;
-    customerId: string;
+    id = uuid();
+    customerId: CustomerEntity;
     accountTypeId: AccountTypeEntity;
     balance: number;
     state = true;

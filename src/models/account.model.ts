@@ -1,8 +1,9 @@
-import { AccountTypeEntity } from '../persistence/entities/account-type.entity';
+import { CustomerModel, AccountTypeModel } from '.';
+
 export interface AccountModel{
     id: string;
-    customerId: string;
-    accountTypeId: AccountTypeEntity;
+    customerId: CustomerModel;
+    accountTypeId: AccountTypeModel;
     balance: number;
     state: boolean;
     deletedAt?: Date | number; 
