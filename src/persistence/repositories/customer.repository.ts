@@ -55,7 +55,7 @@ export class CustomerRepository
         && item.password === password
         && typeof item.deletedAt === 'undefined',
     );
-    return indexCurrentEntity >= -1 ? true : false;
+    return indexCurrentEntity > -1 ? true : false;
   }
 
   findOneByDocumentTypeAndDocument(

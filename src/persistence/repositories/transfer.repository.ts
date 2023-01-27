@@ -22,9 +22,9 @@ export class TransferRepository
                 ...this.database[indexCurrentEntity],
                 ...entity,
                 id,
-            } as TransferEntity;
-        else throw new NotFoundException();
-        return this.database[indexCurrentEntity];
+            } as TransferEntity
+        else throw new NotFoundException()
+        return this.database[indexCurrentEntity]
     }
 
     delete(id: string, soft?: boolean): void {
@@ -32,7 +32,6 @@ export class TransferRepository
             i => i.id === id &&
                 typeof i.deletedAt === 'undefined'
         )
-        //const indexToDelete = this.database.indexOf(this.findOneById(id))
         soft ? this.softDelete(indexToDelete) : this.hardDelete(indexToDelete)
     }
 

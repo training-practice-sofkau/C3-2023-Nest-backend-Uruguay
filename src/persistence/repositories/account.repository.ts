@@ -27,6 +27,10 @@ export class AccountRepository
         return this.database[indexCurrentEntity];
     }
 
+    updateBalance(id: string, balance: number): void {
+        this.findOneById(id).balance += balance
+    }
+
     delete(id: string, soft?: boolean): void {
         const indexToDelete = this.database.findIndex(
             i => i.id === id &&
