@@ -33,9 +33,9 @@ constructor(private readonly accountRepository: AccountTypeRepository) {}
    */
   getBalance(accountId: string):number{
     
-    const entityBalance = this.accountRepository.findOneById(accountId); 
+    const accountEntity = this.accountRepository.findOneById(accountId); 
 
-    return entityBalance.acctp_balance;
+    return accountEntity.acctp_balance;
   }
 
   /**
@@ -47,6 +47,7 @@ constructor(private readonly accountRepository: AccountTypeRepository) {}
    */
   addBalance(accountId: string, amount: number): void {
     const account = this.accountRepository.findOneById(accountId);
+    //validar el amount 
     account.acctp_balance += amount;
     this.accountRepository.update(accountId,account);
   }
@@ -62,7 +63,7 @@ constructor(private readonly accountRepository: AccountTypeRepository) {}
   removeBalance(accountId: string, amount: number): void {
     const account = this.accountRepository.findOneById(accountId);
 
-    if(account.acctp_balance < amount ) 
+    if(account.acctp_balance < amount && amount > -1 ) 
     throw new NotAcceptableException(`El monto : ${amount}
     es superior al balance de la cuenta`);
 

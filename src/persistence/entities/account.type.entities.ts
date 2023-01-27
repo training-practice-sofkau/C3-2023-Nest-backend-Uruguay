@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid';
 export class AccountTypeModel implements accountType{
     
     acctp_id = uuid();
-    customer_id: accountType[];
+    customer_id: accountType[];//customer
     acctp_name: string;
     acctp_state: boolean;
     acctp_balance: number;

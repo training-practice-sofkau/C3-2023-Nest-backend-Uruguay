@@ -28,7 +28,6 @@ export class DepositService {
 
   /**
    * Borrar un deposito
-   *
    * @param {string} depositId
    * @memberof DepositService
    */
