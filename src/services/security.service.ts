@@ -1,8 +1,4 @@
-import {
-    Injectable,
-    InternalServerErrorException,
-    UnauthorizedException,
-  } from '@nestjs/common';
+  import { Injectable, InternalServerErrorException, UnauthorizedException} from '@nestjs/common';
 
   import { v4 as uuid } from 'uuid';
   
@@ -18,10 +14,7 @@ import {
   import { AccountService } from '.';
   
   // Entities
-  import {
-    AccountTypeEntity,
-    CustomerEntity, AccountEntity
-  } from '../persistence/entities';
+  import { AccountTypeEntity, CustomerEntity, AccountEntity } from '../persistence/entities';
   
   @Injectable()
   export class SecurityService {
