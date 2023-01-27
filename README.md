@@ -49,7 +49,7 @@ $ npm run start:prod
 
 ```bash
 # Title of the delivery
-[Workshop Week 1 - Day 4] - Inyección de dependencias
+[Workshop Week 1 - Day 4] - Dependency injection
 
 # Body of the delivery
 [Any short description]

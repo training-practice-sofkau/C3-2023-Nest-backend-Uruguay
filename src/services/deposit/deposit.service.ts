@@ -2,44 +2,56 @@ import { Injectable } from '@nestjs/common';
 
 import { DepositEntity } from '../../persistence/entities';
 import { DataRangeModel, DepositModel, PaginationModel } from '../../models/';
+import { DepositRepository } from '../../persistence/repositories';
 
 @Injectable()
 export class DepositService {
+
+
+  constructor(private readonly depositRepository: DepositRepository) {}
+
   /**
-   * Crear un deposito
+   * Make a new Deposit - OK
    *
    * @param {DepositModel} deposit
    * @return {*}  {DepositEntity}
    * @memberof DepositService
    */
   createDeposit(deposit: DepositModel): DepositEntity {
-    throw new Error('This method is not implemented');
+    
+    return this.depositRepository.register(deposit);
+
   }
 
   /**
-   * Borrar un deposito
+   * Deletes a deposit - OK
    *
    * @param {string} depositId
    * @memberof DepositService
    */
   deleteDeposit(depositId: string): void {
-    throw new Error('This method is not implemented');
+    
+      this.depositRepository.delete(depositId, true); //TODO: Soft Delete by Default,  implement hard/soft selection. 
   }
 
   /**
-   * Obtener el historial de los depósitos en una cuenta
+   * Gets the historical data of an account, can be filter by dates
    *
-   * @param {string} depositId
+   * @param {string} accountId
    * @param {PaginationModel} pagination
-   * @param {DataRangeModel} [dataRange]
+   * @param {DataRangeModel} [dateRange]
    * @return {*}  {DepositEntity[]}
    * @memberof DepositService
    */
-  getHistory(
-    depositId: string,
-    pagination?: PaginationModel,
-    dataRange?: DataRangeModel,
-  ): DepositEntity[] {
-    throw new Error('This method is not implemented');
+  getHistory(accountId: string, pagination?: PaginationModel, dataRange?: DataRangeModel): DepositEntity[] {
+
+    let history = [];
+
+    //TODO: Implement PAgination and Datarange
+
+    history = this.depositRepository.findByAccountId(accountId);
+
+    return history;
+     
   }
 }

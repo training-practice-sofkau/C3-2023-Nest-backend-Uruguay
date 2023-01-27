@@ -4,6 +4,7 @@ import { InternalServerErrorException, NotFoundException } from '@nestjs/common/
 import { DepositEntity } from '../entities';
 import { BankInternalControl } from './base';
 import { DepositRepositoryInterface } from './interfaces';
+import { PaginationModel } from '../../models';
 
 @Injectable()
 export class DepositRepository extends BankInternalControl<DepositEntity> implements DepositRepositoryInterface {
@@ -212,11 +213,12 @@ export class DepositRepository extends BankInternalControl<DepositEntity> implem
      * @param dateEnd  end date
      * @returns array of entities or and exception
      */
-    findByDataRange(dateInit: Date | number, dateEnd: Date | number): DepositEntity[] {
+    findByDataRange(accountId: string, dateInit: Date | number, dateEnd: Date | number): DepositEntity[] {
         
         try{ // try to find all entities that matches date range
 
-            const searchResult = this.database.filter(entity => entity.dateTime >= dateInit 
+            const searchResult = this.database.filter(entity => entity.accountId === accountId
+                && entity.dateTime >= dateInit 
                 && entity.dateTime <= dateEnd
                 && typeof entity.deletedAt === undefined ) ; 
 

@@ -152,7 +152,7 @@ export class AccountService {
    */
   deleteAccount(accountId: string): void {
 
-    this.accountRepository.delete(accountId); //TODO: check if is soft or hard delete
+    this.accountRepository.delete(accountId, true); //TODO: Soft Delete by Default, implement hard/soft selection. 
 
   }
 }
