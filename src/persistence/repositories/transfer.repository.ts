@@ -9,6 +9,16 @@ export class TransferRepository
   extends BaseRepository<TransferEntity>
   implements TransferRepositoryInterface
 {
+  searchByAttributes(
+    attributes: keyof TransferEntity,
+    dataToSearch: string,
+  ): TransferEntity[] {
+    const currentEntity = this.database.filter(
+      (entity) => entity[attributes] === dataToSearch,
+    );
+    if (currentEntity) return currentEntity;
+    else throw new NotFoundException();
+  }
   register(entity: TransferEntity): TransferEntity {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;
@@ -51,14 +61,6 @@ export class TransferRepository
     return this.database.filter(
       (item) => typeof item.deletedAt === 'undefined',
     );
-  }
-
-  findOneById(id: string): TransferEntity {
-    const currentEntity = this.database.find(
-      (item) => item.id === id && typeof item.deletedAt === 'undefined',
-    );
-    if (currentEntity) return currentEntity;
-    else throw new NotFoundException();
   }
 
   findOutcomeByDataRange(

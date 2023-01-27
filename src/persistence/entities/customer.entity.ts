@@ -13,7 +13,8 @@ export class CustomerEntity implements CustomerModel{
     avatarUrl?: string ;
     id = uuid()
     state: true  | false;
-    deletedAt?: number | Date ;   
+    deletedAt?: number | Date ;  
+    name: string
  
 }
 

@@ -9,6 +9,13 @@ export class AccountTypeRepository
   extends BaseRepository<AccountTypeEntity>
   implements AccountTypeRepositoryInterface
 {
+  searchByAttributes(attributes: keyof AccountTypeEntity, dataToSearch: string): AccountTypeEntity[] {
+    const currentEntity = this.database.filter(
+      (entity) => entity[attributes] === dataToSearch,
+    );
+    if (currentEntity) 
+    return currentEntity;
+    else throw new NotFoundException()  }
 
   update(id: string, entity: AccountTypeEntity): AccountTypeEntity {
     const indexCurrentEntity = this.database.findIndex(
@@ -29,21 +36,9 @@ export class AccountTypeRepository
   findAll(): AccountTypeEntity[] {
     return this.database  
 }
-
-  findOneById(id: string): AccountTypeEntity {
-    const currentEntity = this.database.find(
-      (item) => item.id === id ,
-    );
-    if (currentEntity) return currentEntity;
-    else throw new NotFoundException();
-  }
-
   findByState(state: boolean): AccountTypeEntity[] {
      return this.database.filter((item) => ( state === true ? item.state === true : item.state === false  ));    
   }
-  findByName(name: string): AccountTypeEntity[] {
-    return this.database.filter((item) => item.name === name);    
+ 
 }
-}
-
 

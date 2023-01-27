@@ -7,7 +7,18 @@ import { CustomerRepositoryInterface } from './interfaces';
 @Injectable()
 export class CustomerRepository
   extends BaseRepository<CustomerEntity>
-  implements CustomerRepositoryInterface {
+  implements CustomerRepositoryInterface
+{
+  searchByAttributes(
+    attributes: keyof CustomerEntity,
+    dataToSearch: string,
+  ): CustomerEntity[] {
+    const currentEntity = this.database.filter(
+      (entity) => entity[attributes] === dataToSearch,
+    );
+    if (currentEntity) return currentEntity;
+    else throw new NotFoundException();
+  }
 
   register(entity: CustomerEntity): CustomerEntity {
     this.database.push(entity);
@@ -29,21 +40,16 @@ export class CustomerRepository
   }
 
   delete(id: string, soft?: boolean | undefined): void {
-    this.database.splice(this.database.findIndex((item) => item.id === id), 1);
+    this.database.splice(
+      this.database.findIndex((item) => item.id === id),
+      1,
+    );
   }
 
   findAll(): CustomerEntity[] {
     return this.database.filter(
       (item) => typeof item.deletedAt === 'undefined',
     );
-  }
-
-  findOneById(id: string): CustomerEntity {
-    const currentEntity = this.database.find(
-      (item) => item.id === id && typeof item.deletedAt === 'undefined',
-    );
-    if (currentEntity) return currentEntity;
-    else throw new NotFoundException();
   }
 
   findOneByEmailAndPassword(email: string, password: string): boolean {
@@ -66,42 +72,14 @@ export class CustomerRepository
         item.document === document &&
         typeof item.deletedAt === 'undefined',
     );
-    return this.database[indexCurrentEntity]    
-
-
-  }
-
-  findOneByEmail(email: string): CustomerEntity {
-    
-    const indexCurrentEntity = this.database.findIndex(
-      (item) =>
-        item.email === email 
-    );
-
-    if (indexCurrentEntity != 1) {
-    return this.database[indexCurrentEntity]  
-
-  }
-  else throw new NotFoundException();
-}
-
-  findOneByPhone(phone: string): CustomerEntity {    
-   const currentEntity = this.database.find(
-    (item) => item.phone === phone && typeof item.deletedAt === 'undefined',
-  );
-  if (currentEntity) return currentEntity;
-  else throw new NotFoundException();
+    return this.database[indexCurrentEntity];
   }
 
   findByState(state: boolean): CustomerEntity[] {
-    return this.database.filter((item) => ( state === true ? item.state === true : typeof item.deletedAt != 'undefined'));    
-  }
-
-  findByFullName(fullName: string): CustomerEntity[] {
-    const currentEntity = this.database.filter(
-      (item) => item.fullName === fullName,
+    return this.database.filter((item) =>
+      state === true
+        ? item.state === true
+        : typeof item.deletedAt != 'undefined',
     );
-    if (currentEntity) 
-    return currentEntity;
-    else throw new NotFoundException();  }
+  }
 }

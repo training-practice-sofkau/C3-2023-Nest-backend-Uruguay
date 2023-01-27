@@ -3,7 +3,8 @@ export interface BaseRepositoryInterface<T> {
     update(id: string, entity: T): T;
     delete(id: string, soft?: boolean): void;
     findAll(): Array<T>;
-    findOneById(id: string): T;
+    searchByAttributes(attributes: keyof T, dataToSearch: string): T[];
+
   }
 
   

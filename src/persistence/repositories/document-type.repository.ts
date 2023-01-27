@@ -8,6 +8,14 @@ import { DocumentTypeRepositoryInterface } from './interfaces';
 export class DocumentTypeRepository
   extends BaseRepository<DocumentTypeEntity>
   implements DocumentTypeRepositoryInterface {
+  searchByAttributes(attributes: keyof DocumentTypeEntity, dataToSearch: string): DocumentTypeEntity[] {
+    const currentEntity = this.database.filter(
+      (entity) => entity[attributes] === dataToSearch,
+    );
+    if (currentEntity) 
+    return currentEntity;
+    else throw new NotFoundException();
+  }
 
   register(entity: DocumentTypeEntity): DocumentTypeEntity {
         this.database.push(entity);
@@ -36,22 +44,8 @@ export class DocumentTypeRepository
     return this.database 
    }
 
-  findOneById(id: string): DocumentTypeEntity {
-    const currentEntity = this.database.find(
-      (item) => item.id === id,
-    );
-    if (currentEntity) return currentEntity;
-    else throw new NotFoundException();
-  }
-
   findByState(state: boolean): DocumentTypeEntity[] {
     return this.database.filter((item) => ( state === true ? item.state === true : item.state === false));    
   }
 
-  findByName(name: string): DocumentTypeEntity[] {
-    const currentEntity = this.database.filter(
-      (item) => item.name === name,
-    );
-    if (currentEntity) 
-    return currentEntity;
-    else throw new NotFoundException();  }  }
+ }
