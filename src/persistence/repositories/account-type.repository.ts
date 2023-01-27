@@ -7,7 +7,7 @@ import { NotAcceptableException } from '@nestjs/common/exceptions/not-acceptable
 
 
 @Injectable()
-export class AccountTypeRepository
+export class AccountRepository
     extends BaseRepository<Account>
     implements AccountTypeRepositoryInterface {
 
