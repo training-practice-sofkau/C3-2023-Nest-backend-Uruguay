@@ -30,13 +30,7 @@ import {
       private readonly accountService: AccountService,
     ) {}
   
-    /**
-     * Identificarse en el sistema
-     *
-     * @param {CustomerModel} user
-     * @return {*}  {string}
-     * @memberof SecurityService
-     */
+
     signIn(user: CustomerModel): string {
       const answer = this.customerRepository.findOneByEmailAndPassword(
         user.email,
@@ -45,14 +39,7 @@ import {
       if (answer) return 'Falta retornar un JWT';
       else throw new UnauthorizedException();
     }
-  
-    /**
-     * Crear usuario en el sistema
-     *
-     * @param {CustomerModel} user
-     * @return {*}  {string}
-     * @memberof SecurityService
-     */
+
     signUp(user: CustomerModel): string {
       const newCustomer = new CustomerEntity();
       newCustomer.documentType = user.documentType;
@@ -81,12 +68,6 @@ import {
       } else throw new InternalServerErrorException();
     }
   
-    /**
-     * Salir del sistema
-     *
-     * @param {string} JWToken
-     * @memberof SecurityService
-     */
     signOut(JWToken: string): void {
       throw new Error('Method not implemented.');
     }
