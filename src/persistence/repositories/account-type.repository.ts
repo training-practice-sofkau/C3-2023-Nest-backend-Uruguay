@@ -3,7 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { GeneralCRUD } from './base';
 import { AccountTypeEntity } from '../entities';
 import { IAccountTypeRepository, IDisableable } from './interfaces';
-import { PaginatorModel } from '../../models';
+import { PaginationModel } from '../../models';
 
 @Injectable()
 export class AccountTypeRepository extends GeneralCRUD<AccountTypeEntity> implements IAccountTypeRepository, IDisableable<AccountTypeEntity> {
@@ -31,7 +31,7 @@ export class AccountTypeRepository extends GeneralCRUD<AccountTypeEntity> implem
     this.database.splice(finded, 1);
   }
 
-  findAll(paginator: PaginatorModel): AccountTypeEntity[] {
+  findAll(paginator: PaginationModel): AccountTypeEntity[] {
     let finded = this.database
     if (finded === undefined) throw new NotFoundException();
     return finded;
