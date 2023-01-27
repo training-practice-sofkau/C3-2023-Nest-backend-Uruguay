@@ -9,6 +9,16 @@ export class CustomerRepository
   extends BaseRepository<CustomerEntity>
   implements CustomerRepositoryInterface
 {
+  searchByAttributesforOne(
+    attributes: keyof CustomerEntity,
+    dataToSearch: string,
+  ): CustomerEntity {
+    const currentEntity = this.database.find(
+      (entity) => entity[attributes] === dataToSearch,
+    );
+    if (currentEntity) return currentEntity;
+    else throw new NotFoundException();
+  }
   searchByAttributes(
     attributes: keyof CustomerEntity,
     dataToSearch: string,

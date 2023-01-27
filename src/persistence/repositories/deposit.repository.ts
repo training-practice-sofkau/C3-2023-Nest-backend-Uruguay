@@ -9,6 +9,16 @@ export class DepositRepository
   extends BaseRepository<DepositEntity>
   implements DepositRepositoryInterface
 {
+  searchByAttributesforOne(
+    attributes: keyof DepositEntity,
+    dataToSearch: string,
+  ): DepositEntity {
+    const currentEntity = this.database.find(
+      (entity) => entity[attributes] === dataToSearch,
+    );
+    if (currentEntity) return currentEntity;
+    else throw new NotFoundException();
+  }
   searchByAttributes(
     attributes: keyof DepositEntity,
     dataToSearch: string,
@@ -81,6 +91,4 @@ export class DepositRepository
     if (currentEntity) return currentEntity;
     else throw new NotFoundException();
   }
-
-  
 }

@@ -84,7 +84,7 @@ export class AccountService {
    * @memberof AccountService
    */
   getState(accountId: string): boolean {
-   return this.accountRepository.getStateAndChange(accountId)
+    return this.accountRepository.getStateAndChange(accountId);
   }
 
   /**
@@ -95,7 +95,7 @@ export class AccountService {
    * @memberof AccountService
    */
   changeState(accountId: string, state: boolean): void {
-   this.accountRepository.getStateAndChange(accountId, state)
+    this.accountRepository.getStateAndChange(accountId, state);
   }
 
   /**
@@ -111,8 +111,9 @@ export class AccountService {
         item.accountType.id === accountId,
     );
     if (currentEntity != null) {
-    throw new NotFoundException();  }
-    return  currentEntity;
+      throw new NotFoundException();
+    }
+    return currentEntity;
   }
 
   /**
@@ -140,6 +141,6 @@ export class AccountService {
    * @memberof AccountService
    */
   deleteAccount(accountId: string): void {
-  this.accountRepository.delete(accountId)
+    this.accountRepository.delete(accountId);
   }
 }

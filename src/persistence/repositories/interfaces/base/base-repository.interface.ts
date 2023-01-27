@@ -4,6 +4,8 @@ export interface BaseRepositoryInterface<T> {
     delete(id: string, soft?: boolean): void;
     findAll(): Array<T>;
     searchByAttributes(attributes: keyof T, dataToSearch: string): T[];
+    searchByAttributesforOne(attributes: keyof T, dataToSearch: string): T;
+
 
   }
 

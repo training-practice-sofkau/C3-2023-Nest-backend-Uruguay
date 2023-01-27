@@ -9,6 +9,17 @@ export class AccountRepository
   extends BaseRepository<AccountEntity>
   implements AccountRepositoryInterface
 {
+  searchByAttributesforOne(
+    attributes: keyof AccountEntity,
+    dataToSearch: string,
+  ): AccountEntity {
+    const currentEntity = this.database.find(
+      (entity) => entity[attributes] === dataToSearch,
+    );
+    if (currentEntity) return currentEntity;
+    else throw new NotFoundException();
+  }
+
   searchByAttributes(
     attributes: keyof AccountEntity,
     dataToSearch: string,
