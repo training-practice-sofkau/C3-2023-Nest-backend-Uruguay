@@ -133,11 +133,12 @@ export class AccountService { //accountRepositorio(rojo) va a tener todas las fu
    * @return {*}  {AccountTypeEntity}
    * @memberof AccountService
    */
-  changeAccountType(
-    accountId: string,
-    accountTypeId: string,
-  ): AccountTypeEntity {
-    throw new Error('This method is not implemented');
+  changeAccountType(accountId: string,accountTypeId: string): AccountTypeEntity {
+  
+    let accBalance = this.accountRepository.findOneById(accountId)
+    accBalance.accountType.id = accountId
+    return this.accountRepository.update(accountId,accBalance).accountType
+
   }
 
   /**
@@ -147,6 +148,6 @@ export class AccountService { //accountRepositorio(rojo) va a tener todas las fu
    * @memberof AccountService
    */
   deleteAccount(accountId: string): void {
-    throw new Error('This method is not implemented');
+    this.accountRepository.delete(accountId)
   }
 }
