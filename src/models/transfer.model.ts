@@ -1,5 +1,7 @@
-import { AccountTypeModel } from "../models";
-export interface AccountModel {
+import { AccountModel } from "../models";
+
+export interface TransferModel {
+
     id: string;
     outcome_id: AccountModel;
     income_id: AccountModel;
@@ -7,5 +9,4 @@ export interface AccountModel {
     reason:string;
     date_time: Date | number;
     deleted_at: Date | number;
-
 }

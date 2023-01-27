@@ -1,5 +1,6 @@
 
-export interface AccountModel {
+export interface AccountTypeModel {
+    
     id: string;
     name: string;
     state: boolean;
