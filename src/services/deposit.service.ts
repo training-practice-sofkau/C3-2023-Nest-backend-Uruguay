@@ -9,7 +9,11 @@ export class DepositService {
   constructor(private readonly depositRepository: DepositRepository) {}
 
   createDeposit(deposit: DepositModel): DepositEntity {
-    return this.depositRepository.register(deposit);
+    const newDeposit = new DepositEntity();
+    newDeposit.account = deposit.account;
+    newDeposit.amount = 0;
+    newDeposit.dateTime = Date.now();
+    return this.depositRepository.register(newDeposit);
   }
 
   deleteDeposit(depositId: string): void {
@@ -17,10 +21,16 @@ export class DepositService {
   }
 
   getHistory(
-    depositId: string,
+    accountId: string,
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): DepositEntity[] {
-    throw new Error('This method is not implemented');
+    if (dataRange){
+      return this.depositRepository.findByDataRange(accountId, dataRange.dateInit, dataRange.dateEnd, pagination);
+    } else return this.depositRepository.findByAccountId(accountId, pagination);
   }
+}
+
+function uuid(): string {
+  throw new Error('Function not implemented.');
 }

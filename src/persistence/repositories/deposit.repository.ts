@@ -62,22 +62,23 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> implements IDe
     return finded;
   }
 
-  findByAccountId(accountId: string): DepositEntity[] {
+  findByAccountId(accountId: string, paginator?: PaginationModel): DepositEntity[] {
     let finded = this.database.filter(
         (item) => 
           item.account.id === accountId &&
           typeof item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException();
-    return finded;
+    return finded.slice(paginator?.offset, paginator?.limit);
   }
 
-  findByDataRange(dateInit: Date | number, dateEnd: Date | number, paginator?: PaginationModel): DepositEntity[] {
+  findByDataRange(accountId: string, dateInit: Date | number, dateEnd: Date | number, paginator?: PaginationModel): DepositEntity[] {
     let finded = this.database.filter(
         (item) => 
           typeof item.deletedAt === undefined &&
           item.dateTime >= dateInit &&
-          item.dateTime <= dateEnd
+          item.dateTime <= dateEnd && 
+          item.account.id === accountId
     );
     if (finded === undefined) throw new NotFoundException();
     return finded.slice(paginator?.offset, paginator?.limit);

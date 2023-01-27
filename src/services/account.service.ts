@@ -13,17 +13,19 @@ export class AccountService {
     const newAccount = new AccountEntity();
     newAccount.customer = account.customer;
     newAccount.accountType = account.accountType;
+    newAccount.balance = 0;
+    newAccount.state = false;
     return this.accountRepository.register(newAccount);
   }
 
   getBalance(accountId: string): number {
-    return this.accountRepository.findOneById(accountId).balance
+    return this.accountRepository.findOneById(accountId).balance;
   }
 
   addBalance(accountId: string, amount: number): void {
     const current = this.accountRepository.findOneById(accountId);
     current.balance += amount;
-    this.accountRepository.update(accountId, current)
+    this.accountRepository.update(accountId, current);
   }
 
   removeBalance(accountId: string, amount: number): void {
