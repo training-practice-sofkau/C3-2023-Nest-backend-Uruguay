@@ -1,5 +1,5 @@
 
-export abstract class AbstracRepo<T> {
+export abstract class BaseRepository<T> {
 
     protected readonly database: T[]; //solo lectura https://www.tutorialsteacher.com/typescript/typescript-readonly
 
