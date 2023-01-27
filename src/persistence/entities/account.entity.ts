@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 
 export class AccountEntity implements AccountModel{
     
-    private _id = uuid();
+    protected _id = uuid();
     public get id() {
         return this._id;
     }
@@ -11,7 +11,7 @@ export class AccountEntity implements AccountModel{
         this._id = value;
     }
 
-    private _customer_id: CustomerModel;
+    protected _customer_id: CustomerModel;
     public get customer_id(): CustomerModel {
         return this._customer_id;
     }
@@ -19,7 +19,7 @@ export class AccountEntity implements AccountModel{
         this._customer_id = value;
     }
 
-    private _acount_type_id: AccountTypeModel;
+    protected _acount_type_id: AccountTypeModel;
     public get acount_type_id(): AccountTypeModel {
         return this._acount_type_id;
     }
@@ -27,7 +27,7 @@ export class AccountEntity implements AccountModel{
         this._acount_type_id = value;
     }
 
-    private _balance: number;
+    protected _balance: number;
     public get balance(): number {
         return this._balance;
     }
@@ -35,7 +35,7 @@ export class AccountEntity implements AccountModel{
         this._balance = value;
     }
 
-    private _state: boolean;
+    protected _state: boolean;
     public get state(): boolean {
         return this._state;
     }
@@ -43,7 +43,7 @@ export class AccountEntity implements AccountModel{
         this._state = value;
     }
 
-    private _deleted_at: number | Date;
+    protected _deleted_at: number | Date;
     public get deleted_at(): number | Date {
         return this._deleted_at;
     }
