@@ -98,4 +98,33 @@ export class AccountRepository extends BaseRepository<AccountEntity>  implements
     return currentEntity;
   }
 
+//Metodos Jornada de hoy
+
+  findIndexById(id: string): number {
+            
+        const index = this.database.findIndex(obj => obj.id === id && typeof obj.daletedAt === undefined ) ; 
+
+        if(index == -1) { throw new NotFoundException('Lo siento, nada por aquí =('); }
+
+        return index; 
+
+    }
+
+    //Agregar monto al balance
+    addAmount(accountId: string, amount: number){
+
+      const index  = this.findIndexById(accountId);
+
+      if (index == -1){
+        throw new NotFoundException('Lo siento, nada por aquí =('); 
+      }
+
+      this.database[index].balance += amount
+
+    }
+    
+
+    
+
+
 }
