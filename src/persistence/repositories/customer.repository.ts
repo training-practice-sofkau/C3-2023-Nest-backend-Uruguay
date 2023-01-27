@@ -53,7 +53,7 @@ export class CustomerRepository
         item.password === password &&
         typeof item.daletedAt === 'undefined',
     );
-    return indexCurrentEntity >= -1 ? true : false;
+    return indexCurrentEntity > -1 ? true : false;
   }
 
   findOneByDocumentTypeAndDocument(
