@@ -9,8 +9,8 @@ export class CustomerService {
     
   constructor(private readonly customerRepository: CustomerRepository) {}
 
-    /**
-   * Obtener información de un cliente - OK
+  /**
+   * Get Customer information - OK
    *
    * @param {string} customerId
    * @return {*}  {CustomerEntity}
@@ -22,7 +22,7 @@ export class CustomerService {
   }
 
   /**
-   * Actualizar información de un cliente - OK
+   * Update Customer information - OK
    *
    * @param {string} id
    * @param {CustomerModel} customer
@@ -36,7 +36,7 @@ export class CustomerService {
   }
 
   /**
-   * Dar de baja a un cliente en el sistema
+   * Set Customer as inactive
    *
    * @param {string} id
    * @return {*}  {boolean}

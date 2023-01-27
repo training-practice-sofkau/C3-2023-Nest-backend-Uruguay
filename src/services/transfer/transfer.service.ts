@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { throwIfEmpty } from 'rxjs';
-
 
 import { DataRangeModel, PaginationModel, TransferModel } from '../../models';
 import { TransferEntity } from '../../persistence/entities';
-import { TransferRepository } from '../../persistence/repositories/transfer.repository';
+import { TransferRepository } from '../../persistence/repositories';
 
 @Injectable()
 export class TransferService {
@@ -19,8 +17,15 @@ export class TransferService {
    * @memberof TransferService
    */
   createTransfer(transfer: TransferModel): TransferEntity {
-    
-    return this.transferRepository.register(transfer);
+
+    const newTransfer = new TransferEntity();
+
+    newTransfer.outcome = transfer.outcome;
+    newTransfer.income = transfer.income;
+    newTransfer.amount = transfer.amount;
+    newTransfer.reason = transfer.reason;
+        
+    return this.transferRepository.register(newTransfer);
 
   }
 
@@ -35,11 +40,20 @@ export class TransferService {
    */
   getHistoryOut(accountId: string, pagination?: PaginationModel, dataRange?: DataRangeModel): TransferEntity[] {
 
-    let historyOut = [];
+    let history = [];
 
-    historyOut = this.transferRepository.findBy("outcome",accountId);
+    history = this.transferRepository.findBy("outcome",accountId);
 
-    return historyOut;
+    if(dataRange && dataRange.start == typeof Date && dataRange.end == typeof Date){
+      history = history.filter( deposit => deposit.dateTime >= dataRange.start && deposit.dateTime <= dataRange.end)
+    }
+
+    if (pagination) {
+      let { offset = 0, limit = 0 } = pagination;
+      history = history.slice(offset, offset + limit);
+    }  
+
+    return history;
 
   }
 
@@ -54,11 +68,21 @@ export class TransferService {
    */
   getHistoryIn(accountId: string, pagination?: PaginationModel, dataRange?: DataRangeModel): TransferEntity[] {
     
-    let historyIn = [];
+    let history = [];
 
-    historyIn = this.transferRepository.findBy("income",accountId);
+    history = this.transferRepository.findBy("income",accountId);
 
-    return historyIn;
+    if(dataRange && dataRange.start == typeof Date && dataRange.end == typeof Date){
+      history = history.filter( deposit => deposit.dateTime >= dataRange.start && deposit.dateTime <= dataRange.end)
+    }
+
+    if (pagination) {
+      let { offset = 0, limit = 0 } = pagination;
+      history = history.slice(offset, offset + limit);
+    }  
+
+
+    return history;
   }
 
   /**
@@ -76,8 +100,16 @@ export class TransferService {
 
     history = this.getHistoryOut(accountId).concat(this.getHistoryIn(accountId));
 
-    return history;
+    if(dataRange && dataRange.start == typeof Date && dataRange.end == typeof Date){
+      history = history.filter( deposit => deposit.dateTime >= dataRange.start && deposit.dateTime <= dataRange.end)
+    }
+    
+    if (pagination) {
+      let { offset = 0, limit = 0 } = pagination;
+      history = history.slice(offset, offset + limit);
+    }  
 
+    return history;
 
   }
 

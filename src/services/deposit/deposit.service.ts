@@ -50,11 +50,19 @@ export class DepositService {
    */
   getHistory(accountId: string, pagination?: PaginationModel, dataRange?: DataRangeModel): DepositEntity[] {
 
-    let history = [];
+    let history = [];   
 
-    //TODO: Implement PAgination and Datarange
+    history = this.depositRepository.findBy("accountId", accountId);
 
-    history = this.depositRepository.findByAccountId(accountId);
+    if(dataRange && dataRange.start == typeof Date && dataRange.end == typeof Date){
+      history = history.filter( deposit => deposit.dateTime >= dataRange.start && deposit.dateTime <= dataRange.end)
+    }
+
+    if (pagination) {
+      let { offset = 0, limit = 0 } = pagination;
+      history = history.slice(offset, offset + limit);
+    }  
+
 
     return history;
 

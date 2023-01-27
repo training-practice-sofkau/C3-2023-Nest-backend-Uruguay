@@ -31,7 +31,7 @@ export class AccountService {
   }
 
   /**
-   * Obtener el balance de una cuenta - OK
+   * Get account balance - OK
    *
    * @param {string} accountId
    * @return {*}  {number}
@@ -44,7 +44,7 @@ export class AccountService {
   }
 
   /**
-   * Agregar balance a una cuenta  - OK
+   * Add an amount to account balance  - OK
    *
    * @param {string} accountId
    * @param {number} amount
@@ -61,7 +61,7 @@ export class AccountService {
   }
 
   /**
-   * Remover balance de una cuenta  - OK
+   * Remove an amount from account balance  - OK
    *
    * @param {string} accountId
    * @param {number} amount
@@ -83,7 +83,7 @@ export class AccountService {
   }
 
   /**
-   * Verificar la disponibilidad de un monto a retirar en una cuenta - OK
+   * Verify if account balance has enough to make a withdraw - OK
    *
    * @param {string} accountId
    * @param {number} amount
@@ -97,7 +97,7 @@ export class AccountService {
   }
 
   /**
-   * Obtener el estado de una cuenta - OK
+   * Get account State - OK
    *
    * @param {string} accountId
    * @return {*}  {boolean}
@@ -110,7 +110,7 @@ export class AccountService {
   }
 
   /**
-   * Cambiar el estado de una cuenta - OK
+   * Set state account - OK
    *
    * @param {string} accountId
    * @param {boolean} state
@@ -122,7 +122,7 @@ export class AccountService {
   }
 
   /**
-   * Obtener el tipo de cuenta de una cuenta - OK
+   * Get account type - OK
    *
    * @param {string} accountId
    * @return {*}  {AccountTypeEntity}
@@ -135,7 +135,7 @@ export class AccountService {
   }
 
   /**
-   * Cambiar el tipo de cuenta a una cuenta - OK
+   * Set account type - OK
    *
    * @param {string} accountId
    * @param {string} accountTypeId

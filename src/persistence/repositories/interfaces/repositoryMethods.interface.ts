@@ -7,7 +7,7 @@ export interface RepositoryMethodsInterface<T> {
 
     delete(id: string, soft?: boolean): void;
 
-    findAll(paginator: PaginationModel): T[];
+    findAll(): T[];
     
     findOneById(id: string): T;
 
