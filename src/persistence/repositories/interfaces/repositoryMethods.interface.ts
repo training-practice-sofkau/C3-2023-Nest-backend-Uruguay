@@ -12,4 +12,6 @@ export interface RepositoryMethodsInterface<T> {
 
     findBy(property: keyof T, value: string | number | boolean): T[]
 
+    findIndexById(id: string): number;
+
 }

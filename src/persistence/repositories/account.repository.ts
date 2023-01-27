@@ -39,7 +39,7 @@ export class AccountRepository extends BankInternalControl<AccountEntity> implem
 
         try {
 
-            const targetEntityIndex = this.database.findIndex(entity => entity.id === id && typeof entity.deletedAt === undefined); //searchs for the position in the array of the entity with Id
+            const targetEntityIndex = this.findIndexById(id);
 
             if (targetEntityIndex == -1) { // if the result of the search is an -1 (not found)
                 throw new NotFoundException(); // gives and exception
@@ -64,7 +64,7 @@ export class AccountRepository extends BankInternalControl<AccountEntity> implem
 
         try {
 
-            const targetEntityIndex = this.database.findIndex(entity => entity.id === id); //searchs for the position in the array of the entity with Id
+            const targetEntityIndex = this.findIndexById(id);
 
             if (targetEntityIndex == -1) { // if the result of the search is an -1 (not found)
                 throw new NotFoundException(); // gives and exception
@@ -144,7 +144,7 @@ export class AccountRepository extends BankInternalControl<AccountEntity> implem
 
         try { // try to find an entity with a given Id
 
-            const index = this.database.findIndex(entity => entity.id === id && typeof entity.deletedAt === undefined); //searchs for the position in the array of the entity with Id
+            const index = this.findIndexById(id);
 
             if (index == -1) { // if the result of the search is an -1 (not found)
                 throw new NotFoundException(); // gives and exception
@@ -153,6 +153,29 @@ export class AccountRepository extends BankInternalControl<AccountEntity> implem
             return this.database[index]; // all good, return the entity 
 
         } catch (err) { // something wrong happened
+
+            throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
+        }
+    }
+
+
+    /**
+     * Search in the DB for an element with the given ID 
+     * @param id unique key identifier to find
+     * @returns the index or an exception
+     */
+    findIndexById(id: string): number {
+            
+        try{ // try to find an element with a given Id
+
+            const index = this.database.findIndex(entity => entity.id === id 
+                            && typeof entity.deletedAt === undefined ) ; 
+
+            if(index == -1) { throw new NotFoundException(); }
+
+            return index; 
+
+        }catch(err){ // something wrong happened
 
             throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
         }

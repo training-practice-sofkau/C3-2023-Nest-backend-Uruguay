@@ -36,8 +36,7 @@ export class DepositRepository extends BankInternalControl<DepositEntity> implem
     update(id: string, entity: DepositEntity): DepositEntity {
 
         try{                   
-            const targetEntityIndex = this.database.findIndex(entity => entity.id === id 
-                && typeof entity.deletedAt === undefined); //searchs for the position in the array of the entity with Id
+            const targetEntityIndex = this.findIndexById(id);
 
             if(targetEntityIndex == -1){ // if the result of the search is an -1 (not found)
                 throw new NotFoundException(); // gives and exception
@@ -62,8 +61,7 @@ export class DepositRepository extends BankInternalControl<DepositEntity> implem
         
         try{        
         
-            const targetEntityIndex = this.database.findIndex(entity => entity.id === id
-                && typeof entity.deletedAt === undefined); //searchs for the position in the array of the entity with Id
+            const targetEntityIndex = this.findIndexById(id);
 
             if(targetEntityIndex == -1){ // if the result of the search is an -1 (not found)
                 throw new NotFoundException(); // gives and exception
@@ -146,8 +144,7 @@ export class DepositRepository extends BankInternalControl<DepositEntity> implem
 
         try{ // try to find an entity with a given Id
 
-            const index = this.database.findIndex(entity => entity.id === id 
-                && typeof entity.deletedAt === undefined ) ; //searchs for the position in the array of the entity with Id
+            const index = this.findIndexById(id);
 
             if(index == -1){ // if the result of the search is an -1 (not found)
                 throw new NotFoundException(); // gives and exception
@@ -161,6 +158,29 @@ export class DepositRepository extends BankInternalControl<DepositEntity> implem
         }
     }  
  
+    /**
+     * Search in the DB for an element with the given ID 
+     * @param id unique key identifier to find
+     * @returns the index or an exception
+     */
+    findIndexById(id: string): number {
+            
+        try{ // try to find an element with a given Id
+
+            const index = this.database.findIndex(entity => entity.id === id 
+                            && typeof entity.deletedAt === undefined ) ; 
+
+            if(index == -1) { throw new NotFoundException(); }
+
+            return index; 
+
+        }catch(err){ // something wrong happened
+
+            throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
+        }
+    }
+
+    
     /**
      * Searchs in the DB for the Deposits matching an AccountID
      * @param accountId account unique key identifier

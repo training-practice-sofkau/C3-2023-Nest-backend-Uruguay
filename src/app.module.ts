@@ -6,6 +6,7 @@ import { TransferController } from './controllers/transfer/transfer.controller';
 import { CustomerController } from './controllers/customer/customer.controller';
 import { DepositService } from './services/deposit/deposit.service';
 import { CustomerService } from './services/customer/customer.service';
+import { AccountService } from './services/account/account.service';
 
 @Module({
   imports: [],
@@ -16,6 +17,6 @@ import { CustomerService } from './services/customer/customer.service';
     TransferController,
     CustomerController,
   ],
-  providers: [CustomerService, DepositService],
+  providers: [CustomerService, DepositService, AccountService],
 })
 export class AppModule {}
