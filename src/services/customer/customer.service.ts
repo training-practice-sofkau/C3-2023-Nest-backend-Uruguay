@@ -42,7 +42,6 @@ export class CustomerService {
     if(customer) {
       this.customerRepository.findOneById(id).state = false;
       return true;
-    }
-    return false;
+    }return false;
   }
 }

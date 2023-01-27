@@ -15,7 +15,10 @@ export class DepositService {
    * @memberof DepositService
    */
   createDeposit(deposit: DepositModel): DepositEntity {
-    return this.depositRepository.register(deposit)
+    const newDeposit = new DepositEntity();
+    newDeposit.accountId = deposit.accountId;
+    newDeposit.amount = deposit.amount;
+    return this.depositRepository.register(newDeposit);
   }
 
   /**
@@ -42,7 +45,6 @@ export class DepositService {
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): DepositEntity[] {
-    
     let history: Array<DepositEntity> = []
     history = this.depositRepository.findByAccountId(depositId);
     return history;
