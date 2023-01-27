@@ -3,11 +3,12 @@ import { Module } from '@nestjs/common';
 import { SecurityController } from './controllers';
 // Providers
 import { AccountRepository, AccountTypeRepository, CustomerRepository, DepositRepository, DocumentTypeRepository, TransferRepository } from './persistence';
+// Services
 import { AccountService, AccountTypeService, CustomerService, DepositService, DocumentTypeService, TransferService } from './services';
 
 @Module({
-  imports: [AccountTypeRepository, AccountRepository, CustomerRepository, DepositRepository, DocumentTypeRepository, TransferRepository],
+  imports: [AccountTypeService, AccountService, CustomerService, DepositService, DocumentTypeService, TransferService],
   controllers: [SecurityController],
-  providers: [AccountTypeService, AccountService, CustomerService, DepositService, DocumentTypeService, TransferService],
+  providers: [AccountTypeRepository, AccountRepository, CustomerRepository, DepositRepository, DocumentTypeRepository, TransferRepository],
 })
 export class AppModule {}
