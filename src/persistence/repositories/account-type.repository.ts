@@ -3,6 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { AccountTypeEntity } from '../entities';
 import { BaseRepository } from './base';
 import { AccountTypeRepositoryInterface } from './interfaces';
+import { PaginationModel } from '../../models';
 
 @Injectable()
 export class AccountTypeRepository
@@ -34,8 +35,9 @@ export class AccountTypeRepository
         this.database.splice(index, 1);
     }
 
-    findAll(): AccountTypeEntity[] {
-        return this.database;
+    findAll(paginator: PaginationModel): AccountTypeEntity[] {
+        const { offset=0, limit=10 } = paginator;
+        return this.database.slice(offset, offset + limit);   
     }
 
     findOneById(id: string): AccountTypeEntity {

@@ -2,7 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { TransferEntity } from '../entities';
 import { BaseRepository } from './base';
-import { TransferRepositoryInterface } from './interfaces/';
+import { TransferRepositoryInterface } from './interfaces';
+import { PaginationModel } from '../../models';
 
 @Injectable()
 export class TransferRepository
@@ -50,10 +51,11 @@ export class TransferRepository
         this.database[index].daletedAt = Date.now();
     }
 
-    findAll(): TransferEntity[] {
+    findAll(paginator: PaginationModel): TransferEntity[] {
+        const { offset=0, limit=10 } = paginator;
         return this.database.filter(
-            (itemAll) => typeof itemAll.daletedAt === 'undefined',
-        );
+            (itemAll) => typeof itemAll.daletedAt === 'undefined')
+            .slice(offset, offset + limit);
     }
 
     findOneById(id: string): TransferEntity {

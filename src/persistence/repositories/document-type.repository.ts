@@ -3,6 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { DocumentTypeEntity } from '../entities';
 import { BaseRepository } from './base';
 import { DocumentTypeRepositoryInterface } from './interfaces';
+import { PaginationModel } from '../../models';
 
 @Injectable()
 export class DocumentTypeRepository
@@ -34,8 +35,9 @@ export class DocumentTypeRepository
     this.database.splice(index, 1);
   }
 
-  findAll(): DocumentTypeEntity[] {
-    return this.database;
+  findAll(paginator: PaginationModel): DocumentTypeEntity[] {
+    const { offset=0, limit=10 } = paginator;
+    return this.database.slice(offset, offset + limit);  
   }
 
   findOneById(id: string): DocumentTypeEntity {
