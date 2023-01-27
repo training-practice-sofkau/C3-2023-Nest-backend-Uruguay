@@ -83,7 +83,9 @@ export class AccountService {
    * @return {*}  {boolean}
    * @memberof AccountService
    */
-  getState(accountId: string): boolean {}
+  getState(accountId: string): boolean {
+   return this.accountRepository.getStateAndChange(accountId)
+  }
 
   /**
    * Cambiar el estado de una cuenta
@@ -93,7 +95,7 @@ export class AccountService {
    * @memberof AccountService
    */
   changeState(accountId: string, state: boolean): void {
-    throw new Error('This method is not implemented');
+   this.accountRepository.getStateAndChange(accountId, state)
   }
 
   /**
@@ -125,7 +127,10 @@ export class AccountService {
     accountId: string,
     accountTypeId: string,
   ): AccountTypeEntity {
-    throw new Error('This method is not implemented');
+    let account = this.getAccountType(accountId);
+    account.id = accountTypeId;
+    this.AccountTypeRepository.update(accountId, account);
+    return account;
   }
 
   /**
@@ -134,5 +139,7 @@ export class AccountService {
    * @param {string} accountId
    * @memberof AccountService
    */
-  deleteAccount(accountId: string): void {}
+  deleteAccount(accountId: string): void {
+  this.accountRepository.delete(accountId)
+  }
 }

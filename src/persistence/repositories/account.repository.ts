@@ -20,7 +20,6 @@ export class AccountRepository
     else throw new NotFoundException();
   }
 
-  
   register(entity: AccountEntity): AccountEntity {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;
@@ -78,14 +77,42 @@ export class AccountRepository
     if (currentEntity) return currentEntity;
     else throw new NotFoundException();
   }
-  
+
   getBalance(id: string, amount?: number, deposit?: boolean): number {
-      const index  =  this.database.findIndex((item) => item.id === id);
-      let  accountBalance = this.database[index].acc_Balance
-      if(amount === undefined) {
-      return   accountBalance }
-      const newBalance = (deposit === true ?   accountBalance + amount :  accountBalance - amount)
-      this.database[index].acc_Balance = newBalance
-      return newBalance
+    const index = this.database.findIndex((item) => item.id === id);
+
+    let accountBalance = this.database[index].acc_Balance;
+
+    if (!amount) {
+      return accountBalance;
+    }
+
+    let newBalance: number;
+    if (deposit) {
+      newBalance = accountBalance + amount;
+    } else {
+      if (accountBalance - amount < 0) {
+        throw new Error('Saldo insuficiente');
+      }
+      newBalance = accountBalance - amount;
+    }
+    this.database[index].acc_Balance = newBalance;
+    return newBalance;
+  }
+
+  getStateAndChange(accountId: string, state?: boolean): boolean {
+    const index = this.database.findIndex((item) => item.id === accountId);
+    const currentEntity = this.database.find(
+      (item: { id: string }) => item.id === accountId,
+    );
+    if (currentEntity == null) {
+      throw new NotFoundException();
+    }
+
+    if (state) {
+      this.database[index].state = !this.database[index].state;
+    }
+
+    return currentEntity.state;
   }
 }
