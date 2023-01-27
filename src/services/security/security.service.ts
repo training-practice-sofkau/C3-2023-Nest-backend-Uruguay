@@ -45,7 +45,9 @@ import { JsonWebTokenError } from 'jsonwebtoken';
         user.email,
         user.password,
       );
-      if (answer) return aca va un token;
+      const token: string = jwt.sign({_id: user.id}, process.env.TOKEN_SECRET || 'tokentest');
+
+      if (answer) return token;
       else throw new UnauthorizedException();
     }
   
