@@ -1,87 +1,77 @@
+
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { AccountTypeEntity } from "../entities/account-type-entity";
-import { CustomerEntity } from "../entities/customer-entity";
-import { IRepository } from "./interface/i-base/i-repository";
 import { BaseRepository } from "./repo-base/base-repository";
+import { AccountTypeRepositoryInterface } from "./interface/i-account-type-repo";
+
 
 @Injectable()
-export class TypeAccountRepo extends BaseRepository<AccountTypeEntity > implements IRepository<AccountTypeEntity >{ //Consultar??
-   
-   
-  register(entity: CustomerEntity): AccountTypeEntity {
-    this.database.push(entity);
-    return this.database.at(-1) ?? entity; //?
-  }
-
-  update(id: string, entity: AccountTypeEntity): AccountTypeEntity {
-    const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.daletedAt === 'undefined',
-    );
-    if (indexCurrentEntity >= 0)
-      this.database[indexCurrentEntity] = {
-        ...this.database[indexCurrentEntity],
-        ...entity,
-        id,
-      } as AccountTypeEntity;
-    else throw new NotFoundException();
-    return this.database[indexCurrentEntity];
-  }
-
-  delete(id: string, soft?: boolean | undefined): void {
-    throw new Error('Method not implemented.');
-  }
-
-  findAll(): AccountTypeEntity[] {
-    return this.database.filter(
-      (item) => typeof item.daletedAt === 'undefined', //??
-    );
-  }
-
-  findOneById(id: string): CustomerEntity {
-    const currentEntity = this.database.find(
-      (item) => item.id === id && typeof item.daletedAt === 'undefined',
-    );
-    if (currentEntity) return currentEntity;
-    else throw new NotFoundException();
-  }
-
-  //**PROPIOS DE LA ENTIDAD -->
-
-  findOneByEmailAndPassword(email: string, password: string): boolean {
-    const indexCurrentEntity = this.database.findIndex(
-      (item) =>
-        item.email === email &&
-        item.password === password &&
-        typeof item.daletedAt === 'undefined',
-    );
-    return indexCurrentEntity >= -1 ? true : false;
-  }
-
-  findOneByDocumentTypeAndDocument(
-    documentTypeId: string,
-    document: string,
-  ): CustomerEntity {
-    throw new Error('This method is not implemented');
-  }
-
-  findOneByEmail(email: string): CustomerEntity {
+export class AccountTypeRepository extends BaseRepository<AccountTypeEntity> implements AccountTypeRepositoryInterface  {
 
 
-    throw new Error('This method is not implemented');
-  }
+    register(entity: AccountTypeEntity): AccountTypeEntity {
 
-  findOneByPhone(phone: string): CustomerEntity {
-    throw new Error('This method is not implemented');
-  }
+      this.database.push(entity);
 
-  findByState(state: boolean): CustomerEntity[] {
-    throw new Error('This method is not implemented');
-  }
+      return this.database.at(-1) ?? entity;
+    }
 
-  findByFullName(fullName: string): CustomerEntity[] {
-    throw new Error('This method is not implemented');
-  }
+
+
+    update(id: string, entity: AccountTypeEntity): AccountTypeEntity {
+
+      const indexCurrentEntity = this.database.findIndex((item) => item.id === id);
+
+        if (indexCurrentEntity >= 0)this.database[indexCurrentEntity] = {...this.database[indexCurrentEntity],...entity,id,} as AccountTypeEntity;
+        
+        else throw new NotFoundException('Lo siento, nada por aqui =(');
+
+        return this.database[indexCurrentEntity];
+    }
+
+
+
+    delete(id: string, soft?: boolean | undefined): void {
+
+        const index = this.database.findIndex(itemDel => itemDel.id === id);
+
+        if(!index ) throw new NotFoundException('Lo siento, nada por aqui =(');
+
+        this.database.splice(index, 1);
+    }
+
+
+    findAll(): AccountTypeEntity[] {
+      
+        return this.database;
+    }
+
+
+    findOneById(id: string): AccountTypeEntity {
+
+        const currentEntity = this.database.find((itemId) => itemId.id === id);
+
+        if(!currentEntity ) throw new NotFoundException('Lo siento, nada por aqui =(');
+
+        return currentEntity;
+    }
+
+
+    findByState(state: boolean): AccountTypeEntity[] {
+
+        return this.database.filter((itemState) => itemState.state === state);
+    }
+
+
+
+    findByName(name: string): AccountTypeEntity[] {
+
+        const currentEntity = this.database.filter((itemName) => itemName.name === name);
+        
+        if(!currentEntity ) throw new NotFoundException('Lo siento, nada por aqui =(');
+
+        return currentEntity;
+    }
+
+
 }
-
-   
-
