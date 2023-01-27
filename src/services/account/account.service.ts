@@ -136,4 +136,14 @@ export class AccountService {
   deleteAccount(accountId: string): void {
     this.accountRepository.delete(accountId);
   }
+  
+  /**
+   * Borrar una cuenta de forma lógica
+   *
+   * @param {string} accountId
+   * @memberof AccountService
+   */
+  softDeleteAccount(accountId: string): void {
+    this.accountRepository.delete(accountId, true);
+  }
 }
