@@ -17,64 +17,37 @@ export class TransferService {
     return this.transferRepository.register(newTransfer)
   }
 
-  /**
-   * Obtener historial de transacciones de salida de una cuenta
-   *
-   * @param {string} accountId
-   * @param {PaginationModel} pagination
-   * @param {DataRangeModel} [dataRange]
-   * @return {*}  {TransferEntity[]}
-   * @memberof TransferService
-   */
   getHistoryOut(
     accountId: string,
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    if (dataRange){
+      return this.transferRepository.findOutcomeByDataRange(accountId, dataRange.dateInit, dataRange.dateEnd, pagination);
+    } else return this.transferRepository.findByOutcomeId(accountId, pagination);
   }
 
-  /**
-   * Obtener historial de transacciones de entrada en una cuenta
-   *
-   * @param {string} accountId
-   * @param {PaginationModel} pagination
-   * @param {DataRangeModel} [dataRange]
-   * @return {*}  {TransferEntity[]}
-   * @memberof TransferService
-   */
   getHistoryIn(
     accountId: string,
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    if (dataRange){
+      return this.transferRepository.findIncomeByDataRange(accountId, dataRange.dateInit, dataRange.dateEnd, pagination);
+    } else return this.transferRepository.findByIncomeId(accountId, pagination);
   }
 
-  /**
-   * Obtener historial de transacciones de una cuenta
-   *
-   * @param {string} accountId
-   * @param {PaginationModel} pagination
-   * @param {DataRangeModel} [dataRange]
-   * @return {*}  {TransferEntity[]}
-   * @memberof TransferService
-   */
   getHistory(
     accountId: string,
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    if (dataRange){
+      return this.transferRepository.findIncomeByDataRange(accountId, dataRange.dateInit, dataRange.dateEnd, pagination).concat(this.transferRepository.findOutcomeByDataRange(accountId, dataRange.dateInit, dataRange.dateEnd, pagination));
+    } else return this.transferRepository.findByIncomeId(accountId, pagination).concat(this.transferRepository.findByOutcomeId(accountId, pagination));
   }
 
-  /**
-   * Borrar una transacción
-   *
-   * @param {string} transferId
-   * @memberof TransferService
-   */
   deleteTransfer(transferId: string): void {
-    throw new Error('This method is not implemented');
+    this.transferRepository.delete(transferId);
   }
 }

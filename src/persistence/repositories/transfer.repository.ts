@@ -62,6 +62,26 @@ export class TransferRepository extends GeneralCRUD<TransferEntity> implements I
     return finded;
   }
 
+  findByIncomeId(incomeId: string, paginator?: PaginationModel): TransferEntity[] {
+    let finded = this.database.filter(
+        (item) => 
+          item.income.id === incomeId &&
+          typeof item.deletedAt === undefined
+    );
+    if (finded === undefined) throw new NotFoundException();
+    return finded.slice(paginator?.offset, paginator?.limit);
+  }
+
+  findByOutcomeId(outcomeId: string, paginator?: PaginationModel): TransferEntity[] {
+    let finded = this.database.filter(
+        (item) => 
+          item.outcome.id === outcomeId &&
+          typeof item.deletedAt === undefined
+    );
+    if (finded === undefined) throw new NotFoundException();
+    return finded.slice(paginator?.offset, paginator?.limit);
+  }
+
   findOutcomeByDataRange(accountId: string, dateInit: Date | number, dateEnd: Date | number, paginator?: PaginationModel): TransferEntity[] {
     let finded = this.database.filter(
       (item) => 
