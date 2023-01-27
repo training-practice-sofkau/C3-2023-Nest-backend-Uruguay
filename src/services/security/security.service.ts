@@ -55,7 +55,7 @@ import {
      */
     signUp(user: CustomerModel): string {
       const newCustomer = new CustomerEntity();
-      newCustomer.documentType = user.documentType;
+      newCustomer.documentType = user.documentType
       newCustomer.document = user.document;
       newCustomer.fullName = user.fullName;
       newCustomer.email = user.email;

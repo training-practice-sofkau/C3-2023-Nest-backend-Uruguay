@@ -57,17 +57,14 @@ export class CustomerRepository
   }
 
   findAll(): CustomerEntity[] {
-    return this.database.filter(
-      (item) => typeof item.deletedAt === 'undefined',
-    );
+    return this.database
   }
 
   findOneByEmailAndPassword(email: string, password: string): boolean {
     const indexCurrentEntity = this.database.findIndex(
       (item) =>
         item.email === email &&
-        item.password === password &&
-        typeof item.deletedAt === 'undefined',
+        item.password === password ,
     );
     return indexCurrentEntity >= -1 ? true : false;
   }
