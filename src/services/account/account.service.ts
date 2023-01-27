@@ -72,7 +72,13 @@ export class AccountService { //accountRepositorio(rojo) va a tener todas las fu
    * @memberof AccountService
    */
   verifyAmountIntoBalance(accountId: string, amount: number): boolean {
-    return false //Arreglar
+    let accBalance = new AccountEntity
+    accBalance = this.accountRepository.findOneById(accountId)
+    if(accBalance.balance > amount){ 
+
+      return true
+    }
+    return false
   }
 
   /**
