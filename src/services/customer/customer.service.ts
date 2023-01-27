@@ -33,7 +33,7 @@ export class CustomerService {
    * @memberof CustomerService
    */
   updatedCustomer(id: string, customer: CustomerModel): CustomerEntity {
-    this.CustomerRepository.update(id, customer)
+    return  this.CustomerRepository.update(id, customer)
   }
 
   /**

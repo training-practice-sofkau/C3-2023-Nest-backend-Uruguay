@@ -8,4 +8,6 @@ export interface CustomerModel extends BaseModel {
   phone: string;
   password: string;
   avatarUrl?: string;
+  name: string;
+
 }

@@ -14,7 +14,8 @@ export class DepositService {
    * @memberof DepositService
    */
   createDeposit(deposit: DepositModel): DepositEntity {
-    throw new Error('This method is not implemented');
+    
+    
   }
 
   /**

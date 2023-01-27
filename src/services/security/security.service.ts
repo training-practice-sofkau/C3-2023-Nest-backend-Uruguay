@@ -16,6 +16,7 @@ import {
   
   // Services
   import { AccountService } from '../account';
+import { AccountModel } from '../../models/account.model';
   
   // Entities
   import {
