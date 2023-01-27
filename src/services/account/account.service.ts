@@ -1,9 +1,15 @@
+// Libraries
 import { Injectable } from '@nestjs/common';
 import { InternalServerErrorException } from '@nestjs/common/exceptions';
-import { stat } from 'fs';
 
+// Models
 import { AccountModel } from 'src/models/account.model';
-import { AccountEntity, AccountTypeEntity, AccountRepository } from 'src/persistence';
+
+// Entities
+import { AccountEntity, AccountTypeEntity } from 'src/persistence';
+
+// Repositories
+import { AccountRepository } from 'src/persistence'
 
 @Injectable()
 export class AccountService {
@@ -104,9 +110,11 @@ export class AccountService {
    */
   changeState(accountId: string, state: boolean): void {
     try {
-      this.accountRepository.findOneById(accountId).state = state
-    } catch (error) {
+      let actualState = this.accountRepository.findOneById(accountId).state
+      actualState = !actualState
 
+    } catch (error) {
+      throw new InternalServerErrorException(error)
     }
   }
 
@@ -119,9 +127,9 @@ export class AccountService {
    */
   getAccountType(accountId: string): AccountTypeEntity {
     try {
-      this.accountRepository.findOneById(accountId).accountType
+      return this.accountRepository.findOneById(accountId).accountType
     } catch (error) {
-
+      throw new InternalServerErrorException(error)
     }
   }
 
@@ -137,7 +145,12 @@ export class AccountService {
     accountId: string,
     accountTypeId: string,
   ): AccountTypeEntity {
-    throw new Error('This method is not implemented');
+    try {
+      this.accountRepository.findOneById(accountId).accountType.id = accountTypeId
+       
+    } catch (error) {
+      throw new InternalServerErrorException(error)      
+    }
   }
 
   /**
