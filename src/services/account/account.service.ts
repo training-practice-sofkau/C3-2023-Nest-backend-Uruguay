@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { AccountModel } from 'src/models';
+import { AccountModel, AccountTypeModel } from 'src/models';
 import { AccountEntity, AccountTypeEntity } from 'src/persistence';
-import { CustomerEntity } from 'src/persistence/entities/';
 import { AccountRepository } from '../../persistence/repositories/account.repository';
 
 @Injectable()
@@ -10,7 +9,7 @@ export class AccountService {
     constructor(
         private readonly accountRepository: AccountRepository
 
-        ){}
+    ) { }
     /**
      * Crear una cuenta
      *
@@ -21,7 +20,7 @@ export class AccountService {
     createAccount(account: AccountModel): AccountEntity {
         const newAccount = new AccountEntity();
         newAccount.customer_id = account.customer_id;
-        newAccount.acount_type_id = account.acount_type_id;
+        newAccount.account_type_id = account.account_type_id;
         return this.accountRepository.register(newAccount);
     }
 
@@ -33,7 +32,7 @@ export class AccountService {
      * @memberof AccountService
      */
     getBalance(accountId: string): number {
-        throw new Error('This method is not implemented');
+        return this.accountRepository.findOneById(accountId).balance
     }
 
     /**
@@ -44,7 +43,9 @@ export class AccountService {
      * @memberof AccountService
      */
     addBalance(accountId: string, amount: number): void {
-        throw new Error('This method is not implemented');
+        let acc = this.accountRepository.findOneById(accountId)
+        acc.balance += amount
+        this.accountRepository.update(accountId, acc)
     }
 
     /**
@@ -55,7 +56,10 @@ export class AccountService {
      * @memberof AccountService
      */
     removeBalance(accountId: string, amount: number): void {
-        throw new Error('This method is not implemented');
+        let acc = this.accountRepository.findOneById(accountId)
+        acc.balance -= amount
+        this.accountRepository.update(accountId, acc)
+        //throw new Error('This method is not implemented');
     }
 
     /**
@@ -67,7 +71,12 @@ export class AccountService {
      * @memberof AccountService
      */
     verifyAmountIntoBalance(accountId: string, amount: number): boolean {
-        throw new Error('This method is not implemented');
+        let acc = this.accountRepository.findOneById(accountId)
+        acc.balance += amount
+        if (acc.balance < amount) {
+            return false
+        }
+        return true
     }
 
     /**
@@ -78,8 +87,8 @@ export class AccountService {
      * @memberof AccountService
      */
     getState(accountId: string): boolean {
-       //consultar si se puede asi
-      return this.accountRepository.findOneById(accountId).state
+        //consultar si se puede asi
+        return this.accountRepository.findOneById(accountId).state
     }
 
     /**
@@ -90,9 +99,9 @@ export class AccountService {
      * @memberof AccountService
      */
     changeState(accountId: string, state: boolean): void {
-        let  acc = this.accountRepository.findOneById(accountId)
+        let acc = this.accountRepository.findOneById(accountId)
         acc.state = state
-        this.accountRepository.update(accountId,acc)
+        this.accountRepository.update(accountId, acc)
 
     }
 
@@ -104,9 +113,10 @@ export class AccountService {
      * @memberof AccountService
      */
     getAccountType(accountId: string): AccountTypeEntity {
-        let  acc = this.accountRepository.findOneById(accountId)
-        acc =this.accountRepository.findOneById(accountId)
-        return acc.account_type_id
+        let acc = new AccountTypeEntity;
+        acc = this.accountRepository.findOneById(accountId).account_type_id
+        // acc = this.accountRepository.findOneById(accountId)
+        return acc
     }
 
     /**
@@ -122,9 +132,9 @@ export class AccountService {
         accountTypeId: string,
     ): AccountTypeEntity {
 
-        let  acc = this.accountRepository.findOneById(accountId)
-        acc =this.accountRepository.findOneById(accountId)
-        acc.account_type_id.id =  accountTypeId
+        let acc = this.accountRepository.findOneById(accountId)
+       
+        acc.account_type_id.id = accountTypeId
 
         return this.accountRepository.update(accountId, acc).account_type_id
     }
@@ -137,8 +147,8 @@ export class AccountService {
      */
     deleteAccount(accountId: string): void {
 
-        this.accountRepository.delete(accountId) 
-        
+        this.accountRepository.delete(accountId)
+
     }
 
 

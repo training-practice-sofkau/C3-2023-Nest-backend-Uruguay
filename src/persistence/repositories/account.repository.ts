@@ -88,7 +88,7 @@ if (soft){
 
   findByAccountType(accountTypeId: string): AccountEntity[] {
     const currentEntity: AccountEntity[] = this.database.filter(
-      (item) => item.acount_type_id.id === accountTypeId && typeof item.deleted_at === 'undefined',
+      (item) => item.account_type_id.id === accountTypeId && typeof item.deleted_at === 'undefined',
     );
     if (currentEntity) return currentEntity;
     else throw new Error('Datos de no encontrados');

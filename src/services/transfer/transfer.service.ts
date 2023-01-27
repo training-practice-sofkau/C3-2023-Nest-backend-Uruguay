@@ -2,11 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { TransferModel } from 'src/models';
 import { DataRangeModel } from 'src/models/dataRange.model';
 import { PaginationModel } from 'src/models/pagination.model';
-import { TransferEntity } from 'src/persistence';
+import { TranferRepository, TransferEntity } from 'src/persistence';
 
 @Injectable()
 export class TransferService {
+    constructor(
+        private readonly transferRepocitory: TranferRepository
 
+        ){}
 /**
    * Crear una transferencia entre cuentas del banco
    *
@@ -15,7 +18,9 @@ export class TransferService {
    * @memberof TransferService
    */
 createTransfer(transfer: TransferModel): TransferEntity {
-    throw new Error('This method is not implemented');
+    const transfer1 = TransferEntity
+    transfer1 = transfer
+    return this.transferRepocitory.register(transfer)
   }
 
   /**
@@ -76,7 +81,7 @@ createTransfer(transfer: TransferModel): TransferEntity {
    * @memberof TransferService
    */
   deleteTransfer(transferId: string): void {
-    throw new Error('This method is not implemented');
+    this.transferRepocitory.delete(transferId)
   }
 
 }

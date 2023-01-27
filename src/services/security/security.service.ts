@@ -3,6 +3,7 @@ import { CustomerModel } from 'src/models';
 import { AccountTypeEntity, CustomerEntity, CustomerRepository } from 'src/persistence';
 import { AccountService } from '../account';
 import { DocumentTypeRepository } from '../../persistence/repositories/document-type.repository';
+import { AccountEntity } from '../../persistence/entities/account.entity';
 
 @Injectable()
 export class SecurityService {
@@ -38,24 +39,28 @@ export class SecurityService {
        */
       signUp(user: CustomerModel): string {
         const newCustomer = new CustomerEntity();
+       
         newCustomer.documentTypeRepository = user.documentType;
         newCustomer.document = user.document;
         newCustomer.fullName = user.fullName;
         newCustomer.email = user.email;
         newCustomer.phone = user.phone;
         newCustomer.password = user.password;
+       
     
         const customer = this.customerRepository.register(newCustomer);
     
         if (customer) {
           const accountType = new AccountTypeEntity();
           accountType.id = 'Falta el ID por defecto del tipo de cuenta';
+          
           const newAccount = {
             customer,
             accountType,
           };
     
-          const account = this.accountService.createAccount(newAccount);
+          const account = 
+          this.accountService.createAccount(newAccount);
     
           if (account) return 'Falta retornar un JWT';
           else throw new InternalServerErrorException();
