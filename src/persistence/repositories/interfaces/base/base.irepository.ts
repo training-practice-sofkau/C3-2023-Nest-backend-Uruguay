@@ -1,4 +1,4 @@
-export interface IRepository<T> {
+export interface BaseIRepository<T> {
     register(entity: T): T
     update(id: string, entity: T): T
     delete(id: string, soft?: boolean): void
