@@ -1,9 +1,14 @@
 import { Injectable } from '@nestjs/common';
 
-import { PaginationModel } from '../../models/';
+import { DepositModel, PaginationModel } from '../../models/';
+import { Deposit } from 'src/persistence/entities/deposit.entities';
+import { DepositRepository } from '../../persistence/repositories/deposit.repository';
+
 
 @Injectable()
 export class DepositService {
+  constructor(private readonly DepositRepo : DepositRepository){}
+
   /**
    * Crear un deposito
    *
@@ -11,8 +16,14 @@ export class DepositService {
    * @return {*}  {DepositEntity}
    * @memberof DepositService
    */
-  createDeposit(deposit: DepositModel): DepositEntity {
-    throw new Error('This method is not implemented');
+  createDeposit(deposit: DepositModel): Deposit {
+    const newDeposit = new Deposit();
+    newDeposit.dep_id = deposit.dep_id
+    newDeposit.account_id = deposit.account_id
+    newDeposit.dep_amount = deposit.dep_amount
+    newDeposit.dep_date_time = deposit.dep_date_time
+    newDeposit.dep_delete_at = deposit.dep_delete_at
+    return this.DepositRepo.register(newDeposit);
   }
 
   /**
@@ -22,7 +33,7 @@ export class DepositService {
    * @memberof DepositService
    */
   deleteDeposit(depositId: string): void {
-    throw new Error('This method is not implemented');
+    this.DepositRepo.delete(depositId);//Que hago con el soft?
   }
 
   /**
@@ -34,11 +45,7 @@ export class DepositService {
    * @return {*}  {DepositEntity[]}
    * @memberof DepositService
    */
-  getHistory(
-    depositId: string,
-    pagination?: PaginationModel,
-    dataRange?: DataRangeModel,
-  ): DepositEntity[] {
+  getHistory(depositId: string,pagination?: PaginationModel,dataRange?: DataRangeModel,): DepositEntity[] {
     throw new Error('This method is not implemented');
   }
 }

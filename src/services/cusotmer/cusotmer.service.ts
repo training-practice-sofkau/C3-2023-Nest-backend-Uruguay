@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CustomerModel } from '../../models';
-import { CustomerEntity } from '../../persistence/entities';
 import { CustomerRepository } from "../../persistence/repositories/customer.repository";
+import { CustomerEntity } from 'src/persistence/entities/customer.entity';
+
 
 @Injectable()
 export class CustomerService {
@@ -26,8 +27,9 @@ export class CustomerService {
    * @return {*}  {CustomerEntity}
    * @memberof CustomerService
    */
-  updatedCustomer(id: string, customer: CustomerModel): CustomerEntity {
-    t
+  updatedCustomer(id: string, customer: CustomerModel): CustomerEntity{
+    const cust = this.CustomerRepository.update(id,customer);
+    return cust;
   }
 
   /**
@@ -38,6 +40,8 @@ export class CustomerService {
    * @memberof CustomerService
    */
   unsubscribe(id: string): boolean {
-    throw new Error('Method not implemented.');
+    const cust = this.CustomerRepository.findOneById(id);
+    cust.state = false;
+    return cust.state;
   }
 }

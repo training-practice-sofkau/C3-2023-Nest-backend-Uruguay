@@ -4,6 +4,7 @@ import { DepositModel } from '../../models/deposit.model';
 
 
 export class Deposit implements DepositModel  {
+    
     dep_id = uuid();
     account_id: string;
     dep_amount: number;
