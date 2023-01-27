@@ -1,8 +1,7 @@
-import { AccountModel } from './accout.model';
+import { AccountModel } from '../models';
 
-export interface DepositModel  extends BaseModel {
-    accountid: AccountModel;
-    amount: number;
-    date_time: Date;
-    
+export interface DepositModel extends BaseModel {
+  accountid: AccountModel;
+  amount: number;
+  date_time: Date;
 }

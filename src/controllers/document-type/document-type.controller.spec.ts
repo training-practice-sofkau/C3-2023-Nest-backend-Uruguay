@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { DocumentTypeController } from './document_type.controller';
+import { DocumentTypeController } from './document-type.controller';
 
 describe('DocumentTypeController', () => {
   let controller: DocumentTypeController;
