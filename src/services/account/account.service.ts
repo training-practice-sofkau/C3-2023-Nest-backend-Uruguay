@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 
-
 import { AccountModel } from '../../models';
 import { AccountEntity, AccountTypeEntity } from '../../persistence/entities';
 import { AccountRepository } from '../../persistence/repositories';
@@ -9,57 +8,72 @@ import { AccountRepository } from '../../persistence/repositories';
 @Injectable()
 export class AccountService {
 
-    constructor(private readonly accountRepository: AccountRepository) {}
+    constructor(
+      private readonly accountRepository: AccountRepository,       
+      ) {}
     
    /**
-   * Crear una nueva cuenta
+   * Crear una nueva cuenta - OK
    *
    * @param {AccountModel} account
    * @return {*}  {AccountEntity}
    * @memberof AccountService
    */
   createAccount(account: AccountModel): AccountEntity {
+    
     const newAccount = new AccountEntity();
+
     newAccount.customerId = account.customerId;
     newAccount.accountTypeId = account.accountTypeId;
+    
     return this.accountRepository.register(newAccount);
   }
 
   /**
-   * Obtener el balance de una cuenta
+   * Obtener el balance de una cuenta - OK
    *
    * @param {string} accountId
    * @return {*}  {number}
    * @memberof AccountService
    */
   getBalance(accountId: string): number {
-    throw new Error('This method is not implemented');
+    
+    return this.accountRepository.findOneById(accountId).balance;
+
   }
 
   /**
-   * Agregar balance a una cuenta
+   * Agregar balance a una cuenta  - OK
    *
    * @param {string} accountId
    * @param {number} amount
    * @memberof AccountService
    */
   addBalance(accountId: string, amount: number): void {
-    throw new Error('This method is not implemented');
+
+    this.accountRepository.addAmountToBalance(accountId, amount);
+
   }
 
   /**
-   * Remover balance de una cuenta
+   * Remover balance de una cuenta  - OK
    *
    * @param {string} accountId
    * @param {number} amount
    * @memberof AccountService
    */
   removeBalance(accountId: string, amount: number): void {
-    throw new Error('This method is not implemented');
+    
+    if(!this.verifyAmountIntoBalance(accountId, amount)) {
+      throw new Error(`Not enough founds in Account Balance!`);
+    }
+
+    this.accountRepository.removeAmountToBalance(accountId, amount);
+
   }
 
   /**
-   * Verificar la disponibilidad de un monto a retirar en una cuenta
+   * Verificar la disponibilidad de un monto a retirar en una cuenta - OK
    *
    * @param {string} accountId
    * @param {number} amount
@@ -67,64 +81,78 @@ export class AccountService {
    * @memberof AccountService
    */
   verifyAmountIntoBalance(accountId: string, amount: number): boolean {
-    throw new Error('This method is not implemented');
+
+    return this.getBalance(accountId) >= amount ? true : false;
+
   }
 
   /**
-   * Obtener el estado de una cuenta
+   * Obtener el estado de una cuenta - OK
    *
    * @param {string} accountId
    * @return {*}  {boolean}
    * @memberof AccountService
    */
   getState(accountId: string): boolean {
-    throw new Error('This method is not implemented');
+    
+    return this.accountRepository.findOneById(accountId).state; 
+
   }
 
   /**
-   * Cambiar el estado de una cuenta
+   * Cambiar el estado de una cuenta - OK
    *
    * @param {string} accountId
    * @param {boolean} state
    * @memberof AccountService
    */
   changeState(accountId: string, state: boolean): void {
-    throw new Error('This method is not implemented');
+    
+    this.accountRepository.setAccountState(accountId, state);
   }
 
   /**
-   * Obtener el tipo de cuenta de una cuenta
+   * Obtener el tipo de cuenta de una cuenta - OK
    *
    * @param {string} accountId
    * @return {*}  {AccountTypeEntity}
    * @memberof AccountService
    */
   getAccountType(accountId: string): AccountTypeEntity {
-    throw new Error('This method is not implemented');
+    
+    return this.accountRepository.findOneById(accountId).accountTypeId;
+
   }
 
   /**
-   * Cambiar el tipo de cuenta a una cuenta
+   * Cambiar el tipo de cuenta a una cuenta - OK
    *
    * @param {string} accountId
    * @param {string} accountTypeId
    * @return {*}  {AccountTypeEntity}
    * @memberof AccountService
    */
-  changeAccountType(
-    accountId: string,
-    accountTypeId: string,
-  ): AccountTypeEntity {
-    throw new Error('This method is not implemented');
+  changeAccountType(accountId: string, accountTypeId: string): AccountTypeEntity {
+
+    let accountType = this.accountRepository.getAccountType(accountId);
+
+    if(accountType.id === accountTypeId){
+      throw new Error('The Account Type is already the same');
+    }
+
+    return this.accountRepository.setAccountType(accountId, accountType);
+
   }
 
   /**
-   * Borrar una cuenta
+   * Borrar una cuenta - OK
    *
    * @param {string} accountId
    * @memberof AccountService
    */
   deleteAccount(accountId: string): void {
-    throw new Error('This method is not implemented');
+
+    this.accountRepository.delete(accountId); //TODO: check if is soft or hard delete
+
   }
 }

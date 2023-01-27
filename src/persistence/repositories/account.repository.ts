@@ -4,12 +4,15 @@ import { InternalServerErrorException, NotFoundException } from "@nestjs/common/
 import { AccountEntity } from '../entities';
 import { BankInternalControl } from "./base";
 import { AccountRepositoryInterface } from './interfaces';
+import { AccountTypeRepository } from './account-type.repository';
+import { AccountTypeEntity } from '../entities/account-type.entity';
+
 
 
 @Injectable()
 export class AccountRepository extends BankInternalControl<AccountEntity> implements AccountRepositoryInterface {
     
-
+        
     /**
      * Adds a new Account entity to the Array of accounts
      * @param entity new object to be inserted in the array
@@ -54,6 +57,124 @@ export class AccountRepository extends BankInternalControl<AccountEntity> implem
             throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
         }
     }
+
+    /**
+     * Sets the state of the account that matches the given ID
+     * @param accountId account unique Id
+     * @param state new state
+     */
+    setAccountState(accountId: string, state: boolean) {
+
+        try{
+
+            const targetEntityIndex = this.findIndexById(accountId);
+
+            if (targetEntityIndex == -1) { // if the result of the search is an -1 (not found)
+                throw new NotFoundException(); // gives and exception
+            }
+
+            this.database[targetEntityIndex].state = state;
+
+        }catch(err){
+
+            throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
+        }
+    }
+
+    /**
+     * Removes the amount from the balance of the account that matches the given ID
+     * @param accountId account unique Id
+     * @param amount amount to remove
+     */
+    removeAmountToBalance(accountId: string, amount: number) {
+
+        try{
+
+            const targetEntityIndex = this.findIndexById(accountId);
+
+            if (targetEntityIndex == -1) { // if the result of the search is an -1 (not found)
+                throw new NotFoundException(); // gives and exception
+            }
+
+            this.database[targetEntityIndex].balance -= amount; // Removes the amount to balance
+
+        }catch(err){
+
+            throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
+        }
+    }
+
+    
+    /**
+     * Adds the amount to the balance of the account that matches the given ID
+     * @param accountId account unique Id
+     * @param amount amount to add
+     */
+    addAmountToBalance(accountId: string, amount: number) {
+        try{
+
+            const targetEntityIndex = this.findIndexById(accountId);
+
+            if (targetEntityIndex == -1) { // if the result of the search is an -1 (not found)
+                throw new NotFoundException(); // gives and exception
+            }
+
+            this.database[targetEntityIndex].balance += amount; // Adds the amount to balance
+
+        }catch(err){
+
+            throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
+        }
+    }
+
+    /**
+     * Sets a new type of account to the account that matches the given ID
+     * @param accountId account unique key identifier
+     * @param accountType new account type to be set
+     * @returns account type entity
+     */
+    setAccountType(accountId: string, accountType: AccountTypeEntity): AccountTypeEntity {
+        try{
+
+            const targetEntityIndex = this.findIndexById(accountId);
+
+            if (targetEntityIndex == -1) { // if the result of the search is an -1 (not found)
+                throw new NotFoundException(); // gives and exception                
+            }           
+
+            this.database[targetEntityIndex].accountTypeId = accountType
+
+            return this.database[targetEntityIndex].accountTypeId; 
+
+        }catch(err){
+
+            throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
+        }
+    }
+    
+
+    /**
+     * Gets the type of account, returns the ID
+     * @param accountId account unique key identifier
+     * @returns string with the Id of the account Type
+     */
+    getAccountType(accountId: string): AccountTypeEntity {
+        try{
+
+            const targetEntityIndex = this.findIndexById(accountId);
+
+            if (targetEntityIndex == -1) { // if the result of the search is an -1 (not found)
+                throw new NotFoundException(); // gives and exception
+            }
+
+            return this.database[targetEntityIndex].accountTypeId; // returns the unique key Id of the account Type 
+
+        }catch(err){
+
+            throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
+        }
+    }
+
 
     /**
      * Delete the Customer that matches a given Id
@@ -235,7 +356,7 @@ export class AccountRepository extends BankInternalControl<AccountEntity> implem
     findByAccountType(accountTypeId: string): AccountEntity[] {
         try { // try to find all entities of a given Type
 
-            const searchResult = this.database.filter(entity => entity.accountTypeId === accountTypeId &&
+            const searchResult = this.database.filter(entity => entity.accountTypeId.id === accountTypeId &&
                 typeof entity.deletedAt === undefined); //searchs for entities that matches the criteria
 
             if (searchResult.length <= 0) { // if the result of the search is empty
