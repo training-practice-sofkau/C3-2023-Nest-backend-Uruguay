@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { AccountRepository, AccountTypeRepository } from '../persistence';
-import { AccountModel } from 'src/models';
-import { AccountEntity, AccountTypeEntity } from 'src/persistence';
+import { AccountModel } from '../models';
+import { AccountEntity, AccountTypeEntity } from '../persistence/entities';
 
 @Injectable()
 export class AccountService {
