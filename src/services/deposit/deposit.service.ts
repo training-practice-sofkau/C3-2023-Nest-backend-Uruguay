@@ -3,9 +3,14 @@ import { PaginationModel } from 'src/models/pagination.model';
 import { DepositEntity } from 'src/persistence';
 
 import { DepositModel } from '../../models/';
+import { DepositRepository } from '../../persistence/repositories/deposit.repository';
 
 @Injectable()
 export class DepositService {
+  [x: string]: any;
+  constructor(
+    private readonly DepositRepository: DepositRepository,
+  ) {}
   /**
    * Crear un deposito
    *
@@ -14,8 +19,8 @@ export class DepositService {
    * @memberof DepositService
    */
   createDeposit(deposit: DepositModel): DepositEntity {
-    
-    
+   return this.DepositRepository.createDeposit(deposit);
+
   }
 
   /**
@@ -25,7 +30,7 @@ export class DepositService {
    * @memberof DepositService
    */
   deleteDeposit(depositId: string): void {
-    throw new Error('This method is not implemented');
+   this.DepositRepository.delete(depositId)
   }
 
   /**

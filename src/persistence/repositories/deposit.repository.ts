@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { DepositModel } from 'src/models';
 
 import { DepositEntity } from '../entities';
 import { BaseRepository } from './base';
@@ -90,5 +91,18 @@ export class DepositRepository
     );
     if (currentEntity) return currentEntity;
     else throw new NotFoundException();
+  }
+  
+
+  createDeposit(deposit: DepositModel): DepositEntity {
+    const Index = this.database.findIndex((item) => item.accountid === deposit.accountid);
+    if (Index === -1) {
+      throw new NotFoundException();
+    }  
+    const newDeposit = new DepositEntity();
+    newDeposit.amount = deposit.amount;
+    newDeposit.date_time = new Date();
+    newDeposit.state = true;    
+    return newDeposit
   }
 }
