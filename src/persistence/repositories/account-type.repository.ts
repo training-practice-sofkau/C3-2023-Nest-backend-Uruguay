@@ -8,6 +8,11 @@ import { PaginationModel } from '../../models';
 @Injectable()
 export class AccountTypeRepository extends GeneralCRUD<AccountTypeEntity> implements IAccountTypeRepository, IDisableable<AccountTypeEntity> {
 
+  register(entity: AccountTypeEntity): AccountTypeEntity {
+    this.database.push(entity);
+    return this.database.at(-1) ?? entity;
+  }
+
   update(id: string, entity: AccountTypeEntity): AccountTypeEntity {
     const indexCurrentEntity = this.database.findIndex(
         (item) => item.id === id,

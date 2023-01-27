@@ -61,7 +61,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
       (item) => typeof item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException()
-    return finded
+    return finded.slice(paginator?.offset, paginator?.limit);
   }
 
   findOneById(id: string): CustomerEntity {

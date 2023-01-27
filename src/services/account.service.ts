@@ -24,7 +24,7 @@ export class AccountService {
 
   addBalance(accountId: string, amount: number): void {
     const current = this.accountRepository.findOneById(accountId);
-    current.balance += amount;
+    current.balance += Math.abs(amount);
     this.accountRepository.update(accountId, current);
   }
 

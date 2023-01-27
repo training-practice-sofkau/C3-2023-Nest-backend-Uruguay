@@ -62,7 +62,7 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
         (item) => typeof item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException();
-    return finded;
+    return finded.slice(paginator?.offset, paginator?.limit);
   }
 
   findOneById(id: string): AccountEntity {
