@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DocumentTypeEntity } from '../entities';
+
 import { Base } from './base/base.abstract';
 import { CRUD } from './interfaces/crud.interface';
 import { AccountEntity } from '../entities/account.entity';
@@ -93,5 +93,7 @@ if (soft){
     if (currentEntity) return currentEntity;
     else throw new Error('Datos de no encontrados');
   }
+
+ 
 
 }

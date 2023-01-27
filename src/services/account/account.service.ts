@@ -9,7 +9,7 @@ export class AccountService {
 
     constructor(
         private readonly accountRepository: AccountRepository
-
+        
         ){}
     /**
      * Crear una cuenta
@@ -78,6 +78,7 @@ export class AccountService {
      * @memberof AccountService
      */
     getState(accountId: string): boolean {
+       
         throw new Error('This method is not implemented');
     }
 
@@ -115,6 +116,10 @@ export class AccountService {
         accountId: string,
         accountTypeId: string,
     ): AccountTypeEntity {
+
+        //this.accountRepository.update(accountId,accountTypeId)
+        //crear funcion para cambiar tipo en el repositorio
+        
         throw new Error('This method is not implemented');
     }
 
@@ -125,7 +130,9 @@ export class AccountService {
      * @memberof AccountService
      */
     deleteAccount(accountId: string): void {
-        throw new Error('This method is not implemented');
+
+        this.accountRepository.delete(accountId) 
+        
     }
 
 

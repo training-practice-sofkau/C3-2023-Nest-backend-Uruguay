@@ -37,7 +37,7 @@ createDeposit(deposit: DepositModel): DepositEntity {
    * @memberof DepositService
    */
   deleteDeposit(depositId: string): void {
-    throw new Error('This method is not implemented');
+    this.depositRepocitory.delete(depositId) 
   }
 
   /**
@@ -54,6 +54,8 @@ createDeposit(deposit: DepositModel): DepositEntity {
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): DepositEntity[] {
+
+    
     throw new Error('This method is not implemented');
   }
 

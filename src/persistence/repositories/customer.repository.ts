@@ -23,7 +23,7 @@ export class CustomerRepository extends Base<CustomerEntity> implements CRUD<Cus
         id,
       } as CustomerEntity;
     else throw new NotFoundException();
-    return this.database[indexCurrentEntity];
+    return this.database[indexCurrentEntity] ;
   }
 
   delete(id: string, soft?: boolean | undefined): void {
