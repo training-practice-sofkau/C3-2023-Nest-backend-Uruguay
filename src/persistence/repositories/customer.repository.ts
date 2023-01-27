@@ -8,7 +8,7 @@ import { CustomerRepositoryInterface } from './interfaces';
 
 @Injectable()
 export class CustomerRepository extends BankInternalControl<CustomerEntity> implements CustomerRepositoryInterface {
-    
+      
 
     /**
      * Adds a new Customer entity to the Array of customer
@@ -54,6 +54,31 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
             throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
         }        
     }
+
+
+    /**
+     * Sets the state of the customer
+     * @param id unique customer id
+     * @returns boolean
+     */
+    setCustomerAsInactive(id: string, newState: boolean): boolean {
+    
+        try{                   
+            const targetEntityIndex = this.findIndexById(id);
+            
+            if(targetEntityIndex == -1) { throw new NotFoundException(); }
+
+            this.database[targetEntityIndex].state = newState;
+
+            return this.database[targetEntityIndex].state;
+
+        } catch (err){// something wrong happened
+
+            throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
+        }        
+
+    }
+
 
     /**
      * Delete the Customer that matches a given Id
