@@ -39,8 +39,10 @@ export class CustomerService {
    * @memberof CustomerService
    */
   unsubscribe(id: string): boolean {
-    if(this.customerRepository.findOneById(id).state) {
-      this.customerRepository.findOneById(id).state = false;
+    let customerUpdated = this.customerRepository.findOneById(id);
+    if(customerUpdated.state) {
+      customerUpdated.state = false;
+      this.customerRepository.update(id, customerUpdated);
       return true;
     }
     return false;
