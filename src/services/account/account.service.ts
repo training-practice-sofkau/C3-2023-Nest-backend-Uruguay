@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { stringify } from 'querystring';
 
 import { AccountModel } from '../../models';
 import { AccountEntity, AccountRepository, AccountTypeEntity } from '../../persistence';
@@ -121,7 +122,19 @@ export class AccountService {
     accountId: string,
     accountTypeId: string,
   ): AccountTypeEntity {
-    throw new Error('This method is not implemented');
+    const newAccount = new AccountEntity();
+    const accounOriginal = this.accountRepository.findOneById(accountId);
+    if (!accounOriginal) throw new NotFoundException();
+    newAccount.accountTypeId.id = accountTypeId;
+    newAccount.balance = accounOriginal.balance;
+    newAccount.customerId = accounOriginal.customerId;
+    newAccount.state = accounOriginal.state;
+    newAccount.daletedAt = accounOriginal.daletedAt;
+    newAccount.id = accounOriginal.id;
+    newAccount.accountTypeId.name = accounOriginal.accountTypeId.name;
+    newAccount.accountTypeId.state = accounOriginal.accountTypeId.state;
+    return this.accountRepository.update(accountId, newAccount).accountTypeId;
+
   }
 
   /**
