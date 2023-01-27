@@ -45,7 +45,11 @@ export class DepositService {
    * @return {*}  {DepositEntity[]}
    * @memberof DepositService
    */
-  getHistory(depositId: string,pagination?: PaginationModel,dataRange?: DataRangeModel,): DepositEntity[] {
-    throw new Error('This method is not implemented');
+  getHistory(depositId: string , pagination?: PaginationModel,dataRange?: string /*DataRangeModel*/): Deposit[] {
+    //Lo que me falta es que es de todos los depositos 
+    const deposit = this.DepositRepo.findByDataRange(pagination.offset,pagination.offset);//el historial de todas las cuenta en ese rango
+
+    const depo = deposit.filter((depo) => depo.dep_id === depositId);//Mismo rango pero para el id del parametro
+    return depo;
   }
 }

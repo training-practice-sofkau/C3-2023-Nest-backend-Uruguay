@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { PaginationModel, transferModel } from 'src/models';
+import { Transfer } from 'src/persistence/entities/transfer.entities';
+import { TransferRepository } from '../../persistence/repositories/transfer.repository';
 
 @Injectable()
 export class TransferService {
+  constructor(private readonly TransferRepo : TransferRepository){}
   /**
    * Crear una transferencia entre cuentas del banco
    *
@@ -9,8 +13,16 @@ export class TransferService {
    * @return {*}  {TransferEntity}
    * @memberof TransferService
    */
-  createTransfer(transfer: TransferModel): TransferEntity {
-    throw new Error('This method is not implemented');
+  createTransfer(transfer: transferModel): Transfer {
+    const newTransfer = new Transfer();
+    newTransfer.trf_amount = transfer.trf_amount;
+    newTransfer.trf_date_time = transfer.trf_date_time;
+    newTransfer.trf_delete_at = transfer.trf_delete_at;
+    newTransfer.trf_id = transfer.trf_id;
+    newTransfer.trf_income = transfer.trf_income;
+    newTransfer.trf_outcome = transfer.trf_outcome;
+    newTransfer.trf_reason = transfer.trf_reason;
+    return this.TransferRepo.register(newTransfer);
   }
 
   /**
@@ -22,12 +34,9 @@ export class TransferService {
    * @return {*}  {TransferEntity[]}
    * @memberof TransferService
    */
-  getHistoryOut(
-    accountId: string,
-    pagination?: PaginationModel,
-    dataRange?: DataRangeModel,
-  ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+  getHistoryOut(accountId: string,pagination?: PaginationModel,dataRange?: string): Transfer[] {//dataRange:DataRangeModel
+    const transferHistory = this.TransferRepo.findOutcomeByDataRange(accountId,pagination?.offset,pagination?.limit);
+    
   }
 
   /**
