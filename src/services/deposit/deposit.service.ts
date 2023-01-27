@@ -3,18 +3,31 @@ import { DepositModel } from 'src/models';
 import { DataRangeModel } from 'src/models/dataRange.model';
 import { PaginationModel } from 'src/models/pagination.model';
 import { DepositEntity } from 'src/persistence';
+import { DepositRepository } from '../../persistence/repositories/deposit.repository';
 
 @Injectable()
 export class DepositService {
-/**
+
+    constructor(
+        private readonly depositRepocitory: DepositRepository
+
+        ){}
+
+    /**
    * Crear un deposito
+   * 
+   * 
    *
    * @param {DepositModel} deposit
    * @return {*}  {DepositEntity}
    * @memberof DepositService
    */
 createDeposit(deposit: DepositModel): DepositEntity {
-    throw new Error('This method is not implemented');
+    const newDeposit = new DepositEntity()
+    newDeposit.account_id = deposit.account_id
+    newDeposit.amount = deposit.amount
+    newDeposit.date_time = Date.now()
+    return this.depositRepocitory.register(newDeposit); 
   }
 
   /**

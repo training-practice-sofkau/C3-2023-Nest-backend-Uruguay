@@ -4,7 +4,8 @@ import { DocumentTypeEntity } from './';
 import { v4 as uuid } from 'uuid';
 
 export class CustomerEntity implements CustomerModel{   
-    private _id = uuid();
+    protected _id = uuid();
+    documentTypeRepository: import("c:/Users/Cafe/Desktop/Sofka/Prueba 1 Proyectos Nest js/Proyecto Presentacion entregado/C3-2023-Nest-backend-Uruguay/src/models/document-type.model").DocumentTypeModel;
     public get id() {
         return this._id;
     }
@@ -12,7 +13,7 @@ export class CustomerEntity implements CustomerModel{
         this._id = value;
     }
 
-    private _documentType: DocumentTypeEntity;
+    protected _documentType: DocumentTypeEntity;
     public get documentType(): DocumentTypeEntity {
         return this._documentType;
     }
@@ -20,7 +21,7 @@ export class CustomerEntity implements CustomerModel{
         this._documentType = value;
     }
 
-    private _document: string;
+    protected _document: string;
     public get document(): string {
         return this._document;
     }
@@ -28,7 +29,7 @@ export class CustomerEntity implements CustomerModel{
         this._document = value;
     }
 
-    private _fullName: string;
+    protected _fullName: string;
     public get fullName(): string {
         return this._fullName;
     }
@@ -36,7 +37,7 @@ export class CustomerEntity implements CustomerModel{
         this._fullName = value;
     }
 
-    private _email: string;
+    protected _email: string;
     public get email(): string {
         return this._email;
     }
@@ -44,7 +45,7 @@ export class CustomerEntity implements CustomerModel{
         this._email = value;
     }
 
-    private _phone: string;
+    protected _phone: string;
     public get phone(): string {
         return this._phone;
     }
@@ -52,7 +53,7 @@ export class CustomerEntity implements CustomerModel{
         this._phone = value;
     }
 
-    private _password: string;
+    protected _password: string;
     public get password(): string {
         return this._password;
     }
@@ -60,7 +61,7 @@ export class CustomerEntity implements CustomerModel{
         this._password = value;
     }
 
-    private _avatarUrl?: string | undefined;
+    protected _avatarUrl?: string | undefined;
     public get avatarUrl(): string | undefined {
         return this._avatarUrl;
     }
@@ -68,7 +69,7 @@ export class CustomerEntity implements CustomerModel{
         this._avatarUrl = value;
     }
 
-    private _state = true;
+    protected _state = true;
     public get state() {
         return this._state;
     }
@@ -76,7 +77,7 @@ export class CustomerEntity implements CustomerModel{
         this._state = value;
     }
 
-    private _daletedAt?: Date | number | undefined;
+    protected _daletedAt?: Date | number | undefined;
     public get daletedAt(): Date | number | undefined {
         return this._daletedAt;
     }

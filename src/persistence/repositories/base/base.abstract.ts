@@ -1,23 +1,12 @@
-import { CRUD } from "../interfaces/crud";
+import { CRUD } from "../interfaces/crud.interface";
 import { DocumentTypeEntity } from '../../entities/document-type.entity';
+import { CustomerEntity } from "src/persistence/entities";
 
-export abstract class Base implements CRUD<DocumentTypeEntity>{
-    
-    register(entity: DocumentTypeEntity): DocumentTypeEntity {
-        throw new Error("Method not implemented.");
-    }
-    update(id: string, entity: DocumentTypeEntity): DocumentTypeEntity {
-        throw new Error("Method not implemented.");
-    }
-    delete(id: string, soft?: boolean | undefined): void {
-        throw new Error("Method not implemented.");
-    }
-    findAll(): DocumentTypeEntity[] {
-        throw new Error("Method not implemented.");
-    }
-    findOneById(id: string): DocumentTypeEntity {
-        throw new Error("Method not implemented.");
-    }
-
+export abstract class Base<T>{
+ 
+  protected readonly database: Array<T>;
+  constructor() {
+    this.database = new Array<T>();
+ }
     
 }

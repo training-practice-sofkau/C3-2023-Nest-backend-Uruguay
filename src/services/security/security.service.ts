@@ -2,6 +2,7 @@ import { Injectable, InternalServerErrorException, UnauthorizedException } from 
 import { CustomerModel } from 'src/models';
 import { AccountTypeEntity, CustomerEntity, CustomerRepository } from 'src/persistence';
 import { AccountService } from '../account';
+import { DocumentTypeRepository } from '../../persistence/repositories/document-type.repository';
 
 @Injectable()
 export class SecurityService {
@@ -9,6 +10,7 @@ export class SecurityService {
     constructor(
         private readonly customerRepository: CustomerRepository,
         private readonly accountService: AccountService,
+        private readonly documentTypeRepository:DocumentTypeRepository
       ) {}
     
       /**
@@ -36,7 +38,7 @@ export class SecurityService {
        */
       signUp(user: CustomerModel): string {
         const newCustomer = new CustomerEntity();
-        newCustomer.documentType = user.documentType;
+        newCustomer.documentTypeRepository = user.documentType;
         newCustomer.document = user.document;
         newCustomer.fullName = user.fullName;
         newCustomer.email = user.email;
