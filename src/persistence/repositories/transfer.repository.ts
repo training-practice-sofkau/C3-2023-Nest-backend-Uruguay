@@ -3,6 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { GeneralCRUD } from './base';
 import { TransferEntity } from '../entities';
 import { ITransferRepositoryInterface } from './interfaces';
+import { PaginatorModel } from '../../models';
 
 @Injectable()
 export class TransferRepository extends GeneralCRUD<TransferEntity> implements ITransferRepositoryInterface {
@@ -22,7 +23,7 @@ export class TransferRepository extends GeneralCRUD<TransferEntity> implements I
         ...entity,
         id,
       } as TransferEntity;
-    else throw new NotFoundException;
+    else throw new NotFoundException();
     return this.database[indexCurrentEntity];
   }
 
@@ -31,7 +32,7 @@ export class TransferRepository extends GeneralCRUD<TransferEntity> implements I
         (item) => 
           item.id === id
     );
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     soft ? this.softDelete(finded) : this.hardDelete(finded);
   }
 
@@ -43,11 +44,11 @@ export class TransferRepository extends GeneralCRUD<TransferEntity> implements I
     this.database[index].deletedAt = Date.now();
   }
 
-  findAll(): TransferEntity[] {
+  findAll(paginator: PaginatorModel): TransferEntity[] {
     let finded = this.database.filter(
         (item) => typeof item.deletedAt === undefined
     );
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     return finded;
   }
 
@@ -57,7 +58,7 @@ export class TransferRepository extends GeneralCRUD<TransferEntity> implements I
         item.id === id &&
         typeof item.deletedAt === undefined
     );
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     return finded;
   }
 
@@ -69,7 +70,7 @@ export class TransferRepository extends GeneralCRUD<TransferEntity> implements I
         item.dateTime >= dateInit &&
         item.dateTime <= dateEnd
     );
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     return finded
   }
 
@@ -81,7 +82,7 @@ export class TransferRepository extends GeneralCRUD<TransferEntity> implements I
           item.dateTime >= dateInit &&
           item.dateTime <= dateEnd
       );
-      if (finded === undefined) throw new NotFoundException;
+      if (finded === undefined) throw new NotFoundException();
       return finded
   }
 }

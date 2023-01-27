@@ -3,6 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { GeneralCRUD } from './base';
 import { CustomerEntity } from '../entities';
 import { IDisableable, INameable, ICustomerRepository } from './interfaces';
+import { PaginatorModel } from '../../models';
 
 @Injectable()
 export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements ICustomerRepository, IDisableable<CustomerEntity>, INameable<CustomerEntity> {
@@ -22,7 +23,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
         ...entity,
         id,
       } as CustomerEntity;
-    else throw new NotFoundException;
+    else throw new NotFoundException();
     return this.database[indexCurrentEntity];
   }
 
@@ -31,7 +32,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
       (item) => 
         item.id === id
     );
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     soft ? this.softDelete(finded) : this.hardDelete(finded);
   }
 
@@ -55,7 +56,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
     // });
   }
 
-  findAll(): CustomerEntity[] {
+  findAll(paginator: PaginatorModel): CustomerEntity[] {
     let finded = this.database.filter(
       (item) => typeof item.deletedAt === undefined
     );
@@ -90,7 +91,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
         item.document === document &&
         typeof item.deletedAt === undefined
     );
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     return finded;
   }
 
@@ -100,7 +101,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
         item.email === email &&
         typeof item.deletedAt === undefined
     );
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     return finded;
   }
 
@@ -110,7 +111,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
         item.phone === phone &&
         typeof item.deletedAt === undefined
     );
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     return finded;
   }
 
@@ -121,7 +122,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
         return value
       }
     }) as CustomerEntity[]
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     return finded;
   }
 
@@ -133,7 +134,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
         }
       }
     );
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     return finded;
   }
 }

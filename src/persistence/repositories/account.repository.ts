@@ -3,6 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { GeneralCRUD } from './base';
 import { AccountEntity } from '../entities';
 import { IAccountRepository, IDisableable, INameable } from './interfaces';
+import { PaginatorModel } from '../../models';
 
 @Injectable()
 export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAccountRepository, IDisableable<AccountEntity>, INameable<AccountEntity> {
@@ -22,7 +23,7 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
         ...entity,
         id,
       } as AccountEntity;
-    else throw new NotFoundException;
+    else throw new NotFoundException();
     return this.database[indexCurrentEntity];
   }
 
@@ -31,7 +32,7 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
         (item) => 
           item.id === id
     );
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     soft ? this.softDelete(finded) : this.hardDelete(finded);
   }
 
@@ -55,11 +56,12 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
     // });
   }
 
-  findAll(): AccountEntity[] {
+  findAll(paginator: PaginatorModel): AccountEntity[] {
+    
     let finded = this.database.filter(
         (item) => typeof item.deletedAt === undefined
     );
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     return finded;
   }
 
@@ -69,7 +71,7 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
           item.id === id &&
           typeof item.deletedAt === undefined
     );
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     return finded;
   }
 
@@ -79,7 +81,7 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
           item.state === state &&
           typeof item.deletedAt === undefined
     );
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     return finded;
   }
 
@@ -89,7 +91,7 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
           item.customer.id === customerId &&
           typeof item.deletedAt === undefined
     );
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     return finded;
   }
 
@@ -99,7 +101,7 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
           item.accountType.id === accountTypeId &&
           typeof item.deletedAt === undefined
     );
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     return finded;
   }
 
@@ -109,7 +111,7 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
           item.customer.fullName === name &&
           typeof item.deletedAt === undefined
     );
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     return finded;
   }
 }

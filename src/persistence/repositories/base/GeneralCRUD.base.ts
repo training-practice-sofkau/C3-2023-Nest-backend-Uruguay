@@ -1,3 +1,4 @@
+import { PaginatorModel } from '../../../models';
 import { IGeneral } from '../interfaces';
 
 export abstract class GeneralCRUD<T> implements IGeneral<T> {
@@ -16,7 +17,7 @@ export abstract class GeneralCRUD<T> implements IGeneral<T> {
     delete(id: string, soft?: boolean | undefined): void {
         throw new Error('Method not implemented.');
     }
-    findAll(): T[] {
+    findAll(paginator: PaginatorModel): T[] {
         throw new Error('Method not implemented.');
     }
     findOneById(id: string): T {

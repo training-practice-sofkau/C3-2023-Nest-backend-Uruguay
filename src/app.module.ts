@@ -1,14 +1,12 @@
 import { Module } from '@nestjs/common';
-// Modules
-import { AccountModule, AccountTypeModule, CustomerModule, DepositModule, DocumentTypeModule, SecurityModule, TransferModule } from './modules';
 // Controllers
 import { AccountController, AccountTypeController, CustomerController, DepositController, DocumentTypeController, SecurityController, TransferController } from './controllers';
-// Services
-import { AccountService, AccountTypeService, CustomerService, DepositService, DocumentTypeService, SecurityService, TransferService } from './services';
+// Providers
+import { AccountRepository, AccountTypeRepository, CustomerRepository, DepositRepository, DocumentTypeRepository, TransferRepository } from './persistence';
 
 @Module({
-  imports: [SecurityModule, AccountModule, CustomerModule, TransferModule, DepositModule, AccountTypeModule, DocumentTypeModule],
+  imports: [],
   controllers: [SecurityController, AccountController, CustomerController, TransferController, DepositController, AccountTypeController, DocumentTypeController],
-  providers: [SecurityService, AccountService, CustomerService, TransferService, DepositService, AccountTypeService, DocumentTypeService],
+  providers: [AccountTypeRepository, AccountRepository, CustomerRepository, DepositRepository, DocumentTypeRepository, TransferRepository],
 })
 export class AppModule {}

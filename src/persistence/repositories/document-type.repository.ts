@@ -3,6 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { GeneralCRUD } from './base';
 import { DocumentTypeEntity } from '../entities';
 import { IDisableable, IDocumentTypeRepositoryInterface, INameable } from './interfaces';
+import { PaginatorModel } from '../../models';
 
 @Injectable()
 export class DocumentTypeRepository extends GeneralCRUD<DocumentTypeEntity> implements IDocumentTypeRepositoryInterface, IDisableable<DocumentTypeEntity>, INameable<DocumentTypeEntity> {
@@ -22,7 +23,7 @@ export class DocumentTypeRepository extends GeneralCRUD<DocumentTypeEntity> impl
         ...entity,
         id,
       } as DocumentTypeEntity;
-    else throw new NotFoundException;
+    else throw new NotFoundException();
     return this.database[indexCurrentEntity];
   }
 
@@ -31,31 +32,31 @@ export class DocumentTypeRepository extends GeneralCRUD<DocumentTypeEntity> impl
       (item) => 
         item.id === id
     );
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     this.database.splice(finded, 1);
   }
 
-  findAll(): DocumentTypeEntity[] {
+  findAll(paginator: PaginatorModel): DocumentTypeEntity[] {
     let finded = this.database;
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     return finded;
   }
 
   findOneById(id: string): DocumentTypeEntity {
     let finded = this.database.find( (item) => item.id === id );
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     return finded;
   }
 
   findByState(state: boolean): DocumentTypeEntity[] {
     let finded = this.database.filter( (item) => item.state === state );
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     return finded;
   }
 
   findByName(name: string): DocumentTypeEntity[] {
     let finded = this.database.filter( (item) => item.name === name );
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     return finded;
   }
 }

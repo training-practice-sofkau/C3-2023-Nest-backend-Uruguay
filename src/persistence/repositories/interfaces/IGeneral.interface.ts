@@ -1,3 +1,4 @@
+import { PaginatorModel } from '../../../models';
 export interface IGeneral<T> {
 
     register(entity: T): T;
@@ -6,7 +7,7 @@ export interface IGeneral<T> {
 
     delete(id: string, soft?: boolean): void;
 
-    findAll(): T[];
+    findAll(paginator: PaginatorModel): T[];
 
     findOneById(id: string): T;
 

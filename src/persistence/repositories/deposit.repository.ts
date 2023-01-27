@@ -3,6 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { GeneralCRUD } from './base';
 import { DepositEntity } from '../entities';
 import { IDepositRepository } from './interfaces';
+import { PaginatorModel } from '../../models';
 
 @Injectable()
 export class DepositRepository extends GeneralCRUD<DepositEntity> implements IDepositRepository {
@@ -22,7 +23,7 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> implements IDe
         ...entity,
         id,
       } as DepositEntity;
-    else throw new NotFoundException;
+    else throw new NotFoundException();
     return this.database[indexCurrentEntity];
   }
 
@@ -31,7 +32,7 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> implements IDe
         (item) => 
           item.id === id
     );
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     soft ? this.softDelete(finded) : this.hardDelete(finded);
   }
 
@@ -43,11 +44,11 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> implements IDe
     this.database[index].deletedAt = Date.now();
   }
 
-  findAll(): DepositEntity[] {
+  findAll(paginator: PaginatorModel): DepositEntity[] {
     let finded = this.database.filter(
         (item) => typeof item.deletedAt === undefined,
     );
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     return finded;
   }
 
@@ -57,7 +58,7 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> implements IDe
           item.id === id &&
           typeof item.deletedAt === undefined
     );
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     return finded;
   }
 
@@ -67,7 +68,7 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> implements IDe
           item.account.id === accountId &&
           typeof item.deletedAt === undefined
     );
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     return finded;
   }
 
@@ -78,7 +79,7 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> implements IDe
           item.dateTime >= dateInit &&
           item.dateTime <= dateEnd
     );
-    if (finded === undefined) throw new NotFoundException;
+    if (finded === undefined) throw new NotFoundException();
     return finded
   }
 }
