@@ -8,6 +8,7 @@ import { CustomerRepositoryInterface } from './interfaces';
 
 @Injectable()
 export class CustomerRepository extends BankInternalControl<CustomerEntity> implements CustomerRepositoryInterface {
+    
 
     /**
      * Adds a new Customer entity to the Array of customer
@@ -294,4 +295,27 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
             throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
         }
       }
+
+     /**
+     * Search in the DB any value provided by the property given
+     * @param property property where to find
+     * @param value value to find
+     * @returns array of entities or and exception
+     */
+      findBy(property: keyof CustomerEntity, value: string | number | boolean): CustomerEntity[] {
+                
+        try{ 
+
+            const searchResult = this.database.filter(entity => entity[property] === value); //searchs for entities that matches the criteria
+           
+            if( searchResult.length <= 0){ // if the result of the search is empty
+                throw new NotFoundException(); // gives and exception
+            }
+            return searchResult; // all good, return the entity 
+
+        }catch(err){ // something wrong happened
+
+            throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
+        }
+    }
 }

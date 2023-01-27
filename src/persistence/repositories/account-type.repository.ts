@@ -8,6 +8,8 @@ import { AccountTypeRepositoryInterface } from "./interfaces";
 
 @Injectable()
 export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity> implements AccountTypeRepositoryInterface{
+    
+   
 
     /**
      * Adds a new AccountType Entity to the Array of Accounts
@@ -145,8 +147,8 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
      * @returns array of entities with that name or an exception
      */
     findByName(name: string): AccountTypeEntity[] {
-        
-        try{ // try to find all entities of a given Name
+
+          try{ // try to find all entities of a given Name
 
             const searchResult = this.database.filter(entity => entity.name === name); //searchs for entities that matches the criteria
            
@@ -158,7 +160,7 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
         }catch(err){ // something wrong happened
 
             throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
-        }
+        } 
     }
 
 
@@ -168,9 +170,9 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
      * @param value value to find
      * @returns array of entities or and exception
      */
-    findBy(property: keyof AccountTypeEntity, value: string | number): AccountTypeEntity[] {
+    findBy(property: keyof AccountTypeEntity, value: string | number | boolean): AccountTypeEntity[] {
         
-        try{ // try to find all entities of a given Name
+        try{ 
 
             const searchResult = this.database.filter(entity => entity[property] === value); //searchs for entities that matches the criteria
            
@@ -183,5 +185,5 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
 
             throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
         }
-    }
+    } 
 }

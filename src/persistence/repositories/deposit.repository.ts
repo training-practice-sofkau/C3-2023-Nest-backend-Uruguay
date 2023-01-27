@@ -211,4 +211,27 @@ export class DepositRepository extends BankInternalControl<DepositEntity> implem
             throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
         }
     }
+
+    /**
+     * Search in the DB any value provided by the property given
+     * @param property property where to find
+     * @param value value to find
+     * @returns array of entities or and exception
+     */
+    findBy(property: keyof DepositEntity, value: string | number | boolean): DepositEntity[] {
+                
+        try{ 
+
+            const searchResult = this.database.filter(entity => entity[property] === value); //searchs for entities that matches the criteria
+           
+            if( searchResult.length <= 0){ // if the result of the search is empty
+                throw new NotFoundException(); // gives and exception
+            }
+            return searchResult; // all good, return the entity 
+
+        }catch(err){ // something wrong happened
+
+            throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
+        }
+    }
 }

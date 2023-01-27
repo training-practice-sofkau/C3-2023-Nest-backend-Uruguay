@@ -7,7 +7,8 @@ import { AccountRepositoryInterface } from './interfaces';
 
 
 @Injectable()
-export class AccountRepository extends BankInternalControl <AccountEntity> implements AccountRepositoryInterface  {
+export class AccountRepository extends BankInternalControl<AccountEntity> implements AccountRepositoryInterface {
+    
 
     /**
      * Adds a new Account entity to the Array of accounts
@@ -15,18 +16,18 @@ export class AccountRepository extends BankInternalControl <AccountEntity> imple
      * @returns new entity added
      */
     register(entity: AccountEntity): AccountEntity {
-        
-        try{ // try to add the entity to the array
-            
+
+        try { // try to add the entity to the array
+
             this.database.push(entity);
-            
+
             return this.database.at(-1) ?? entity; // all good, returns the new entity 
 
-        } catch (err){ // something went wrong, push didn't work
+        } catch (err) { // something went wrong, push didn't work
 
             throw new InternalServerErrorException(`Internal Error! (${err})`)
 
-        }        
+        }
     }
 
     /**
@@ -35,23 +36,23 @@ export class AccountRepository extends BankInternalControl <AccountEntity> imple
      * @param entity object that provides the new updated data 
      */
     update(id: string, entity: AccountEntity): AccountEntity {
-        
-        try{        
-           
+
+        try {
+
             const targetEntityIndex = this.database.findIndex(entity => entity.id === id && typeof entity.deletedAt === undefined); //searchs for the position in the array of the entity with Id
 
-            if(targetEntityIndex == -1){ // if the result of the search is an -1 (not found)
+            if (targetEntityIndex == -1) { // if the result of the search is an -1 (not found)
                 throw new NotFoundException(); // gives and exception
             }
 
-            this.database[targetEntityIndex] = {...this.database[targetEntityIndex], ...entity, id: id} as AccountEntity; // update existing entity
+            this.database[targetEntityIndex] = { ...this.database[targetEntityIndex], ...entity, id: id } as AccountEntity; // update existing entity
 
             return this.database[targetEntityIndex]; // all good, returning update existing entity
 
-        } catch (err){// something wrong happened
+        } catch (err) {// something wrong happened
 
             throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
-        }        
+        }
     }
 
     /**
@@ -60,26 +61,26 @@ export class AccountRepository extends BankInternalControl <AccountEntity> imple
      * @param soft sets the deletion method to use (true = logical / false = permanent)
      */
     delete(id: string, soft?: boolean | undefined): void {
-        
-        try{        
-           
+
+        try {
+
             const targetEntityIndex = this.database.findIndex(entity => entity.id === id); //searchs for the position in the array of the entity with Id
 
-            if(targetEntityIndex == -1){ // if the result of the search is an -1 (not found)
+            if (targetEntityIndex == -1) { // if the result of the search is an -1 (not found)
                 throw new NotFoundException(); // gives and exception
-            }  
-            
-            if(typeof soft === undefined || soft === true){ // check if is a Logical Deletion
+            }
 
-                    this.softDelete(targetEntityIndex); // calls the internal soft delete method
+            if (typeof soft === undefined || soft === true) { // check if is a Logical Deletion
+
+                this.softDelete(targetEntityIndex); // calls the internal soft delete method
 
             }
-            else if(typeof soft !== undefined || soft === false){ // checks if is Physical Deletion
+            else if (typeof soft !== undefined || soft === false) { // checks if is Physical Deletion
 
                 this.hardDelete(targetEntityIndex); // calls the internal hard delete method
             }
 
-        } catch (err){// something wrong happened
+        } catch (err) {// something wrong happened
 
             throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
         }
@@ -91,11 +92,11 @@ export class AccountRepository extends BankInternalControl <AccountEntity> imple
      */
     private hardDelete(index: number): void {
 
-        try{
+        try {
 
             this.database.splice(index);
 
-        } catch(err){ // something went wrong
+        } catch (err) { // something went wrong
 
             throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
         }
@@ -107,14 +108,14 @@ export class AccountRepository extends BankInternalControl <AccountEntity> imple
      */
     private softDelete(index: number): void {
 
-        try{
+        try {
 
-            this.database[index] = {...this.database[index], deletedAt: new Date()};
+            this.database[index] = { ...this.database[index], deletedAt: new Date() };
 
-        } catch(err){ // something went wrong
+        } catch (err) { // something went wrong
 
             throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
-        }        
+        }
     }
 
     /**
@@ -123,12 +124,12 @@ export class AccountRepository extends BankInternalControl <AccountEntity> imple
      * @returns Array of entities 
      */
     findAll(): AccountEntity[] {
-                
-        try{ 
-        
-            return this.database.filter( entity => typeof entity.deletedAt === undefined); //applies filter for deleted ones
 
-        } catch (err){// something wrong happened
+        try {
+
+            return this.database.filter(entity => typeof entity.deletedAt === undefined); //applies filter for deleted ones
+
+        } catch (err) {// something wrong happened
 
             throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
         }
@@ -141,22 +142,22 @@ export class AccountRepository extends BankInternalControl <AccountEntity> imple
      */
     findOneById(id: string): AccountEntity {
 
-        try{ // try to find an entity with a given Id
+        try { // try to find an entity with a given Id
 
-            const index = this.database.findIndex(entity => entity.id === id && typeof entity.deletedAt === undefined ) ; //searchs for the position in the array of the entity with Id
+            const index = this.database.findIndex(entity => entity.id === id && typeof entity.deletedAt === undefined); //searchs for the position in the array of the entity with Id
 
-            if(index == -1){ // if the result of the search is an -1 (not found)
+            if (index == -1) { // if the result of the search is an -1 (not found)
                 throw new NotFoundException(); // gives and exception
             }
 
             return this.database[index]; // all good, return the entity 
 
-        }catch(err){ // something wrong happened
+        } catch (err) { // something wrong happened
 
             throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
         }
-    }   
-    
+    }
+
     /**
      * Find in the database all the entities with a given state
      * @param state value to check
@@ -164,21 +165,21 @@ export class AccountRepository extends BankInternalControl <AccountEntity> imple
      */
     findByState(state: boolean): AccountEntity[] {
 
-        try{ // try to find all entities with a given state
+        try { // try to find all entities with a given state
 
-            const searchResult = this.database.filter(entity => entity.state === state && typeof entity.deletedAt === undefined ); //searchs for the position in the array of the entity with Id
-           
-            if( searchResult.length <= 0){ // if the result of the search is empty
+            const searchResult = this.database.filter(entity => entity.state === state && typeof entity.deletedAt === undefined); //searchs for the position in the array of the entity with Id
+
+            if (searchResult.length <= 0) { // if the result of the search is empty
                 throw new NotFoundException(); // gives and exception
             }
 
             return searchResult; // all good, return the entity 
 
-        }catch(err){ // something wrong happened
+        } catch (err) { // something wrong happened
 
             throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
         }
-      }
+    }
 
     /**
      * Searchs in the DB all the accounts of on customer
@@ -186,18 +187,18 @@ export class AccountRepository extends BankInternalControl <AccountEntity> imple
      * @returns array of accounts or and exception
      */
     findByCustomer(customerId: string): AccountEntity[] {
-        
-        try{ // try to find all entities with a given CustomerId
+
+        try { // try to find all entities with a given CustomerId
 
             const searchResult = this.database.filter(entity => entity.customerId === customerId &&
-                typeof entity.deletedAt === undefined ); //searchs for entities that matches the criteria
-           
-            if( searchResult.length <= 0){ // if the result of the search is empty
+                typeof entity.deletedAt === undefined); //searchs for entities that matches the criteria
+
+            if (searchResult.length <= 0) { // if the result of the search is empty
                 throw new NotFoundException(); // gives and exception
             }
             return searchResult; // all good, return the entity 
 
-        }catch(err){ // something wrong happened
+        } catch (err) { // something wrong happened
 
             throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
         }
@@ -209,10 +210,33 @@ export class AccountRepository extends BankInternalControl <AccountEntity> imple
      * @returns array of entities of type or an exception
      */
     findByAccountType(accountTypeId: string): AccountEntity[] {
-        try{ // try to find all entities of a given Type
+        try { // try to find all entities of a given Type
 
             const searchResult = this.database.filter(entity => entity.accountTypeId === accountTypeId &&
-                typeof entity.deletedAt === undefined ); //searchs for entities that matches the criteria
+                typeof entity.deletedAt === undefined); //searchs for entities that matches the criteria
+
+            if (searchResult.length <= 0) { // if the result of the search is empty
+                throw new NotFoundException(); // gives and exception
+            }
+            return searchResult; // all good, return the entity 
+
+        } catch (err) { // something wrong happened
+
+            throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
+        }
+    }
+
+    /**
+     * Search in the DB any value provided by the property given
+     * @param property property where to find
+     * @param value value to find
+     * @returns array of entities or and exception
+     */
+    findBy(property: keyof AccountEntity, value: string | number | boolean): AccountEntity[] {
+        
+        try{ 
+
+            const searchResult = this.database.filter(entity => entity[property] === value); //searchs for entities that matches the criteria
            
             if( searchResult.length <= 0){ // if the result of the search is empty
                 throw new NotFoundException(); // gives and exception

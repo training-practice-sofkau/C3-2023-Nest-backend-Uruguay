@@ -10,4 +10,6 @@ export interface RepositoryMethodsInterface<T> {
     
     findOneById(id: string): T;
 
+    findBy(property: keyof T, value: string | number | boolean): T[]
+
 }
