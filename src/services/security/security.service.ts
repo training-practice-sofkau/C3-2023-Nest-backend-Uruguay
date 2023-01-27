@@ -6,7 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 
 
   // Models
-  import { CustomerModel } from '../../models';
+  import { CustomerModel, AccountModel } from '../../models';
 
   // Repositories
   import { CustomerRepository } from '../../persistence/repositories';
@@ -15,8 +15,9 @@ import { JwtService } from '@nestjs/jwt';
   import { AccountService } from '../account';
 
   // Entities
-  import { AccountTypeEntity, CustomerEntity } from '../../persistence/entities';
-import { AccountEntity } from '../../persistence/entities/account.entity';
+  import { AccountTypeEntity, CustomerEntity, AccountEntity } from '../../persistence/entities';
+
+
 
   @Injectable()
   export class SecurityService {
@@ -28,7 +29,7 @@ import { AccountEntity } from '../../persistence/entities/account.entity';
     ) {}
 
     /**
-     * Login to the system
+     * Login to the system - OK
      *
      * @param {CustomerModel} user
      * @return {*}  {string}
@@ -40,7 +41,10 @@ import { AccountEntity } from '../../persistence/entities/account.entity';
         user.password,
       );
       if (answer){
-        return this.jwtService.sign(""); 
+        // The secret token is an very long string almost impossible to guess (may implement a token generator for this!)
+        const JWT_SECRET = "goK!pusp6ThEdURUtRenOwUhAsWUCLheBazl!uJLPlS8EbreWLdrupIwabRAsiBu";
+
+        return this.jwtService.sign(JWT_SECRET); 
       } 
       else throw new UnauthorizedException();
     }
@@ -67,8 +71,9 @@ import { AccountEntity } from '../../persistence/entities/account.entity';
 
       if (customer) {
         const accountType = new AccountTypeEntity();
-        accountType.id = accountType.id;        
-        const newAccount = {
+        accountType.id = accountType.id;      
+
+        const newAccount: AccountModel = {
           customer,
           accountType,
         };
