@@ -22,6 +22,7 @@ import {
   AccountTypeEntity,
   CustomerEntity,
 } from '../../persistence/entities';
+import { AccountTypeModel } from 'src/persistence/entities/account.type.entities';
 @Injectable()
 export class SegurityService {
 constructor(
@@ -64,8 +65,8 @@ signUp(user: CustomerModel): string {
   const customer = this.customerRepository.register(newCustomer);
 
   if (customer) {
-    const accountType = new AccountTypeEntity();
-    accountType.id = 'Falta el ID por defecto del tipo de cuenta';
+    const accountType = new AccountTypeModel();
+    accountType.acctp_id = uuid();
     const newAccount = {
       customer,
       accountType,
@@ -73,9 +74,12 @@ signUp(user: CustomerModel): string {
 
     const account = this.accountService.createAccount(newAccount);
 
-    if (account) return 'Falta retornar un JWT';
-    else throw new InternalServerErrorException();
-  } else throw new InternalServerErrorException();
+    if (!account) {
+      throw new InternalServerErrorException();
+      //throw new InternalServerErrorException(); porque dos ?
+    }
+    
+    return 'Falta retornar un JWT';
 }
 
 /**
@@ -88,3 +92,7 @@ signOut(JWToken: string): void {
   throw new Error('Method not implemented.');
 }
 }
+function uuid(): string {
+  throw new Error('Function not implemented.');
+}
+

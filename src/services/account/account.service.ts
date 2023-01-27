@@ -2,7 +2,6 @@ import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { accountType } from 'src/models';
 import { AccountTypeModel} from 'src/persistence/entities/account.type.entities';
 import { AccountTypeRepository } from 'src/persistence/repositories';
-
 @Injectable()
 export class AccountService {
 constructor(private readonly accountRepository: AccountTypeRepository) {}
@@ -14,6 +13,7 @@ constructor(private readonly accountRepository: AccountTypeRepository) {}
    * @return {*}  {AccountEntity}
    * @memberof AccountService
    */
+
   createAccount(account: accountType): AccountTypeModel {
 
     const newAccount = new AccountTypeModel();
@@ -111,6 +111,7 @@ constructor(private readonly accountRepository: AccountTypeRepository) {}
   changeState(accountId: string, state: boolean): void {
    const account = this.accountRepository.findOneById(accountId);
    account.acctp_state = state;
+
    this.accountRepository.update(accountId,account);
   }
 
