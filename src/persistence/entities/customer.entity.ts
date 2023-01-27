@@ -1,5 +1,5 @@
 import { DocumentTypeEntity } from '../entities';
-import { CustomerModel } from '../../models';
+import { CustomerModel, DocumentTypeModel } from '../../models';
 
 import { v4 as uuid } from 'uuid';
 
@@ -11,10 +11,10 @@ export class CustomerEntity implements CustomerModel{
     phone: string;
     password: string;
     avatarUrl?: string ;
-    id = uuid()
-    state: true  | false;
-    deletedAt?: number | Date ;  
-    name: string
+    id = uuid();
+    name: string ;
+    state: boolean;
+  
  
 }
 

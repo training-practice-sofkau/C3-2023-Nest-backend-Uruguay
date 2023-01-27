@@ -116,7 +116,7 @@ export class AccountRepository
     const currentEntity = this.database.find(
       (item: { id: string }) => item.id === accountId,
     );
-    if (currentEntity == null) {
+    if (!currentEntity) {
       throw new NotFoundException();
     }
 

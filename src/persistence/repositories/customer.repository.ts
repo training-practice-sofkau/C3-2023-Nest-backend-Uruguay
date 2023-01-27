@@ -37,7 +37,7 @@ export class CustomerRepository
 
   update(id: string, entity: CustomerEntity): CustomerEntity {
     const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.deletedAt === 'undefined',
+      (item) => item.id === id ,
     );
     if (indexCurrentEntity >= 0)
       this.database[indexCurrentEntity] = {
@@ -79,8 +79,7 @@ export class CustomerRepository
     const indexCurrentEntity = this.database.findIndex(
       (item) =>
         item.documentType.id === documentTypeId &&
-        item.document === document &&
-        typeof item.deletedAt === 'undefined',
+        item.document === document,
     );
     return this.database[indexCurrentEntity];
   }
@@ -89,7 +88,7 @@ export class CustomerRepository
     return this.database.filter((item) =>
       state === true
         ? item.state === true
-        : typeof item.deletedAt != 'undefined',
+        : item.state === false,
     );
   }
 }
