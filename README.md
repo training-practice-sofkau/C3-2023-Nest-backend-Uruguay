@@ -66,7 +66,5 @@ The following are the guidelines that should be taken into account for the devel
 Do not forget to consult the Nest documentation if you consider it necessary: [Nest Documentation](https://docs.nestjs.com/).
 
 ### Important note
-<<<<<<< HEAD
-
 Do not forget that for this workshop, you should make at least 10 commits properly documented (title and message body).
 
