@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { PaginationModel } from 'src/models';
 
 @Injectable()
 export class TransferService {
