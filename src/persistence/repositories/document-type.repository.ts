@@ -1,31 +1,54 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+
 import { DocumentTypeEntity } from '../entities';
+import { BaseRepository } from './base';
+import { DocumentTypeRepositoryInterface } from './interfaces';
 
 @Injectable()
-export class DocumentTypeRepository {
-  private readonly database: Array<DocumentTypeEntity>;
-
-  constructor() {
-    this.database = new Array<DocumentTypeEntity>();
-  }
+export class DocumentTypeRepository
+  extends BaseRepository<DocumentTypeEntity>
+  implements DocumentTypeRepositoryInterface {
 
   register(entity: DocumentTypeEntity): DocumentTypeEntity {
-    throw new Error('This method is not implemented');
+    this.database.push(entity);
+    return this.database.at(-1) ?? entity;
   }
 
   update(id: string, entity: DocumentTypeEntity): DocumentTypeEntity {
-    throw new Error('This method is not implemented');
+    const indexCurrentEntity = this.database.findIndex((item) => item.id === id);
+    if (indexCurrentEntity === -1) throw new NotFoundException();
+    return this.database[indexCurrentEntity] = {
+        ...this.database[indexCurrentEntity],
+        ...entity,
+        id,
+      } as DocumentTypeEntity;
   }
 
   delete(id: string, soft?: boolean | undefined): void {
-    throw new Error('This method is not implemented');
+    const indexCurrentEntity = this.database.findIndex((item) => item.id === id);
+    if(indexCurrentEntity === -1) throw new NotFoundException();
+    this.database.splice(indexCurrentEntity, 1);
   }
 
   findAll(): DocumentTypeEntity[] {
-    throw new Error('This method is not implemented');
+    return this.database;
   }
 
   findOneById(id: string): DocumentTypeEntity {
-    throw new Error('This method is not implemented');
+    const currentEntity = this.database.find((item) => item.id === id);
+    if (currentEntity) return currentEntity;
+    throw new NotFoundException();
+  }
+
+  findByState(state: boolean): DocumentTypeEntity[] {
+    const currentEntities = this.database.filter((item) => item.state === state);
+    if (currentEntities) return currentEntities;
+    throw new NotFoundException();
+  }
+
+  findByName(name: string): DocumentTypeEntity[] {
+    const currentEntities = this.database.filter((item) => item.name === name);
+    if (currentEntities) return currentEntities;
+    throw new NotFoundException();
   }
 }
