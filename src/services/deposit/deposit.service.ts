@@ -21,8 +21,7 @@ export class DepositService {
     newDeposit.account = deposit.account
     newDeposit.amount = deposit.amount
     newDeposit.dateTime = Date.now()
-
-    return newDeposit
+    return this.depositRepository.register(newDeposit)
   }
 
   /**
@@ -49,6 +48,7 @@ export class DepositService {
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): DepositEntity[] {
-    throw new Error('This method is not implemented');
+    const depositArrayByDate = this.depositRepository.findByDataRange(depositId, dataRange?.min, dataRange?.max)
+    return depositArrayByDate
   }
 }
