@@ -1,3 +1,4 @@
+
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { IAccountModel } from 'src/models/i-account-model';
 import { AccountEntity } from 'src/persistence/entities/account-entity';
@@ -24,9 +25,11 @@ export class AccountService {
    * @memberof AccountService
    */
     createAccount(account: IAccountModel): AccountEntity {
+
         const newAccount = new AccountEntity();
         newAccount.customerId = account.customerId;
         newAccount.accountTypeId = account.accountTypeId;
+
         return this.accountRepository.register(newAccount);
     }
 
@@ -38,8 +41,10 @@ export class AccountService {
      * @memberof AccountService
      */
     getBalance(accountId: string): number {
-        // return this.getAccount(accountId).balance;
-        return this.accountRepository.findOneById(accountId).balance
+        
+        const currentEntity = this.accountRepository.findOneById(accountId);
+
+        return currentEntity.balance
     }
 
     /**
@@ -54,7 +59,7 @@ export class AccountService {
         const currentEntity = this.accountRepository.findOneById(accountId);
 
         currentEntity.balance = currentEntity.balance + amount;
-        
+
         this.accountRepository.update(accountId, currentEntity)
 
     }
@@ -147,7 +152,10 @@ export class AccountService {
      */
     getAccountType(accountId: string): AccountTypeEntity {
 
-        return this.getAccount(accountId).accountTypeId;
+        const currentEntity = this.accountRepository.findOneById(accountId);
+
+        return currentEntity.accountTypeId;
+
     }
 
     /**
@@ -158,14 +166,13 @@ export class AccountService {
      * @return {*}  {AccountTypeEntity}
      * @memberof AccountService
      */
-    changeAccountType(
-        accountId: string,
-        accountTypeId: string,
-    ): AccountTypeEntity {
-        const account = this.getAccount(accountId);
-        account.accountTypeId = this.accountTypeRepository.findOneById(accountTypeId);
+    changeAccountType(accountId: string, accountTypeId: string): AccountTypeEntity {
 
-        return account.accountTypeId;
+        const currentEntity = this.accountRepository.findOneById(accountId);
+        
+        currentEntity.accountTypeId = this.accountTypeRepository.findOneById(accountTypeId);
+
+        return currentEntity.accountTypeId;
     }
 
     /**
