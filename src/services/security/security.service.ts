@@ -1,5 +1,6 @@
 // Libraries
 import {
+  
     Injectable,
     InternalServerErrorException,
     UnauthorizedException,
@@ -20,6 +21,7 @@ import { AccountModel } from '../../models/account.model';
   
   // Entities
   import {
+    AccountEntity,
     AccountTypeEntity,
     CustomerEntity,
   } from '../../persistence/entities';
@@ -27,6 +29,7 @@ import { AccountModel } from '../../models/account.model';
   @Injectable()
   export class SecurityService {
     constructor(
+      
       private readonly customerRepository: CustomerRepository,
       private readonly accountService: AccountService,
     ) {}
@@ -39,11 +42,13 @@ import { AccountModel } from '../../models/account.model';
      * @memberof SecurityService
      */
     signIn(user: CustomerModel): string {
+      const jwt = require('jsonwebtoken');
+
       const answer = this.customerRepository.findOneByEmailAndPassword(
         user.email,
         user.password,
       );
-      if (answer) return 'Falta retornar un JWT';
+      if (answer) return jwt.sign({id: user.id}, process.env.TOKEN_SECRET || 'tokentest')
       else throw new UnauthorizedException();
     }
   
@@ -62,21 +67,27 @@ import { AccountModel } from '../../models/account.model';
       newCustomer.email = user.email;
       newCustomer.phone = user.phone;
       newCustomer.password = user.password;
+      newCustomer.name = user.name;      
+      newCustomer.documentType.id = user.documentType.id
+      newCustomer.documentType.name = user.documentType.name
+      newCustomer.documentType.state = user.documentType.state
+
   
       const customer = this.customerRepository.register(newCustomer);
   
       if (customer) {
         const jwt = require('jsonwebtoken');
+
         const accountType = new AccountTypeEntity();
-        accountType.id = 'Falta el ID por defecto del tipo de cuenta';
-        const newAccount = {
-          customer,
-          accountType,
-        };
+        accountType.id =  user.id;
+        const newAccount  = new AccountEntity()
+         newAccount.customer = customer;
+         newAccount.accountType = accountType;
+        
+        const   account = this.accountService.createAccount(newAccount);
+
   
-        const account = this.accountService.createAccount(newAccount);
-  
-        if (account) return 'Falta retornar un JWT';
+        if (account) return jwt.sign({id: accountType.id}, process.env.TOKEN_SECRET || 'tokentest');
         else throw new InternalServerErrorException();
       } else throw new InternalServerErrorException();
     }

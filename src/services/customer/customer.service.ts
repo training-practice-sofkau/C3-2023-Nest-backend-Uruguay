@@ -2,15 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { CustomerModel } from '../../models';
 import { CustomerEntity } from '../../persistence/entities';
 import { CustomerRepository } from '../../persistence/repositories/customer.repository';
-import { AccountRepository } from '../../persistence/repositories/account.repository';
 
 @Injectable()
 export class CustomerService {
 
   [x: string]: any;
   constructor(
-    private readonly CustomerRepository: CustomerRepository,  private readonly AccountRepository: AccountRepository
-  ) {}
+    private readonly CustomerRepository: CustomerRepository,    ) {}
 
   /**
    * Obtener información de un cliente
