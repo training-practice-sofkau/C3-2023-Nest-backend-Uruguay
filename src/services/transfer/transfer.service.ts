@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
+import { PaginationModel, TransferModel } from '../../models';
+import { TransferEntity } from '../../persistence';
+
 @Injectable()
 export class TransferService {
   /**

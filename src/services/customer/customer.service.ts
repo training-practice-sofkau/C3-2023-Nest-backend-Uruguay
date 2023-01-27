@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
+
 import { CustomerModel } from '../../models';
-import { CustomerEntity } from '../../persistence/entities';
+import { CustomerEntity } from '../../persistence';
 
 @Injectable()
 export class CustomerService {
