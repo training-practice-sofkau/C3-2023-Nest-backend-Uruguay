@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { DepositModel, PaginationModel } from '../../models/';
+import { DataRangeModel, DepositModel, PaginationModel } from '../../models/';
 import { DepositRepository } from 'src/persistence/repositories';
 import { DepositEntity } from 'src/persistence/entities';
 
@@ -53,6 +53,11 @@ export class DepositService {
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): DepositEntity[] {
-    return 
+    const deposit = this.depositRepository.findAll();
+    let depositPaginated: DepositEntity[] = [];
+
+    if(pagination) {
+      depositPaginated = deposit.slice(pagination.offset, pagination.limit);
+    }
   }
 }
