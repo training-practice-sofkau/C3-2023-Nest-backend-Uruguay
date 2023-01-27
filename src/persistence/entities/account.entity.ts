@@ -1,5 +1,6 @@
 import { AccountModel, AccountTypeModel, CustomerModel } from "../../models";
 import { v4 as uuid } from 'uuid';
+import { AccountTypeEntity } from './account-type.entity';
 
 export class AccountEntity implements AccountModel{
     
@@ -19,12 +20,12 @@ export class AccountEntity implements AccountModel{
         this._customer_id = value;
     }
 
-    protected _acount_type_id: AccountTypeModel;
-    public get acount_type_id(): AccountTypeModel {
-        return this._acount_type_id;
+    protected _account_type_id: AccountTypeEntity;
+    public get account_type_id(): AccountTypeEntity {
+        return this._account_type_id;
     }
-    public set acount_type_id(value: AccountTypeModel) {
-        this._acount_type_id = value;
+    public set account_type_id(value: AccountTypeEntity) {
+        this._account_type_id = value;
     }
 
     protected _balance: number;

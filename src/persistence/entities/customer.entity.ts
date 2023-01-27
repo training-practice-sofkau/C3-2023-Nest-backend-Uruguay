@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid';
 
 export class CustomerEntity implements CustomerModel{   
     protected _id = uuid();
-    documentTypeRepository: import("c:/Users/Cafe/Desktop/Sofka/Prueba 1 Proyectos Nest js/Proyecto Presentacion entregado/C3-2023-Nest-backend-Uruguay/src/models/document-type.model").DocumentTypeModel;
+    //documentTypeRepository: import("c:/Users/Cafe/Desktop/Sofka/Prueba 1 Proyectos Nest js/Proyecto Presentacion entregado/C3-2023-Nest-backend-Uruguay/src/models/document-type.model").DocumentTypeModel;
     public get id() {
         return this._id;
     }

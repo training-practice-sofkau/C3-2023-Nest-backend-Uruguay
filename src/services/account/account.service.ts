@@ -9,7 +9,7 @@ export class AccountService {
 
     constructor(
         private readonly accountRepository: AccountRepository
-        
+
         ){}
     /**
      * Crear una cuenta
@@ -78,8 +78,8 @@ export class AccountService {
      * @memberof AccountService
      */
     getState(accountId: string): boolean {
-       
-        throw new Error('This method is not implemented');
+       //consultar si se puede asi
+      return this.accountRepository.findOneById(accountId).state
     }
 
     /**
@@ -90,7 +90,10 @@ export class AccountService {
      * @memberof AccountService
      */
     changeState(accountId: string, state: boolean): void {
-        throw new Error('This method is not implemented');
+        let  acc = this.accountRepository.findOneById(accountId)
+        acc.state = state
+        this.accountRepository.update(accountId,acc)
+
     }
 
     /**
@@ -101,7 +104,9 @@ export class AccountService {
      * @memberof AccountService
      */
     getAccountType(accountId: string): AccountTypeEntity {
-        throw new Error('This method is not implemented');
+        let  acc = this.accountRepository.findOneById(accountId)
+        acc =this.accountRepository.findOneById(accountId)
+        return acc.account_type_id
     }
 
     /**
@@ -117,10 +122,11 @@ export class AccountService {
         accountTypeId: string,
     ): AccountTypeEntity {
 
-        //this.accountRepository.update(accountId,accountTypeId)
-        //crear funcion para cambiar tipo en el repositorio
-        
-        throw new Error('This method is not implemented');
+        let  acc = this.accountRepository.findOneById(accountId)
+        acc =this.accountRepository.findOneById(accountId)
+        acc.account_type_id.id =  accountTypeId
+
+        return this.accountRepository.update(accountId, acc).account_type_id
     }
 
     /**
