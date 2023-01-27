@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { DataRangeModel } from 'src/models/DataRange.Model';
 import { PaginationModel } from 'src/models/pagination.model';
 import { DepositEntity } from 'src/persistence';
 
@@ -19,7 +20,13 @@ export class DepositService {
    * @memberof DepositService
    */
   createDeposit(deposit: DepositModel): DepositEntity {
-   return this.DepositRepository.createDeposit(deposit);
+
+    const newDeposit = new DepositEntity();
+    newDeposit.amount = deposit.amount;
+    newDeposit.date_time = new Date();
+    newDeposit.state = true;
+    return this.accountRepository.register(newDeposit);
+
 
   }
 
@@ -47,10 +54,16 @@ export class DepositService {
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): DepositEntity[] {
-     let deposit =  this.DepositRepository.searchDeposit("id", depositId)
+     let deposit =  this.DepositRepository.searchByAttributes("id", depositId)
+
+    if(dataRange) 
+    {
+      let {dateInit, dateEnd} = dataRange
+      deposit = deposit.filter(deposit => deposit.date_time)
+    }
 
      if(pagination){
-      const {offset, limit } = pagination
+      let  {offset= 0, limit = 0 } = pagination
       deposit = deposit.slice(offset, offset + limit );      
      }
      return deposit

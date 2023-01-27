@@ -35,7 +35,11 @@ export class AccountService {
    * @memberof AccountService
    */
   getBalance(accountId: string): number {
-    return this.accountRepository.getBalance(accountId);
+    let account = this.accountRepository.searchByAttributesforOne(
+      'id',
+      accountId,
+    );
+    return account.acc_Balance;
   }
 
   /**
@@ -46,7 +50,15 @@ export class AccountService {
    * @memberof AccountService
    */
   addBalance(accountId: string, amount: number): void {
-    this.accountRepository.getBalance(accountId, amount);
+    if (amount <= 0) {
+      throw new NotFoundException();
+    }
+    let account = this.accountRepository.searchByAttributesforOne(
+      'id',
+      accountId,
+    );
+    account.acc_Balance += amount;
+    this.accountRepository.update(accountId, account);
   }
 
   /**
@@ -57,9 +69,16 @@ export class AccountService {
    * @memberof AccountService
    */
   removeBalance(accountId: string, amount: number): void {
-    this.accountRepository.getBalance(accountId, amount, false);
+    if (amount <= 0) {
+      throw new NotFoundException();
+    }
+    let account = this.accountRepository.searchByAttributesforOne(
+      'id',
+      accountId,
+    );
+    account.acc_Balance -= amount;
+    this.accountRepository.update(accountId, account);
   }
-
   /**
    * Verificar la disponibilidad de un monto a retirar en una cuenta
    *
@@ -69,7 +88,7 @@ export class AccountService {
    * @memberof AccountService
    */
   verifyAmountIntoBalance(accountId: string, amount: number): boolean {
-    const balance = this.accountRepository.getBalance(accountId);
+    const balance = this.accountService.getBalance(accountId);
     if (balance >= amount) {
       return true;
     }
@@ -84,7 +103,7 @@ export class AccountService {
    * @memberof AccountService
    */
   getState(accountId: string): boolean {
-    return this.accountRepository.getStateAndChange(accountId);
+    return this.accountRepository.searchByAttributesforOne('id', accountId).state;
   }
 
   /**
@@ -95,7 +114,12 @@ export class AccountService {
    * @memberof AccountService
    */
   changeState(accountId: string, state: boolean): void {
-    this.accountRepository.getStateAndChange(accountId, state);
+    let account = this.accountRepository.searchByAttributesforOne(
+      'id',
+      accountId,
+    );
+    account.state = state;
+    this.AccountTypeRepository.update(accountId, account);
   }
 
   /**
@@ -124,10 +148,7 @@ export class AccountService {
    * @return {*}  {AccountTypeEntity}
    * @memberof AccountService
    */
-  changeAccountType(
-    accountId: string,
-    accountTypeId: string,
-  ): AccountTypeEntity {
+  changeAccntType(accountId: string, accountTypeId: string): AccountTypeEntity {
     let account = this.getAccountType(accountId);
     account.id = accountTypeId;
     this.AccountTypeRepository.update(accountId, account);

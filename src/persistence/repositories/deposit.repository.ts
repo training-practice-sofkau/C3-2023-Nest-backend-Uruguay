@@ -93,19 +93,6 @@ export class DepositRepository
     else throw new NotFoundException();
   }
 
-  createDeposit(deposit: DepositModel): DepositEntity {
-    const Index = this.database.findIndex(
-      (item) => item.accountid === deposit.accountid,
-    );
-    if (Index === -1) {
-      throw new NotFoundException();
-    }
-    const newDeposit = new DepositEntity();
-    newDeposit.amount = deposit.amount;
-    newDeposit.date_time = new Date();
-    newDeposit.state = true;
-    return newDeposit;
-  }
 
   searchDeposit(
     attributes: keyof DepositModel,

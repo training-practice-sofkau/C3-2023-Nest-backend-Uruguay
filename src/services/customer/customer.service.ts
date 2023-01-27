@@ -44,6 +44,6 @@ export class CustomerService {
    * @memberof CustomerService
    */
   unsubscribe(id: string): boolean {
-    return  this.AccountRepository.getStateAndChange(id, true)
+    return this.CustomerRepository.searchByAttributesforOne("id", id).state 
   }
 }
