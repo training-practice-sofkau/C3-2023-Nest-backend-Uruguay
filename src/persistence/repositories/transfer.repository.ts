@@ -44,12 +44,12 @@ export class TransferRepository extends GeneralCRUD<TransferEntity> implements I
     this.database[index].deletedAt = Date.now();
   }
 
-  findAll(paginator: PaginationModel): TransferEntity[] {
+  findAll(paginator?: PaginationModel): TransferEntity[] {
     let finded = this.database.filter(
         (item) => typeof item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException();
-    return finded;
+    return finded.slice(paginator?.offset, paginator?.limit);
   }
 
   findOneById(id: string): TransferEntity {
@@ -62,7 +62,7 @@ export class TransferRepository extends GeneralCRUD<TransferEntity> implements I
     return finded;
   }
 
-  findOutcomeByDataRange(accountId: string, dateInit: Date | number, dateEnd: Date | number): TransferEntity[] {
+  findOutcomeByDataRange(accountId: string, dateInit: Date | number, dateEnd: Date | number, paginator?: PaginationModel): TransferEntity[] {
     let finded = this.database.filter(
       (item) => 
         item.outcome.id === accountId &&
@@ -71,10 +71,10 @@ export class TransferRepository extends GeneralCRUD<TransferEntity> implements I
         item.dateTime <= dateEnd
     );
     if (finded === undefined) throw new NotFoundException();
-    return finded
+    return finded.slice(paginator?.offset, paginator?.limit);
   }
 
-  findIncomeByDataRange(accountId: string, dateInit: Date | number, dateEnd: Date | number): TransferEntity[] {
+  findIncomeByDataRange(accountId: string, dateInit: Date | number, dateEnd: Date | number, paginator?: PaginationModel): TransferEntity[] {
     let finded = this.database.filter(
         (item) => 
           item.income.id === accountId &&
@@ -83,6 +83,6 @@ export class TransferRepository extends GeneralCRUD<TransferEntity> implements I
           item.dateTime <= dateEnd
       );
       if (finded === undefined) throw new NotFoundException();
-      return finded
+      return finded.slice(paginator?.offset, paginator?.limit);
   }
 }

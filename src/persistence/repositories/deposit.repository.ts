@@ -44,12 +44,12 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> implements IDe
     this.database[index].deletedAt = Date.now();
   }
 
-  findAll(paginator: PaginationModel): DepositEntity[] {
+  findAll(paginator?: PaginationModel): DepositEntity[] {
     let finded = this.database.filter(
-        (item) => typeof item.deletedAt === undefined,
+        (item) => typeof item.deletedAt === undefined 
     );
     if (finded === undefined) throw new NotFoundException();
-    return finded;
+    return finded.slice(paginator?.offset, paginator?.limit);
   }
 
   findOneById(id: string): DepositEntity {
@@ -72,7 +72,7 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> implements IDe
     return finded;
   }
 
-  findByDataRange(dateInit: Date | number, dateEnd: Date | number): DepositEntity[] {
+  findByDataRange(dateInit: Date | number, dateEnd: Date | number, paginator?: PaginationModel): DepositEntity[] {
     let finded = this.database.filter(
         (item) => 
           typeof item.deletedAt === undefined &&
@@ -80,6 +80,6 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> implements IDe
           item.dateTime <= dateEnd
     );
     if (finded === undefined) throw new NotFoundException();
-    return finded
+    return finded.slice(paginator?.offset, paginator?.limit);
   }
 }

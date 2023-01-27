@@ -7,4 +7,3 @@ export * from './document-type.repository.interface';
 export * from './general.interface';
 export * from './nameable.repository.interface';
 export * from './transfer.repository.interface';
-export * from './utils.interface';
