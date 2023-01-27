@@ -6,6 +6,7 @@ import { AccountEntity, AccountTypeEntity } from 'src/persistence';
 
 @Injectable()
 export class AccountService {
+
   constructor(private readonly accountRepository: AccountRepository, private readonly accountTypeRepository: AccountTypeRepository) {}
 
   createAccount(account: AccountModel): AccountEntity {
@@ -57,6 +58,6 @@ export class AccountService {
   }
 
   deleteAccount(accountId: string, soft?: boolean): void {
-    return this.accountRepository.delete(accountId, soft);
+    this.accountRepository.delete(accountId, soft);
   }
 }
