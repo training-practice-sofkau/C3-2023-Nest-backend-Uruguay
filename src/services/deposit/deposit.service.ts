@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { DepositModel, PaginationModel } from '../../models/';
 import { Deposit } from 'src/persistence/entities/deposit.entities';
 import { DepositRepository } from '../../persistence/repositories/deposit.repository';
+import { DataRangeModel } from 'src/models/dataRange.model';
 
 
 @Injectable()
@@ -44,9 +45,12 @@ export class DepositService {
    * @return {*}  {DepositEntity[]}
    * @memberof DepositService
    */
-  getHistory(depositId: string , pagination?: PaginationModel,dataRange?: string /*DataRangeModel*/): Deposit[] {
+  getHistory(depositId: string , pagination?: PaginationModel,dataRange?: DataRangeModel): Deposit[] {
     //Lo que me falta es que es de todos los depositos 
-    const deposit = this.DepositRepo.findByDataRange(pagination.offset,pagination.offset);//el historial de todas las cuenta en ese rango
+    if (!dataRange?.max || !dataRange.min) throw new NotFoundException(); //Arreglar este || 
+
+    const deposit = this.DepositRepo.findByDataRange(dataRange.min,dataRange.max);//el historial de todas las cuenta en ese rango
+    
 
     const depo = deposit.filter((depo) => depo.dep_id === depositId);//Mismo rango pero para el id del parametro
     return depo;
