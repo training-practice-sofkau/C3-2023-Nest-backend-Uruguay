@@ -82,7 +82,7 @@ findOutcomeByDataRange(
     dateInit: Date | number,
     dateEnd: Date | number,
 ): Transfer[] {
-    const rango  = this.database.filter(item => item.trf_outcome === accountId && item.trf_date_time>=dateInit && item.trf_date_time === dateEnd && typeof  item.trf_delete_at === `undefined`);
+    const rango  = this.database.filter(item => item.trf_outcome.acctp_id === accountId && item.trf_date_time>=dateInit && item.trf_date_time === dateEnd && typeof  item.trf_delete_at === `undefined`);
     if(typeof rango === `undefined`)throw new NotFoundException();
     return rango;
 }
@@ -90,7 +90,7 @@ findOutcomeByDataRange(
 //-----------------------------------------------------------------------------------------------------
 
 findIncomeByDataRange(accountId: string,dateInit: Date | number,dateEnd: Date | number): Transfer[] {
-    const rango  = this.database.filter(item => item.trf_income === accountId 
+    const rango  = this.database.filter(item => item.trf_income.acctp_id === accountId 
         && item.trf_date_time>=dateInit && 
         item.trf_date_time <= dateEnd &&
         typeof  item.trf_delete_at === `undefined`);

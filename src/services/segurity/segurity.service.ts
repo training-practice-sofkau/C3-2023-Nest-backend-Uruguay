@@ -93,10 +93,6 @@ export class SegurityService {
    * @memberof SecurityService
    */
   signOut(JWToken: string): void {
-    const token = jwt.sign({_id: account.acctp_id},process.env.MENSAJE || ` tokenprueba`) ;
+    
   }
-}
-
-function uuid(): string {
-  throw new Error('Function not implemented.');
 }

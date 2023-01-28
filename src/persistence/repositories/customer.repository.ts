@@ -4,6 +4,7 @@ import { CustomerEntity } from '../entities';
 
 import { CustomerRepositoryInterface } from './interfaces';
 import { BaseRepository } from '.';
+import { PaginationModel } from '../../models/pagination.model';
 
 @Injectable()
 export class CustomerRepository

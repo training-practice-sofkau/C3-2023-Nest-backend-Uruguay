@@ -42,6 +42,7 @@ export class CustomerService {
   unsubscribe(id: string): boolean {
     const cust = this.CustomerRepository.findOneById(id);
     cust.state = false;
+    this.CustomerRepository.update(id,cust);
     return cust.state;
   }
 }
