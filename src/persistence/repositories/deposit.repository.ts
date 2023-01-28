@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CustomerEntity, DocumentTypeEntity } from '../entities';
 import { Base } from './base/base.abstract';
 import { DepositEntity } from '../entities/deposit.entity';
 import { CRUD } from './interfaces/crud.interface';
