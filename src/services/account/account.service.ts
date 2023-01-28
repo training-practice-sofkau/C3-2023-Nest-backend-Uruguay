@@ -90,9 +90,7 @@ export class AccountService { //accountRepositorio(rojo) va a tener todas las fu
    */
   getState(accountId: string): boolean {
    
-    
     return this.accountRepository.findOneById(accountId).state
-    
      
   }
 
