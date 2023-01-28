@@ -4,4 +4,7 @@
   "material-icon-theme.folders.theme": "specific",
   "explorer.compactFolders": false,
   "jest.autoRun": "off",
+  "githubPullRequests.ignoredPullRequestBranches": [
+    "main"
+  ],
 }
