@@ -97,6 +97,9 @@ import { JsonWebTokenError } from 'jsonwebtoken';
      * @memberof SecurityService
      */
     signOut(JWToken: string): void {
-      throw new Error('Method not implemented.');
+      const account = jwt.decode(JWToken);
+      if (account) {
+        this.accountService.changeState(account.id);
+      }
     }
   }
