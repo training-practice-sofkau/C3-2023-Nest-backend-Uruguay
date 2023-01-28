@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { TransferRepository } from '../../persistence';
+import { transferEntity, TransferRepository } from '../../persistence';
 
 @Injectable()
 export class TransferService {
@@ -12,7 +12,8 @@ export class TransferService {
    * @memberof TransferService
    */
   createTransfer(transfer: TransferModel): TransferEntity {
-    throw new Error('This method is not implemented');
+    const newAccount = new transferEntity; //Desde ahi
+    return this.transferRepository.register(newAccount);
   }
 
   /**
@@ -73,6 +74,6 @@ export class TransferService {
    * @memberof TransferService
    */
   deleteTransfer(transferId: string): void {
-    throw new Error('This method is not implemented');
+    this.transferRepository.delete(transferId)
   }
 }
