@@ -129,9 +129,9 @@ export class AccountService {
    * @return {*}  {AccountTypeEntity}
    * @memberof AccountService
    */
-  getAccountType(accountId: string): AccountTypeEntity {
+  getAccountType(accountId: string): AccountEntity {
     try {
-      return this.accountRepository.findOneById(accountId).accountType
+      return this.accountRepository.findOneById(accountId)
     } catch (error) {
       throw new InternalServerErrorException(error)
     }
