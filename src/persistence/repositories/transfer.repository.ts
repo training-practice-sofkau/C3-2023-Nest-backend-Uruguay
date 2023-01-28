@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
+import { PaginationModel } from "src/models";
 import { TransferEntity } from "../entities/transfer.entity";
 import { BaseRepository } from "./base";
 import { TrasnferRepositoryInterface } from "./interfaces";

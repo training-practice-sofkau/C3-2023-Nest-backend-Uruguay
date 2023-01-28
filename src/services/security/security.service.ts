@@ -24,6 +24,7 @@ import {
   } from '../../persistence/entities';
   // JWT
   import * as jwt from "jsonwebtoken"
+import { AccountEntity } from '../../persistence/entities/account.entity';
 
   
   @Injectable()
@@ -44,8 +45,8 @@ import {
         user.email,
         user.password,
       );
-      if (answer) return jwt.sign(user, process.env.TOKEN_SECRET || "tokentest");
-      else throw new UnauthorizedException();
+      if (answer) return jwt.sign(user, process.env.TOKEN_SECRET || "tokentest")
+      else throw new UnauthorizedException()
     }
   
     /**
@@ -67,17 +68,17 @@ import {
       const customer = this.customerRepository.register(newCustomer);
   
       if (customer) {
-        const accountType = new AccountTypeEntity();
+        const accountType = new AccountEntity()
         accountType.id = uuid();
         const newAccount = {
           ...customer,
           ...accountType,
         };
-        const account = this.accountService.createAccount(newAccount);
+        const account = this.accountService.createAccount(newAccount)
         
-        if (account) return jwt.sign(user, process.env.TOKEN_SECRET || "tokentest");
-        else throw new InternalServerErrorException();
-      } else throw new InternalServerErrorException();
+        if (account) return jwt.sign(user, process.env.TOKEN_SECRET || "tokentest")
+        else throw new InternalServerErrorException()
+      } else throw new InternalServerErrorException()
     }
   
     /**

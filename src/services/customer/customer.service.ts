@@ -48,8 +48,10 @@ export class CustomerService {
    */
   unsubscribe(id: string): boolean {
     try {
-      this.customerRepository.delete(id)
-      return true ///////////////////////////////////////////
+      const newClient = this.customerRepository.findOneById(id)
+      newClient.state = false
+      this.customerRepository.update(id, newClient)
+      return true
     } catch (error) {
       throw new InternalServerErrorException(error)
     }
