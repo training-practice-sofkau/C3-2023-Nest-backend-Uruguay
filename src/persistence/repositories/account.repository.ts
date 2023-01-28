@@ -36,7 +36,7 @@ export class AccountRepository
             i => i.id === id &&
                 typeof i.deletedAt === 'undefined'
         )
-        soft ? this.hardDelete(indexToDelete) : this.softDelete(indexToDelete)
+        soft ? this.softDelete(indexToDelete) : this.hardDelete(indexToDelete)
     }
 
     private hardDelete(index: number): void {

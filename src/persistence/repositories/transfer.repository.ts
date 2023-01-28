@@ -67,13 +67,14 @@ export class TransferRepository
         dateEnd: Date | number,
     ): TransferEntity[] {
         const currentEntity = this.database.filter(
-            (item) => item.id === accountId
-                && dateInit > item.dateTime
-                && item.dateTime < dateEnd
+            (item) =>
+                item.id === accountId
+                && dateInit >= item.dateTime
+                && item.dateTime <= dateEnd
                 && typeof item.deletedAt === "undefined"
         )
         if (!currentEntity) throw new NotFoundException()
-        else return currentEntity.filter(item => item.outcome)
+        else return currentEntity.filter(item => item.outcome.id === accountId)
     }
 
     findIncomeByDataRange(
@@ -88,6 +89,6 @@ export class TransferRepository
                 && typeof item.deletedAt === "undefined"
         )
         if (!currentEntity) throw new NotFoundException()
-        else return currentEntity.filter(item => item.income)
+        else return currentEntity.filter(item => item.income.id === accountId)
     }
 }

@@ -37,7 +37,8 @@ export class AccountService {
    * @memberof AccountService
    */
   getBalance(accountId: string): number {
-    return this.accountRepository.findOneById(accountId).balance
+    const account = this.accountRepository.findOneById(accountId)
+    return account.balance
   }
 
   /**
@@ -48,7 +49,9 @@ export class AccountService {
    * @memberof AccountService
    */
   addBalance(accountId: string, amount: number): void {
-    this.accountRepository.updateBalance(accountId, amount)
+    if (amount > 0) {
+      this.accountRepository.updateBalance(accountId, amount)
+    }
   }
 
   /**
@@ -60,7 +63,7 @@ export class AccountService {
    */
   removeBalance(accountId: string, amount: number): void {
     try {
-      if (this.accountRepository.findOneById(accountId).balance >= amount) {
+      if (this.verifyAmountIntoBalance(accountId, amount)) {
         this.accountRepository.updateBalance(accountId, -amount)
       }
     } catch (error) {
@@ -78,7 +81,8 @@ export class AccountService {
    */
   verifyAmountIntoBalance(accountId: string, amount: number): boolean {
     try {
-      if (this.accountRepository.findOneById(accountId).balance >= amount) {
+      if (amount > 0 &&
+        this.accountRepository.findOneById(accountId).balance >= amount) {
         return true
       } else return false
     } catch (error) {
@@ -110,11 +114,11 @@ export class AccountService {
    */
   changeState(accountId: string, state: boolean): void {
     try {
-      let actualState = this.accountRepository.findOneById(accountId).state
-      actualState = !actualState
-
+      let actualState = this.accountRepository.findOneById(accountId);
+      actualState.state = !actualState.state
+      this.accountRepository.update(accountId, actualState);
     } catch (error) {
-      throw new InternalServerErrorException(error)
+      throw new InternalServerErrorException(error);
     }
   }
 
@@ -147,9 +151,9 @@ export class AccountService {
   ): AccountTypeEntity {
     try {
       this.accountRepository.findOneById(accountId).accountType.id = accountTypeId
-       
+
     } catch (error) {
-      throw new InternalServerErrorException(error)      
+      throw new InternalServerErrorException(error)
     }
   }
 

@@ -4,7 +4,7 @@ import {
     InternalServerErrorException,
     UnauthorizedException,
   } from '@nestjs/common';
-  
+  import { v4 as uuid } from 'uuid';
   // Data transfer objects
 
   
@@ -24,7 +24,7 @@ import {
   } from '../../persistence/entities';
   // JWT
   import * as jwt from "jsonwebtoken"
-import { v4 as uuid } from 'uuid';
+
   
   @Injectable()
   export class SecurityService {
@@ -87,5 +87,6 @@ import { v4 as uuid } from 'uuid';
      * @memberof SecurityService
      */
     signOut(JWToken: string): void {
+
     }
   }
