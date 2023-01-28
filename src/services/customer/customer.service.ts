@@ -90,4 +90,3 @@ export class CustomerService {
     this.customerRepository.delete(customerId, true);
   }
 
-}

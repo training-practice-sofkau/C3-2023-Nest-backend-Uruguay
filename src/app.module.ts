@@ -18,6 +18,7 @@ import { CustomerRepository, AccountRepository, AccountTypeRepository, TransferR
     DepositRepository,
     TransferRepository,
     AccountTypeRepository,
-    DocumentTypeRepository],
+    DocumentTypeRepository
+  ],
 })
-export class AppModule {}
+export class AppModule { }
