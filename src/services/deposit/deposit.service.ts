@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { DepositRepository } from '../../persistence';
+import { DepositRepository } from 'src/persistence';
 
 import { PaginationModel } from '../../models/';
+import { depositEntity } from '../../persistence/entities/deposit.entity';
 
 @Injectable()
 export class DepositService {
   constructor(private readonly depositRepository: DepositRepository) {}
-  
   /**
    * Crear un deposito
    *
@@ -15,8 +15,7 @@ export class DepositService {
    * @memberof DepositService
    */
   createDeposit(deposit: DepositModel): DepositEntity {
-    this.depositRepository.register()
-    
+    throw new Error('This method is not implemented');
   }
 
   /**
@@ -26,7 +25,9 @@ export class DepositService {
    * @memberof DepositService
    */
   deleteDeposit(depositId: string): void {
-    throw new Error('This method is not implemented');
+   
+    this.deleteDeposit(depositId)
+    // this.accountRepository.delete(accountId)
   }
 
   /**
@@ -38,11 +39,7 @@ export class DepositService {
    * @return {*}  {DepositEntity[]}
    * @memberof DepositService
    */
-  getHistory(
-    depositId: string,
-    pagination?: PaginationModel,
-    dataRange?: DataRangeModel,
-  ): DepositEntity[] {
-    throw new Error('This method is not implemented');
+  getHistory(depositId: string,pagination?: PaginationModel,dataRange?: DataRangeModel,): DepositEntity[] {
+    
   }
 }

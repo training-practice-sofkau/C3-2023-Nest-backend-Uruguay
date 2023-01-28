@@ -5,9 +5,7 @@ import { CustomerModel } from '../../models';
 
 @Injectable()
 export class CustomerService {
-  
     constructor(private readonly costumerRepository: CustomerRepository) {}
-
   /**
    * Obtener información de un cliente
    *
@@ -16,11 +14,9 @@ export class CustomerService {
    * @memberof CustomerService
    */
   getCustomerInfo(customerId: string): CustomerEntity {
-
     let customer = new CustomerEntity
     customer = this.costumerRepository.findOneById(customerId)
     return customer
-
   }
 
   /**
@@ -32,7 +28,9 @@ export class CustomerService {
    * @memberof CustomerService
    */
   updatedCustomer(id: string, customer: CustomerModel): CustomerEntity {
-    throw new Error('Method not implemented.');
+    let customerU = new CustomerEntity
+    customerU = this.costumerRepository.update(id,customerU)
+    return customerU
   }
 
   /**
@@ -48,8 +46,6 @@ export class CustomerService {
     if(unsubscribe.state == true){
       unsubscribe.state = false
     }
-
     return unsubscribe.state
-    
   }
 }
