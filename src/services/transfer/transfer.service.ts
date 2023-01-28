@@ -18,9 +18,9 @@ export class TransferService {
    * @memberof TransferService
    */
 createTransfer(transfer: TransferModel): TransferEntity {
-    const transfer1 = TransferEntity
+    const transfer1 = new TransferEntity
     transfer1 = transfer
-    return this.transferRepocitory.register(transfer)
+    return this.transferRepocitory.register(transfer1)
   }
 
   /**

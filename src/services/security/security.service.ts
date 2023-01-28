@@ -74,7 +74,16 @@ export class SecurityService {
        * @memberof SecurityService
        */
       signOut(JWToken: string): void {
-        throw new Error('Method not implemented.');
+        
+           jwt.verify(JWToken, 'secret', (err, decoded) => {
+            if (err) {
+                console.log('Invalid token');
+            } else {
+                // Eliminar el token del almacenamiento local del cliente
+                localStorage.removeItem('token');
+                // Redirigir al usuario a la página de inicio de sesión
+                window.location.href = '/login';
+            }throw new Error('Method not implemented.');
       }
 
 }
