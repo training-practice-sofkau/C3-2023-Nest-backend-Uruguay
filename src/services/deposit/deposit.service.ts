@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { DepositRepository } from 'src/persistence';
+import { depositEntity, DepositRepository } from 'src/persistence';
 
 import { PaginationModel } from '../../models/';
-import { depositEntity } from '../../persistence/entities/deposit.entity';
+
+import { depositModel } from '../../models/deposit.model';
 
 @Injectable()
 export class DepositService {
@@ -14,8 +15,10 @@ export class DepositService {
    * @return {*}  {DepositEntity}
    * @memberof DepositService
    */
-  createDeposit(deposit: DepositModel): DepositEntity {
-    throw new Error('This method is not implemented');
+  createDeposit(deposit: depositModel): depositEntity {
+    const newAccount = new depositEntity; //Desde ahi
+    newAccount.account = deposit.account;
+    return this.depositRepository.register(newAccount);
   }
 
   /**
