@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AccountModel, AccountTypeModel } from 'src/models';
+import { AccountModel} from 'src/models';
 import { AccountEntity, AccountTypeEntity } from 'src/persistence';
 import { AccountRepository } from '../../persistence/repositories/account.repository';
 
