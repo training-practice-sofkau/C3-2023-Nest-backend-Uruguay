@@ -48,7 +48,8 @@ export class DepositService {
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): DepositEntity[] {
-    const depositArrayByDate = this.depositRepository.findByDataRange(depositId, dataRange?.min, dataRange?.max)
-    return depositArrayByDate
+    if (!dataRange?.max || !dataRange.min) throw new Error("error") 
+    const depositArrayByDate = this.depositRepository.findByDataRange(dataRange?.min, dataRange?.max)
+    return depositArrayByDate.filter(id => id.id === depositId)
   }
 }
