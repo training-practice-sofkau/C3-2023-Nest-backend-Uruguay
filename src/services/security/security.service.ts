@@ -3,7 +3,7 @@ import { CustomerModel } from 'src/models';
 import { AccountTypeEntity, CustomerEntity, CustomerRepository } from 'src/persistence';
 import { AccountService } from '../account';
 import { DocumentTypeRepository } from '../../persistence/repositories/document-type.repository';
-import { AccountEntity } from '../../persistence/entities/account.entity';
+
 
 @Injectable()
 export class SecurityService {
@@ -40,7 +40,7 @@ export class SecurityService {
       signUp(user: CustomerModel): string {
         const newCustomer = new CustomerEntity();
        
-        newCustomer.documentTypeRepository = user.documentType;
+        //newCustomer.documentTypeRepository = user.documentType;
         newCustomer.document = user.document;
         newCustomer.fullName = user.fullName;
         newCustomer.email = user.email;
