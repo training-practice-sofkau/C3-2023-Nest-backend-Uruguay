@@ -1,14 +1,13 @@
-import { TransferModel } from '../../models';
+import { AccountModel, TransferModel } from '../../models';
 import { v4 as uuid } from 'uuid';
-import { AccountTypeEntity } from './accountType.entity';
 
 export class TransferEntity implements TransferModel {
+  income: AccountModel;
   id = uuid();
-  outcome: AccountTypeEntity;
-  accountTypeId: AccountTypeEntity;
+  outcome: AccountModel;
   transferAmount: number;
   transferReason: string;
   dateTime: Date;
   state: true  | false;
-  deletedAt?: Date | number;
+  deletedAt: Date | number
 }
