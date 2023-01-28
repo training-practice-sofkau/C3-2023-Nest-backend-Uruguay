@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { BaseRepository } from "./repo-base/base-repository";
 import { CustomerEntity } from "../entities/customer-entity";
 import { IRepository } from "./interface/i-base/i-repository";
+import { PaginationModel } from "src/models/i-pagination-model";
 
 
 @Injectable()
@@ -98,6 +99,7 @@ export class CustomerRepo extends BaseRepository<CustomerEntity> implements IRep
 
 
   findOneByEmail(email: string): CustomerEntity {
+    
     const currentEntity = this.database.find((obj) => obj.email === email && typeof obj.daletedAt === 'undefined');
 
     if (currentEntity) return currentEntity;
@@ -134,6 +136,13 @@ export class CustomerRepo extends BaseRepository<CustomerEntity> implements IRep
 
     else throw new NotFoundException('Lo siento, nada por aqui =(');
   }
+
+
+  private paginationMethod(pagination: PaginationModel): PaginationModel {
+    
+    return pagination = {... {offset: 0, limit: 10}, ... pagination}
+  }
+
 
 }
 

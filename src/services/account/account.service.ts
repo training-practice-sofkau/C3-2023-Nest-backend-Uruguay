@@ -1,10 +1,10 @@
 
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { IAccountModel } from 'src/models/i-account-model';
+import { PaginationModel } from 'src/models/i-pagination-model';
 import { AccountEntity } from 'src/persistence/entities/account-entity';
 import { AccountTypeEntity } from 'src/persistence/entities/account-type-entity';
 import { AccountRepository } from 'src/persistence/repositories/AccountRepo';
-import { CustomerRepo } from 'src/persistence/repositories/CustomerRepo';
 import { AccountTypeRepository } from 'src/persistence/repositories/TypeAccountRepo';
 import { CustomerRepositoryInterface } from 'src/persistence/repositories/interface/i-customer-repo';
 
@@ -13,8 +13,7 @@ export class AccountService {
 
 
     constructor(private readonly accountRepository: AccountRepository,
-        private readonly accountTypeRepository: AccountTypeRepository,
-        private readonly customerRepository: CustomerRepo) {
+                private readonly accountTypeRepository: AccountTypeRepository,) {
     }
 
     /**
@@ -86,6 +85,7 @@ export class AccountService {
 
             this.accountRepository.update(accountId, currentEntity)
         }
+        //hacer validacion
 
 
     }
@@ -188,8 +188,17 @@ export class AccountService {
     }
 
     private getAccount(accountId: string): AccountEntity {
+
         return this.accountRepository.findOneById(accountId);
     }
+
+
+    findByCustomer(pagination: PaginationModel, customerId: string): AccountEntity[] {
+
+        const currentEntity: AccountEntity[] = this.accountRepository.findByCustomer(customerId)
+
+        return currentEntity
+      }
 
 
 }
