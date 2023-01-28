@@ -9,6 +9,6 @@ export class TransferEntity implements TransferModel {
   transferAmount: number;
   transferReason: string;
   dateTime: Date;
-  state: true  | false;;
+  state: true  | false;
   deletedAt?: Date | number;
 }

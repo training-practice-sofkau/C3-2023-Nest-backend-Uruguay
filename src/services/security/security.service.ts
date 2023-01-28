@@ -48,7 +48,7 @@ import { AccountModel } from '../../models/account.model';
         user.email,
         user.password,
       );
-      if (answer) return jwt.sign({id: user.id}, process.env.TOKEN_SECRET || 'tokentest')
+      if (answer) return jwt.sign({id: user.id}, process.env.TOKEN_SECRET )
       else throw new UnauthorizedException();
     }
   
@@ -87,7 +87,7 @@ import { AccountModel } from '../../models/account.model';
         const   account = this.accountService.createAccount(newAccount);
 
   
-        if (account) return jwt.sign({id: accountType.id}, process.env.TOKEN_SECRET || 'tokentest');
+        if (account) return jwt.sign({id: accountType.id}, process.env.TOKEN_SECRET );
         else throw new InternalServerErrorException();
       } else throw new InternalServerErrorException();
     }
@@ -99,6 +99,7 @@ import { AccountModel } from '../../models/account.model';
      * @memberof SecurityService
      */
     signOut(JWToken: string): void {
-      throw new Error('Method not implemented.');
+      const jwt = require('jsonwebtoken');
+      jwt.invalidate(JWToken, process.env.TOKEN_SECRET);
     }
   }
