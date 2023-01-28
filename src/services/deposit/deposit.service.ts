@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { depositEntity, DepositRepository } from 'src/persistence';
-
-import { PaginationModel } from '../../models/';
-
-import { depositModel } from '../../models/deposit.model';
+import { depositEntity, DepositRepository } from '../../persistence';
+import { PaginationModel.depositModel } from '../../models/';
 
 @Injectable()
 export class DepositService {

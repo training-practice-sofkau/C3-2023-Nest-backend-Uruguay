@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { TransferRepository } from '../../persistence';
 
 @Injectable()
 export class TransferService {
+  constructor(private readonly transferRepository: TransferRepository) {}
   /**
    * Crear una transferencia entre cuentas del banco
    *
