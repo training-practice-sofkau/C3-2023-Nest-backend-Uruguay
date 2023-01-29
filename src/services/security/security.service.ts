@@ -44,7 +44,9 @@ import  jwt  from 'jsonwebtoken';
       if (answer){                
         return jwt.sign({id:user.id}, process.env.SECRET_KEY || 'secretToken', {expiresIn:"1h"});
       } 
-      else throw new UnauthorizedException();
+      
+      throw new UnauthorizedException();
+
     }
 
     /**
@@ -78,10 +80,15 @@ import  jwt  from 'jsonwebtoken';
 
         const account = this.accountService.createAccount(newAccount);
 
-        if (account) return jwt.sign({id: customer.id}, process.env.SECRET_KEY || 'secretToken', {expiresIn:"1h"});
+        if (account) {
+          return jwt.sign({id: customer.id}, process.env.SECRET_KEY || 'secretToken', {expiresIn:"1h"});
+        }
         
-        else throw new InternalServerErrorException();
-      } else throw new InternalServerErrorException();
+        throw new InternalServerErrorException();
+
+      } 
+      
+      throw new InternalServerErrorException();
     }
 
     /**
