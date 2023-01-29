@@ -62,7 +62,7 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
      * @param id unique customer id
      * @returns boolean
      */
-    setCustomerAsInactive(id: string, newState: boolean): boolean {
+    setCustomerState(id: string, newState: boolean): boolean {
     
         try{                   
             const targetEntityIndex = this.findIndexById(id);

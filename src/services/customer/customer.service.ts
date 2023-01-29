@@ -10,8 +10,7 @@ export class CustomerService {
   constructor(private readonly customerRepository: CustomerRepository) {}
 
   /**
-   * Get Customer information - OK
-   *
+   * Get Customer information - OK   *
    * @param {string} customerId
    * @return {*}  {CustomerEntity}
    * @memberof CustomerService
@@ -22,8 +21,7 @@ export class CustomerService {
   }
 
   /**
-   * Update Customer information - OK
-   *
+   * Update Customer information - OK   *
    * @param {string} id
    * @param {CustomerModel} customer
    * @return {*}  {CustomerEntity}
@@ -36,15 +34,27 @@ export class CustomerService {
   }
 
   /**
-   * Set Customer as inactive
-   *
+   * Set Customer as inactive   *
    * @param {string} id
    * @return {*}  {boolean}
    * @memberof CustomerService
    */
   unsubscribe(id: string): boolean {
     
-    return this.customerRepository.setCustomerAsInactive(id, false);
+    return this.customerRepository.setCustomerState(id, false);
 
   }
+
+  /**
+   * Set Customer as active
+   * @param {string} id
+   * @return {*}  {boolean}
+   * @memberof CustomerService
+   */
+  subscribe(id: string): boolean {
+    
+    return this.customerRepository.setCustomerState(id, true);
+
+  }
+
 }

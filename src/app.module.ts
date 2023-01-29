@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 
 import { SecurityController, 
-         AccountController } from './controllers';
+         AccountController,
+         CustomerController } from './controllers';
 
 import { AccountService, 
          CustomerService, 
@@ -19,7 +20,7 @@ import { AccountRepository,
 
 @Module({
   imports: [],
-  controllers: [SecurityController, AccountController],
+  controllers: [SecurityController, AccountController, CustomerController],
   providers: [AccountService, 
               CustomerService, 
               DepositService, 
