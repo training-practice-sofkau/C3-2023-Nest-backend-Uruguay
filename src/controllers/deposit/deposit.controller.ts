@@ -21,18 +21,18 @@ export class DepositController {
     }
 
     // delete Deposit ( Only soft delete from here )
-    @Delete('/:id')
-    async deleteDeposit(@Param('id') accountId: string): Promise<void> {
-        await this.depositService.deleteDeposit(accountId);
+    @Delete('delete/:id')
+    async deleteDeposit(@Param('id') depositId: string): Promise<void> {
+        await this.depositService.deleteDeposit(depositId);
     }
 
 
     // Get historical Data
     //TODO: see how to send values for pagination and date range ( look for info and methods )
     @Get('/:id')
-    async getDeposit(@Param('id') accountId: string): Promise<DepositEntity[]> {
+    async getDeposit(@Param('id') depositId: string): Promise<DepositEntity[]> {
 
-        return await this.depositService.getHistory(accountId);
+        return await this.depositService.getHistory(depositId);
 
     }
 }

@@ -75,7 +75,7 @@ export class TransferService {
    * @return {*}  {TransferEntity[]}
    * @memberof TransferService
    */
-  getHistory( accountId: string, pagination: PaginationModel, dataRange?: DataRangeModel): TransferEntity[] {
+  getHistory( accountId: string, pagination?: PaginationModel, dataRange?: DataRangeModel): TransferEntity[] {
     
     let history = [];
 
