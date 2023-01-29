@@ -1,14 +1,19 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
-import { DepositModel, PaginationModel } from '../../models/';
-import { Deposit } from 'src/module/deposit/deposit.entities';
+
 import { DepositRepository } from '../../module/deposit/deposit.repository';
 import { DataRangeModel } from 'src/module/dataRange.model';
+import { DepositEntity } from './deposit.entities';
+import { AccountService } from '../account/service';
+import { DepositModel } from './deposit.model';
+import { PaginationModel } from '../base';
 
 
 @Injectable()
 export class DepositService {
-  constructor(private readonly DepositRepo : DepositRepository){}
+  constructor(
+    private readonly depositRepository : DepositRepository,
+    private readonly accountService : AccountService){}
 
   /**
    * Crear un deposito
@@ -17,14 +22,18 @@ export class DepositService {
    * @return {*}  {DepositEntity}
    * @memberof DepositService
    */
-  createDeposit(deposit: DepositModel): Deposit {
-    const newDeposit = new Deposit();
-    newDeposit.dep_id = deposit.dep_id
-    newDeposit.account_id = deposit.account_id
-    newDeposit.dep_amount = deposit.dep_amount
-    newDeposit.dep_date_time = deposit.dep_date_time
-    newDeposit.dep_delete_at = deposit.dep_delete_at
-    return this.DepositRepo.register(newDeposit);
+  createDeposit(deposit: DepositModel): DepositEntity {
+    const newDeposit = new DepositEntity();
+    newDeposit.account = deposit.account;
+    newDeposit.amount = deposit.amount;
+    newDeposit.date_time = deposit.date_time;
+    newDeposit.delete_at = deposit.delete_at;
+    newDeposit.id = deposit.id;
+    return this.depositRepository.register(newDeposit);
+  }
+
+  findAll(): DepositEntity[] {
+    return this.depositRepository.findAll();
   }
 
   /**
@@ -32,8 +41,10 @@ export class DepositService {
    * @param {string} depositId
    * @memberof DepositService
    */
-  deleteDeposit(depositId: string): void {
-    this.DepositRepo.delete(depositId);//Que hago con el soft?
+  deleteDeposit(depositId: string,sof? : boolean): void {
+    if(sof)this.depositRepository.delete(depositId,sof);
+
+    this.depositRepository.delete(depositId);
   }
 
   /**
@@ -45,14 +56,14 @@ export class DepositService {
    * @return {*}  {DepositEntity[]}
    * @memberof DepositService
    */
-  getHistory(depositId: string , pagination?: PaginationModel,dataRange?: DataRangeModel): Deposit[] {
+  getHistory(depositId: string , pagination?: PaginationModel,dataRange?: DataRangeModel): DepositEntity[] {
     //Lo que me falta es que es de todos los depositos 
     if (!dataRange?.max || !dataRange.min) throw new NotFoundException(); //Arreglar este || 
 
-    const deposit = this.DepositRepo.findByDataRange(dataRange.min,dataRange.max);//el historial de todas las cuenta en ese rango
+    const deposit = this.depositRepository.findByDataRange(dataRange.min,dataRange.max);//el historial de todas las cuenta en ese rango
     
 
-    const depo = deposit.filter((depo) => depo.dep_id === depositId);//Mismo rango pero para el id del parametro
+    const depo = deposit.filter((depo) => depo.id === depositId);//Mismo rango pero para el id del parametro
     return depo;
   }
 }

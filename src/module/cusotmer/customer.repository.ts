@@ -14,30 +14,56 @@ export class CustomerRepository
   implements CustomerRepositoryInterface {
  //-----------------------------------------------------------------------------------------------------
 //HECHA
-  register(entity: CustomerModel): CustomerEntity {
+  register(entity: CustomerEntity): CustomerEntity {
+
+    const indexCurrentEntity = this.database.findIndex(
+      (item) => item.id === entity.id && typeof item.daletedAt === 'undefined',
+    );
+
+    if (!indexCurrentEntity) throw new NotFoundException();
+
     this.database.push(entity);
     return this.database.at(-1) ?? entity;
   }
 //-----------------------------------------------------------------------------------------------------
-  update(id: string, entity: CustomerModel): CustomerEntity {
+  update(id: string, entity: CustomerEntity): CustomerEntity {
+
     const indexCurrentEntity = this.database.findIndex(
       (item) => item.id === id && typeof item.daletedAt === 'undefined',
     );
-    if (indexCurrentEntity >= 0)
-      this.database[indexCurrentEntity] = {
-        ...this.database[indexCurrentEntity],
-        ...entity,
-        id,
-      } as CustomerEntity;
-    else throw new NotFoundException();
+
+    if (!indexCurrentEntity) throw new NotFoundException();
+
+    this.database[indexCurrentEntity] = {
+      ...this.database[indexCurrentEntity],
+      ...entity,
+      id,
+    } as CustomerEntity;
+
     return this.database[indexCurrentEntity];
   }
   
 //-----------------------------------------------------------------------------------------------------
   delete(id: string, soft?: boolean | undefined): void {
-    throw new Error('Method not implemented.');
+    const indexCurrentEntity = this.database.findIndex(
+      (item => item.id === id && typeof item.daletedAt === `undefined`));
+
+    if (!indexCurrentEntity) throw new NotFoundException();
+
+    soft
+      ? this.softDelete(indexCurrentEntity)
+      : this.hardDelete(indexCurrentEntity);
   }
 
+  private hardDelete(index: number): void {
+    this.database.splice(index);
+  }
+
+  private softDelete(index: number): void {
+    this.database[index].daletedAt = new Date;
+  }
+
+  
 //-----------------------------------------------------------------------------------------------------
 
   findAll(): CustomerEntity[] {
@@ -52,8 +78,9 @@ export class CustomerRepository
     const currentEntity = this.database.find(
       (item) => item.id === id && typeof item.daletedAt === 'undefined',
     );
-    if (currentEntity) return currentEntity;
-    else throw new NotFoundException();
+    if (!currentEntity) throw new NotFoundException();
+
+    return currentEntity;
   }
 
  //-----------------------------------------------------------------------------------------------------
@@ -77,10 +104,10 @@ export class CustomerRepository
 
     // Traer un solo objeto con tales caracteristicas
     const indexCurrentEntity = this.database.findIndex(
-      (indexCurrentEntity) =>
-      indexCurrentEntity.documentType.id === documentTypeId &&
-      indexCurrentEntity.document === document &&
-      typeof indexCurrentEntity.daletedAt === 'undefined',
+      (item) =>
+      item.documentType.id === documentTypeId &&
+      item.document === document &&
+      typeof item.daletedAt === 'undefined',
     );
     if(!indexCurrentEntity){
       throw new NotFoundException(`No se encontraron los datos`);
@@ -125,7 +152,9 @@ export class CustomerRepository
 //-----------------------------------------------------------------------------------------------------
 
   findByState(state: boolean): CustomerEntity[] {
-    const stateCustomer = this.database.filter((entity => entity.state ===state && typeof entity.daletedAt === `undefined`));
+    const stateCustomer = this.database.filter(
+      (entity => entity.state === state 
+      && typeof entity.daletedAt === `undefined`));
     if(!stateCustomer){
       throw new NotFoundException(`State : ${state} not found`);
     }
@@ -135,10 +164,13 @@ export class CustomerRepository
 //-----------------------------------------------------------------------------------------------------
 
   findByFullName(fullName: string): CustomerEntity[] {
-    const fullNameCustomer = this.database.filter(entity => entity.fullName === fullName && typeof entity.daletedAt === `undefined`)
+    const fullNameCustomer = this.database.filter(
+      (entity) => entity.fullName === fullName
+      && typeof entity.daletedAt === `undefined`);
     if(!fullNameCustomer){
       throw new NotFoundException(`fullName : ${fullName} not found`);
     }
     return fullNameCustomer;
   }
+
 }

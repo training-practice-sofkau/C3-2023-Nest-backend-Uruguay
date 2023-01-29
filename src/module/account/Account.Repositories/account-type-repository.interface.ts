@@ -1,5 +1,5 @@
 
 import { BaseRepositoryInterface } from '../../base/base-repository.interface';
-import { AccountTypeModel } from 'src/module/account/account-type-model.interface';
+import { AccountTypeEntity } from '../account.Type.Entity';
 
-export interface AccountTypeRepositoryInterface extends BaseRepositoryInterface<accountTypeModel>{}
+export interface AccountTypeRepositoryInterface extends BaseRepositoryInterface<AccountTypeEntity>{}

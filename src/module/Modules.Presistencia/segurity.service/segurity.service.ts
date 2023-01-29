@@ -5,27 +5,32 @@ import {
     UnauthorizedException,
   } from '@nestjs/common';
   
-import jwt  from "jsonwebtoken";
+
+import jwt  from 'jsonwebtoken';
+import { Response } from 'express';
 
 // Data transfer objects
 
 
 // Models
-import { CustomerModel } from '../../models';
+import { CustomerModel, CustomerRepository } from 'src/module/cusotmer';
 
 // Repositories
-import { CustomerRepository } from '../../persistence/repositories';
+
 
 // Services
-import { AccountService } from '../../module/account/Account.service';
+
+
 
 // Entities
-import {
-  AccountTypeEntity,
-  CustomerEntity,
-} from '../../persistence/entities';
-import { AccountTypeModel } from 'src/module/account/account.entities';
+import { CustomerEntity } from 'src/module/cusotmer/customer.entity';
+import { AccountTypeEntity } from 'src/module/account/account.Type.Entity';
+import { v4 as uuid } from 'uuid';
+import { AccountEntity } from '../../account/account.entities';
+import { AccountService } from 'src/module/account/service';
 import { Res } from '@nestjs/common/decorators';
+import * as request from 'supertest';
+
 
 @Injectable()
 export class SegurityService {
@@ -46,8 +51,9 @@ export class SegurityService {
       user.email,
       user.password,
     );
-    if (answer) return 'Falta retornar un JWT';
-    else throw new UnauthorizedException();
+    if (!answer)  throw new UnauthorizedException();
+    
+    return jwt.sign({id: user.id},process.env.TOKEN_SECRET || `tokentest`);
   }
 
   /**
@@ -65,25 +71,26 @@ export class SegurityService {
     newCustomer.email = user.email;
     newCustomer.phone = user.phone;
     newCustomer.password = user.password;
+    
     const customer = this.customerRepository.register(newCustomer);
 
-    if (customer) {
-      const accountType = new AccountTypeModel();
-      accountType.acctp_id = uuid();
-      const newAccount = {
-        ...customer,
-        ...accountType,
-      };
+    if (!customer) throw new InternalServerErrorException();
+    
+    const accountType = new AccountTypeEntity();
+    accountType.id = uuid();//Se lo asignamos nosotros?
+    let newAccount = new AccountEntity();
+    newAccount = {
+      ...newAccount,
+      customer,
+      accountType,
+    };
 
-      const account = this.accountService.createAccount(newAccount);
+    const account = this.accountService.createAccount(newAccount);
 
-      if (account) return jwt.sign({_id: account.acctp_id},process.env.MENSAJE || ` tokenprueba`) ;
-      else throw new InternalServerErrorException();
-      
-    }
-      else throw new InternalServerErrorException();
-            
-      
+    if (!account) throw new InternalServerErrorException();
+    
+    
+    return jwt.sign({_id: account.id},process.env.TOKEN_SECRET || ` tokentest`) ;  
   }
 
   /**
@@ -92,7 +99,7 @@ export class SegurityService {
    * @param {string} JWToken
    * @memberof SecurityService
    */
-  signOut(JWToken: string): void {
-    
+  signOut(JWToken: string , res:Response): void {
+    res.clearCookie(JWToken);
   }
 }

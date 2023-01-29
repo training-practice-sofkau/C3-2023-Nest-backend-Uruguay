@@ -1,10 +1,14 @@
 import { Injectable, NotAcceptableException } from '@nestjs/common';
-import { accountType } from 'src/models';
-import { AccountTypeModel} from 'src/module/account/account.entities';
-import { AccountTypeRepository } from 'src/persistence/repositories';
+
+import { AccountRepository, AccountTypeRepository } from '../Account.Repositories';
+import { AccountEntity } from '../account.entities';
+import { AccountModel } from '../accountModel.interface';
+import { AccountTypeEntity } from '../account.Type.Entity';
 @Injectable()
 export class AccountService {
-constructor(private readonly accountRepository: AccountTypeRepository) {}
+constructor(
+  private readonly accountRepository: AccountRepository,
+  private readonly accountTypeRepository: AccountTypeRepository) {}
 
   /**
    * Crear una cuenta
@@ -14,12 +18,10 @@ constructor(private readonly accountRepository: AccountTypeRepository) {}
    * @memberof AccountService
    */
 
-  createAccount(account: accountType): AccountTypeModel {
+  createAccount(account: AccountModel): AccountEntity {
 
-    const newAccount = new AccountTypeModel();
-    newAccount.acctp_id = account.acctp_id;
-    newAccount.acctp_state = account.acctp_state
-    newAccount.acctp_name = account.acctp_name;
+    const newAccount = new AccountEntity();
+    newAccount.coustomer_id = account.coustomer_id;
 
     return this.accountRepository.register(newAccount);
   }
@@ -35,7 +37,7 @@ constructor(private readonly accountRepository: AccountTypeRepository) {}
     
     const accountEntity = this.accountRepository.findOneById(accountId); 
 
-    return accountEntity.acctp_balance;
+    return accountEntity.balance;
   }
 
   /**
@@ -48,7 +50,7 @@ constructor(private readonly accountRepository: AccountTypeRepository) {}
   addBalance(accountId: string, amount: number): void {
     const account = this.accountRepository.findOneById(accountId);
     //validar el amount 
-    account.acctp_balance += amount;
+    account.balance += amount;
     this.accountRepository.update(accountId,account);
   }
 
@@ -63,11 +65,12 @@ constructor(private readonly accountRepository: AccountTypeRepository) {}
   removeBalance(accountId: string, amount: number): void {
     const account = this.accountRepository.findOneById(accountId);
 
-    if(account.acctp_balance < amount && amount > -1 ) 
+    if(this.verifyAmountIntoBalance(accountId,amount) === false) 
     throw new NotAcceptableException(`El monto : ${amount}
-    es superior al balance de la cuenta`);
+     es incorrecto , verifique que el monto ingresado no sea inferior a 0, o superior al  
+     balance : ${account.balance}`); 
 
-    account.acctp_balance -= amount;
+    account.balance -= amount;
 
     this.accountRepository.update(accountId,account);
   }
@@ -83,9 +86,7 @@ constructor(private readonly accountRepository: AccountTypeRepository) {}
   verifyAmountIntoBalance(accountId: string, amount: number): boolean {
     const account = this.accountRepository.findOneById(accountId);
     
-    if(account.acctp_balance < amount  || account.acctp_balance == 0) 
-    throw new NotAcceptableException(`El monto : ${amount}
-    es superior al balance de la cuenta`);
+    if(account.balance < amount  || account.balance == 0 || amount <0) return false;
 
     return true;
   }
@@ -99,7 +100,7 @@ constructor(private readonly accountRepository: AccountTypeRepository) {}
    */
   getState(accountId: string): boolean {
     const account = this.accountRepository.findOneById(accountId);
-    return account.acctp_state;
+    return account.state;
   }
 
   /**
@@ -111,7 +112,7 @@ constructor(private readonly accountRepository: AccountTypeRepository) {}
    */
   changeState(accountId: string, state: boolean): void {
    const account = this.accountRepository.findOneById(accountId);
-   account.acctp_state = state;
+   account.state = state;
 
    this.accountRepository.update(accountId,account);
   }
@@ -123,7 +124,7 @@ constructor(private readonly accountRepository: AccountTypeRepository) {}
    * @return {*}  {AccountTypeEntity}
    * @memberof AccountService
    */
-  getAccountType(accountId: string): accountType {
+  getAccountType(accountId: string): AccountEntity {
     const account = this.accountRepository.findOneById(accountId);
     return account;
   }
@@ -136,10 +137,11 @@ constructor(private readonly accountRepository: AccountTypeRepository) {}
    * @return {*}  {AccountTypeEntity}
    * @memberof AccountService
    */
-  changeAccountType(accountId: string,accountTypeId: string,): AccountTypeModel {
+  changeAccountType(accountId: string,accountTypeId: string,): AccountTypeEntity {
     const account = this.accountRepository.findOneById(accountId);
-    return account;
-    
+    account.account_type_id = this.accountTypeRepository.findOneById(accountTypeId);
+    this.accountRepository.update(accountId,account);
+    return account.account_type_id; 
   }
 
   /**
@@ -148,7 +150,14 @@ constructor(private readonly accountRepository: AccountTypeRepository) {}
    * @param {string} accountId
    * @memberof AccountService
    */
-  deleteAccount(accountId: string): void {
+  deleteAccount(accountId: string , sof? : boolean): void {
+    const entity = this.accountRepository.findOneById(accountId);
+    if(entity.balance != 0) throw new Error(`No se puede borrar
+    la cuenta porque el balance no es 0 , por favor transfiera a otra cuenta `);
+
+    if(sof) this.accountRepository.delete(accountId,sof);
     this.accountRepository.delete(accountId);
   }
+
+
 }

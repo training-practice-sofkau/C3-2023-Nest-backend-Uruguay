@@ -12,21 +12,21 @@ export class TransferRepository
     implements TransferRepositoryInterface {
 
 
-    register(entity: transferModel): TransferEntity {
-        const entityTransfer = new TransferEntity();
-        entityTransfer.id = entity.id;
-        entityTransfer.amount = entity.amount;
-        entityTransfer.date_time = entity.date_time;
-        entityTransfer.delete_at = entity.delete_at;
-        entityTransfer.income = entity.income;
-        entityTransfer.outcome = entity.outcome;
-        entityTransfer.reason = entity.reason;
+    register(entity: TransferEntity): TransferEntity {
+        const indexCurrentEntity = this.database.findIndex(
+            (item) => item.id === entity.id && typeof item.delete_at === 'undefined',
+            );
+
+        if (indexCurrentEntity <= 0){
+            throw new NotFoundException(`Id : ${entity.id} not found`);
+        }
+
         this.database.push(entity);
         return this.database.at(-1) ?? entity;
     }
 
 
-    update(id: string, entity: transferModel): TransferEntity {
+    update(id: string, entity: TransferEntity): TransferEntity {
         const indexCurrentEntity = this.database.findIndex(
             (item) => item.id === id && typeof item.delete_at === 'undefined',
             );
@@ -99,7 +99,7 @@ export class TransferRepository
         accountId: string,
         dateInit: Date | number,
         dateEnd: Date | number):
-         TransferEntity[] {
+        TransferEntity[] {
         const rango  = this.database.filter(item => item.income.id === accountId 
             && item.date_time>=dateInit && 
             item.date_time <= dateEnd &&

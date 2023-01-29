@@ -7,28 +7,12 @@ import { CusotmerController } from "./controllers/cusotmer/cusotmer.controller";
 import { DepositController } from "./controllers/deposit/deposit.controller";
 import { TansferController } from "./controllers/tansfer/tansfer.controller";
 import { AccountTypeRepository,CustomerRepository,DepositRepository,DocumentTypeRepository,AccountRepository } from "./persistence/repositories";
-import { SegurityService } from './services/segurity.service/segurity.service';
+import { SegurityService } from './module/Modules.Presistencia/segurity.service';
+
 
 @Module({
   imports: [ModuleModule],
   controllers: [SecurityController,AccountController,CusotmerController,DepositController,TansferController],
-  providers: [
-    AccountService,
-    CusotmerService,
-    DepositService,
-    //SecurityService,
-    TransferService,
-    AccountTypeRepository,
-    AccountRepository,  
-    CustomerRepository,
-    DepositRepository,
-    DocumentTypeRepository,
-    SegurityService,
-    
-    
-
-
-
-    ],
+  providers: []
 })
 export class AppModule {}

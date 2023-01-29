@@ -1,4 +1,4 @@
 export interface DataRangeModel {
     min : number | Date;
-    max : number | Date | undefined;
+    max : number | Date ;
 }

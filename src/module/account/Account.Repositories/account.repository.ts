@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { NotAcceptableException } from '@nestjs/common/exceptions/not-acceptable.exception';
 import { AccountEntity } from '../account.entities';
-import { AccountModel } from 'src/module/account/accountModel.interface';
 import { AccountRepositoryInterface } from './account-repository.interface';
 import { BaseRepository } from 'src/module/base/base.repository';
 
@@ -11,17 +10,23 @@ export class AccountRepository
     extends BaseRepository<AccountEntity>
     implements AccountRepositoryInterface {
 
-register(entity: AccountModel ): AccountEntity {
+register(entity: AccountEntity ): AccountEntity {
+    const indexCurrentEntity = this.database.findIndex(
+      (item) => item.id === entity.id && typeof item.delete_at === 'undefined',
+    );
+    if(!indexCurrentEntity){
+      throw new NotFoundException(`Id : ${entity.id} no found .`)
+    }
     this.database.push(entity);
     return  this.database.at(-1) ?? entity;
 }
 
-update(id: string, entity: AccountModel):AccountEntity{
+update(id: string, entity: AccountEntity  ):AccountEntity{
     const indexCurrentEntity = this.database.findIndex(
         (item) => item.id === id && typeof item.delete_at === 'undefined',
       );
 
-      if(indexCurrentEntity <= 0){
+      if(!indexCurrentEntity){
         throw new NotFoundException(`Id : ${id} no found .`)
       }
         this.database[indexCurrentEntity] = {
@@ -40,7 +45,7 @@ findAll(): AccountEntity[] {
 
 findOneById(id: string):AccountEntity {
     const currentEntity = this.database.find(
-        (item) => item.acc_id === id && typeof item.acc_delete_at === 'undefined',
+        (item) => item.id === id && typeof item.delete_at === 'undefined',
       );
 
       if(!currentEntity){
@@ -51,33 +56,25 @@ findOneById(id: string):AccountEntity {
 }
 
 findByState(state: boolean): AccountEntity[] {
-    //Verifico que algun cliente este en se estado
-const indexCurrentEntity = this.database.find(
-    (item) =>
-      item.acc_state === state &&
-      typeof item.acc_delete_at === 'undefined',
+
+  const indexCurrentEntity = this.database.filter(
+  (item) =>
+    item.state === state &&
+    typeof item.delete_at === 'undefined',
   );
   //Si no hay cliente con este estado entonces mando un exepcion
   if(!indexCurrentEntity){
     throw new NotFoundException(`State : ${state} not found`);
   }
 
-  //En caso de haber , hago una copia para retornar un arreglo de los clientes que tienen ese estado
-  const stateAccount : Account[] = [];
-  for(let i = 0; i<this.database.length; i++){
-    if(this.database[i].acc_state === state){
-        stateAccount[i] = this.database[i];
-    }
-  }
-  
-  return stateAccount;
+  return indexCurrentEntity;
 }
 
 findByCustomer(customerId: string): AccountEntity[] {
     //Verifico que algun cliente este en se estado
-    const indexCurrentEntity = this.database.find(
+    const indexCurrentEntity = this.database.filter(
     (item) =>
-      item.coustomer_id.cust_id === customerId &&
+      item.coustomer_id.id === customerId &&
       typeof item.delete_at === 'undefined',
     );
     //Si no hay cliente con este estado entonces mando un exepcion
@@ -85,38 +82,22 @@ findByCustomer(customerId: string): AccountEntity[] {
         throw new NotFoundException(`customer Id : ${customerId} not found`);
     }
 
-    //En caso de haber , hago una copia para retornar un arreglo de los clientes que tienen ese estado
-    const CustomerAccount : Account[] = [];
-    for(let i = 0; i<this.database.length; i++){
-        if(this.database[i].coustomer_id === customerId){
-            CustomerAccount[i] = this.database[i];
-        }
-    }
-
-    return CustomerAccount;
+    return indexCurrentEntity;
 }
 
 findByAccountType(accountTypeId: string): AccountEntity[] {
-//Verifico que algun cliente este en se estado
-  const indexCurrentEntity = this.database.find(
+
+  const indexCurrentEntity = this.database.filter(
     (item) =>
-      item.account_type_id === accountTypeId &&
-      typeof item.acc_delete_at === 'undefined',
+      item.account_type_id.id === accountTypeId &&
+      typeof item.delete_at === 'undefined',
     );
-    //Si no hay cliente con este estado entonces mando un exepcion
+
     if(!indexCurrentEntity){
         throw new NotFoundException(`account Type Id: ${accountTypeId} not found`);
     }
 
-    //En caso de haber , hago una copia para retornar un arreglo de los clientes que tienen ese estado
-    const CopyAccountTypeId : Account[] = [];
-    for(let i = 0; i<this.database.length; i++){
-        if(this.database[i].account_type_id === accountTypeId){
-            CopyAccountTypeId[i] = this.database[i];
-        }
-    }
-
-    return CopyAccountTypeId;
+    return indexCurrentEntity;
 }
 
 delete(id: string, soft?: boolean | undefined): void {

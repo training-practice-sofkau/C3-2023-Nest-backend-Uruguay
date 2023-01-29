@@ -2,7 +2,6 @@ import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/c
 import { BaseRepository } from '../base';
 import { DepositEntity } from './deposit.entities';
 import { DepositRepositoryInterface } from './deposit-repository.interface';
-import { DepositModel } from './deposit.model';
 
 
 @Injectable()
@@ -10,17 +9,24 @@ export class DepositRepository
     extends BaseRepository<DepositEntity>
     implements DepositRepositoryInterface {
 
-    register(entity: DepositModel): DepositEntity {
+    register(entity: DepositEntity): DepositEntity {
+        const indexCurrentEntity = this.database.findIndex(
+            (item) => item.id === entity.id && typeof item.delete_at === 'undefined',
+        );
+
+        if(!indexCurrentEntity){
+            throw new NotFoundException(`No se pudo actualizar porque no se encontro el id : ${id}`)
+        }
         this.database.push(entity);
         return this.database.at(-1) ?? entity;
     }
 
-    update(id: string, entity: DepositModel): DepositEntity {
+    update(id: string, entity: DepositEntity): DepositEntity {
         const indexCurrentEntity = this.database.findIndex(
-            (item) => item.dep_id === id && typeof item.dep_delete_at === 'undefined',
+            (item) => item.id === id && typeof item.delete_at === 'undefined',
         );
 
-        if(indexCurrentEntity <= 0){
+        if(!indexCurrentEntity){
             throw new NotFoundException(`No se pudo actualizar porque no se encontro el id : ${id}`)
         }
           
@@ -75,6 +81,7 @@ export class DepositRepository
     }
 
     private softDelete(index: number): void {
+        
         if (index < 0){
             throw new NotAcceptableException(`No se aceptan valores negativos`);
         }

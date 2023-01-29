@@ -9,7 +9,7 @@ import { DocumentTypeRepositoryInterface } from './document-type-repository.inte
 export class DocumentTypeRepository extends Repository<DocumentTypeEntity> implements DocumentTypeRepositoryInterface{
 
     register(entity: DocumentTypeEntity): DocumentTypeEntity {
-        const indexCurrentEntity = this.database.findIndex(item => item.id === entity.id);
+        const indexCurrentEntity = this.database.findIndex((item) => item.id === entity.id);
         if (!indexCurrentEntity) throw new NotFoundException(`The Document:${entity.id} not found`);
 
         this.database.push(entity);
@@ -45,7 +45,7 @@ export class DocumentTypeRepository extends Repository<DocumentTypeEntity> imple
 
     findOneById(id: string): DocumentTypeEntity {
         const currentEntity = this.database.find(
-        (item) => item.id === id );
+        (item) => item.id === id);
 
         if (!currentEntity) throw new NotFoundException();
 

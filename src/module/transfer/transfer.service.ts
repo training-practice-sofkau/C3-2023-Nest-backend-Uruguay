@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PaginationModel, transferModel } from 'src/models';
-import { Transfer } from 'src/module/transfer/transfer.entities';
 import { TransferRepository } from './transfer.repository';
+import { TransferEntity } from './transfer.entities';
+import { TransferModel } from './transfer.model';
+import { DataRangeModel } from '../base/dataRange.model';
 
 @Injectable()
 export class TransferService {
@@ -13,15 +15,15 @@ export class TransferService {
    * @return {*}  {TransferEntity}
    * @memberof TransferService
    */
-  createTransfer(transfer: transferModel): Transfer {
-    const newTransfer = new Transfer();
-    newTransfer.trf_amount = transfer.trf_amount;
-    newTransfer.trf_date_time = transfer.trf_date_time;
-    newTransfer.trf_delete_at = transfer.trf_delete_at;
-    newTransfer.trf_id = transfer.trf_id;
-    newTransfer.trf_income = transfer.trf_income;
-    newTransfer.trf_outcome = transfer.trf_outcome;
-    newTransfer.trf_reason = transfer.trf_reason;
+  createTransfer(transfer: TransferModel): TransferEntity {
+    const newTransfer = new TransferEntity();
+    newTransfer.amount = transfer.amount;
+    newTransfer.date_time = transfer.date_time;
+    newTransfer.delete_at = transfer.delete_at;
+    newTransfer.id = transfer.id;
+    newTransfer.income = transfer.income;
+    newTransfer.outcome = transfer.outcome;
+    newTransfer.reason = transfer.reason;
     return this.TransferRepo.register(newTransfer);
   }
 
@@ -34,9 +36,14 @@ export class TransferService {
    * @return {*}  {TransferEntity[]}
    * @memberof TransferService
    */
-  getHistoryOut(accountId: string,pagination?: PaginationModel,dataRange?: string): Transfer[] {//dataRange:DataRangeModel
-    const transferHistory = this.TransferRepo.findOutcomeByDataRange(accountId,pagination?.offset,pagination?.limit);
-    const transfercuentaHistory = transferHistory.filter((account) => account.trf_id === accountId);
+  getHistoryOut(accountId: string,pagination?: PaginationModel,dataRange?: DataRangeModel): TransferEntity[] {//dataRange:DataRangeModel
+    dataRange = {
+      ...{min: 0 ,max: Date.now()},
+      ...dataRange
+    }
+
+    const transferHistory = this.TransferRepo.findOutcomeByDataRange(accountId,dataRange.min,dataRange?.max);
+    const transfercuentaHistory = transferHistory.filter((account) => account.id === accountId);
     return transfercuentaHistory;
 
   }
@@ -50,9 +57,13 @@ export class TransferService {
    * @return {*}  {TransferEntity[]}
    * @memberof TransferService
    */
-  getHistoryIn(accountId: string,pagination?: PaginationModel,dataRange?: string): Transfer[] {//dataRange?: DataRangeModel
-    const transferHistory = this.TransferRepo.findIncomeByDataRange(accountId,pagination?.offset,pagination?.limit);
-    const transfercuentaHistory = transferHistory.filter((account) => account.trf_id === accountId);
+  getHistoryIn(accountId: string,pagination?: PaginationModel,dataRange?: DataRangeModel): TransferEntity[] {//dataRange?: DataRangeModel
+    dataRange = {
+      ...{min: 0 ,max: Date.now()},
+      ...dataRange
+    }
+    const transferHistory = this.TransferRepo.findIncomeByDataRange(accountId,dataRange?.min,dataRange?.max);
+    const transfercuentaHistory = transferHistory.filter((account) => account.id === accountId);
     return transfercuentaHistory;
   }
 
@@ -65,7 +76,7 @@ export class TransferService {
    * @return {*}  {TransferEntity[]}
    * @memberof TransferService
    */
-  getHistory(accountId: string,pagination: PaginationModel,dataRange?: string): Transfer[] {//dataRange?: DataRangeModel
+  getHistory(accountId: string,pagination: PaginationModel,dataRange?: DataRangeModel): TransferEntity[] {//dataRange?: 
     let InHisotry = this.getHistoryIn(accountId,pagination,dataRange);
     let outHistory =  this.getHistoryOut(accountId,pagination,dataRange);
     let TotalHistory = InHisotry.concat(outHistory); 
@@ -78,7 +89,8 @@ export class TransferService {
    * @param {string} transferId
    * @memberof TransferService
    */
-  deleteTransfer(transferId: string): void {
+  deleteTransfer(transferId: string , sof? : boolean): void {
+    if(sof)this.TransferRepo.delete(transferId,sof);
     this.TransferRepo.delete(transferId);
   }
 }

@@ -1,11 +1,12 @@
-import { AccountEntity } from "../account/account.entities";
+import { AccountModel } from 'src/module/account/accountModel.interface';
 
 
-export interface transferModel {
+
+export interface TransferModel {
   
     id: string;
-    outcome: AccountEntity ;//DocumentTypeModel , es un tipo de dato que nosotros creamos
-    income: AccountEntity;
+    outcome: AccountModel ;//DocumentTypeModel , es un tipo de dato que nosotros creamos
+    income: AccountModel;
     amount: number;
     reason: string;
     date_time: Date | number;
