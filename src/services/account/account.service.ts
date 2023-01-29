@@ -3,10 +3,9 @@ import { AccountModel } from 'src/models';
 import { AccountEntity, AccountTypeEntity } from 'src/persistence';
 import { AccountRepository } from '../../persistence/repositories';
 
-
-
 @Injectable()
-export class AccountService { //accountRepositorio(rojo) va a tener todas las funciones de AccountRepository
+export class AccountService {
+  //accountRepositorio(rojo) va a tener todas las funciones de AccountRepository
   constructor(private readonly accountRepository: AccountRepository) {}
 
   /**
@@ -42,12 +41,10 @@ export class AccountService { //accountRepositorio(rojo) va a tener todas las fu
    * @memberof AccountService
    */
   addBalance(accountId: string, amount: number): void {
-  
-    let accBalance = new AccountEntity
-    accBalance = this.accountRepository.findOneById(accountId)
-    accBalance.balance = accBalance.balance + amount
-    this.accountRepository.update(accountId,accBalance)
-    
+    let accBalance = new AccountEntity();
+    accBalance = this.accountRepository.findOneById(accountId);
+    accBalance.balance = accBalance.balance + amount;
+    this.accountRepository.update(accountId, accBalance);
   }
 
   /**
@@ -58,10 +55,10 @@ export class AccountService { //accountRepositorio(rojo) va a tener todas las fu
    * @memberof AccountService
    */
   removeBalance(accountId: string, amount: number): void {
-    let accBalance = new AccountEntity
-    accBalance = this.accountRepository.findOneById(accountId)
-    accBalance.balance = accBalance.balance - amount
-    this.accountRepository.update(accountId,accBalance)
+    let accBalance = new AccountEntity();
+    accBalance = this.accountRepository.findOneById(accountId);
+    accBalance.balance = accBalance.balance - amount;
+    this.accountRepository.update(accountId, accBalance);
   }
 
   /**
@@ -73,13 +70,12 @@ export class AccountService { //accountRepositorio(rojo) va a tener todas las fu
    * @memberof AccountService
    */
   verifyAmountIntoBalance(accountId: string, amount: number): boolean {
-    let accBalance = new AccountEntity
-    accBalance = this.accountRepository.findOneById(accountId)
-    if(accBalance.balance > amount){ 
-
-      return true
+    let accBalance = new AccountEntity();
+    accBalance = this.accountRepository.findOneById(accountId);
+    if (accBalance.balance > amount) {
+      return true;
     }
-    return false
+    return false;
   }
 
   /**
@@ -90,9 +86,7 @@ export class AccountService { //accountRepositorio(rojo) va a tener todas las fu
    * @memberof AccountService
    */
   getState(accountId: string): boolean {
-   
-    return this.accountRepository.findOneById(accountId).state
-     
+    return this.accountRepository.findOneById(accountId).state;
   }
 
   /**
@@ -103,10 +97,9 @@ export class AccountService { //accountRepositorio(rojo) va a tener todas las fu
    * @memberof AccountService
    */
   changeState(accountId: string, state: boolean): void {
-    
-    let account = new AccountEntity
-    account = this.accountRepository.findOneById(accountId)
-    account.state = state
+    let account = new AccountEntity();
+    account = this.accountRepository.findOneById(accountId);
+    account.state = state;
   }
 
   /**
@@ -117,11 +110,9 @@ export class AccountService { //accountRepositorio(rojo) va a tener todas las fu
    * @memberof AccountService
    */
   getAccountType(accountId: string): AccountTypeEntity {
-   let account = new AccountTypeEntity
-    
-    account = this.accountRepository.findOneById(accountId).accountType
-    return account
-    
+    let account = new AccountTypeEntity();
+    account = this.accountRepository.findOneById(accountId).accountType;
+    return account;
   }
 
   /**
@@ -132,12 +123,10 @@ export class AccountService { //accountRepositorio(rojo) va a tener todas las fu
    * @return {*}  {AccountTypeEntity}
    * @memberof AccountService
    */
-  changeAccountType(accountId: string,accountTypeId: string): AccountTypeEntity {
-  
-    let accBalance = this.accountRepository.findOneById(accountId)
-    accBalance.accountType.id = accountId
-    return this.accountRepository.update(accountId,accBalance).accountType
-
+  changeAccountType(accountId: string): AccountTypeEntity {
+    const accBalance = this.accountRepository.findOneById(accountId);
+    accBalance.accountType.id = accountId;
+    return this.accountRepository.update(accountId, accBalance).accountType;
   }
 
   /**
@@ -147,6 +136,6 @@ export class AccountService { //accountRepositorio(rojo) va a tener todas las fu
    * @memberof AccountService
    */
   deleteAccount(accountId: string): void {
-    this.accountRepository.delete(accountId)
+    this.accountRepository.delete(accountId);
   }
 }

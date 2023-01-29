@@ -2,10 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { CustomerEntity, CustomerRepository } from '../../persistence';
 import { CustomerModel } from '../../models';
 
-
 @Injectable()
 export class CustomerService {
-    constructor(private readonly costumerRepository: CustomerRepository) {}
+  constructor(private readonly costumerRepository: CustomerRepository) {}
   /**
    * Obtener información de un cliente
    *
@@ -14,10 +13,9 @@ export class CustomerService {
    * @memberof CustomerService
    */
   getCustomerInfo(customerId: string): CustomerEntity {
-    let customer = new CustomerEntity
-    customer = this.costumerRepository.findOneById(customerId)
-    return customer
-   
+    let customer = new CustomerEntity();
+    customer = this.costumerRepository.findOneById(customerId);
+    return customer;
   }
 
   /**
@@ -29,11 +27,9 @@ export class CustomerService {
    * @memberof CustomerService
    */
   updatedCustomer(id: string, customer: CustomerModel): CustomerEntity {
-    
-    let customerU = new CustomerEntity
-    customerU = this.costumerRepository.update(id,customerU)
-    return customerU
-
+    const customerU = new CustomerEntity();
+    customerU.id = customer.id;
+    return this.costumerRepository.update(id, customer);
   }
 
   /**
@@ -44,11 +40,11 @@ export class CustomerService {
    * @memberof CustomerService
    */
   unsubscribe(id: string): boolean {
-    let unsubscribe = new CustomerEntity
-    unsubscribe = this.costumerRepository.findOneById(id)
-    if(unsubscribe.state == true){
-      unsubscribe.state = false
+    let unsubscribe = new CustomerEntity();
+    unsubscribe = this.costumerRepository.findOneById(id);
+    if (unsubscribe.state == true) {
+      unsubscribe.state = false;
     }
-    return unsubscribe.state
+    return unsubscribe.state;
   }
 }

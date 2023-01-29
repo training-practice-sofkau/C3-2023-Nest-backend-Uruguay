@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { depositEntity, DepositRepository } from '../../persistence';
-import { PaginationModel,depositModel } from '../../models/';
+import { PaginationModel, depositModel } from '../../models/';
 
 @Injectable()
 export class DepositService {
@@ -13,7 +13,7 @@ export class DepositService {
    * @memberof DepositService
    */
   createDeposit(deposit: depositModel): depositEntity {
-    const newAccount = new depositEntity; //Desde ahi
+    const newAccount = new depositEntity(); //Desde ahi
     newAccount.account = deposit.account;
     return this.depositRepository.register(newAccount);
   }
@@ -25,8 +25,7 @@ export class DepositService {
    * @memberof DepositService
    */
   deleteDeposit(depositId: string): void {
-   
-    this.deleteDeposit(depositId)
+    this.deleteDeposit(depositId);
     // this.accountRepository.delete(accountId)
   }
 
@@ -39,7 +38,9 @@ export class DepositService {
    * @return {*}  {DepositEntity[]}
    * @memberof DepositService
    */
-  getHistory(depositId: string,pagination?: PaginationModel,dataRange?: DataRangeModel,): DepositEntity[] {
-    
-  }
+  getHistory(
+    depositId: string,
+    pagination?: PaginationModel,
+    dataRange?: DataRangeModel,
+  ): DepositEntity[] {}
 }

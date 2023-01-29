@@ -74,6 +74,6 @@ export class TransferService {
    * @memberof TransferService
    */
   deleteTransfer(transferId: string): void {
-    this.transferRepository.delete(transferId)
+    this.transferRepository.delete(transferId);
   }
 }
