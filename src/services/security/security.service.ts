@@ -42,7 +42,7 @@ import  jwt  from 'jsonwebtoken';
         user.password,
       );
       if (answer){                
-        return jwt.sign({id:user.id}, process.env.SECRET_KEY || 'secretToken');
+        return jwt.sign({id:user.id}, process.env.SECRET_KEY || 'secretToken', {expiresIn:"1h"});
       } 
       else throw new UnauthorizedException();
     }
@@ -78,7 +78,7 @@ import  jwt  from 'jsonwebtoken';
 
         const account = this.accountService.createAccount(newAccount);
 
-        if (account) return jwt.sign({id: customer.id}, process.env.SECRET_KEY || 'secretToken');
+        if (account) return jwt.sign({id: customer.id}, process.env.SECRET_KEY || 'secretToken', {expiresIn:"1h"});
         
         else throw new InternalServerErrorException();
       } else throw new InternalServerErrorException();
@@ -92,8 +92,16 @@ import  jwt  from 'jsonwebtoken';
      */
     signOut(JWToken: string): void {
       
-        //TODO: I didn't find a way to remove JWToken from client side.
-        // Maybe I can make a blacklist of used tokens and check that
-        // the request is not coming from a invalid or already spent token.
+      const token = jwt.verify(JWToken, process.env.SECRET_KEY || 'secretToken') as string;
+
+      if(token === this.customerRepository.findOneById(token).id){ // verify the id user 
+        
+        console.log('Logging Out!');
+
+        //TODO: save token in a blocklist to check from unauthorized possible future access until expires
+
+      }  
+
+      
     }
   }
