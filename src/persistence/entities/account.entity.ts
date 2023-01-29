@@ -1,6 +1,5 @@
-import { AccountModel, AccountTypeModel, CustomerModel} from 'src/models';
+import { AccountModel, AccountTypeModel, CustomerModel } from 'src/models';
 import { v4 as uuid } from 'uuid';
-
 
 export class AccountEntity implements AccountModel {
   id = uuid();
@@ -9,5 +8,4 @@ export class AccountEntity implements AccountModel {
   balance: number;
   state: boolean;
   deletedAt?: number | Date;
-
 }

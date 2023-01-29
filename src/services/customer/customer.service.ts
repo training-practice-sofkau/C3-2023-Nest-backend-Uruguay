@@ -17,6 +17,7 @@ export class CustomerService {
     let customer = new CustomerEntity
     customer = this.costumerRepository.findOneById(customerId)
     return customer
+   
   }
 
   /**
@@ -28,9 +29,11 @@ export class CustomerService {
    * @memberof CustomerService
    */
   updatedCustomer(id: string, customer: CustomerModel): CustomerEntity {
+    
     let customerU = new CustomerEntity
     customerU = this.costumerRepository.update(id,customerU)
     return customerU
+
   }
 
   /**

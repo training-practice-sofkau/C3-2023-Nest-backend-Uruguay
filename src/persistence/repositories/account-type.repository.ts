@@ -6,28 +6,30 @@ import { AccountTypeRepositoryInterface } from './interfaces';
 
 @Injectable()
 export class AccountTypeRepository
-    extends BaseRepository<AccountTypeEntity> implements AccountTypeRepositoryInterface {
-        
-        
-    register(entity: AccountTypeEntity): AccountTypeEntity {
-            this.database.push(entity);
-            return this.database.at(-1) ?? entity;
-          }
-    
-    update(id: string, entity: AccountTypeEntity): AccountTypeEntity {
-        const indexCurrentEntity = this.database.findIndex(
-            (item) => item.id === id);
-          if (indexCurrentEntity >=0 ) 
-            this.database[indexCurrentEntity] = {
-              ...this.database[indexCurrentEntity],
-              ...entity,
-              id,
-            } as AccountTypeEntity; //Si lo que viene del if puede entrar a CustomerEntity? 2do check
-          else throw new NotFoundException();
-          return this.database[indexCurrentEntity];;
-    }
-    
-    
+  extends BaseRepository<AccountTypeEntity>
+  implements AccountTypeRepositoryInterface
+{
+  register(entity: AccountTypeEntity): AccountTypeEntity {
+    this.database.push(entity);
+    return this.database.at(-1) ?? entity;
+  }
+
+  update(id: string, entity: AccountTypeEntity): AccountTypeEntity {
+    const indexCurrentEntity = this.database.findIndex(
+      (item) => item.id === id));
+
+    if (indexCurrentEntity >= 0)
+      this.database[indexCurrentEntity] = {
+        ...this.database[indexCurrentEntity],
+        ...entity,
+        id,
+      } as AccountTypeEntity;
+    //Si lo que viene del if puede entrar a CustomerEntity? 2do check
+    else throw new NotFoundException();
+    return this.database[indexCurrentEntity];
+  }
+
+  
     delete(id: string, soft?: boolean): void {
         const customer = this.findOneById(id);
         if (soft || soft === undefined) {

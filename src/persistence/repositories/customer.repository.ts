@@ -44,15 +44,16 @@ export class CustomerRepository
     return this.database.filter((item) => item.deletedAt === undefined);
   }
 
-
   findOneById(id: string): CustomerEntity {
-    const customer = this.database.find(
-      (item) => item.id === id && (item.deletedAt ?? true) === true);
-    if (customer) return customer;
-    else throw new NotFoundException("El id no existe en base de datos");
+      const customer = this.database.find(item => item.id === id && item.state === true && !item.deletedAt);
+      if (customer)
+      return customer;
+      else throw new NotFoundException("El id no existe en base de datos");
+    }
   }
 
   findOneByEmailAndPassword(email: string, password: string): boolean {
+    
     const index = this.database.findIndex(
       (item) =>
         item.email === email &&

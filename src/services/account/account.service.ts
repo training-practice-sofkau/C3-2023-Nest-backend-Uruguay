@@ -4,6 +4,7 @@ import { AccountEntity, AccountTypeEntity } from 'src/persistence';
 import { AccountRepository } from '../../persistence/repositories';
 
 
+
 @Injectable()
 export class AccountService { //accountRepositorio(rojo) va a tener todas las funciones de AccountRepository
   constructor(private readonly accountRepository: AccountRepository) {}
