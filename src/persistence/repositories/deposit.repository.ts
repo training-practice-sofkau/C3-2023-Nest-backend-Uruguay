@@ -6,16 +6,18 @@ import { DepositRepositoryInterface } from './interfaces/';
 
 @Injectable()
 export class DepositRepository
-  extends BaseRepository<depositEntity> implements DepositRepositoryInterface {
-
+  extends BaseRepository<depositEntity>
+  implements DepositRepositoryInterface
+{
   register(entity: depositEntity): depositEntity {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;
   }
-  
+
   update(id: string, entity: depositEntity): depositEntity {
     const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.deletedAt === 'undefined');
+      (item) => item.id === id && typeof item.deletedAt === 'undefined',
+    );
     if (indexCurrentEntity >= 0)
       this.database[indexCurrentEntity] = {
         ...this.database[indexCurrentEntity],
@@ -25,19 +27,15 @@ export class DepositRepository
     else throw new NotFoundException();
     return this.database[indexCurrentEntity];
   }
-  
+
   delete(id: string, soft?: boolean): void {
     if (soft === undefined) {
-      const index = this.database.findIndex(
-        (item) => item.id === id)
-      this.softDelete(index)
+      const index = this.database.findIndex((item) => item.id === id);
+      this.softDelete(index);
     } else {
-      const index = this.database.findIndex(
-        (item) => item.id === id
-      );
-      this.hardDelete(index) // le paso el index para que llame a la funcion
+      const index = this.database.findIndex((item) => item.id === id);
+      this.hardDelete(index); // le paso el index para que llame a la funcion
     }
-
   }
   findAll(): depositEntity[] {
     return this.database.filter((item) => item.deletedAt === undefined);
@@ -45,15 +43,19 @@ export class DepositRepository
 
   findOneById(id: string): depositEntity {
     const deposit = this.database.find(
-      (item) => item.id === id && (item.deletedAt ?? true) === true);
+      (item) => item.id === id && (item.deletedAt ?? true) === true,
+    );
     if (deposit) return deposit;
-    else throw new NotFoundException("El id no existe en base de datos");
+    else throw new NotFoundException('El id no existe en base de datos');
   }
 
   findByAccountType(accountTypeId: string): depositEntity[] {
-    const accountf = this.database.filter( //filtra segun una condicion y devuelve un array
-      (item) => item.account.id == accountTypeId && typeof item.deletedAt === "undefined"
-    )
+    const accountf = this.database.filter(
+      //filtra segun una condicion y devuelve un array
+      (item) =>
+        item.account.id == accountTypeId &&
+        typeof item.deletedAt === 'undefined',
+    );
     return accountf;
   }
 
@@ -61,7 +63,6 @@ export class DepositRepository
     this.database[index].deletedAt = Date.now();
   }
   private hardDelete(index: number): void {
-    this.database.splice(index, 1)
+    this.database.splice(index, 1);
   }
-
 }
