@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { HttpException } from '@nestjs/common/exceptions';
 
 import { AccountModel } from '../../models';
 import { AccountEntity, AccountTypeEntity } from '../../persistence/entities';
@@ -14,8 +13,7 @@ export class AccountService {
       ) {}
     
    /**
-   * Create a new account - OK
-   *
+   * Create a new account - OK   *
    * @param {AccountModel} account
    * @return {*}  {AccountEntity}
    * @memberof AccountService
@@ -31,8 +29,19 @@ export class AccountService {
   }
 
   /**
-   * Get account balance - OK
-   *
+   * Update the data of the account that matches the given ID
+   * @param accountId ID of account to update
+   * @param newAccountDetails new data
+   * @returns updated entity
+   */
+  updateAccount(accountId: string, newAccountDetails: AccountModel) : AccountEntity{
+
+    return this.accountRepository.update(accountId, newAccountDetails);
+
+  }
+
+  /**
+   * Get account balance - OK   *
    * @param {string} accountId
    * @return {*}  {number}
    * @memberof AccountService
@@ -44,8 +53,7 @@ export class AccountService {
   }
 
   /**
-   * Add an amount to account balance  - OK
-   *
+   * Add an amount to account balance  - OK   *
    * @param {string} accountId
    * @param {number} amount
    * @memberof AccountService
@@ -61,15 +69,13 @@ export class AccountService {
   }
 
   /**
-   * Remove an amount from account balance  - OK
-   *
+   * Remove an amount from account balance  - OK   *
    * @param {string} accountId
    * @param {number} amount
    * @memberof AccountService
    */
   removeBalance(accountId: string, amount: number): void {
-    
-    
+        
     if(amount < 0){
       throw new Error(`Negative amounts are not allowed!`);
     }
@@ -83,8 +89,7 @@ export class AccountService {
   }
 
   /**
-   * Verify if account balance has enough to make a withdraw - OK
-   *
+   * Verify if account balance has enough to make a withdraw - OK   *
    * @param {string} accountId
    * @param {number} amount
    * @return {*}  {boolean}
@@ -97,8 +102,7 @@ export class AccountService {
   }
 
   /**
-   * Get account State - OK
-   *
+   * Get account State - OK   *
    * @param {string} accountId
    * @return {*}  {boolean}
    * @memberof AccountService
@@ -110,8 +114,7 @@ export class AccountService {
   }
 
   /**
-   * Set state account - OK
-   *
+   * Set state account - OK   *
    * @param {string} accountId
    * @param {boolean} state
    * @memberof AccountService
@@ -122,8 +125,7 @@ export class AccountService {
   }
 
   /**
-   * Get account type - OK
-   *
+   * Get account type - OK   *
    * @param {string} accountId
    * @return {*}  {AccountTypeEntity}
    * @memberof AccountService
@@ -135,8 +137,7 @@ export class AccountService {
   }
 
   /**
-   * Set account type - OK
-   *
+   * Set account type - OK   *
    * @param {string} accountId
    * @param {string} accountTypeId
    * @return {*}  {AccountTypeEntity}
@@ -155,8 +156,7 @@ export class AccountService {
   }
 
   /**
-   * Deletes the account that matches the given ID - OK
-   *
+   * Deletes the account that matches the given ID - OK   *
    * @param {string} accountId
    * @memberof AccountService
    */
