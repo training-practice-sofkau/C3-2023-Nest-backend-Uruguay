@@ -3,6 +3,7 @@ import {Injectable, InternalServerErrorException, UnauthorizedException} from '@
 
 import { JwtService } from '@nestjs/jwt';
 
+
   // Data transfer objects
 
 
@@ -17,7 +18,8 @@ import { JwtService } from '@nestjs/jwt';
 
   // Entities
   import { AccountTypeEntity, CustomerEntity, AccountEntity } from '../../persistence/entities';
-import { timeStamp } from 'console';
+
+
 
 
 
@@ -98,7 +100,5 @@ import { timeStamp } from 'console';
         //TODO: I didn't find a way to remove JWToken from client side.
         // Maybe I can make a blacklist of used tokens and check that
         // the request is not coming from a invalid or already spent token.
-        
-
     }
   }
