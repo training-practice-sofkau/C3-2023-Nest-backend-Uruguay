@@ -1,4 +1,5 @@
 import { PaginationModel } from '../../../models/pagination.model';
+import { DataRangeModel } from '../../../models/data-range.model';
 export interface RepositoryMethodsInterface<T> {
 
     register(entity: T): T;
@@ -7,11 +8,11 @@ export interface RepositoryMethodsInterface<T> {
 
     delete(id: string, soft?: boolean): void;
 
-    findAll(): T[];
+    findAll(pagination?: PaginationModel): T[];
     
     findOneById(id: string): T;
 
-    findBy(property: keyof T, value: string | number | boolean): T[]
+    findBy(property: keyof T, value: string | number | boolean, pagination?: PaginationModel, dataRange?: DataRangeModel): T[]
 
     findIndexById(id: string): number;
 

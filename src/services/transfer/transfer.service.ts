@@ -81,7 +81,6 @@ export class TransferService {
       history = history.slice(offset, offset + limit);
     }  
 
-
     return history;
   }
 
