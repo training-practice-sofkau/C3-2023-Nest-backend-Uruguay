@@ -1,6 +1,10 @@
 // Libraries
 import { NestFactory } from '@nestjs/core';
 
+//call to environment variables
+import dotenv from 'dotenv';
+dotenv.config();
+
 // Main module
 import { AppModule } from './app.module';
 

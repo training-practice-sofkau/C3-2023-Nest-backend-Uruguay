@@ -1,7 +1,7 @@
 // Libraries
 import {Injectable, InternalServerErrorException, UnauthorizedException} from '@nestjs/common';
 
-import { JwtService } from '@nestjs/jwt';
+import  jwt  from 'jsonwebtoken';
 
 
   // Data transfer objects
@@ -21,17 +21,12 @@ import { JwtService } from '@nestjs/jwt';
 
 
 
-
-
-
-
   @Injectable()
   export class SecurityService {
 
     constructor(
       private readonly customerRepository: CustomerRepository,
-      private readonly accountService: AccountService,      
-      private jwtService: JwtService,
+      private readonly accountService: AccountService,
     ) {}
 
     /**
@@ -47,7 +42,7 @@ import { JwtService } from '@nestjs/jwt';
         user.password,
       );
       if (answer){                
-        return this.jwtService.sign({id:user.id, email:user.email});
+        return jwt.sign({id:user.id}, process.env.SECRET_KEY || 'secretToken');
       } 
       else throw new UnauthorizedException();
     }
@@ -83,7 +78,7 @@ import { JwtService } from '@nestjs/jwt';
 
         const account = this.accountService.createAccount(newAccount);
 
-        if (account) return this.jwtService.sign({id:customer.id});
+        if (account) return jwt.sign({id: customer.id}, process.env.SECRET_KEY || 'secretToken');
         
         else throw new InternalServerErrorException();
       } else throw new InternalServerErrorException();
