@@ -7,7 +7,7 @@ import { CusotmerController } from "./controllers/cusotmer/cusotmer.controller";
 import { DepositController } from "./controllers/deposit/deposit.controller";
 import { TansferController } from "./controllers/tansfer/tansfer.controller";
 import { AccountTypeRepository,CustomerRepository,DepositRepository,DocumentTypeRepository,AccountRepository } from "./persistence/repositories";
-import { SegurityService } from './services/segurity/segurity.service';
+import { SegurityService } from './services/segurity.service/segurity.service';
 
 @Module({
   imports: [ModuleModule],
