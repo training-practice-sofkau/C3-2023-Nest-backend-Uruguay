@@ -89,13 +89,14 @@ export class AccountService {
   }
 
   /**
-   * Verify if account balance has enough to make a withdraw - OK   *
+   * Verify if account balance has enough to make a withdraw - OK   
+   * Private Method
    * @param {string} accountId
    * @param {number} amount
    * @return {*}  {boolean}
    * @memberof AccountService
    */
-  verifyAmountIntoBalance(accountId: string, amount: number): boolean {
+   private verifyAmountIntoBalance(accountId: string, amount: number): boolean {
 
     return this.getBalance(accountId) >= amount ? true : false;
 
