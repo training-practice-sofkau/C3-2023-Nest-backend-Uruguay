@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common/decorators';
 import { CustomerEntity } from '../entities';
 import { BankInternalControl } from './base';
 import { CustomerRepositoryInterface } from './interfaces';
+import { PaginationModel } from '../../models';
 
 @Injectable()
 export class CustomerRepository extends BankInternalControl<CustomerEntity> implements CustomerRepositoryInterface {
@@ -149,13 +150,25 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
     /**
      * Returns the content of the array of Customers
      * excludes the mark as deleted
-     * @returns Array of entities 
+     * @param pagination optional pagination to be consider
+     * @returns Array of entities  
      */
-    findAll(): CustomerEntity[] {
+    findAll(pagination?: PaginationModel): CustomerEntity[] {
                 
         try{ 
         
-            return this.database.filter( entity => typeof entity.deletedAt === undefined); //applies filter for deleted ones
+            let result = this.database.filter( entity => typeof entity.deletedAt === undefined); //applies filter for deleted ones
+            
+            if( result.length <= 0){ // if the result of the search is empty
+                throw new NotFoundException(); 
+            }
+
+            if (pagination) { // if there is a pagination provided
+                let { offset = 0, limit = 0 } = pagination;
+                result = result.slice(offset, offset + limit);
+            }  
+    
+            return result; // all good, return the array 
 
         } catch (err){// something wrong happened
 
@@ -296,12 +309,43 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
         }
       }
 
-      /**
+    /**
+     * Search in the DB any value provided by the property given
+     * @param property property where to find
+     * @param value value to find
+     * @param pagination optional pagination to consider         
+     * @returns array of entities or and exception
+    */
+    findBy(property: keyof CustomerEntity, value: string | number | boolean, pagination?: PaginationModel): CustomerEntity[] {
+            
+        try{ 
+
+            let searchResult = this.database.filter(entity => entity[property] === value); //searchs for entities that matches the criteria
+        
+            if( searchResult.length <= 0){ // if the result of the search is empty
+                throw new NotFoundException(); // gives and exception
+            }
+            
+            if (pagination) { // if there is a pagination provided
+                let { offset = 0, limit = 0 } = pagination;
+                searchResult = searchResult.slice(offset, offset + limit);
+            }  
+
+            return searchResult; // all good, return the entity 
+
+        }catch(err){ // something wrong happened
+
+            throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
+        }
+    } 
+
+
+/*      /**
        * Find in the database all the entities with a given state
        * @param state value to check
        * @returns array of elements or an exception
        */
-      findByState(state: boolean): CustomerEntity[] {
+ /*     findByState(state: boolean): CustomerEntity[] {
 
         try{ // try to find all entities with a given state
 
@@ -324,7 +368,7 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
        * @param fullName value to search for
        * @returns an array of entities or an exception
        */
-      findByFullName(fullName: string): CustomerEntity[] {
+ /*     findByFullName(fullName: string): CustomerEntity[] {
 
         try{ // try to find all entities that matches a given full name
 
@@ -342,27 +386,6 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
             throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
         }
       }
-
-     /**
-     * Search in the DB any value provided by the property given
-     * @param property property where to find
-     * @param value value to find
-     * @returns array of entities or and exception
-     */
-      findBy(property: keyof CustomerEntity, value: string | number | boolean): CustomerEntity[] {
-                
-        try{ 
-
-            const searchResult = this.database.filter(entity => entity[property] === value); //searchs for entities that matches the criteria
-           
-            if( searchResult.length <= 0){ // if the result of the search is empty
-                throw new NotFoundException(); // gives and exception
-            }
-            return searchResult; // all good, return the entity 
-
-        }catch(err){ // something wrong happened
-
-            throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
-        }
-    }
+*/
+     
 }

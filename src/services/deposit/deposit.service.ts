@@ -52,17 +52,7 @@ export class DepositService {
 
     let history = [];   
 
-    history = this.depositRepository.findBy("accountId", accountId);
-
-    if(dataRange && dataRange.start == typeof Date && dataRange.end == typeof Date){
-      history = history.filter( deposit => deposit.dateTime >= dataRange.start && deposit.dateTime <= dataRange.end)
-    }
-
-    if (pagination) {
-      let { offset = 0, limit = 0 } = pagination;
-      history = history.slice(offset, offset + limit);
-    }  
-
+    history = this.depositRepository.findBy("accountId", accountId, pagination, dataRange);
 
     return history;
 

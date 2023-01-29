@@ -42,16 +42,7 @@ export class TransferService {
 
     let history = [];
 
-    history = this.transferRepository.findBy("outcome",accountId);
-
-    if(dataRange && dataRange.start == typeof Date && dataRange.end == typeof Date){
-      history = history.filter( deposit => deposit.dateTime >= dataRange.start && deposit.dateTime <= dataRange.end)
-    }
-
-    if (pagination) {
-      let { offset = 0, limit = 0 } = pagination;
-      history = history.slice(offset, offset + limit);
-    }  
+    history = this.transferRepository.findBy("outcome",accountId, pagination, dataRange);    
 
     return history;
 
@@ -61,25 +52,16 @@ export class TransferService {
    * Get the historical data of In transfers from one account - OK
    *
    * @param {string} accountId
-   * @param {PaginationModel} pagination
+   * @param {PaginationModel} paginator
    * @param {DataRangeModel} [dataRange]
    * @return {*}  {TransferEntity[]}
    * @memberof TransferService
    */
-  getHistoryIn(accountId: string, pagination?: PaginationModel, dataRange?: DataRangeModel): TransferEntity[] {
+  getHistoryIn(accountId: string, paginator?: PaginationModel, dataRange?: DataRangeModel): TransferEntity[] {
     
     let history = [];
 
-    history = this.transferRepository.findBy("income",accountId);
-
-    if(dataRange && dataRange.start == typeof Date && dataRange.end == typeof Date){
-      history = history.filter( deposit => deposit.dateTime >= dataRange.start && deposit.dateTime <= dataRange.end)
-    }
-
-    if (pagination) {
-      let { offset = 0, limit = 0 } = pagination;
-      history = history.slice(offset, offset + limit);
-    }  
+    history = this.transferRepository.findBy("income",accountId, paginator, dataRange);    
 
     return history;
   }
@@ -97,16 +79,7 @@ export class TransferService {
     
     let history = [];
 
-    history = this.getHistoryOut(accountId).concat(this.getHistoryIn(accountId));
-
-    if(dataRange && dataRange.start == typeof Date && dataRange.end == typeof Date){
-      history = history.filter( deposit => deposit.dateTime >= dataRange.start && deposit.dateTime <= dataRange.end)
-    }
-    
-    if (pagination) {
-      let { offset = 0, limit = 0 } = pagination;
-      history = history.slice(offset, offset + limit);
-    }  
+    history = this.getHistoryOut(accountId, pagination, dataRange).concat(this.getHistoryIn(accountId, pagination, dataRange));    
 
     return history;
 
