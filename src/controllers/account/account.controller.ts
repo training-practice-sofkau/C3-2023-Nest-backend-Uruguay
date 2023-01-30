@@ -3,7 +3,6 @@ import { AccountService } from '../../services/account/';
 import { AccountDTO, CreateAccountDTO } from '../../dtos/';
 import { PaginationModel } from 'src/models';
 import { CustomerEntity, AccountTypeEntity, AccountEntity} from '../../persistence/entities/';
-import { Typessss } from '../../dtos/type.dto';
 
 @Controller('account')
 export class AccountController {
@@ -59,12 +58,12 @@ export class AccountController {
         return this.accountService.getState(accountId);
     }
 
-    @Post('/add-balance/:accountId/:amount')
+    @Post('/add-balance/:accountId')
     addBalance(@Param('accountId') accountId: string, @Body() amount: number) {
         this.accountService.addBalance(accountId, amount);
     }
 
-    @Patch('/change-account-type/:accountId')
+    @Patch('/change-account-type')
     changeAccountType(@Param('accountId') accountId: string,@Body() accountTypeId: string): AccountEntity {
         return this.changeAccountType(accountId, accountTypeId);
     }

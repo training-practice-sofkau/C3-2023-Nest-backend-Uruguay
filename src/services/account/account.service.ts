@@ -107,7 +107,9 @@ export class AccountService {
    */
   addBalance(accountId: string, amount: number): void {
     const account = this.getAccount(accountId);
-    account.balance = account.balance + amount;
+    let balance: number = account.balance; 
+    balance += amount;
+    account.balance = balance;
 
     this.accountRepository.update(accountId, account);
   }
@@ -177,7 +179,9 @@ export class AccountService {
     if (removeAll) this.cleanBalance(accountId);
 
     const account = this.getAccount(accountId);
-    account.balance -= amount;
+    let balance: number = account.balance; 
+    balance += amount;
+    account.balance = balance;
 
     this.accountRepository.update(accountId, account);
   }
