@@ -1,4 +1,4 @@
-import { Body, Controller, Get,  Post, Put } from '@nestjs/common';
+import { Body, Controller, Get,  Param,  Post, Put } from '@nestjs/common';
 import { DepositDto } from 'src/dtos/DepositDto';
 import { DepositEntity } from 'src/persistence';
 import { DepositService } from '../../services/deposit/deposit.service';
@@ -14,14 +14,14 @@ export class DepositController {
     return this.DepositService.createDeposit(deposit);
   }
 
-  @Get()
-  getHistory( depositId: string):  DepositEntity[] {
+  @Get(':id')
+  getHistory(@Param('id') depositId: string):  DepositEntity[] {
     return this.DepositService.getHistory(depositId);
   }
 
  
   @Put('delete/:id')
-  deleteDeposit(@Body()depositId: string): void {
+  deleteDeposit(@Param('id') @Body()depositId: string): void {
     return this.DepositService.deleteDeposit(depositId);
   }
 }

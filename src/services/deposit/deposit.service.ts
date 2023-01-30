@@ -8,7 +8,6 @@ import { DepositRepository } from '../../persistence/repositories/deposit.reposi
 
 @Injectable()
 export class DepositService {
-  [x: string]: any;
   constructor(private readonly DepositRepository: DepositRepository) {}
   /**
    * Crear un deposito
@@ -22,7 +21,7 @@ export class DepositService {
     newDeposit.amount = deposit.amount;
     newDeposit.date_time = new Date();
     newDeposit.state = true;
-    return this.accountRepository.register(newDeposit);
+    return this.DepositRepository.register(newDeposit);
   }
 
   /**
