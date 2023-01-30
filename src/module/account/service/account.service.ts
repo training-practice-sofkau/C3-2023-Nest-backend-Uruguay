@@ -4,6 +4,7 @@ import { AccountEntity } from '../account.entities';
 import { AccountTypeEntity } from '../account.Type.Entity';
 import { CreateAccountdto } from '../dto/create-account.dto';
 import { CustomerService } from 'src/module/customer';
+import { AccountDto } from '../dto/account.dto';
 
 @Injectable()
 export class AccountService {
@@ -24,6 +25,19 @@ constructor(
     newAccount.coustomer_id = customer;
     
     return this.accountRepository.register(newAccount);
+  }
+
+  updateAccount(accountId: string, newAccount: AccountDto) {
+    let account = this.accountRepository.findOneById(accountId);
+    const customer = this.customerServer.getCustomerInfo(newAccount.id);
+    const accountType = this.accountTypeRepository.findOneById(newAccount.accountType);
+
+    account.account_type_id = accountType;
+    account.coustomer_id = customer;
+    account.balance = newAccount.balance;
+    account.state = newAccount.state;
+
+    return this.accountRepository.update(accountId, account);
   }
 
   getById(accountId : string):AccountEntity{

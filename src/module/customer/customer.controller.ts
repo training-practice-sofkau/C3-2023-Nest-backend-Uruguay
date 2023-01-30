@@ -7,19 +7,19 @@ import { CustomerEntity } from './customer.entity';
 export class CustomerController {
     constructor(private readonly customerService : CustomerService ){}
 
-    @Delete(`deleteCustomerSof/:id/:soft`)
+    @Delete(`/deleteSof/:id/:soft`)
     deleteCustomerSof(@Param(`id`)customerId: string,
     @Param(`soft`) soft?: boolean): void {
         return this.customerService.deleteCustomer(customerId,soft);
     }
     
-    @Delete(`deleteCustomerHard/:id`)
+    @Delete(`/deleteHard/:id`)
     deleteCustomerHard(@Param(`id`)customerId: string): void {
         return this.customerService.deleteCustomer(customerId);
 
     }
 
-    @Put(`changeState/:customerId/:state`)
+    @Put(`/changeState/:customerId/:state`)
     changeState(@Param(`customerId`)customerId: string ,
     @Param(`state`)state: boolean): void {
         return this.customerService.changeState(customerId,state);
@@ -27,18 +27,18 @@ export class CustomerController {
 
 
 
-    @Get(`unsubscribe/:id`)
+    @Get(`/unsubscribe/:id`)
     unsubscribe(@Param(`id`) id: string): boolean {
         return this.customerService.unsubscribe(id);
     }
 
-    @Get(`all`)//Hay que pasarle por parametro con pagination
+    @Get(`/all`)//Hay que pasarle por parametro con pagination
     findAll(): CustomerEntity[] {
         return this.customerService.findAll();
     }
 
     
-    @Get(`getCustomer/:id`)
+    @Get(`/getInfo/:id`)
     getCustomerInfo(@Param(`id`) customerId: string): CustomerEntity {
         return this.customerService.getCustomerInfo(customerId);
     }
@@ -49,7 +49,7 @@ export class CustomerController {
         return this.customerService.createCustomer(customer);
     }
 
-    @Put(`update/:id`)
+    @Put(`/update/:id`)
     updatedCustomer(@Param(`id`) id : string,
     @Body() newCustomer : CustomerDto)
     :CustomerEntity{

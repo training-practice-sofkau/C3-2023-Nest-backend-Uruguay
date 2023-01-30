@@ -3,6 +3,7 @@ import { AccountService } from './service/account.service';
 import { CreateAccountdto } from './dto/create-account.dto';
 import { AccountEntity } from './account.entities';
 import { AccountTypeEntity } from './account.Type.Entity';
+import { AccountDto } from './dto/account.dto';
 
 @Controller('account')
 export class AccountController {
@@ -13,6 +14,10 @@ export class AccountController {
         return this.accountService.createAccount(newAccount);
     }
     
+    @Put('/update/:accountId')
+    updateAccount(@Param() accountId: string, @Body() newAccount: AccountDto): AccountEntity {
+        return this.accountService.updateAccount(accountId, newAccount);
+    }
     //Esto funciona? hay que usar 
     @Delete(`deleteSof/:id/:sof`)
     deleteAccountSof(@Param(`id`)accountId: string ,
