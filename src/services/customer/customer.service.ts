@@ -58,14 +58,21 @@ export class CustomerService {
      * @memberof CustomerService
      */
 
-    updatedCustomer(id: string, newCustomer: ICustomerModel): CustomerEntity {
-        let customer = this.getCustomer(id);
-        customer = {
-            ...customer,
-            ...newCustomer,
-        };
+    updatedCustomer(id: string, newCustomer: CustomerDto): CustomerEntity {
 
-        return this.customerRepository.update(id, customer);
+        const currentEntity = this.customerRepository.findOneById(id);
+
+        const documentType = new DocumentTypeEntity();
+        documentType.id = newCustomer.documentType;
+
+        currentEntity.documentType = documentType;
+        currentEntity.document = currentEntity.document
+        currentEntity.fullName = currentEntity.fullName;
+        currentEntity.email = currentEntity.email;
+        currentEntity.phone = currentEntity.phone;
+        currentEntity.password = currentEntity.password;
+
+        return this.customerRepository.update(id, currentEntity);
     }
 
 
