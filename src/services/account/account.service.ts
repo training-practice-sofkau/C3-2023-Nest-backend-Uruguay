@@ -1,7 +1,6 @@
 
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { AccountDto } from 'src/dtos/account-dto';
-import { IAccountModel } from 'src/models/i-account-model';
 import { PaginationModel } from 'src/models/i-pagination-model';
 import { AccountEntity } from 'src/persistence/entities/account-entity';
 import { AccountTypeEntity } from 'src/persistence/entities/account-type-entity';
@@ -204,5 +203,19 @@ export class AccountService {
         return currentEntity
       }
 
+
+      updateAccount(accountId: string, newAccountData: AccountDto) : AccountEntity{
+
+        const accountTypeEntity = new AccountTypeEntity();
+        accountTypeEntity.id = newAccountData.accountTypeId;
+
+        const newAccountEntity = new AccountEntity();
+        newAccountEntity.accountTypeId = accountTypeEntity;
+
+
+
+        return this.accountRepository.update(accountId, newAccountEntity);
+    
+      }
 
 }

@@ -1,7 +1,6 @@
-import { Body, Controller, Param, Post, Put } from '@nestjs/common';
-import { constructor } from 'express';
+import { Body, Controller, Param, Post, Put, Get, Delete } from '@nestjs/common';
 import { AccountDto } from 'src/dtos/account-dto';
-import { CustomerDto } from 'src/dtos/customer-dto';
+import { CustomerDto } from 'src/dtos/create-customer-dto';
 import { AccountEntity } from 'src/persistence/entities/account-entity';
 import { CustomerEntity } from 'src/persistence/entities/customer-entity';
 import { AccountService } from 'src/services/account/account.service';
@@ -17,13 +16,25 @@ export class AccountController {
         return this.accountService.createAccount(account);
     }
     
-    @Put(`update/:id`)
-    async updatedCustomer(@Param(`id`) id : string,@Body() newCustomer : CustomerDto):CustomerEntity{
-        return this.customerService.updatedCustomer(id,newCustomer);
+
+    @Put('update/:id')
+    async updateAccount(@Param('id') accountId: string, @Body() newDetails: AccountDto): Promise<AccountEntity>{
+        return  this.accountService.updateAccount(accountId, newDetails);
+    }   
+
+    @Get('balance/:id')
+    getBalance(@Param('id') accountId: string): number{
+        
+    return this.accountService.getBalance(accountId)
+    }
+
+    @Delete('/:id')
+    async deleteAccount(@Param('id') accountId: string): Promise<void> {
+        await this.accountService.deleteAccount(accountId);
     }
 
 
-}
+}    
 
 
 

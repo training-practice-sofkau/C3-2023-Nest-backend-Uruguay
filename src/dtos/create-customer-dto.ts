@@ -1,6 +1,6 @@
 import { IsEmail, IsNumberString, IsUUID, IsString } from 'class-validator';
 
-export class CustomerDto{
+export class CreateCustomerDto{
 
     @IsUUID(4, { message: "this must to be uuid" })
     documentType: string ; 
