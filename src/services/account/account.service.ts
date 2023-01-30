@@ -1,5 +1,6 @@
 
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
+import { AccountDto } from 'src/dtos/account-dto';
 import { IAccountModel } from 'src/models/i-account-model';
 import { PaginationModel } from 'src/models/i-pagination-model';
 import { AccountEntity } from 'src/persistence/entities/account-entity';
@@ -22,13 +23,16 @@ export class AccountService {
    * @return {*}  {AccountEntity}
    * @memberof AccountService
    */
-    createAccount(account: IAccountModel): AccountEntity {
+    createAccount(accountDto: AccountDto): AccountEntity {  //Le paso DTO para crear un entity
 
-        const newAccount = new AccountEntity();
-        newAccount.customerId = account.customerId;
-        newAccount.accountTypeId = account.accountTypeId;
+        const accountTypeEntity = new AccountTypeEntity();
+        accountTypeEntity.id = accountDto.accountTypeId;
 
-        return this.accountRepository.register(newAccount);
+        const newAccountEntity = new AccountEntity();
+        newAccountEntity.accountTypeId = accountTypeEntity;
+
+ 
+        return this.accountRepository.register(newAccountEntity);
     }
 
     /**

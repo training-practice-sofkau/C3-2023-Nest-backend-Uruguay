@@ -16,18 +16,18 @@ export class CustomerService {
 
     createCustomer(customer: CustomerDto) {
 
-        const documentType = new DocumentTypeEntity;
-        documentType.id = customer.documentType;
+        const documentTypeEntity = new DocumentTypeEntity;
+        documentTypeEntity.id = customer.documentType;
 
-        const newCustomer = new CustomerEntity();
+        const newCustomerEntity = new CustomerEntity();
         
-        newCustomer.documentType = documentType;
-        newCustomer.email = customer.email;
-        newCustomer.fullName = customer.fullName;
-        newCustomer.password = customer.password;
-        newCustomer.phone = customer.phone;
+        newCustomerEntity.documentType = documentTypeEntity;
+        newCustomerEntity.email = customer.email;
+        newCustomerEntity.fullName = customer.fullName;
+        newCustomerEntity.password = customer.password;
+        newCustomerEntity.phone = customer.phone;
 
-        return this.customerRepository.register(newCustomer);
+        return this.customerRepository.register(newCustomerEntity);
     }
 
     /**
@@ -60,17 +60,17 @@ export class CustomerService {
 
     updatedCustomer(id: string, newCustomer: CustomerDto): CustomerEntity {
 
-        const currentEntity = this.customerRepository.findOneById(id);
+        const currentEntity = this.customerRepository.findOneById(id); // Creo una constante y la igualo segun Id
 
-        const documentType = new DocumentTypeEntity();
-        documentType.id = newCustomer.documentType;
+        const documentType = new DocumentTypeEntity(); //Creo una constante de tipo Document type Entity
+        documentType.id = newCustomer.documentType; //Al ID de mi cosntante DTE le asigno el tipo de documento de mi dto
 
         currentEntity.documentType = documentType;
-        currentEntity.document = currentEntity.document
-        currentEntity.fullName = currentEntity.fullName;
-        currentEntity.email = currentEntity.email;
-        currentEntity.phone = currentEntity.phone;
-        currentEntity.password = currentEntity.password;
+        currentEntity.document = newCustomer.document  //igualo atributos
+        currentEntity.fullName = newCustomer.fullName;
+        currentEntity.email = newCustomer.email;
+        currentEntity.phone = newCustomer.phone;
+        currentEntity.password = newCustomer.password;
 
         return this.customerRepository.update(id, currentEntity);
     }
