@@ -4,6 +4,8 @@ import { AccountService } from '../account/account.service';
 import { ICustomerModel } from 'src/models/i-customer-model';
 import { CustomerEntity } from 'src/persistence/entities/customer-entity';
 import { PaginationModel } from 'src/models/i-pagination-model';
+import { CustomerDto } from 'src/dtos/customer-dto';
+import { DocumentTypeEntity } from 'src/persistence/entities/document-type-entity';
 
 @Injectable()
 export class CustomerService {
@@ -12,11 +14,14 @@ export class CustomerService {
     constructor(private readonly customerRepository: CustomerRepo,
                 private readonly accountService: AccountService) { }
 
-    createCustomer(customer: ICustomerModel) {
+    createCustomer(customer: CustomerDto) {
+
+        const documentType = new DocumentTypeEntity;
+        documentType.id = customer.documentType;
 
         const newCustomer = new CustomerEntity();
-
-        newCustomer.documentType = customer.documentType;
+        
+        newCustomer.documentType = documentType;
         newCustomer.email = customer.email;
         newCustomer.fullName = customer.fullName;
         newCustomer.password = customer.password;

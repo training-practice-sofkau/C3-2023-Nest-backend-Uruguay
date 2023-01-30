@@ -5,8 +5,8 @@ import { v4 as uuid } from 'uuid';
 export class TransferEntity implements ITransferModel {
 
      id = uuid();
-     outcome: AccountEntity;
-     income: AccountEntity;
+     outcome: AccountEntity; //Cuenta destino
+     income: AccountEntity; //Cuenta entrante
      amount: number;
      reason: string;
      dateTime: number | Date;

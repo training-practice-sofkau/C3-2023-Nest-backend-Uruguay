@@ -17,7 +17,6 @@ export class SecurityService {
      
       /**
      * Identificarse en el sistema
-     *
      * @param {CustomerModel} user
      * @return {*}  {string}
      * @memberof SecurityService
@@ -65,12 +64,11 @@ export class SecurityService {
   
     /**
      * Salir del sistema
-     *
      * @param {string} JWToken
      * @memberof SecurityService
      */
     signOut(JWToken: string): void {
-
+      //implementar
     }
   }
 

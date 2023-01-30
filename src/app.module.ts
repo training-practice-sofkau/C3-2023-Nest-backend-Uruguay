@@ -39,8 +39,7 @@ import { DocumentTypeRepository } from './persistence/repositories/DocumentTypeR
               CustomerRepo,
               DepositRepository,
               TransferRepository,
-              DocumentTypeRepository
-
+              DocumentTypeRepository,
             ],
 })
 export class AppModule {}
