@@ -13,7 +13,12 @@ export class DepositController {
     }
 
     @Delete("delete/:id/:bool")
-    deleteDeposit(@Param("id") depositId: string, @Param("bool")depositDelete : boolean){
-        
+    deleteDeposit(@Param("id") depositId: string, @Param("bool") depositDelete: boolean) {
+        this.depositService.deleteDeposit(depositId, depositDelete)
+    }
+
+    @Get("history/:id")
+    getHistory(@Param("id") depositId: string){
+        return this.depositService.getHistory(depositId)
     }
 }
