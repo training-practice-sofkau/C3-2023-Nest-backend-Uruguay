@@ -1,4 +1,4 @@
-import { IsNumberString, IsUUID, IsBoolean, IsDate, IsOptional, IsString, IsEmail, IsUrl, Min } from 'class-validator';
+import { IsNumberString, IsUUID, IsOptional, IsString, IsEmail, IsUrl, Min } from 'class-validator';
 
 export class UpdateCustomerDto {
 
