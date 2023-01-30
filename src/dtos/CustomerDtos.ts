@@ -45,4 +45,10 @@ export class CustomerDtos {
   @IsNotEmpty()
   @IsString({ message: 'Enter a name for your account.' })
   name: string;
+  @IsNotEmpty()
+
+  @IsNotEmpty()
+  id:  string
+  @IsNotEmpty()
+  state: boolean
 }
