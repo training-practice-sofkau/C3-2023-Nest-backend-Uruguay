@@ -37,6 +37,13 @@ export class AccountController {
         await this.accountService.deleteAccount(accountId);
     }
 
+    // show all accounts
+    @Get()
+    async getAll(): Promise<AccountEntity[]> {
+
+        return await this.accountService.getAllAccounts();
+    }
+
     // get account balance
     @Get('/:id')
     async getBalance(@Param('id', ParseUUIDPipe) accountId: string): Promise<number>{

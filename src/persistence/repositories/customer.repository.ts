@@ -157,7 +157,7 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
                 
         try{ 
         
-            let result = this.database.filter( entity => typeof entity.deletedAt === undefined); //applies filter for deleted ones
+            let result = this.database.filter( entity => typeof entity.deletedAt === 'undefined'); //applies filter for deleted ones
             
             if( result.length <= 0){ // if the result of the search is empty
                 throw new NotFoundException(); 
@@ -209,7 +209,7 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
         try{ // try to find an element with a given Id
 
             const index = this.database.findIndex(entity => entity.id === id 
-                            && typeof entity.deletedAt === undefined ) ; 
+                            && typeof entity.deletedAt === 'undefined' ) ; 
 
             if(index == -1) { throw new NotFoundException(); }
 
@@ -231,7 +231,7 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
     findOneByEmailAndPassword(email: string, password: string): boolean {
 
         const index = this.database.findIndex(entity => entity.email === email && 
-            entity.password === password && typeof entity.deletedAt === undefined
+            entity.password === password && typeof entity.deletedAt === 'undefined'
         );
 
         return index == -1 ? false : true; // if the value returned is -1 the values dont have a match in the DB
@@ -249,7 +249,7 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
         try{ // try to find an entity with a given documentType and a document value
 
             const index = this.database.findIndex(entity => entity.documentType.id === documentTypeId 
-                && entity.document === document && typeof entity.deletedAt === undefined ) ; //searchs for the position in the array of the entity with Id
+                && entity.document === document && typeof entity.deletedAt === 'undefined' ) ; //searchs for the position in the array of the entity with Id
            
             if(index == -1){ // if the result of the search is an -1 (not found)
                 throw new NotFoundException(); // gives and exception
@@ -272,7 +272,7 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
 
         try{ // try to find an entity with a given email
 
-            const index = this.database.findIndex(entity => entity.email === email && typeof entity.deletedAt === undefined ) ; //searchs for the position in the array of the entity with Id
+            const index = this.database.findIndex(entity => entity.email === email && typeof entity.deletedAt === 'undefined' ) ; //searchs for the position in the array of the entity with Id
            
             if(index == -1){ // if the result of the search is an -1 (not found)
                 throw new NotFoundException(); // gives and exception
@@ -295,7 +295,7 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
         
         try{ // try to find an entity with a given phone
 
-            const index = this.database.findIndex(entity => entity.phone === phone && typeof entity.deletedAt === undefined ) ; //searchs for the position in the array of the entity with Id
+            const index = this.database.findIndex(entity => entity.phone === phone && typeof entity.deletedAt === 'undefined' ) ; //searchs for the position in the array of the entity with Id
            
             if(index == -1){ // if the result of the search is an -1 (not found)
                 throw new NotFoundException(); // gives and exception

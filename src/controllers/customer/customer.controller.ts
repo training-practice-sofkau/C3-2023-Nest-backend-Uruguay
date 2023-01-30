@@ -21,6 +21,10 @@ export class CustomerController {
         return await this.customerService.updatedCustomer(customerId, newDetails);
     }    
 
+    @Get()
+    async getCustomers() : Promise<CustomerEntity[]>{
+        return await this.customerService.getAll();
+    }
     // get customer information
     @Get('/:id')
     async getInformation(@Param('id', ParseUUIDPipe) customerId: string): Promise<CustomerEntity>{
@@ -29,14 +33,14 @@ export class CustomerController {
     }
 
     // Unsuscribe customer
-    @Post('unsuscribe/:id')
+    @Post('unsubscribe/:id')
     async unsubscribeCustomer(@Param('id', ParseUUIDPipe) customerId: string): Promise<boolean>{
 
         return await this.customerService.unsubscribe(customerId);
     }
 
     // Suscribe customer
-    @Post('unsuscribe/:id')
+    @Post('subscribe/:id')
     async subscribeCustomer(@Param('id', ParseUUIDPipe) customerId: string): Promise<boolean>{
 
         return await this.customerService.subscribe(customerId);

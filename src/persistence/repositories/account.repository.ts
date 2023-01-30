@@ -191,12 +191,12 @@ export class AccountRepository extends BankInternalControl<AccountEntity> implem
                 throw new NotFoundException(); // gives and exception
             }
 
-            if (typeof soft === undefined || soft === true) { // check if is a Logical Deletion
+            if (typeof soft === 'undefined' || soft === true) { // check if is a Logical Deletion
 
                 this.softDelete(targetEntityIndex); // calls the internal soft delete method
 
             }
-            else if (typeof soft !== undefined || soft === false) { // checks if is Physical Deletion
+            else if (typeof soft !== 'undefined' || soft === false) { // checks if is Physical Deletion
 
                 this.hardDelete(targetEntityIndex); // calls the internal hard delete method
             }
@@ -249,7 +249,7 @@ export class AccountRepository extends BankInternalControl<AccountEntity> implem
                 
         try{ 
         
-            let result = this.database.filter( entity => typeof entity.deletedAt === undefined); //applies filter for deleted ones
+            let result = this.database.filter( entity => typeof entity.deletedAt === 'undefined'); //applies filter for deleted ones
             
             if( result.length <= 0){ // if the result of the search is empty
                 throw new NotFoundException(); 
@@ -302,7 +302,7 @@ export class AccountRepository extends BankInternalControl<AccountEntity> implem
         try{ // try to find an element with a given Id
 
             const index = this.database.findIndex(entity => entity.id === id 
-                            && typeof entity.deletedAt === undefined ) ; 
+                            && typeof entity.deletedAt === 'undefined' ) ; 
 
             if(index == -1) { throw new NotFoundException(); }
 

@@ -7,6 +7,7 @@ import { CreateAccountDto, UpdateAccountDto } from '../../dtos';
 
 @Injectable()
 export class AccountService {
+  
 
   constructor(
     private readonly accountRepository: AccountRepository,
@@ -121,6 +122,14 @@ export class AccountService {
 
     return this.getBalance(accountId) >= amount ? true : false;
 
+  }
+
+  /**
+   * Return all the accounts in the DB
+   * @returns array of entities
+   */
+  getAllAccounts(): AccountEntity[] {
+    return this.accountRepository.findAll();
   }
 
   /**

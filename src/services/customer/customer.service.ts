@@ -9,6 +9,7 @@ import { DocumentTypeEntity } from '../../persistence/entities/document-type.ent
 
 @Injectable()
 export class CustomerService {
+  
 
   constructor(
     private readonly customerRepository: CustomerRepository,
@@ -50,6 +51,15 @@ export class CustomerService {
 
     return this.customerRepository.update(id, customer);
 
+  }
+
+  /**
+   * Returns all the customers in the DB
+   * @returns array of entities
+   */
+  getAll(): CustomerEntity[]  {
+    
+   return this.customerRepository.findAll(); 
   }
 
   /**
