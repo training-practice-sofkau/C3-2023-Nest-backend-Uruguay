@@ -19,13 +19,13 @@ export class AccountController {
     return this.AccountService.getBalance(accountId)
   }
   @Post('AddBalance')
-  addBalance(accountId: string, amount: number): void{
+  addBalance(@Body() accountId: string, amount: number): void{
     
     return this.AccountService.addBalance(accountId,amount )
   }
 
   @Post('removeBalance')
-  removeBalance(accountId: string, amount: number): void{
+  removeBalance(@Body() accountId: string, amount: number): void{
     
     return this.AccountService.removeBalance(accountId,amount )
   }
@@ -37,7 +37,7 @@ export class AccountController {
   }
 
   @Put('changeState')
-  changeState(accountId: string, state: boolean): void {
+  changeState(@Body() accountId: string, state: boolean): void {
     return this.AccountService.changeState(accountId, state)
   }
  
@@ -46,11 +46,11 @@ export class AccountController {
   return this.AccountService.getAccountType(accountId)
 }
 @Put ('changeAccntType') 
-changeAccntType(accountId: string, accountTypeId: string): AccountTypeEntity { 
+changeAccntType(@Body() accountId: string, accountTypeId: string): AccountTypeEntity { 
     return this.AccountService.changeAccntType(accountId, accountTypeId);
 }
 
-@Put('unsubscribe/:id')
+@Put('delete/:id')
 unsubscribe(@Param('id') accountId: string): void{
   return this.AccountService.deleteAccount(accountId);
 }
