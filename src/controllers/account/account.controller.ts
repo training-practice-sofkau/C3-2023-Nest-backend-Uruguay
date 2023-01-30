@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Put,  Post } from '@nestjs/common';
+import { Controller, Get, Param, Put,  Post, Body } from '@nestjs/common';
 import { AccountDtos } from 'src/dtos/accountDtos';
 import { AccountEntity, AccountTypeEntity } from 'src/persistence';
 import { AccountService } from '../../services/account/account.service';
@@ -9,7 +9,7 @@ export class AccountController {
 
 
   @Post('newAccount')
-  createAccount(account: AccountDtos): AccountEntity {
+  createAccount(@Body() account: AccountDtos): AccountEntity {
     
     return this.AccountService.createAccount(account)
   }
