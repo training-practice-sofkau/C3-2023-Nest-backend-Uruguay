@@ -1,11 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put } from '@nestjs/common';
-import { AccountService } from '../../services/account/account.service';
-import { AccountDTO } from '../../dtos/account.dto';
-import { AccountEntity } from '../../persistence/entities/account.entity';
-import { PaginationModel } from '../../../dist/models/pagination-model.model';
-import { AccountTypeEntity } from '../../persistence/entities/account-type.entity';
-import { CustomerEntity } from '../../persistence/entities/customer.entity';
-import { CreateAccountDTO } from '../../dtos/create-account.dto';
+import { AccountService } from '../../services/account/';
+import { AccountDTO, CreateAccountDTO } from '../../dtos/';
+import { PaginationModel } from 'src/models';
+import { CustomerEntity, AccountTypeEntity, AccountEntity} from '../../persistence/entities/';
 
 @Controller('account')
 export class AccountController {
