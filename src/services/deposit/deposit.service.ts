@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
 
-import { PaginationModel } from '../../models/';
+import { DataRangeModel, DepositModel, PaginationModel } from '../../models/';
+import { DepositRepository } from 'src/persistence/repositories';
+import { DepositEntity } from 'src/persistence/entities';
 
 @Injectable()
 export class DepositService {
+  constructor(private readonly depositRepository: DepositRepository) {}
+
   /**
    * Crear un deposito
    *
@@ -12,7 +16,11 @@ export class DepositService {
    * @memberof DepositService
    */
   createDeposit(deposit: DepositModel): DepositEntity {
-    throw new Error('This method is not implemented');
+    const newDeposit = new DepositEntity();
+    newDeposit.account = deposit.account;
+    newDeposit.amount = deposit.amount;
+
+    return this.depositRepository.register(newDeposit);
   }
 
   /**
@@ -22,7 +30,17 @@ export class DepositService {
    * @memberof DepositService
    */
   deleteDeposit(depositId: string): void {
-    throw new Error('This method is not implemented');
+    this.depositRepository.delete(depositId);
+  }
+  
+  /**
+   * Borrar un deposito de forma lógica
+   *
+   * @param {string} depositId
+   * @memberof DepositService
+   */
+  softDeleteDeposit(depositId: string): void {
+    this.depositRepository.delete(depositId, true);
   }
 
   /**
@@ -39,6 +57,11 @@ export class DepositService {
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): DepositEntity[] {
-    throw new Error('This method is not implemented');
+    const deposit = this.depositRepository.findAll();
+    let depositPaginated: DepositEntity[] = [];
+
+    if(pagination) {
+      depositPaginated = deposit.slice(pagination.offset, pagination.limit);
+    }
   }
 }

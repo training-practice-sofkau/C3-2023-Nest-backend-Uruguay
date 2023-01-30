@@ -1,15 +1,17 @@
 // Libraries
 import {
-    Injectable,
-    InternalServerErrorException,
-    UnauthorizedException,
-  } from '@nestjs/common';
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { v4 as uuid } from 'uuid';
+import jwt from 'jsonwebtoken';
   
   // Data transfer objects
 
   
   // Models
-  import { CustomerModel } from '../../models';
+  import { AccountModel, CustomerModel } from '../../models';
   
   // Repositories
   import { CustomerRepository } from '../../persistence/repositories';
@@ -22,6 +24,7 @@ import {
     AccountTypeEntity,
     CustomerEntity,
   } from '../../persistence/entities';
+import { JsonWebTokenError } from 'jsonwebtoken';
   
   @Injectable()
   export class SecurityService {
@@ -42,7 +45,9 @@ import {
         user.email,
         user.password,
       );
-      if (answer) return 'Falta retornar un JWT';
+      const token: string = jwt.sign({_id: user.id}, process.env.TOKEN_SECRET || 'tokentest');
+
+      if (answer) return token;
       else throw new UnauthorizedException();
     }
   
@@ -66,15 +71,21 @@ import {
   
       if (customer) {
         const accountType = new AccountTypeEntity();
-        accountType.id = 'Falta el ID por defecto del tipo de cuenta';
-        const newAccount = {
+        accountType.id = uuid(); //'Falta el ID por defecto del tipo de cuenta'
+        
+        const newAccount: AccountModel = {
           customer,
           accountType,
+          id: '',
+          balance: 0,
+          state: true
         };
   
         const account = this.accountService.createAccount(newAccount);
+
+        const token: string = jwt.sign({_id: newAccount.id}, process.env.TOKEN_SECRET || 'tokentest');
   
-        if (account) return 'Falta retornar un JWT';
+        if (account) return token;
         else throw new InternalServerErrorException();
       } else throw new InternalServerErrorException();
     }
@@ -86,6 +97,9 @@ import {
      * @memberof SecurityService
      */
     signOut(JWToken: string): void {
-      throw new Error('Method not implemented.');
+      const account = jwt.decode(JWToken);
+      if (account) {
+        this.accountService.changeState(account.id);
+      }
     }
   }
