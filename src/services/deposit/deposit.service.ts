@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { depositEntity, DepositRepository } from '../../persistence';
-import { PaginationModel, depositModel } from '../../models/';
+import { PaginationModel } from '../../models/';
+import { DepositDto } from '../../dtos/deposit.dto';
 
 @Injectable()
 export class DepositService {
@@ -12,7 +13,7 @@ export class DepositService {
    * @return {*}  {DepositEntity}
    * @memberof DepositService
    */
-  createDeposit(deposit: depositModel): depositEntity {
+  createDeposit(deposit: DepositDto): depositEntity {
     const newDeposit = new depositEntity(); 
     newDeposit.account = deposit.account;
     return this.depositRepository.register(newDeposit);
