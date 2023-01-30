@@ -9,5 +9,6 @@ export interface CustomerModel extends BaseModel {
   password: string;
   avatarUrl?: string;
   name: string;
-
+  id: string;  
+  state: boolean;
 }
