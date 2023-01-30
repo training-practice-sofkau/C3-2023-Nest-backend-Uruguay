@@ -2,6 +2,7 @@ import { TransferEntity } from '../entities/';
 import { BASE } from './base/';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { TransferRepositoryInterface } from './interfaces/';
+import { PaginationModel } from '../../models/pagination-model.model';
 
 @Injectable()
 export class TransferRepository
@@ -45,10 +46,12 @@ export class TransferRepository
     this.database[index].deletedAt = Date.now();
   }
 
-  findAll(): TransferEntity[] {
+  findAll(pagination: PaginationModel): TransferEntity[] {
+    const paginations = this.paginationMethod(pagination);
+
     return this.database.filter(
       (item) => typeof item.deletedAt === 'undefined',
-    );
+    ).slice(pagination.offset, pagination.offset + (pagination.limit || 0));
   }
 
   findOneById(id: string): TransferEntity {
@@ -60,29 +63,55 @@ export class TransferRepository
     return currentEntity;
   }
 
+  findByAccountIdAndDataRange(
+    pagination: PaginationModel,
+    accountId: string,
+    dateInit: Date | number,
+    dateEnd: Date | number,
+  ): TransferEntity[]  {
+    const paginations = this.paginationMethod(pagination);
+
+    return this.database.filter(
+      (item) => (item.income.id === accountId || item.outcome.id === accountId) && item.dateTime >= dateInit && item.dateTime <= dateEnd && typeof item.deletedAt === 'undefined',
+    ).slice(paginations.offset, paginations.offset + (paginations.limit || 0));
+  }
+
   findOutcomeByDataRange(
+    pagination: PaginationModel,
     accountId: string,
     dateInit: Date | number,
     dateEnd: Date | number,
   ): TransferEntity[] {
+    const paginations = this.paginationMethod(pagination);
+
     return this.database.filter(
       (item) => item.outcome.id === accountId && item.dateTime >= dateInit && item.dateTime <= dateEnd && typeof item.deletedAt === 'undefined',
-    );
+    ).slice(paginations.offset, paginations.offset + (paginations.limit || 0));
   }
 
   findIncomeByDataRange(
+    pagination: PaginationModel,
     accountId: string,
     dateInit: Date | number,
     dateEnd: Date | number,
   ): TransferEntity[] {
+    const paginations = this.paginationMethod(pagination);
+
     return this.database.filter(
       (item) => item.income.id === accountId && item.dateTime >= dateInit && item.dateTime <= dateEnd && typeof item.deletedAt === 'undefined',
-    );
+    ).slice(paginations.offset, paginations.offset + (paginations.limit || 0));
   }
 
   private findIndex(id: string): number {
     return this.database.findIndex(
       (item) => item.id === id && typeof item.deletedAt === 'undefined',
     );
+  }
+
+  private paginationMethod(pagination: PaginationModel): PaginationModel {
+    return pagination = {
+      ... {offset: 0, limit: 10},
+      ... pagination
+    }
   }
 }

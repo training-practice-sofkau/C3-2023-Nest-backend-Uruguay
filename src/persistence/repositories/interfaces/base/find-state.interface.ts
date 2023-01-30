@@ -1,4 +1,5 @@
+import { PaginationModel } from '../../../../models/';
 export interface FindStateInterface<T> {
     
-    findByState(state: boolean): T[];
+    findByState(pagination: PaginationModel ,state: boolean): T[];
 }

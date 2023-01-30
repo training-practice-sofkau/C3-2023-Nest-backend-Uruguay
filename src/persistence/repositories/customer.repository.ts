@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CustomerEntity } from '../entities/';
 import { CustomerRepositoryInterface } from './interfaces/';
 import { BASE } from './base/';
+import { PaginationModel } from '../../models/pagination-model.model';
 
 @Injectable()
 export class CustomerRepository
@@ -48,10 +49,12 @@ export class CustomerRepository
     this.database[index].deletedAt = Date.now();
   }
 
-  findAll(): CustomerEntity[] {
+  findAll(pagination: PaginationModel): CustomerEntity[] {
+    const paginations = this.paginationMethod(pagination);
+
     return this.database.filter(
       (item) => typeof item.deletedAt === 'undefined',
-    );
+    ).slice(paginations.offset, paginations.offset + (paginations.limit || 0));
   }
 
   findOneById(id: string): CustomerEntity {
@@ -70,7 +73,7 @@ export class CustomerRepository
         item.password === password &&
         typeof item.deletedAt === 'undefined',
     );
-    return indexCurrentEntity >= -1 ? true : false;
+    return indexCurrentEntity != -1 ? true : false;
   }
 
   findOneByDocumentTypeAndDocument(
@@ -106,22 +109,33 @@ export class CustomerRepository
     return currentEntity;
   }
 
-  findByState(state: boolean): CustomerEntity[] {
+  findByState(pagination: PaginationModel ,state: boolean): CustomerEntity[] {
+    const paginations = this.paginationMethod(pagination);
+
     return this.database.filter(
       (item) => item.state === state && typeof item.deletedAt === 'undefined',
-    );
+    ).slice(paginations.offset, paginations.offset + (pagination.limit || 0));
   }
 
-  findByFullName(fullName: string): CustomerEntity[] {
+  findByFullName(pagination: PaginationModel ,fullName: string): CustomerEntity[] {
+    const paginations = this.paginationMethod(pagination);
+    
     return this.database.filter(
       (item) =>
         item.fullName === fullName && typeof item.deletedAt === 'undefined',
-    );
+    ).slice(paginations.offset, paginations.offset + (pagination.limit || 0));
   }
 
   private findIndex(id: string): number {
     return this.database.findIndex(
       (item) => item.id === id && typeof item.deletedAt === 'undefined',
     );
+  }
+
+  private paginationMethod(pagination: PaginationModel): PaginationModel {
+    return pagination = {
+      ... {offset: 0, limit: 10},
+      ... pagination
+    }
   }
 }

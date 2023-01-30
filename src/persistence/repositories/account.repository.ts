@@ -2,6 +2,7 @@ import { BASE } from './base/';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { AccountEntity } from '../entities';
 import { AccountRepositoryInterface } from './interfaces/';
+import { PaginationModel } from '../../models/pagination-model.model';
 
 @Injectable()
 export class AccountRepository
@@ -45,10 +46,12 @@ export class AccountRepository
     this.database[index].deletedAt = Date.now();
   }
 
-  findAll(): AccountEntity[] {
+  findAll(pagination: PaginationModel): AccountEntity[] {
+    const paginations = this.paginationMethod(pagination);
+
     return this.database.filter(
       (item) => typeof item.deletedAt === 'undefined',
-    );
+    ).slice(paginations.offset, paginations.offset + (paginations.limit || 0));
   }
 
   findOneById(id: string): AccountEntity {
@@ -60,10 +63,12 @@ export class AccountRepository
     return currentEntity;
   }
 
-  findByState(state: boolean): AccountEntity[] {
+  findByState(pagination: PaginationModel ,state: boolean): AccountEntity[] {
+    const paginations = this.paginationMethod(pagination);
+
     return this.database.filter(
       (item) => item.state === state && typeof item.deletedAt === 'undefined',
-    );
+    ).slice(paginations.offset, paginations.offset + (paginations.limit || 0));
   }
 
   findByCustomer(customerId: string): AccountEntity[] {
@@ -72,15 +77,24 @@ export class AccountRepository
     );
   }
 
-  findByAccountType(accountTypeId: string): AccountEntity[] {
+  findByAccountType(pagination: PaginationModel ,accountTypeId: string): AccountEntity[] {
+    const paginations = this.paginationMethod(pagination);
+
     return this.database.filter(
       (item) => item.accountType.id === accountTypeId && typeof item.deletedAt === 'undefined',
-    );
+    ).slice(paginations.offset, paginations.offset + (paginations.limit || 0));
   }
 
   private findIndex(id: string): number {
     return this.database.findIndex(
       (item) => item.id === id && typeof item.deletedAt === 'undefined',
     );
+  }
+
+  private paginationMethod(pagination: PaginationModel): PaginationModel {
+    return pagination = {
+      ... {offset: 0, limit: 20},
+      ... pagination
+    }
   }
 }

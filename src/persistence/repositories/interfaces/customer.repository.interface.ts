@@ -1,5 +1,6 @@
 import { ICRUD, FindStateInterface } from './base/';
 import { CustomerEntity } from '../../entities/';
+import { PaginationModel } from '../../../models/pagination-model.model';
 
 export interface CustomerRepositoryInterface
   extends ICRUD<CustomerEntity>,
@@ -15,5 +16,5 @@ export interface CustomerRepositoryInterface
 
   findOneByPhone(phone: string): CustomerEntity;
 
-  findByFullName(fullName: string): CustomerEntity[];
+  findByFullName(pagination: PaginationModel ,fullName: string): CustomerEntity[];
 }

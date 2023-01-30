@@ -2,6 +2,7 @@ import { AccountTypeEntity } from '../entities';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { BASE } from './base';
 import { AccountTypeRepositoryInterface } from './interfaces';
+import { PaginationModel } from '../../models/pagination-model.model';
 
 @Injectable()
 export class AccountTypeRepository
@@ -37,8 +38,10 @@ export class AccountTypeRepository
     this.database.splice(indexCurrentEntity);
   }
 
-  findAll(): AccountTypeEntity[] {
-    return this.database.map(item => item);
+  findAll(pagination: PaginationModel): AccountTypeEntity[] {
+    const paginations = this.paginationMethod(pagination);
+
+    return this.database.map(item => item).slice(paginations.offset, paginations.offset + (paginations.limit || 0));
   }
 
   findOneById(id: string): AccountTypeEntity {
@@ -50,17 +53,21 @@ export class AccountTypeRepository
     return currentEntity;
   }
 
-  findByState(state: boolean): AccountTypeEntity[] {
+  findByState(pagination: PaginationModel, state: boolean): AccountTypeEntity[] {
+    const paginations = this.paginationMethod(pagination);
+
     return this.database.filter(
       (item) => item.state === state
-    );
+    ).slice(paginations.offset, paginations.offset + (paginations.limit || 0));
   }
 
-  findByName(name: string): AccountTypeEntity[] {
+  findByName(pagination: PaginationModel,name: string): AccountTypeEntity[] {
+    const paginations = this.paginationMethod(pagination);
+
     return this.database.filter(
       (item) =>
         item.name === name
-    );
+    ).slice(paginations.offset, paginations.offset + (paginations.limit || 0));
   }
 
   private findIndex(id: string): number {
@@ -68,4 +75,12 @@ export class AccountTypeRepository
       (item) => item.id === id
     );
   }
+
+  private paginationMethod(pagination: PaginationModel): PaginationModel {
+    return pagination = {
+      ... {offset: 0, limit: 10},
+      ... pagination
+    }
+  }
+
 }
