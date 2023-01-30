@@ -4,17 +4,19 @@ import {
   AccountRepository,
   AccountTypeRepository,
 } from '../../persistence/repositories/';
-import { AccountModel } from '../../models/';
-import { throws } from 'assert';
 import { PaginationModel } from '../../models/pagination-model.model';
 import { CustomerEntity } from '../../persistence/entities/customer.entity';
 import { AccountController } from '../../controllers/account/account.controller';
+import { CreateAccountDTO } from '../../dtos/create-account.dto';
+import { CustomerRepository } from '../../persistence/repositories/customer.repository';
+import { AccountDTO } from '../../dtos/account.dto';
 
 @Injectable()
 export class AccountService {
   constructor(
     private readonly accountRepository: AccountRepository,
     private readonly accountTypeRepository: AccountTypeRepository,
+    private readonly customerRepository: CustomerRepository,
   ) {}
 
   /**
@@ -24,10 +26,14 @@ export class AccountService {
    * @return {*}  {AccountEntity}
    * @memberof AccountService
    */
-  createAccount(account: AccountModel): AccountEntity {
+  createAccount(account: CreateAccountDTO): AccountEntity {
+    const customer = this.customerRepository.findOneById(account.customerId);
+    const accountType = this.accountTypeRepository.findOneById(account.accountTypeId);
+
+
     const newAccount = new AccountEntity();
-    newAccount.customer = account.customer;
-    newAccount.accountType = account.accountType;
+    newAccount.customer = customer;
+    newAccount.accountType = accountType;
     return this.accountRepository.register(newAccount);
   }
 
@@ -40,10 +46,9 @@ export class AccountService {
   }
 
   findByCustomer(
-    pagination: PaginationModel,
     customerId: string,
   ): AccountEntity[] {
-    return this.accountRepository.findByCustomer(pagination, customerId);
+    return this.accountRepository.findByCustomer(customerId);
   }
 
   /**
@@ -83,12 +88,15 @@ export class AccountService {
     return this.getAccount(accountId).state;
   }
 
-  updateAccount(accountId: string, newAccount: AccountModel) {
+  updateAccount(accountId: string, newAccount: AccountDTO) {
     let account = this.getAccount(accountId);
-    account = {
-      ...account,
-      ...newAccount,
-    };
+    const customer = this.customerRepository.findOneById(newAccount.customer);
+    const accountType = this.accountTypeRepository.findOneById(newAccount.accountType);
+
+    account.accountType = accountType;
+    account.customer = customer;
+    account.balance = newAccount.balance;
+    account.state = newAccount.state;
 
     return this.accountRepository.update(accountId, account);
   }

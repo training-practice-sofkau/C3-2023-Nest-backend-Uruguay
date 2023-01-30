@@ -1,9 +1,11 @@
 import { Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { CustomerRepository } from '../../persistence/repositories/';
 import { AccountService } from '../account/';
-import { CustomerModel } from '../../models/';
 import { CustomerEntity, AccountTypeEntity, AccountEntity } from '../../persistence/entities/';
-import jwt  from 'jsonwebtoken';
+import * as jwt from "jsonwebtoken"
+import { SingInDTO } from '../../dtos/sing-in.dto';
+import { SingUpDTO } from '../../dtos/sing-up-dto';
+import { DocumentTypeEntity } from '../../persistence/entities/document-type.entity';
 import { Response } from 'express';
 
 @Injectable()
@@ -20,16 +22,16 @@ export class SecurityService {
        * @return {*}  {string}
        * @memberof SecurityService
        */
-      signIn(user: CustomerModel): string {
+      signIn(user: SingInDTO): string {
         const answer = this.customerRepository.findOneByEmailAndPassword(
-          user.email,
+          user.username,
           user.password,
         );
 
         
         if (!answer) throw new UnauthorizedException();
 
-        return jwt.sign({id: user.id}, process.env.TOKEN_SECRET || 'tokentest');
+        return jwt.sign({id: user.username}, process.env.TOKEN_SECRET || 'tokentest');
       }
     
       /**
@@ -39,9 +41,12 @@ export class SecurityService {
        * @return {*}  {string}
        * @memberof SecurityService
        */
-      signUp(user: CustomerModel): string {
+      signUp(user: SingUpDTO): string {
+        const documentType = new DocumentTypeEntity();
+        documentType.id = user.documentTypeId;
+
         const newCustomer = new CustomerEntity();
-        newCustomer.documentType = user.documentType;
+        newCustomer.documentType = documentType;
         newCustomer.document = user.document;
         newCustomer.fullName = user.fullName;
         newCustomer.email = user.email;
@@ -64,7 +69,7 @@ export class SecurityService {
     
           if (account) throw new InternalServerErrorException();
 
-          return jwt.sign({id: user.id}, process.env.TOKEN_SECRET || 'tokentest');
+          return jwt.sign({id: user.email}, process.env.TOKEN_SECRET || 'tokentest');
         } else throw new InternalServerErrorException();
       }
     
