@@ -7,7 +7,6 @@ import { AccountDtos } from 'src/dtos/accountDtos';
 
 @Injectable()
 export class AccountService {
-  [x: string]: any;
   constructor(
     private readonly accountRepository: AccountRepository,
     private readonly AccountTypeRepository: AccountTypeRepository,
@@ -16,11 +15,8 @@ export class AccountService {
   /**
    *
    */
-  createAccount(account: AccountDtos): any {
-    if (!account.customer) {
-      throw new BadRequestException('Customer is required');
-    }
-    
+  createAccount(account: AccountDtos): AccountEntity {
+      
     const newAccount = new AccountEntity();
     newAccount.customer = account.customer;
     newAccount.accountType = account.accountType;
@@ -88,8 +84,11 @@ export class AccountService {
    * @memberof AccountService
    */
   verifyAmountIntoBalance(accountId: string, amount: number): boolean {
-    const balance = this.accountService.getBalance(accountId);
-    if (balance >= amount) {
+    let balance = this.accountRepository.searchByAttributesforOne(
+      'id',
+      accountId,
+    ).acc_Balance;
+        if (balance >= amount) {
       return true;
     }
     return false;

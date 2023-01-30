@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { TransferEntity } from 'src/persistence';
 import { TransferService } from '../../services/transfer/transfer.service';
 import { TransferDto } from '../../dtos/transferDto';
@@ -14,32 +14,35 @@ export class TransferController {
     return this.TransferService.createTransfer(transfer);
   }
   @Put('delete/:id')
-  deleteTransfer(transferId: string): void {
-    return this.TransferService.deleteTransfer(transferId);
+  deleteTransfer(@Param('id') id: string): void {
+    return this.TransferService.deleteTransfer(id);
   }
   @Get('getHistory/:id')
   getHistory(
-    accountId: string,
+    @Param('id')
+    id: string,
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    return this.TransferService.getHistory(accountId, pagination, dataRange);
+    return this.TransferService.getHistory(id, pagination, dataRange);
   }
-  @Get('getHistoryIn')
+  @Get('getHistoryIn/:id')
   getHistoryIn(
-    accountId: string,
+    @Param('id')
+    id: string,
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    return this.TransferService.getHistoryIn(accountId, pagination, dataRange);
+    return this.TransferService.getHistoryIn(id, pagination, dataRange);
   }
 
-  @Get('getHistoryOut')
+  @Get('getHistoryOut/:id')
   getHistoryOut(
-    accountId: string,
+    @Param('id')
+    id: string,
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    return this.TransferService.getHistoryOut(accountId, pagination, dataRange);
+    return this.TransferService.getHistoryOut(id, pagination, dataRange);
   }
 }
