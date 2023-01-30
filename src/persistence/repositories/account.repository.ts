@@ -3,6 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { AccountEntity } from '../entities';
 import { BaseRepository } from './base';
 import { AccountRepositoryInterface } from './interfaces';
+import { AccountDto } from '../../dtos';
 
 
 @Injectable()
@@ -15,7 +16,7 @@ export class AccountRepository
         return this.database.at(-1) ?? entity;
     }
 
-    update(id: string, entity: AccountEntity): AccountEntity {
+    update(id: string, entity: AccountDto): AccountEntity {
         const indexCurrentEntity = this.database.findIndex(
             (item) => item.id === id && typeof item.deletedAt === 'undefined'
         );
