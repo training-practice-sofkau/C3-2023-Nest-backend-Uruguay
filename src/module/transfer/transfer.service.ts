@@ -5,19 +5,21 @@ import { AccountEntity } from '../account/account.entities';
 import { createTransferDto } from './dto/transfer.dto';
 import { dataRangeDto } from './dto/dataRange.dto';
 import { paginationDto } from './dto/Pagination.dto';
+import { AccountService } from '../account/service';
 
 @Injectable()
 export class TransferService {
-  constructor(private readonly TransferRepo : TransferRepository){}
+  constructor(private readonly TransferRepo : TransferRepository,
+    private readonly accountServer : AccountService){}
   /**
    * Crear una transferencia entre cuentas del banco
    */
   createTransfer(transfer: createTransferDto): TransferEntity {
-    const newOucome = new AccountEntity();
+    const newOucome = this.accountServer.getById(transfer.outcome);
     //O tiene que ser al tipo de cuenta porque aca lo hago con la cuenta directamente
     newOucome.id = transfer.outcome;
 
-    const newIncome = new AccountEntity();
+    const newIncome = this.accountServer.getById(transfer.outcome);
     newIncome.id = transfer.income;
 
     const newTransfer = new TransferEntity();
