@@ -3,6 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { DepositEntity } from '../entities';
 import { BaseRepository } from './base';
 import { DepositRepositoryInterface } from './interfaces/';
+import { PaginationModel } from '../../models';
 
 @Injectable()
 export class DepositRepository
@@ -49,10 +50,11 @@ export class DepositRepository
         this.database[index].daletedAt = Date.now();
     }
 
-    findAll(): DepositEntity[] {
+    findAll(paginator: PaginationModel): DepositEntity[] {
+        const { offset=0, limit=10 } = paginator;
         return this.database.filter(
-            (item) => typeof item.daletedAt === 'undefined',
-        );
+            (item) => typeof item.daletedAt === 'undefined')
+            .slice(offset, offset + limit);
     }
 
     findOneById(id: string): DepositEntity {

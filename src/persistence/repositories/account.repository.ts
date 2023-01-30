@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
+import { PaginationModel } from '../../models';
 import { AccountEntity } from '../entities';
 import { BaseRepository } from './base';
 import { AccountRepositoryInterface } from './interfaces';
@@ -51,10 +52,11 @@ export class AccountRepository
         this.database[index].daletedAt = Date.now();
     }
 
-    findAll(): AccountEntity[] {
+    findAll(paginator: PaginationModel): AccountEntity[] {
+        const { offset=0, limit=10 } = paginator;
         return this.database.filter(
-            (item) => typeof item.daletedAt === 'undefined',
-        );
+            (item) => typeof item.daletedAt === 'undefined')
+            .slice(offset, offset + limit);
     }
 
     findOneById(id: string): AccountEntity {

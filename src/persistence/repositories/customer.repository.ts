@@ -3,6 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CustomerEntity } from '../entities';
 import { BaseRepository } from './base';
 import { CustomerRepositoryInterface } from './interfaces';
+import { PaginationModel } from '../../models';
 
 @Injectable()
 export class CustomerRepository
@@ -49,10 +50,11 @@ private softDelete(index: number): void {
     this.database[index].daletedAt = Date.now();
 }
 
-  findAll(): CustomerEntity[] {
+  findAll(paginator: PaginationModel): CustomerEntity[] {
+    const { offset=0, limit=10 } = paginator;
     return this.database.filter(
-      (itemDel) => typeof itemDel.daletedAt === 'undefined',
-    );
+      (itemDel) => typeof itemDel.daletedAt === 'undefined')
+      .slice(offset, offset + limit);
   }
 
   findOneById(id: string): CustomerEntity {
@@ -70,7 +72,7 @@ private softDelete(index: number): void {
         itemEAndP.password === password &&
         typeof itemEAndP.daletedAt === 'undefined',
     );
-    return indexCurrentEntity >= -1 ? true : false;
+    return indexCurrentEntity > -1 ? true : false;
   }
 
   findOneByDocumentTypeAndDocument(
