@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
 import { AccountService } from '../../services/account';
 import { CreateAccountDto } from '../../dtos';
 import { AccountEntity, AccountTypeEntity } from '../../persistence/entities';
@@ -13,7 +13,7 @@ export class AccountController {
     }
 
     @Get('getBalance/:id')
-    getBalance(@Param('id') accountId: string): number {
+    getBalance(@Param('id')  accountId: string): number {
         return this.accountService.getBalance(accountId);
     }
 

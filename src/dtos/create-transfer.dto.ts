@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsPositive, IsUUID, IsString, IsDate } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsPositive, IsUUID, IsString, IsDate, Min, Max } from 'class-validator';
 
 export class CreateTrasferDto {
 
@@ -17,9 +17,11 @@ export class CreateTrasferDto {
     @IsNumber(undefined, { message: "Not a valid format."})
     @IsNotEmpty({ message: "This slot must not be empty."})
     @IsPositive({ message: "Needs a positive value."})
+    @Min(1, { message: "The minimun value is 1."})
     amount: number;
 
-    @IsString()
+    @IsString({ message: "Not a valid format."})
+    @Max(300)
     reason: string;
 
     @IsDate({ message: "Not a valid format."})
