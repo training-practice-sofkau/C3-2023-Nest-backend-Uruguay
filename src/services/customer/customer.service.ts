@@ -18,9 +18,8 @@ export class CustomerService {
   ) {}
 
   createCustomer(customer: CreateCustomerDTO) {
-    const documentType = this.documentTypeRepository.findOneById(
-      customer.documentType,
-    );
+    const documentTypeId = customer.documentType;
+    const documentType = this.documentTypeRepository.findOneById(documentTypeId);
 
     const newCustomer = new CustomerEntity();
     newCustomer.documentType = documentType;
