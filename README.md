@@ -49,19 +49,22 @@ $ npm run start:prod
 
 ```bash
 # Title of the delivery
-[Workshop Week 1 - Day 3] - Manipulación de colecciones
+[Workshop Week 2 - Day 1] - API
 
 # Body of the delivery
 [Any short description]
 ```
 
-### Workshop
+## Workshop
+
 The following are the guidelines that should be taken into account for the development of the workshop to be submitted:
 
-1. Code all the proposed repositories along with their respective methods.
-2. The methods should be worked with different filters, reduce, map, among others.
-
-Do not forget to consult the information from the following link for the development of your workshop: [Arrays into JavaScript](https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array).
+1. Create all DTOs.
+2. Validate all DTOs.
+3. Implement DTOs instead of models ( review all the mappings )
+4. Create all Controllers.
+Do not forget to consult the Nest documentation if you consider it necessary: [Nest Documentation](https://docs.nestjs.com/).
 
 ### Important note
-Do not forget that for this workshop, you should make at least 5 commits properly documented (title and message body).
+Do not forget that for this workshop, you should make at least 10 commits properly documented (title and message body).
+

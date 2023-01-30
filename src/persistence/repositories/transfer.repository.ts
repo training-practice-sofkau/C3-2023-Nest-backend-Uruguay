@@ -4,6 +4,8 @@ import { InternalServerErrorException, NotFoundException } from '@nestjs/common/
 import { TransferEntity } from '../entities';
 import { BankInternalControl } from './base';
 import { RepositoryMethodsInterface } from "./interfaces";
+import { PaginationModel } from '../../models/pagination.model';
+import { DataRangeModel } from '../../models/data-range.model';
 
 @Injectable()
 export class TransferRepository extends BankInternalControl<TransferEntity> implements RepositoryMethodsInterface<TransferEntity> {
@@ -118,20 +120,33 @@ export class TransferRepository extends BankInternalControl<TransferEntity> impl
 
     /**
      * Returns the content of the array of Transfers
-     * excludes the mark as deleted
-     * @returns Array of entities 
+     * excludes the mark as deleted     
+     * @param pagination optional pagination to be consider
+     * @returns Array of entities  
      */
-    findAll(): TransferEntity[] {
+    findAll(pagination?: PaginationModel<TransferEntity>): TransferEntity[] {
                 
         try{ 
         
-            return this.database.filter( entity => typeof entity.deletedAt === undefined); //applies filter for deleted ones
+            let result = this.database.filter( entity => typeof entity.deletedAt === undefined); //applies filter for deleted ones
+            
+            if( result.length <= 0){ // if the result of the search is empty
+                throw new NotFoundException(); 
+            }
+
+            if (pagination) { // if there is a pagination provided
+                let { offset = 0, limit = 0 } = pagination;
+                result = result.slice(offset, offset + limit);
+            }  
+    
+            return result; // all good, return the array 
 
         } catch (err){// something wrong happened
 
             throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
         }
     }
+    
 
     /**
      * Search in the array for an entity that matches the Id provided
@@ -179,13 +194,53 @@ export class TransferRepository extends BankInternalControl<TransferEntity> impl
     }
 
     /**
+     * Search in the DB any value provided by the property given
+     * @param property property where to find
+     * @param value value to find
+     * @param pagination optional pagination to consider
+     * @param dataRange dataRange to filter for
+     * @returns array of entities or and exception
+     */
+    findBy(property: keyof TransferEntity, 
+        value: string | number | boolean, 
+        pagination?: PaginationModel<TransferEntity>, 
+        dataRange?: DataRangeModel): TransferEntity[] {
+            
+        try{ 
+
+            let searchResult = this.database.filter(entity => entity[property] === value); //searchs for entities that matches the criteria
+            
+            if( searchResult.length <= 0){ // if the result of the search is empty
+                throw new NotFoundException(); 
+            }
+
+            if(dataRange && dataRange.start == typeof Date && dataRange.end == typeof Date){ //if there is a range provided
+                searchResult = searchResult.filter( account => account.dateTime >= dataRange.start && account.dateTime <= dataRange.end)
+            }
+        
+            if (pagination) { // if there is a pagination provided
+            let { offset = 0, limit = 0 } = pagination;
+            searchResult = searchResult.slice(offset, offset + limit);
+            }  
+
+            return searchResult; // all good, return the array 
+
+        }catch(err){ // something wrong happened
+
+            throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
+        }
+    }
+
+
+/*
+    /**
      * Searchs in the DB all the transfers from an origin account between two dates
      * @param accountId origin account unique key identifier
      * @param dateInit start date
      * @param dateEnd  end date
      * @returns array of entities or an exception
      */
-    findOutcomeByDateRange(accountId: string, dateInit: Date | number, dateEnd: Date | number): TransferEntity[] {
+ /*   findOutcomeByDateRange(accountId: string, dateInit: Date | number, dateEnd: Date | number): TransferEntity[] {
 
         try{ // try to find all entities that matches the date range by outcome ( origin account )
 
@@ -213,7 +268,7 @@ export class TransferRepository extends BankInternalControl<TransferEntity> impl
      * @param dateEnd end date
      * @returns array of entities or an exception
      */
-    findIncomeByDateRange(accountId: string, dateInit: Date | number, dateEnd: Date | number): TransferEntity[] {
+  /*  findIncomeByDateRange(accountId: string, dateInit: Date | number, dateEnd: Date | number): TransferEntity[] {
 
         try{ // try to find all entities that matches the date range by income ( destination account )
 
@@ -231,30 +286,6 @@ export class TransferRepository extends BankInternalControl<TransferEntity> impl
 
             throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
         }
-    }
-
-    /**
-     * Search in the DB any value provided by the property given
-     * @param property property where to find
-     * @param value value to find
-     * @returns array of entities or and exception
-     */
-    findBy(property: keyof TransferEntity, value: string | number | boolean): TransferEntity[] {
-                
-        try{ 
-
-            const searchResult = this.database.filter(entity => entity[property] === value); //searchs for entities that matches the criteria
-           
-            if( searchResult.length <= 0){ // if the result of the search is empty
-                throw new NotFoundException(); // gives and exception
-            }
-            return searchResult; // all good, return the entity 
-
-        }catch(err){ // something wrong happened
-
-            throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
-        }
-    }
-
+    }*/
     
 }

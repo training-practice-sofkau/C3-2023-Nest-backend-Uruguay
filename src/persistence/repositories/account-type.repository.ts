@@ -4,6 +4,7 @@ import { InternalServerErrorException, NotFoundException } from '@nestjs/common/
 import { AccountTypeEntity } from "../entities";
 import { BankInternalControl } from "./base";
 import { AccountTypeRepositoryInterface } from "./interfaces";
+import { PaginationModel } from '../../models/pagination.model';
 
 
 @Injectable()
@@ -80,13 +81,20 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
 
     /**
      * Returns the content of the array of AccountTypes
+     * @param pagination optional pagination to consider
      * @returns Array of entities 
      */
-    findAll(): AccountTypeEntity[] {
+    findAll(pagination?: PaginationModel<AccountTypeEntity>): AccountTypeEntity[] {
 
         try{ 
         
-            return this.database;
+            let result = this.database;
+
+            if(pagination){
+                let { offset = 0, limit = 0 } = pagination;
+                result = result.slice(offset, offset + limit);
+            }
+            return result;
 
         } catch (err){// something wrong happened
 
@@ -138,13 +146,43 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
         }
     }
 
+    /**
+         * Search in the DB any value provided by the property given
+         * @param property property where to find
+         * @param value value to find
+         * @param pagination optional pagination to consider         
+         * @returns array of entities or and exception
+         */
+    findBy(property: keyof AccountTypeEntity, value: string | number | boolean, pagination?: PaginationModel<AccountTypeEntity>): AccountTypeEntity[] {
+            
+        try{ 
 
+            let searchResult = this.database.filter(entity => entity[property] === value); //searchs for entities that matches the criteria
+        
+            if( searchResult.length <= 0){ // if the result of the search is empty
+                throw new NotFoundException(); // gives and exception
+            }
+            
+            if (pagination) { // if there is a pagination provided
+                let { offset = 0, limit = 0 } = pagination;
+                searchResult = searchResult.slice(offset, offset + limit);
+            }  
+
+            return searchResult; // all good, return the entity 
+
+        }catch(err){ // something wrong happened
+
+            throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
+        }
+    } 
+
+/*
     /**
      * Find in the database all the entities with a given state
      * @param state value to check
      * @returns array of elements or an exception
      */
-    findByState(state: boolean): AccountTypeEntity[] {
+ /*   findByState(state: boolean): AccountTypeEntity[] {
 
         try{ // try to find all entities with a given state
 
@@ -167,7 +205,7 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
      * @param name name of the account
      * @returns array of entities with that name or an exception
      */
-    findByName(name: string): AccountTypeEntity[] {
+ /*   findByName(name: string): AccountTypeEntity[] {
 
           try{ // try to find all entities of a given Name
 
@@ -184,27 +222,6 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
         } 
     }
 
-
-    /**
-     * Search in the DB any value provided by the property given
-     * @param property property where to find
-     * @param value value to find
-     * @returns array of entities or and exception
-     */
-    findBy(property: keyof AccountTypeEntity, value: string | number | boolean): AccountTypeEntity[] {
-        
-        try{ 
-
-            const searchResult = this.database.filter(entity => entity[property] === value); //searchs for entities that matches the criteria
-           
-            if( searchResult.length <= 0){ // if the result of the search is empty
-                throw new NotFoundException(); // gives and exception
-            }
-            return searchResult; // all good, return the entity 
-
-        }catch(err){ // something wrong happened
-
-            throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
-        }
-    } 
+*/
+    
 }

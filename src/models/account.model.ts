@@ -1,7 +1,9 @@
+import { CustomerModel, AccountTypeModel } from '.';
+
 export interface AccountModel{
     id: string;
-    customerId: string;
-    accountTypeId: string;
+    customerId: CustomerModel;
+    accountTypeId: AccountTypeModel;
     balance: number;
     state: boolean;
     deletedAt?: Date | number; 

@@ -1,22 +1,41 @@
 import { Module } from '@nestjs/common';
-import { SecurityController } from './controllers';
-import { AccountController } from './controllers/account/account.controller';
-import { DepositController } from './controllers/deposit/deposit.controller';
-import { TransferController } from './controllers/transfer/transfer.controller';
-import { CustomerController } from './controllers/customer/customer.controller';
-import { DepositService } from './services/deposit/deposit.service';
-import { CustomerService } from './services/customer/customer.service';
-import { AccountService } from './services/account/account.service';
+import { ConfigModule } from '@nestjs/config';
 
-@Module({
-  imports: [],
-  controllers: [
-    SecurityController,
-    AccountController,
-    DepositController,
-    TransferController,
-    CustomerController,
-  ],
-  providers: [CustomerService, DepositService, AccountService],
+import {  
+         AccountController,
+         CustomerController, 
+         DepositController,
+         SecurityController,
+         TransferController,
+         } from './controllers';
+
+import { AccountService, 
+         CustomerService, 
+         DepositService, 
+         TransferService, 
+         SecurityService, } from './services';
+
+import { AccountRepository, 
+         CustomerRepository, 
+         DepositRepository, 
+         TransferRepository, 
+         AccountTypeRepository, 
+         DocumentTypeRepository, } from './persistence/repositories';
+
+
+@Module({  
+  imports: [ConfigModule.forRoot()],
+  controllers: [AccountController, CustomerController, DepositController, TransferController, SecurityController, ],
+  providers: [AccountService, 
+              CustomerService, 
+              DepositService, 
+              SecurityService, 
+              TransferService, 
+              AccountRepository, 
+              CustomerRepository,
+              DepositRepository, 
+              TransferRepository, 
+              AccountTypeRepository,
+              DocumentTypeRepository],
 })
-export class AppModule {}
+export class AppModule { }

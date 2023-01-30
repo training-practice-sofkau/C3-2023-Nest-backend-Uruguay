@@ -4,6 +4,7 @@ import { InternalServerErrorException, NotFoundException } from '@nestjs/common/
 import { DepositEntity } from '../entities';
 import { BankInternalControl } from './base';
 import { DepositRepositoryInterface } from './interfaces';
+import { DataRangeModel, PaginationModel } from '../../models';
 
 @Injectable()
 export class DepositRepository extends BankInternalControl<DepositEntity> implements DepositRepositoryInterface {
@@ -119,15 +120,27 @@ export class DepositRepository extends BankInternalControl<DepositEntity> implem
 
     
     /**
-     * Returns the content of the array of Deposits
+     * Returns the content of the array of Deposits    
      * excludes the mark as deleted
-     * @returns Array of entities 
+     * @param pagination optional pagination to be consider
+     * @returns Array of entities  
      */
-    findAll(): DepositEntity[] {
+    findAll(pagination?: PaginationModel<DepositEntity>): DepositEntity[] {
                 
         try{ 
         
-            return this.database.filter( entity => typeof entity.deletedAt === undefined); //applies filter for deleted ones
+            let result = this.database.filter( entity => typeof entity.deletedAt === undefined); //applies filter for deleted ones
+            
+            if( result.length <= 0){ // if the result of the search is empty
+                throw new NotFoundException(); 
+            }
+
+            if (pagination) { // if there is a pagination provided
+                let { offset = 0, limit = 0 } = pagination;
+                result = result.slice(offset, offset + limit);
+            }  
+    
+            return result; // all good, return the array 
 
         } catch (err){// something wrong happened
 
@@ -207,16 +220,56 @@ export class DepositRepository extends BankInternalControl<DepositEntity> implem
 
 
     /**
+     * Search in the DB any value provided by the property given
+     * @param property property where to find
+     * @param value value to find
+     * @param pagination optional pagination to consider
+     * @param dataRange dataRange to filter for
+     * @returns array of entities or and exception
+     */
+    findBy(property: keyof DepositEntity, 
+        value: string | number | boolean, 
+        pagination?: PaginationModel<DepositEntity>, 
+        dataRange?: DataRangeModel): DepositEntity[] {
+            
+        try{ 
+
+            let searchResult = this.database.filter(entity => entity[property] === value); //searchs for entities that matches the criteria
+            
+            if( searchResult.length <= 0){ // if the result of the search is empty
+                throw new NotFoundException(); 
+            }
+
+            if(dataRange && dataRange.start == typeof Date && dataRange.end == typeof Date){ //if there is a range provided
+                searchResult = searchResult.filter( account => account.dateTime >= dataRange.start && account.dateTime <= dataRange.end)
+            }
+        
+            if (pagination) { // if there is a pagination provided
+            let { offset = 0, limit = 0 } = pagination;
+            searchResult = searchResult.slice(offset, offset + limit);
+            }  
+
+            return searchResult; // all good, return the array 
+
+        }catch(err){ // something wrong happened
+
+            throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
+        }
+    }
+
+/*
+    /**
      * Searchs in the DB for Deposits made between dates
      * @param dateInit start date 
      * @param dateEnd  end date
      * @returns array of entities or and exception
      */
-    findByDataRange(dateInit: Date | number, dateEnd: Date | number): DepositEntity[] {
+/*    findByDataRange(accountId: string, dateInit: Date | number, dateEnd: Date | number): DepositEntity[] {
         
         try{ // try to find all entities that matches date range
 
-            const searchResult = this.database.filter(entity => entity.dateTime >= dateInit 
+            const searchResult = this.database.filter(entity => entity.accountId === accountId
+                && entity.dateTime >= dateInit 
                 && entity.dateTime <= dateEnd
                 && typeof entity.deletedAt === undefined ) ; 
 
@@ -238,7 +291,7 @@ export class DepositRepository extends BankInternalControl<DepositEntity> implem
      * @param value value to find
      * @returns array of entities or and exception
      */
-    findBy(property: keyof DepositEntity, value: string | number | boolean): DepositEntity[] {
+ /*   findBy(property: keyof DepositEntity, value: string | number | boolean): DepositEntity[] {
                 
         try{ 
 
@@ -253,5 +306,5 @@ export class DepositRepository extends BankInternalControl<DepositEntity> implem
 
             throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
         }
-    }
+    }*/
 }
