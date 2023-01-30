@@ -45,5 +45,13 @@ export class AccountController {
   getAccountType(accountId: string): AccountTypeEntity{
   return this.AccountService.getAccountType(accountId)
 }
-@Put ('changeAccntType')
+@Put ('changeAccntType') 
+changeAccntType(accountId: string, accountTypeId: string): AccountTypeEntity { 
+    return this.AccountService.changeAccntType(accountId, accountTypeId);
+}
+
+@Put('unsubscribe/:id')
+unsubscribe(@Param('id') accountId: string): void{
+  return this.AccountService.deleteAccount(accountId);
+}
 }
