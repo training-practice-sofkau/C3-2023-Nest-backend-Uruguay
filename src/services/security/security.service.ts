@@ -17,9 +17,10 @@ import { CustomerRepository } from '../../persistence/repositories';
 import { AccountService } from '../account';
 
 // Entities
-import { AccountTypeEntity, CustomerEntity, AccountEntity } from '../../persistence/entities';
-import { SignInDto, SignUpDto } from '../../dtos';
+import { AccountTypeEntity, CustomerEntity } from '../../persistence/entities';
+import { SignInDto, SignUpDto, CreateAccountDto } from '../../dtos';
 import { DocumentTypeEntity } from '../../persistence/entities/document-type.entity';
+
 
 
 
@@ -53,12 +54,10 @@ export class SecurityService {
 
   /**
    * Create a new user
-   *
    * @param {SignUpDto} user
-   * @return {*}  {string}
-   * @memberof SecurityService
+   * @return {*}  {string}   
    */
-  signUp(user: SignUpDto): string {
+   signUp(user: SignUpDto): string {
 
     const newDocumentType = new DocumentTypeEntity();
     newDocumentType.id = user.documentTypeId;
@@ -78,22 +77,30 @@ export class SecurityService {
       const accountType = new AccountTypeEntity();
       accountType.id = accountType.id;
 
-      const newAccount = new AccountEntity();
+      const newAccount = new CreateAccountDto();
 
-      newAccount.customerId = customer;
-      newAccount.accountTypeId = accountType;
+      newAccount.customerId = customer.id;
+      newAccount.accountTypeId = accountType.id;
 
-      const account = this.accountService.createAccount(newAccount);
+      const account = this.accountService.createAccount(newAccount);      
 
       if (account) {
-        return jwt.sign({ id: customer.id }, 'secretToken', { expiresIn: "1h" }); // process.env.SECRET_KEY || 
+
+        //TODO: jwt throw errors, is disable now but needs to be checked
+
+        return 'eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjcxM2M3OGI4MTYwM2YxNjA0ZjNmNGU4ZTVhNzQ4MzEwIn0.e30.1OmZZ-XrYqB3c7teD7X10kuaMX8BQcAOs9IR77j7iNRRdcMa8ry5pNbR0idTsdYo8uelYR1BnM1AfrXIhmUr1w'
+        // jwt.sign({ id: customer.email }, process.env.SECRET_KEY || 'secretToken');
+        
+      }else{
+        
+        throw new Error('cuenta no creada');
       }
-
-      throw new InternalServerErrorException();
-
-    }
-
-    throw new InternalServerErrorException();
+    
+    } else {     
+      
+      throw new Error("something went wrong!");
+    }    
+    
   }
 
   /**

@@ -24,7 +24,7 @@ export class SignUpDto{
 
     @IsAlphanumeric()
     @IsNotEmpty({message:'This value cannot be empty!'})    
-    @Min(5, {message: 'Password must be at least 5 characters long!'})
+   // @Min(5, {message: 'Password must be at least 5 characters long!'}) <- TODO: this throw some error, check
     password: string;
     
 }

@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 
 import {  
          AccountController,
@@ -23,6 +24,7 @@ import { AccountRepository,
 
 
 @Module({  
+  imports: [ConfigModule.forRoot()],
   controllers: [AccountController, CustomerController, DepositController, TransferController, SecurityController, ],
   providers: [AccountService, 
               CustomerService, 

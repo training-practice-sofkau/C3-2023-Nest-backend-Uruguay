@@ -36,9 +36,9 @@ export class AccountRepository extends BankInternalControl<AccountEntity> implem
     /**
      * Modify the data of the Account that matches a given Id
      * @param id unique key identifier
-     * @param entity object that provides the new updated data 
+     * @param accountNewDetails object that provides the new updated data 
      */
-    update(id: string, entity: AccountEntity): AccountEntity {
+    update(id: string, accountNewDetails: AccountEntity): AccountEntity {
 
         try {
 
@@ -48,7 +48,7 @@ export class AccountRepository extends BankInternalControl<AccountEntity> implem
                 throw new NotFoundException(); // gives and exception
             }
 
-            this.database[targetEntityIndex] = { ...this.database[targetEntityIndex], ...entity, id: id } as AccountEntity; // update existing entity
+            this.database[targetEntityIndex] = { ...this.database[targetEntityIndex], ...accountNewDetails, id: id } as AccountEntity; // update existing entity
 
             return this.database[targetEntityIndex]; // all good, returning update existing entity
 

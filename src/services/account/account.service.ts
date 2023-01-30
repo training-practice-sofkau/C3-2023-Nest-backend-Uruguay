@@ -3,27 +3,37 @@ import { Injectable } from '@nestjs/common';
 import { AccountModel } from '../../models';
 import { AccountEntity, AccountTypeEntity } from '../../persistence/entities';
 import { AccountRepository } from '../../persistence/repositories';
+import { CreateAccountDto } from '../../dtos/account/create-account.dto';
+import { CustomerService } from '../customer/customer.service';
+import { CustomerEntity } from '../../persistence/entities/customer.entity';
 
 
 @Injectable()
 export class AccountService {
 
     constructor(
-      private readonly accountRepository: AccountRepository,       
+      private readonly accountRepository: AccountRepository,
+      private readonly customerService: CustomerService,
       ) {}
     
    /**
    * Create a new account - OK   *
-   * @param {AccountModel} account
-   * @return {*}  {AccountEntity}
-   * @memberof AccountService
+   * @param {CreateAccountDto} account
+   * @return {*}  {AccountEntity}   
    */
-  createAccount(account: AccountModel): AccountEntity {
+  createAccount(account: CreateAccountDto): AccountEntity {
     
+    const newAccountType = new AccountTypeEntity();
+    newAccountType.id = account.accountTypeId;
+
+    // search for existing customer
+    const customer = new CustomerEntity();
+    customer.id = account.customerId;
+
     const newAccount = new AccountEntity();
 
-    newAccount.customerId = account.customerId;
-    newAccount.accountTypeId = account.accountTypeId;
+    newAccount.customerId = customer;
+    newAccount.accountTypeId = newAccountType;
     
     return this.accountRepository.register(newAccount);
   }

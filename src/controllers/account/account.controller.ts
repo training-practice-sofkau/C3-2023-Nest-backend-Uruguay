@@ -3,11 +3,12 @@ import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put } from '
 import { AccountService } from '../../services';
 import { AccountModel } from '../../models';
 import { AccountEntity } from '../../persistence/entities';
+import { CreateAccountDto } from '../../dtos/account/create-account.dto';
 
 @Controller('account')
 export class AccountController {
 
-    constructor( private accountService: AccountService) {}
+    constructor( private readonly accountService: AccountService) {}
 
 
     //TODO: Implment checks and controls - Verify user token
@@ -15,9 +16,9 @@ export class AccountController {
 
     // new account
     // TODO: implement newAccountDTO to use instead of accountModel
-    @Post('register')
-    async createAccount(@Body() account: AccountModel): Promise<AccountEntity>{
-
+    @Post('create')
+    async createAccount(@Body() account: CreateAccountDto): Promise<AccountEntity> {
+        
         return await this.accountService.createAccount(account);
     }
 
