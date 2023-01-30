@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 
-import { CustomerModel } from '../../models';
+import { CustomerModel, PaginationModel } from '../../models';
 import { CustomerEntity } from '../../persistence/entities';
 import { CustomerRepository } from '../../persistence/repositories';
+import { CustomerDto } from '../../dtos';
 
 @Injectable()
 export class CustomerService {
@@ -11,12 +12,8 @@ export class CustomerService {
 
   /**
    * Crear una cliente
-   *
-   * @param {CustomerModel} account
-   * @return {*}  {CustomerEntity}
-   * @memberof CustomerService
    */
-  createCustomer(customer: CustomerModel): CustomerEntity {
+  createCustomer(customer: CustomerDto): CustomerEntity {
     const newACustomer = new CustomerEntity();
     newACustomer.fullName = customer.fullName;
     newACustomer.document = customer.document;
@@ -31,34 +28,21 @@ export class CustomerService {
 
   /**
    * Obtener información de un cliente
-   *
-   * @param {string} customerId
-   * @return {*}  {CustomerEntity}
-   * @memberof CustomerService
    */
-  getCustomerInfo(customerId: string): CustomerEntity {
+  getCustomerInfo(customerId: string): CustomerDto {
     const customer = this.customerRepository.findOneById(customerId);
     return customer;
   }
 
   /**
    * Actualizar información de un cliente
-   *
-   * @param {string} id
-   * @param {CustomerModel} customer
-   * @return {*}  {CustomerEntity}
-   * @memberof CustomerService
    */
-  updatedCustomer(id: string, customer: CustomerModel): CustomerEntity {
+  updatedCustomer(id: string, customer: CustomerModel): CustomerDto {
     return this.customerRepository.update(id, customer);
   }
 
   /**
    * Dar de baja a un cliente en el sistema
-   *
-   * @param {string} id
-   * @return {*}  {boolean}
-   * @memberof CustomerService
    */
   unsubscribe(id: string): boolean {
     let customerUpdated = this.customerRepository.findOneById(id);
@@ -72,9 +56,6 @@ export class CustomerService {
   
   /**
    * Borrar un cliente
-   *
-   * @param {string} customerId
-   * @memberof CustomerService
    */
   deleteCustomer(customerId: string): void {
     this.customerRepository.delete(customerId);
@@ -82,11 +63,22 @@ export class CustomerService {
   
   /**
    * Borrar un cliente de forma lógica
-   *
-   * @param {string} customerId
-   * @memberof CustomerService
    */
   softDeleteCustomer(customerId: string): void {
     this.customerRepository.delete(customerId, true);
   }
 
+  /**
+   * Obtener la lista de clientes
+   */
+  findAllCustomers(pagination?: PaginationModel): CustomerDto[] {
+    const customers = this.customerRepository.findAll();
+    let customersPaginated: CustomerDto[] =[];
+
+    if(pagination) {
+      return customersPaginated = customers.slice(pagination.offset, pagination.limit);
+    }
+    return customers;
+  }
+
+}

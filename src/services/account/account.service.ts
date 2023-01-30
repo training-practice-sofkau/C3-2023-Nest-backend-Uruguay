@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { BadRequestException, ForbiddenException, HttpException } from '@nestjs/common/exceptions';
+import { BadRequestException, ForbiddenException, HttpException, Injectable } from '@nestjs/common';
 
-import { AccountModel } from 'src/models';
-import { AccountEntity, AccountTypeEntity } from 'src/persistence/entities';
+import { PaginationModel } from '../../models';
+import { AccountEntity, AccountTypeEntity } from '../../persistence/entities';
 import { AccountRepository, AccountTypeRepository } from '../../persistence/repositories';
+import { AccountDto } from '../../dtos';
 
 @Injectable()
 export class AccountService {
@@ -13,24 +13,20 @@ export class AccountService {
 
   /**
    * Crear una cuenta
-   *
-   * @param {AccountModel} account
-   * @return {*}  {AccountEntity}
-   * @memberof AccountService
    */
-  createAccount(account: AccountModel): AccountEntity {
-    const newAccount = new AccountEntity();
-    newAccount.customer = account.customer;
-    newAccount.accountType = account.accountType;
+  createAccount(account: AccountDto): AccountEntity {
+    let newAccount = new AccountEntity();
+
+    newAccount = {
+      ...newAccount,
+      ...account
+    };
+
     return this.accountRepository.register(newAccount);
   }
 
   /**
    * Obtener el balance de una cuenta
-   *
-   * @param {string} accountId
-   * @return {*}  {number}
-   * @memberof AccountService
    */
   getBalance(accountId: string): number {
     const account = this.accountRepository.findOneById(accountId);
@@ -39,10 +35,6 @@ export class AccountService {
 
   /**
    * Agregar balance a una cuenta
-   *
-   * @param {string} accountId
-   * @param {number} amount
-   * @memberof AccountService
    */
   addBalance(accountId: string, amount: number): void {
     try {
@@ -59,10 +51,6 @@ export class AccountService {
 
   /**
    * Remover balance de una cuenta
-   *
-   * @param {string} accountId
-   * @param {number} amount
-   * @memberof AccountService
    */
   removeBalance(accountId: string, amount: number): void {
     try {
@@ -82,11 +70,6 @@ export class AccountService {
 
   /**
    * Verificar la disponibilidad de un monto a retirar en una cuenta
-   *
-   * @param {string} accountId
-   * @param {number} amount
-   * @return {*}  {boolean}
-   * @memberof AccountService
    */
   verifyAmountIntoBalance(accountId: string, amount: number): boolean {
     if(this.accountRepository.findOneById(accountId).balance >= amount) {
@@ -97,10 +80,6 @@ export class AccountService {
 
   /**
    * Obtener el estado de una cuenta
-   *
-   * @param {string} accountId
-   * @return {*}  {boolean}
-   * @memberof AccountService
    */
   getState(accountId: string): boolean {
     return this.accountRepository.findOneById(accountId).state;
@@ -108,10 +87,6 @@ export class AccountService {
 
   /**
    * Cambiar el estado de una cuenta
-   *
-   * @param {string} accountId
-   * @param {boolean} state
-   * @memberof AccountService
    */
   changeState(accountId: string, state: boolean): void {
     try {
@@ -126,10 +101,6 @@ export class AccountService {
 
   /**
    * Obtener el tipo de cuenta de una cuenta
-   *
-   * @param {string} accountId
-   * @return {*}  {AccountTypeEntity}
-   * @memberof AccountService
    */
   getAccountType(accountId: string): AccountTypeEntity {
     return this.accountRepository.findOneById(accountId).accountType;
@@ -137,11 +108,6 @@ export class AccountService {
 
   /**
    * Cambiar el tipo de cuenta a una cuenta
-   *
-   * @param {string} accountId
-   * @param {string} accountTypeId
-   * @return {*}  {AccountTypeEntity}
-   * @memberof AccountService
    */
   changeAccountType(
     accountId: string,
@@ -163,9 +129,6 @@ export class AccountService {
 
   /**
    * Borrar una cuenta
-   *
-   * @param {string} accountId
-   * @memberof AccountService
    */
   deleteAccount(accountId: string): void {
     this.accountRepository.delete(accountId);
@@ -173,11 +136,38 @@ export class AccountService {
   
   /**
    * Borrar una cuenta de forma lógica
-   *
-   * @param {string} accountId
-   * @memberof AccountService
    */
   softDeleteAccount(accountId: string): void {
-    this.accountRepository.delete(accountId, true);
+    const accountUpdated = this.accountRepository.findOneById(accountId);
+    accountUpdated.deletedAt = Date.now();
+    this.accountRepository.update(accountId, accountUpdated);
+  }
+
+  /**
+   * Obtener todas las cuentas
+   */
+  findAllAccounts(pagination?: PaginationModel): AccountDto[] {
+    const accounts = this.accountRepository.findAll();
+    let accountsPaginated: AccountDto[] =[];
+
+    if(pagination) {
+      return accountsPaginated = accounts.slice(pagination.offset, pagination.limit);
+    }
+    return accounts;
+  }
+
+  /**
+   * Obtener una cuenta por id
+   */
+  findOneAccountById(id: string): AccountDto {
+    const account = this.accountRepository.findOneById(id);
+    return account;
+  }
+
+  /**
+   * Actualizar información de una cuenta
+   */
+  updatedAccount(id: string, account: AccountDto): AccountEntity {
+    return this.accountRepository.update(id, account);
   }
 }

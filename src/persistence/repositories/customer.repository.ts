@@ -28,14 +28,18 @@ export class CustomerRepository
     return this.database[indexCurrentEntity];
   }
 
-  delete(id: string, soft?: boolean | undefined): void {
+  delete(id: string, soft?: boolean): void {
     const indexCurrentEntity = this.database.findIndex(
       (item) => item.id === id && typeof item.deletedAt === 'undefined'
     );
     if(indexCurrentEntity === -1) throw new NotFoundException();
-    soft ?
-    this.database[indexCurrentEntity].deletedAt = Date.now() :
-    this.database.splice(indexCurrentEntity, 1);
+
+    if(soft) {
+      this.database[indexCurrentEntity].deletedAt = Date.now();
+    }
+    else {
+      this.database.splice(indexCurrentEntity, 1);
+    }
   }
 
   findAll(): CustomerEntity[] {
@@ -49,7 +53,7 @@ export class CustomerRepository
       (item) => item.id === id && typeof item.deletedAt === 'undefined'
     );
     if (currentEntity) return currentEntity;
-    throw new NotFoundException();
+    throw new NotFoundException('The customer with this id does not exist');
   }
 
   findOneByEmailAndPassword(email: string, password: string): boolean {

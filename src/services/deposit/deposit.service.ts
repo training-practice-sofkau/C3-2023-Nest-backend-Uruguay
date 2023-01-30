@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 
-import { DataRangeModel, DepositModel, PaginationModel } from '../../models/';
+import { DataRangeModel, PaginationModel } from '../../models/';
 import { DepositRepository } from 'src/persistence/repositories';
 import { DepositEntity } from 'src/persistence/entities';
+import { DepositDto } from '../../dtos';
 
 @Injectable()
 export class DepositService {
@@ -10,12 +11,8 @@ export class DepositService {
 
   /**
    * Crear un deposito
-   *
-   * @param {DepositModel} deposit
-   * @return {*}  {DepositEntity}
-   * @memberof DepositService
    */
-  createDeposit(deposit: DepositModel): DepositEntity {
+  createDeposit(deposit: DepositDto): DepositEntity {
     const newDeposit = new DepositEntity();
     newDeposit.account = deposit.account;
     newDeposit.amount = deposit.amount;
@@ -24,10 +21,14 @@ export class DepositService {
   }
 
   /**
+   * Actualizar un deposito
+   */
+  updateDeposit(id: string, newDeposit: DepositDto): DepositEntity {
+    return this.depositRepository.update(id, newDeposit);
+  }
+
+  /**
    * Borrar un deposito
-   *
-   * @param {string} depositId
-   * @memberof DepositService
    */
   deleteDeposit(depositId: string): void {
     this.depositRepository.delete(depositId);
@@ -35,9 +36,6 @@ export class DepositService {
   
   /**
    * Borrar un deposito de forma lógica
-   *
-   * @param {string} depositId
-   * @memberof DepositService
    */
   softDeleteDeposit(depositId: string): void {
     this.depositRepository.delete(depositId, true);
@@ -45,23 +43,19 @@ export class DepositService {
 
   /**
    * Obtener el historial de los depósitos en una cuenta
-   *
-   * @param {string} depositId
-   * @param {PaginationModel} pagination
-   * @param {DataRangeModel} [dataRange]
-   * @return {*}  {DepositEntity[]}
-   * @memberof DepositService
    */
   getHistory(
-    depositId: string,
+    accountId: string,
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): DepositEntity[] {
-    const deposit = this.depositRepository.findAll();
-    let depositPaginated: DepositEntity[] = [];
+    let deposits = this.depositRepository.findAll();
+    let depositsOfAccount = deposits.filter(deposit => deposit.account.id === accountId)
+    let depositsPaginated: DepositEntity[] = [];
 
     if(pagination) {
-      depositPaginated = deposit.slice(pagination.offset, pagination.limit);
+      return depositsPaginated = depositsOfAccount.slice(pagination.offset, pagination.limit);
     }
+    return depositsOfAccount;
   }
 }

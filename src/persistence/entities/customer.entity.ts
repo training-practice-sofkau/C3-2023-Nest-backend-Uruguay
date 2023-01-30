@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid';
 
 export class CustomerEntity implements CustomerModel{
     id = uuid();
-    documentType: DocumentTypeModel;
+    documentType: DocumentTypeEntity;
     document: string;
     fullName: string;
     email: string;
@@ -13,6 +13,6 @@ export class CustomerEntity implements CustomerModel{
     password: string;
     avatarUrl?: string | undefined;
     state = true;
-    daletedAt?: number | Date | undefined;   
+    deletedAt?: number | Date | undefined;   
     
 }

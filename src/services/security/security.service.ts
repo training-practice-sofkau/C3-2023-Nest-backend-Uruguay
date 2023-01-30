@@ -8,8 +8,8 @@ import { v4 as uuid } from 'uuid';
 import jwt from 'jsonwebtoken';
   
   // Data transfer objects
+  import { SignOutDto, SignUpDto, SignInDto, AccountDto } from '../../dtos';
 
-  
   // Models
   import { AccountModel, CustomerModel } from '../../models';
   
@@ -23,8 +23,8 @@ import jwt from 'jsonwebtoken';
   import {
     AccountTypeEntity,
     CustomerEntity,
+    DocumentTypeEntity,
   } from '../../persistence/entities';
-import { JsonWebTokenError } from 'jsonwebtoken';
   
   @Injectable()
   export class SecurityService {
@@ -35,17 +35,13 @@ import { JsonWebTokenError } from 'jsonwebtoken';
   
     /**
      * Identificarse en el sistema
-     *
-     * @param {CustomerModel} user
-     * @return {*}  {string}
-     * @memberof SecurityService
      */
-    signIn(user: CustomerModel): string {
+    signIn(user: SignInDto): string {
       const answer = this.customerRepository.findOneByEmailAndPassword(
-        user.email,
+        user.username,
         user.password,
       );
-      const token: string = jwt.sign({_id: user.id}, process.env.TOKEN_SECRET || 'tokentest');
+      const token: string = jwt.sign({id: user.id}, process.env.TOKEN_SECRET || 'tokentest');
 
       if (answer) return token;
       else throw new UnauthorizedException();
@@ -53,37 +49,33 @@ import { JsonWebTokenError } from 'jsonwebtoken';
   
     /**
      * Crear usuario en el sistema
-     *
-     * @param {CustomerModel} user
-     * @return {*}  {string}
-     * @memberof SecurityService
      */
-    signUp(user: CustomerModel): string {
+    signUp(user: SignUpDto): string {
+      const documentType = new DocumentTypeEntity()
+      documentType.id = user.documentTypeId;
+
       const newCustomer = new CustomerEntity();
-      newCustomer.documentType = user.documentType;
+      newCustomer.documentType = documentType;
       newCustomer.document = user.document;
       newCustomer.fullName = user.fullName;
       newCustomer.email = user.email;
       newCustomer.phone = user.phone;
       newCustomer.password = user.password;
-  
+      
       const customer = this.customerRepository.register(newCustomer);
   
       if (customer) {
         const accountType = new AccountTypeEntity();
-        accountType.id = uuid(); //'Falta el ID por defecto del tipo de cuenta'
+        // accountType.id = ;
         
-        const newAccount: AccountModel = {
+        const newAccount = {
           customer,
           accountType,
-          id: '',
-          balance: 0,
-          state: true
         };
   
         const account = this.accountService.createAccount(newAccount);
 
-        const token: string = jwt.sign({_id: newAccount.id}, process.env.TOKEN_SECRET || 'tokentest');
+        const token: string = jwt.sign({id: account.id}, process.env.TOKEN_SECRET || 'tokentest');
   
         if (account) return token;
         else throw new InternalServerErrorException();
@@ -92,14 +84,15 @@ import { JsonWebTokenError } from 'jsonwebtoken';
   
     /**
      * Salir del sistema
-     *
-     * @param {string} JWToken
-     * @memberof SecurityService
      */
-    signOut(JWToken: string): void {
-      const account = jwt.decode(JWToken);
-      if (account) {
-        this.accountService.changeState(account.id);
-      }
-    }
+    // signOut(JWToken: string): void {
+    //   const jwtPayload = jwt.verify(JWToken, process.env.TOKEN_SECRET || 'tokentest');
+      
+    //   if(jwtPayload instanceof Object) {
+    //     const account = <SignOutDto>jwtPayload;
+    //     this.accountService.changeState(account.id, false);
+    //   }
+    //   else throw new InternalServerErrorException();
+    // }
+    
   }
