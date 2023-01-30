@@ -5,7 +5,7 @@ import { AccountModel } from '../models';
 import { AccountEntity, AccountTypeEntity } from '../persistence/entities';
 
 // Data Transfer Object
-import { BalanceDto } from '../dtos/balance.dto';
+import { BalanceDto, ChangeStateDto } from '../dtos';
 
 @Injectable()
 export class AccountService {
@@ -46,10 +46,10 @@ export class AccountService {
     return this.accountRepository.findOneById(accountId).state
   }
 
-  changeState(accountId: string, state: boolean): void {
-    const current = this.accountRepository.findOneById(accountId);
-    current.state = state;
-    this.accountRepository.update(accountId, current)
+  changeState(account: ChangeStateDto): void {
+    const current = this.accountRepository.findOneById(account.accountId);
+    current.state = account.state;
+    this.accountRepository.update(account.accountId, current)
   }
 
   getAccountById(accountId: string): AccountEntity {
