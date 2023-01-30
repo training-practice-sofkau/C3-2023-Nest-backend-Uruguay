@@ -12,7 +12,7 @@ export class SignUpDto{
 
     @IsNotEmpty({message:'This value cannot be empty!'})
     @IsString()
-    fullname: string;
+    fullName: string;
 
     @IsEmail()
     @IsNotEmpty({message:'This value cannot be empty!'})
