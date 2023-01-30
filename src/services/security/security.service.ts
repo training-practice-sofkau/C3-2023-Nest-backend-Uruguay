@@ -8,7 +8,7 @@ import {
 // Data transfer objects
 
 // Models
-import { CustomerModel } from '../../models';
+
 
 // Repositories
 import { CustomerRepository } from '../../persistence/repositories';
@@ -18,6 +18,9 @@ import { AccountService } from '../account';
 
 // Entities
 import { AccountTypeEntity, CustomerEntity } from '../../persistence/entities';
+import { SignInDto } from '../../dtos/sign-in.dto';
+import { DocumentTypeEntity } from '../../persistence/entities/document-type.entity';
+import { SignUpDto } from '../../dtos/sign-up.dto';
 
 @Injectable()
 export class SecurityService {
@@ -26,14 +29,8 @@ export class SecurityService {
     private readonly accountService: AccountService,
   ) {}
 
-  /**
-   * Identificarse en el sistema
-   *
-   * @param {CustomerModel} user
-   * @return {*}  {string}
-   * @memberof SecurityService
-   */
-  signIn(user: CustomerModel): string {
+
+  signIn(user: SignInDto): string {
     const answer = this.customerRepository.findOneByEmailAndPassword(
       user.email,
       user.password,
@@ -42,16 +39,13 @@ export class SecurityService {
     else throw new UnauthorizedException();
   }
 
-  /**
-   * Crear usuario en el sistema
-   *
-   * @param {CustomerModel} user
-   * @return {*}  {string}
-   * @memberof SecurityService
-   */
-  signUp(user: CustomerModel): string {
+ 
+  signUp(user: SignUpDto): string {
+    const documentType = new DocumentTypeEntity();
+    documentType.id = user.document;
+    
     const newCustomer = new CustomerEntity();
-    newCustomer.documentType = user.documentType;
+    newCustomer.documentType = documentType;
     newCustomer.document = user.document;
     newCustomer.fullName = user.fullName;
     newCustomer.email = user.email;
