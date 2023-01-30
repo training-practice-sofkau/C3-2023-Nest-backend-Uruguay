@@ -7,6 +7,5 @@ export class SingInDTO {
 
     @IsNotEmpty({ message: 'the password is required.' })
     @IsString()
-    @Min(5)
     password: string;
 }
