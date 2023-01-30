@@ -1,8 +1,8 @@
-import { IsEmail,IsNumberString, IsUUID, IsString } from 'class-validator';
+import { IsUUID, IsNumberString, IsString, IsEmail } from "class-validator";
 
 export class SignUpDto {
 
-    @IsUUID(4, { message: 'This must be a valid UUID version 4' })
+  @IsUUID(4, { message: 'This must be a valid UUID version 4' })
   documentTypeId: string;
 
   @IsNumberString(undefined,{ message: 'This must be a string of numbers' })
