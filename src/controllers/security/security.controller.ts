@@ -2,24 +2,24 @@
 import { Body, Controller, Param, Post } from '@nestjs/common';
 
 import { CustomerModel } from '../../models';
+import { SignUpDto } from '../../dtos';
+import { SignInDto } from '../../dtos/sign-in.dto';
 
 @Controller('security')
 export class SecurityController {
 
     constructor(private securityService: SecurityController) {}
 
-    //sign in
-    //TODO: generate userDTO and use it instead of customerModel
-    @Post('signin')
-    async signIn(@Body() user: CustomerModel): Promise<string> {
+    //sign in    
+    @Post('/signin')
+    async signIn(@Body() user: SignInDto): Promise<string> {
         return this.securityService.signIn(user);
     }
 
 
-    //sign up - new customer
-    //TODO: generate customerDTO and use it instead of customerModel
-    @Post('signup')
-    async signUp(@Body() customer: CustomerModel): Promise<string> {
+    //sign up - new customer    
+    @Post('/signup')
+    async signUp(@Body() customer: SignUpDto): Promise<string> {
         return await this.securityService.signUp(customer);
     }
 

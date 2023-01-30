@@ -18,6 +18,9 @@ import  jwt  from 'jsonwebtoken';
 
   // Entities
   import { AccountTypeEntity, CustomerEntity, AccountEntity } from '../../persistence/entities';
+import { SignInDto } from '../../dtos/sign-in.dto';
+import { SignUpDto } from 'src/dtos/sign-up.dto';
+import { DocumentTypeEntity } from '../../persistence/entities/document-type.entity';
 
 
 
@@ -32,17 +35,17 @@ import  jwt  from 'jsonwebtoken';
     /**
      * Login to the system -
      *
-     * @param {CustomerModel} user
+     * @param {SignInDto} user
      * @return {*}  {string}
      * @memberof SecurityService
      */
-    signIn(user: CustomerModel): string {
+    signIn(user: SignInDto): string {
       const answer = this.customerRepository.findOneByEmailAndPassword(
-        user.email,
+        user.username,
         user.password,
       );
       if (answer){                
-        return jwt.sign({id:user.id}, process.env.SECRET_KEY || 'secretToken', {expiresIn:"1h"});
+        return jwt.sign({id:user.username},'secretToken', {expiresIn:"1h"}); // process.env.SECRET_KEY || 
       } 
       
       throw new UnauthorizedException();
@@ -52,15 +55,18 @@ import  jwt  from 'jsonwebtoken';
     /**
      * Create a new user
      *
-     * @param {CustomerModel} user
+     * @param {SignUpDto} user
      * @return {*}  {string}
      * @memberof SecurityService
      */
-    signUp(user: CustomerModel): string {
+    signUp(user: SignUpDto): string {
+
+      const newDocumentType= new DocumentTypeEntity();
+      newDocumentType.id= user.documentTypeId;
 
       const newCustomer = new CustomerEntity();
       
-      newCustomer.documentType = user.documentType;
+      newCustomer.documentType = newDocumentType;
       newCustomer.document = user.document;
       newCustomer.fullname = user.fullname;
       newCustomer.email = user.email;
@@ -81,7 +87,7 @@ import  jwt  from 'jsonwebtoken';
         const account = this.accountService.createAccount(newAccount);
 
         if (account) {
-          return jwt.sign({id: customer.id}, process.env.SECRET_KEY || 'secretToken', {expiresIn:"1h"});
+          return jwt.sign({id: customer.id}, 'secretToken' , {expiresIn:"1h"}); // process.env.SECRET_KEY || 
         }
         
         throw new InternalServerErrorException();
@@ -99,9 +105,9 @@ import  jwt  from 'jsonwebtoken';
      */
     signOut(JWToken: string): void {
       
-      const token = jwt.verify(JWToken, process.env.SECRET_KEY || 'secretToken') as string;
+      const token = jwt.verify(JWToken, 'secretToken') as string; // process.env.SECRET_KEY || 
 
-      if(token === this.customerRepository.findOneById(token).id){ // verify the id user 
+      if(token === this.customerRepository.findOneByEmail(token).email){ // verify the user email
         
         console.log('Logging Out!');
 

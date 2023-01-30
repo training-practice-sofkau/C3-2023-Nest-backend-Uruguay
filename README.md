@@ -49,7 +49,7 @@ $ npm run start:prod
 
 ```bash
 # Title of the delivery
-[Workshop Week 1 - Day 4] - Dependency injection
+[Workshop Week 2 - Day 1] - API
 
 # Body of the delivery
 [Any short description]
@@ -59,10 +59,10 @@ $ npm run start:prod
 
 The following are the guidelines that should be taken into account for the development of the workshop to be submitted:
 
-1. Code all the services of the proposed system.
-2. If you consider that a service should have an additional method, feel free to implement and code it in relation to the existing repositories and methods.
-3. If you consider that additional method is required in the existing repositories, you may also code it according to your needs.
-
+1. Create all DTOs.
+2. Validate all DTOs.
+3. Implement DTOs instead of models ( review all the mappings )
+4. Create all Controllers.
 Do not forget to consult the Nest documentation if you consider it necessary: [Nest Documentation](https://docs.nestjs.com/).
 
 ### Important note
