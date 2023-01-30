@@ -2,11 +2,12 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { TransferEntity } from "../entities/transfer-entity";
 import { TransferRepositoryInterface } from "./interface/i-transfer-repo";
 import { BaseRepository } from "./repo-base/base-repository";
+import { PaginationModel } from "src/models/i-pagination-model";
 
 @Injectable()
 export class TransferRepository extends BaseRepository<TransferEntity> implements TransferRepositoryInterface {
-
-
+   
+   
     register(entity: TransferEntity): TransferEntity {
 
         this.database.push(entity);
@@ -94,4 +95,15 @@ export class TransferRepository extends BaseRepository<TransferEntity> implement
         
         return currentEntity;
     }
+
+
+    //******************NUEVOS**********************/
+
+    findBy(property: keyof TransferEntity, value: string | number | boolean, pagination?: PaginationModel | undefined): TransferEntity[] {
+        throw new Error("Method not implemented.");
+    }
+    findIndexById(id: string): number {
+        throw new Error("Method not implemented.");
+    }
+
 }

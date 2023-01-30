@@ -1,3 +1,5 @@
+import { PaginationModel } from "src/models/i-pagination-model";
+
 export interface IRepository<T> {  //Maneja un cualquier tipo de objeto, T es un objeto generico
     
     register(entity: T): T;
@@ -6,7 +8,13 @@ export interface IRepository<T> {  //Maneja un cualquier tipo de objeto, T es un
 
     delete(id: string, soft?: boolean): void;
 
-    findAll(): T[];
+    findAll(pagination?: PaginationModel): T[];
 
     findOneById(id: string): T;
+
+    findBy(property: keyof T,
+             value: string | number | boolean,
+              pagination?: PaginationModel): T[]
+
+    findIndexById(id: string): number;
 }
