@@ -2,6 +2,7 @@ import { Body, UsePipes, Controller, Get, Post, Param, ParseUUIDPipe, Validation
 
 import { AccountService } from '../../services';
 import { AccountDto } from '../../dtos';
+import { AccountEntity } from '../../persistence/entities';
 
 @Controller('account')
 export class AccountController {
@@ -19,19 +20,19 @@ export class AccountController {
 
     @Post()
     @UsePipes(new ValidationPipe())
-    createAccount(@Body() account: AccountDto): AccountDto {
+    createAccount(@Body() account: AccountDto): AccountEntity {
         return this.accountService.createAccount(account);
     }
 
     @Put(':id')
     @UsePipes(new ValidationPipe())
-    updateAccount(@Param('id', ParseUUIDPipe) id: string ,@Body() account: AccountDto): AccountDto {
+    updateAccount(@Param('id', ParseUUIDPipe) id: string ,@Body() account: AccountDto): AccountEntity {
         return this.accountService.updatedAccount(id, account);
     }
 
     @Patch(':id')
     @UsePipes(new ValidationPipe())
-    updateSomePropertiesAccount(@Param('id', ParseUUIDPipe) id: string ,@Body() account: AccountDto): AccountDto {
+    updateSomePropertiesAccount(@Param('id', ParseUUIDPipe) id: string ,@Body() account: AccountDto): AccountEntity {
         return this.accountService.updatedAccount(id, account);
     }
 
