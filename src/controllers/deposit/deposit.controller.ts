@@ -15,11 +15,13 @@ export class DepositController {
     }
 
     @Post()
+    @UsePipes(new ValidationPipe())
     postDeposit(@Body() deposit: DepositDto): DepositEntity {
         return this.depositService.createDeposit(deposit);
     }
 
     @Put(':id')
+    @UsePipes(new ValidationPipe())
     putDeposit(@Param('id', ParseUUIDPipe) id: string, @Body() newdDeposit: DepositDto): DepositEntity {
         return this.depositService.updateDeposit(id, newdDeposit);
     }
