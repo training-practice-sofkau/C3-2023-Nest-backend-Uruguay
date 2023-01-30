@@ -3,10 +3,13 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { AccountTypeEntity } from "../entities/account-type-entity";
 import { BaseRepository } from "./repo-base/base-repository";
 import { AccountTypeRepositoryInterface } from "./interface/i-account-type-repo";
+import { IRepository } from "./interface/i-base/i-repository";
+import { PaginationModel } from "src/models/i-pagination-model";
 
 
 @Injectable()
 export class AccountTypeRepository extends BaseRepository<AccountTypeEntity> implements AccountTypeRepositoryInterface  {
+  
 
 
     register(entity: AccountTypeEntity): AccountTypeEntity {
@@ -71,6 +74,16 @@ export class AccountTypeRepository extends BaseRepository<AccountTypeEntity> imp
         if(!currentEntity ) throw new NotFoundException('Lo siento, nada por aqui =(');
 
         return currentEntity;
+    }
+
+    //*************NUEVOS********************/
+
+      
+    findBy(property: keyof AccountTypeEntity, value: string | number | boolean, pagination?: PaginationModel | undefined): AccountTypeEntity[] {
+        throw new Error("Method not implemented.");
+    }
+    findIndexById(id: string): number {
+        throw new Error("Method not implemented.");
     }
 
 

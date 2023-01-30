@@ -6,14 +6,13 @@ import { AccountEntity } from 'src/persistence/entities/account-entity';
 import { AccountTypeEntity } from 'src/persistence/entities/account-type-entity';
 import { AccountRepository } from 'src/persistence/repositories/AccountRepo';
 import { AccountTypeRepository } from 'src/persistence/repositories/TypeAccountRepo';
-import { CustomerRepositoryInterface } from 'src/persistence/repositories/interface/i-customer-repo';
 
 @Injectable()
 export class AccountService {
 
-
     constructor(private readonly accountRepository: AccountRepository,
-                private readonly accountTypeRepository: AccountTypeRepository,) {
+                private readonly accountTypeRepository: AccountTypeRepository
+                ) {
     }
 
     /**
@@ -165,7 +164,7 @@ export class AccountService {
      * @param {string} accountTypeId
      * @return {*}  {AccountTypeEntity}
      * @memberof AccountService
-     */
+      */
     changeAccountType(accountId: string, accountTypeId: string): AccountTypeEntity {
 
         const currentEntity = this.accountRepository.findOneById(accountId);
@@ -174,6 +173,7 @@ export class AccountService {
 
         return currentEntity.accountTypeId;
     }
+   
 
     /**
      * Borrar una cuenta

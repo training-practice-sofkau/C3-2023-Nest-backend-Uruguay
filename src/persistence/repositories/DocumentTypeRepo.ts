@@ -2,9 +2,13 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { DocumentTypeEntity } from "../entities/document-type-entity";
 import { DocumentTypeRepositoryInterface } from "./interface/i-document-type-repo";
 import { BaseRepository } from "./repo-base/base-repository";
+import { PaginationModel } from "src/models/i-pagination-model";
 
 @Injectable()
 export class DocumentTypeRepository extends BaseRepository<DocumentTypeEntity> implements DocumentTypeRepositoryInterface {
+  
+  
+  
 
   register(entity: DocumentTypeEntity): DocumentTypeEntity {
     this.database.push(entity);
@@ -58,6 +62,15 @@ export class DocumentTypeRepository extends BaseRepository<DocumentTypeEntity> i
     const currentEntity = this.database.filter((obj) => obj.name === name);
     if (currentEntity) return currentEntity;
     else throw new NotFoundException('Lo siento, nada por aqui =(');
+  }
+
+  /*********************NUEVOS********************/
+
+  findBy(property: keyof DocumentTypeEntity, value: string | number | boolean, pagination?: PaginationModel | undefined): DocumentTypeEntity[] {
+    throw new Error("Method not implemented.");
+  }
+  findIndexById(id: string): number {
+    throw new Error("Method not implemented.");
   }
 
 

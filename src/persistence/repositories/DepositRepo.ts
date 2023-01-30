@@ -2,11 +2,12 @@ import { NotFoundException } from "@nestjs/common";
 import { DepositEntity } from "../entities/deposit-entity";
 import { IRepository } from "./interface/i-base/i-repository";
 import { BaseRepository } from "./repo-base/base-repository";
+import { DepositRepositoryInterface } from "./interface/i-deposit-repo";
+import { PaginationModel } from "src/models/i-pagination-model";
 
-export class DepositRepository extends BaseRepository<DepositEntity> implements IRepository<DepositEntity> {
+export class DepositRepository extends BaseRepository<DepositEntity> implements DepositRepositoryInterface {
     
-    
-    
+     
     
     register(entity: DepositEntity): DepositEntity {
 
@@ -91,6 +92,18 @@ export class DepositRepository extends BaseRepository<DepositEntity> implements 
         
         return currentEntity;
     }
+
+
+
+    //**********************NUEVOS************************* */
+    
+    findBy(property: keyof DepositEntity, value: string | number | boolean, pagination?: PaginationModel | undefined): DepositEntity[] {
+        throw new Error("Method not implemented.");
+    }
+    findIndexById(id: string): number {
+        throw new Error("Method not implemented.");
+    }
+    
 
     
 }

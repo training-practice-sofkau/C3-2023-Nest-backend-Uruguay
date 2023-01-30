@@ -1,14 +1,23 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { BaseRepository } from "./repo-base/base-repository";
 import { CustomerEntity } from "../entities/customer-entity";
-import { IRepository } from "./interface/i-base/i-repository";
 import { PaginationModel } from "src/models/i-pagination-model";
+import { CustomerRepositoryInterface } from "./interface/i-customer-repo";
 
 
 @Injectable()
-export class CustomerRepo extends BaseRepository<CustomerEntity> implements IRepository<CustomerEntity>{ //Consultar??
+export class CustomerRepo extends BaseRepository<CustomerEntity> implements CustomerRepositoryInterface{
 
 
+  
+  findBy(property: keyof CustomerEntity, value: string | number | boolean, pagination?: PaginationModel | undefined): CustomerEntity[] {
+    throw new Error("Method not implemented.");
+  }
+  findIndexById(id: string): number {
+    throw new Error("Method not implemented.");
+  } //Consultar??
+  
+ 
   register(entity: CustomerEntity): CustomerEntity {
 
     this.database.push(entity);
