@@ -10,21 +10,21 @@ import {
 
   
   // Models
-  import { CustomerModel } from '../../models';
   
   // Repositories
   import { CustomerRepository } from '../../persistence/repositories';
   
   // Services
   import { AccountService } from '../account';
-import { AccountModel } from '../../models/account.model';
   
   // Entities
   import {
     AccountEntity,
     AccountTypeEntity,
     CustomerEntity,
+    DocumentTypeEntity,
   } from '../../persistence/entities';
+import { SignInDto, SignUpDto } from 'src/dtos';
   
   @Injectable()
   export class SecurityService {
@@ -41,11 +41,11 @@ import { AccountModel } from '../../models/account.model';
      * @return {*}  {string}
      * @memberof SecurityService
      */
-    signIn(user: CustomerModel): string {
+    signIn(user: SignInDto): string {
       const jwt = require('jsonwebtoken');
 
       const answer = this.customerRepository.findOneByEmailAndPassword(
-        user.email,
+        user.username,
         user.password,
       );
       if (answer) return jwt.sign({id: user.id}, process.env.TOKEN_SECRET )
@@ -59,18 +59,18 @@ import { AccountModel } from '../../models/account.model';
      * @return {*}  {string}
      * @memberof SecurityService
      */
-    signUp(user: CustomerModel): string {
+    signUp(user: SignUpDto): string {
+
+      const documentType = new DocumentTypeEntity()
+      documentType.id = user.documentTypeId;
+
       const newCustomer = new CustomerEntity();
-      newCustomer.documentType = user.documentType
+      newCustomer.documentType = documentType;
       newCustomer.document = user.document;
       newCustomer.fullName = user.fullName;
       newCustomer.email = user.email;
       newCustomer.phone = user.phone;
       newCustomer.password = user.password;
-      newCustomer.name = user.name;      
-      newCustomer.documentType.id = user.documentType.id
-      newCustomer.documentType.name = user.documentType.name
-      newCustomer.documentType.state = user.documentType.state
 
   
       const customer = this.customerRepository.register(newCustomer);
@@ -79,7 +79,7 @@ import { AccountModel } from '../../models/account.model';
         const jwt = require('jsonwebtoken');
 
         const accountType = new AccountTypeEntity();
-        accountType.id =  user.id;
+        accountType.id =  customer.id;
         const newAccount  = new AccountEntity()
          newAccount.customer = customer;
          newAccount.accountType = accountType;

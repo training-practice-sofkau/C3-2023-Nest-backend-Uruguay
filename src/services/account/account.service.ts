@@ -4,6 +4,7 @@ import { AccountEntity } from '../../persistence/entities/account.entity';
 import { AccountModel } from '../../models/account.model';
 import { AccountTypeEntity } from 'src/persistence';
 import { AccountTypeRepository } from '../../persistence/repositories/account-type.repository';
+import { AccountDtos } from 'src/dtos/accountDtos';
 
 @Injectable()
 export class AccountService {
@@ -14,13 +15,9 @@ export class AccountService {
   ) {}
 
   /**
-   * Crear una cuenta
    *
-   * @param {AccountModel} account
-   * @return {*}  {AccountEntity}
-   * @memberof AccountService
    */
-  createAccount(account: AccountModel): AccountEntity {
+  createAccount(account: AccountDtos): AccountEntity {
     const newAccount = new AccountEntity();
     newAccount.customer = account.customer;
     newAccount.accountType = account.accountType;
