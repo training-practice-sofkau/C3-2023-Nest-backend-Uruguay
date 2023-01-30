@@ -45,12 +45,14 @@ export class CustomerController {
 
     
     @Post()
-    async createCustomer(@Body() customer : CustomerDto){
+    createCustomer(@Body() customer : CustomerDto){
         return this.customerService.createCustomer(customer);
     }
 
     @Put(`update/:id`)
-    async updatedCustomer(@Param(`id`) id : string,@Body() newCustomer : CustomerDto):CustomerEntity{
+    updatedCustomer(@Param(`id`) id : string,
+    @Body() newCustomer : CustomerDto)
+    :CustomerEntity{
         return this.customerService.updatedCustomer(id,newCustomer);
     }
 

@@ -14,6 +14,8 @@ import { AccountService } from 'src/module/account/service';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 import { CustomerRepository, DocumentTypeEntity } from '../customer';
+import { CreateCustomerDto } from '../customer/dto/create-customer.dto';
+import { CreateAccountdto } from '../account/dto/create-account.dto';
 
 
 @Injectable()
@@ -52,15 +54,19 @@ export class SegurityService {
     if (!customer) throw new InternalServerErrorException();
     
     const accountType = new AccountTypeEntity();
-    accountType.id = uuid();//Se lo asignamos nosotros?
+    accountType.id = uuid()
+
+    
     let newAccount = new AccountEntity();
     newAccount.coustomer_id = customer
-        newAccount.account_type_id= accountType
-        newAccount.balance = 0
-        newAccount.id = uuid()
-        newAccount.state = false
 
-    const account = this.accountService.createAccount(newAccount);
+
+    newAccount.account_type_id = accountType;
+
+    const newCreateAccount = new CreateAccountdto();
+    newCreateAccount.accountTypeId =  accountType.id;
+
+    const account = this.accountService.createAccount(newCreateAccount);
 
     if (!account) throw new InternalServerErrorException();
     

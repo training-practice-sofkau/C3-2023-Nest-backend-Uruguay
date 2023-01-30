@@ -6,8 +6,6 @@ import { DepositEntity } from './deposit.entities';
 import { AccountService } from '../account/service';
 import { DataRangeModel, PaginationModel } from '../base';
 import { depositDto } from './dto/deposit.dto';
-import { AccountTypeEntity } from '../account/account.Type.Entity';
-import { AccountEntity } from '../account/account.entities';
 
 
 
@@ -19,12 +17,13 @@ export class DepositService {
 
 
   createDeposit(deposit: depositDto): DepositEntity {
-    const newAccountType = new AccountEntity();
-    newAccountType.id = deposit.accountTypeId;
-    
+
+    const account = this.accountService.getById(deposit.accountId);
+
     const newDeposit = new DepositEntity();
-    newDeposit.account = newAccountType;
+    newDeposit.account = account;
     newDeposit.amount = deposit.amount;
+    newDeposit.date_time = Date.now();
     
     return this.depositRepository.register(newDeposit);
   }
