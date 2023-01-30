@@ -1,8 +1,9 @@
 import { Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { CustomerModel } from 'src/models';
-import { AccountTypeEntity, CustomerEntity, CustomerRepository } from 'src/persistence';
+import { AccountTypeEntity, CustomerEntity, CustomerRepository, DocumentTypeEntity } from 'src/persistence';
 import { AccountService } from '../account';
 import { DocumentTypeRepository } from '../../persistence/repositories/document-type.repository';
+import { SignUpDto } from 'src/dtos/sign-up.dto';
 
 
 @Injectable()
@@ -37,30 +38,30 @@ export class SecurityService {
        * @return {*}  {string}
        * @memberof SecurityService
        */
-      signUp(user: CustomerModel): string {
+      signUp(user: SignUpDto): string {
+        const documentType = new DocumentTypeEntity()
+        documentType.id = user.documentTypeId;
+  
         const newCustomer = new CustomerEntity();
-       
-        //newCustomer.documentTypeRepository = user.documentType;
+        newCustomer.documentType = documentType;
         newCustomer.document = user.document;
         newCustomer.fullName = user.fullName;
         newCustomer.email = user.email;
         newCustomer.phone = user.phone;
         newCustomer.password = user.password;
-       
     
         const customer = this.customerRepository.register(newCustomer);
     
         if (customer) {
           const accountType = new AccountTypeEntity();
           accountType.id = 'Falta el ID por defecto del tipo de cuenta';
-          
           const newAccount = {
             customer,
             accountType,
           };
-    
-          const account = 
-          this.accountService.createAccount(newAccount);
+          
+          
+          const account = this.accountService.createAccount(newAccount);
     
           if (account) return 'Falta retornar un JWT';
           else throw new InternalServerErrorException();

@@ -6,18 +6,18 @@ import { TranferRepository, TransferEntity } from 'src/persistence';
 
 @Injectable()
 export class TransferService {
-    constructor(
-        private readonly transferRepocitory: TranferRepository
+  constructor(
+    private readonly transferRepocitory: TranferRepository
 
-        ){}
-/**
-   * Crear una transferencia entre cuentas del banco
-   *
-   * @param {TransferModel} transfer
-   * @return {*}  {TransferEntity}
-   * @memberof TransferService
-   */
-createTransfer(transfer: TransferModel): TransferEntity {
+  ) { }
+  /**
+     * Crear una transferencia entre cuentas del banco
+     *
+     * @param {TransferModel} transfer
+     * @return {*}  {TransferEntity}
+     * @memberof TransferService
+     */
+  createTransfer(transfer: TransferModel): TransferEntity {
     const transfer1 = new TransferEntity
     transfer1 = transfer
     return this.transferRepocitory.register(transfer1)
