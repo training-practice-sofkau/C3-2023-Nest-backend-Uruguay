@@ -9,11 +9,6 @@ export class CustomerController {
 
     constructor(private readonly customerService: CustomerService) {}
 
-    @Post('/create')
-    createCustomer(customer: CreateCustomerDTO): CustomerEntity {
-        return this.customerService.createCustomer(customer);
-    }
-
     @Put('/update/:id')
     updateCustomer(@Param() id: string ,@Body() newCustomer: UpdateCustomerDTO): CustomerEntity {
         return this.customerService.updatedCustomer(id, newCustomer);
