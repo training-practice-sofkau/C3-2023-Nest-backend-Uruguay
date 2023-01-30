@@ -9,28 +9,28 @@ export class TransferController {
 
     constructor(private readonly transferService: TransferService) {}
 
-    @Post()
+    @Post('/create-transfer')
     createTransfer(@Body() transfer: CreateTransferDto): string {
         return this.transferService.createTransfer(transfer).toString();
     }
     
-    @Post()
+    @Post('/delete-transfer')
     deleteTransfer(@Body() transfer: string): string {
         this.transferService.deleteTransfer(transfer);
         return 'ready';
     }
     
-    @Post()
+    @Post('/get-history')
     getHistory(@Body() account: string, pagination?: PaginationDto, dataRange?: HistoryDto): string {
         return this.transferService.getHistory(account, pagination, dataRange).toString();
     }
 
-    @Post()
+    @Post('/get-history-out')
     getHistoryOut(@Body() accountOut: string, pagination?: PaginationDto, dataRange?: HistoryDto): string {
         return this.transferService.getHistory(accountOut, pagination, dataRange).toString();
     }
 
-    @Post()
+    @Post('/get-history-in')
     getHistoryIn(@Body() accountIn: string, pagination?: PaginationDto, dataRange?: HistoryDto): string {
         return this.transferService.getHistory(accountIn, pagination, dataRange).toString();
     }

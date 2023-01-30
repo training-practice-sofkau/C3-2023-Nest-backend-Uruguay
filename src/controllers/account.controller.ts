@@ -9,45 +9,45 @@ export class AccountController {
 
     constructor(private readonly accountService: AccountService) {}
 
-    @Post()
+    @Post('/create-account')
     createAccount(@Body() account: CreateAccountDto): string {
         return this.accountService.createAccount(account).toString();
     }
 
-    @Post()
+    @Post('/get-balance')
     getBalance(@Body() account: string): string {
         return this.accountService.getBalance(account).toString();
       }
     
-    @Post()
+    @Post('/add-balance')
     addBalance(@Body() balance: BalanceDto): string {
         this.accountService.addBalance(balance);
         return 'ready';
     }
 
-    @Post()
+    @Post('/remove-balance')
     removeBalance(@Body() balance: BalanceDto): string {
         this.accountService.removeBalance(balance);
         return 'ready';
     }
 
-    @Post()
+    @Post('/verify-amount-into-balance')
     verifyAmountIntoBalance(@Body() balance: BalanceDto): string {
         return this.accountService.verifyAmountIntoBalance(balance).toString();
     }
 
-    @Post()
+    @Post('/get-state')
     getState(@Body() account: string): string {
         return this.accountService.getState(account).toString();
     }
 
-    @Post()
+    @Post('/change-state')
     changeState(@Body() account: ChangeStateDto): string {
         this.accountService.changeState(account);
         return 'ready';
     }
 
-    @Post()
+    @Post('/get-account-by-id')
     getAccountById(@Body() account: string): string {
         return this.accountService.getAccountById(account).toString();
     }

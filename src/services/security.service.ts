@@ -5,9 +5,6 @@
   // Data transfer objects
   import { CreateAccountDto, SignInDto, SignUpDto } from '../dtos';
   
-  // Repositories
-  import { CustomerRepository } from '../persistence';
-  
   // Services
   import { AccountService } from '.';
   

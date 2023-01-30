@@ -9,18 +9,18 @@ export class DepositController {
 
     constructor(private readonly depositService: DepositService, private readonly accountService: AccountService) {}
 
-    @Post()
+    @Post('/create-deposit')
     createDeposit(@Body() deposit: CreateDepositDto): string {
         return this.depositService.createDeposit(deposit).toString();
     }
     
-    @Post()
+    @Post('/delete-deposit')
     deleteDeposit(@Body() deposit: string): string {
         this.depositService.deleteDeposit(deposit);
         return 'ready';
     }
     
-    @Post()
+    @Post('/get-history')
     getHistory(@Body() account: string, pagination?: PaginationDto, dataRange?: HistoryDto): string {
         return this.depositService.getHistory(account, pagination, dataRange).toString();
     }

@@ -8,17 +8,17 @@ import { ApiTags } from '@nestjs/swagger';
 export class CustomerController {
     constructor(private readonly customerService: CustomerService) {}
 
-    @Post()
+    @Post('/get-customer')
     getCustomerInfo(@Body() customer: string): string {
         return this.customerService.getCustomerInfo(customer).toString();
     }
 
-    @Post()
+    @Post('/update-customer')
     updatedCustomer(@Body() customer: UpdateCustomerDto): string {
         return this.customerService.updatedCustomer(customer).toString();
     }
 
-    @Post()
+    @Post('/unsuscribe')
     unsubscribe(@Body() customer: string): string {
         return 'Not implemented';
     }

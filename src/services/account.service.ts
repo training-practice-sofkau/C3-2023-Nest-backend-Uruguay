@@ -42,8 +42,8 @@ export class AccountService {
 
   removeBalance(balance: BalanceDto): void {
     const current = this.accountRepository.findOneById(balance.accountId);
-    current.balance -= +balance.amount;
-    if (current.balance < 0) this.accountRepository.update(balance.accountId, current); else throw new BadRequestException();
+    current.balance -= Math.abs(+balance.amount);
+    if (current.balance >= 0) this.accountRepository.update(balance.accountId, current); else throw new BadRequestException();
   }
 
   verifyAmountIntoBalance(balance: BalanceDto): boolean {
