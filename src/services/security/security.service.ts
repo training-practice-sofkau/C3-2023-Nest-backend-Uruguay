@@ -1,5 +1,6 @@
 // Libraries
 import {
+  
     Injectable,
     InternalServerErrorException,
     UnauthorizedException,
@@ -9,7 +10,6 @@ import {
 
   
   // Models
-  import { CustomerModel } from '../../models';
   
   // Repositories
   import { CustomerRepository } from '../../persistence/repositories';
@@ -19,13 +19,17 @@ import {
   
   // Entities
   import {
+    AccountEntity,
     AccountTypeEntity,
     CustomerEntity,
+    DocumentTypeEntity,
   } from '../../persistence/entities';
+import { SignInDto, SignUpDto } from 'src/dtos';
   
   @Injectable()
   export class SecurityService {
     constructor(
+      
       private readonly customerRepository: CustomerRepository,
       private readonly accountService: AccountService,
     ) {}
@@ -37,12 +41,14 @@ import {
      * @return {*}  {string}
      * @memberof SecurityService
      */
-    signIn(user: CustomerModel): string {
+    signIn(user: SignInDto): string {
+      const jwt = require('jsonwebtoken');
+
       const answer = this.customerRepository.findOneByEmailAndPassword(
-        user.email,
+        user.username,
         user.password,
       );
-      if (answer) return 'Falta retornar un JWT';
+      if (answer) return "any"
       else throw new UnauthorizedException();
     }
   
@@ -53,28 +59,35 @@ import {
      * @return {*}  {string}
      * @memberof SecurityService
      */
-    signUp(user: CustomerModel): string {
+    signUp(user: SignUpDto): string {
+
+      const documentType = new DocumentTypeEntity()
+      documentType.id = user.documentTypeId
+
       const newCustomer = new CustomerEntity();
-      newCustomer.documentType = user.documentType;
+      newCustomer.documentType = documentType;
       newCustomer.document = user.document;
       newCustomer.fullName = user.fullName;
       newCustomer.email = user.email;
       newCustomer.phone = user.phone;
       newCustomer.password = user.password;
+
   
       const customer = this.customerRepository.register(newCustomer);
   
       if (customer) {
+        const jwt = require('jsonwebtoken');
+
         const accountType = new AccountTypeEntity();
-        accountType.id = 'Falta el ID por defecto del tipo de cuenta';
-        const newAccount = {
-          customer,
-          accountType,
-        };
+        accountType.id =  customer.id;
+        const newAccount  = new AccountEntity()
+         newAccount.customer = customer;
+         newAccount.accountType = accountType;
+        
+        const   account = this.accountService.createAccount(newAccount);
+
   
-        const account = this.accountService.createAccount(newAccount);
-  
-        if (account) return 'Falta retornar un JWT';
+        if (account) return jwt.sign({id: accountType.id}, process.env.TOKEN_SECRET );
         else throw new InternalServerErrorException();
       } else throw new InternalServerErrorException();
     }
@@ -86,6 +99,7 @@ import {
      * @memberof SecurityService
      */
     signOut(JWToken: string): void {
-      throw new Error('Method not implemented.');
+      const jwt = require('jsonwebtoken');
+      jwt.invalidate(JWToken, process.env.TOKEN_SECRET);
     }
   }

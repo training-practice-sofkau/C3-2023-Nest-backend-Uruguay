@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import { DepositDto } from 'src/dtos/DepositDto';
+import { DataRangeModel } from 'src/models/DataRange.Model';
 import { PaginationModel } from 'src/models/pagination.model';
 import { DepositEntity } from 'src/persistence';
 
-import { DepositModel } from '../../models/';
+import { DepositRepository } from '../../persistence/repositories/deposit.repository';
 
 @Injectable()
 export class DepositService {
+  constructor(private readonly DepositRepository: DepositRepository) {}
   /**
    * Crear un deposito
    *
@@ -13,8 +16,12 @@ export class DepositService {
    * @return {*}  {DepositEntity}
    * @memberof DepositService
    */
-  createDeposit(deposit: DepositModel): DepositEntity {
-    throw new Error('This method is not implemented');
+  createDeposit(deposit: DepositDto): DepositEntity {
+    const newDeposit = new DepositEntity();
+    newDeposit.amount = deposit.amount;
+    newDeposit.date_time = new Date();
+    newDeposit.state = true;
+    return this.DepositRepository.register(newDeposit);
   }
 
   /**
@@ -24,7 +31,7 @@ export class DepositService {
    * @memberof DepositService
    */
   deleteDeposit(depositId: string): void {
-    throw new Error('This method is not implemented');
+    this.DepositRepository.delete(depositId);
   }
 
   /**
@@ -41,6 +48,21 @@ export class DepositService {
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): DepositEntity[] {
-    throw new Error('This method is not implemented');
+    let deposit = this.DepositRepository.searchByAttributes('id', depositId);
+
+    if (dataRange) {
+      let { dateInit, dateEnd = Date.now() } = dataRange;
+      deposit = deposit.filter(
+        (deposit) =>
+          deposit.date_time.getTime() >= dateInit &&
+          deposit.date_time.getTime() <= dateEnd,
+      );
+    }
+
+    if (pagination) {
+      let { offset = 0, limit = 0 } = pagination;
+      deposit = deposit.slice(offset, offset + limit);
+    }
+    return deposit;
   }
 }

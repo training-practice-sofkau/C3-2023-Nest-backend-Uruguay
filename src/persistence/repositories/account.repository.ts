@@ -9,6 +9,17 @@ export class AccountRepository
   extends BaseRepository<AccountEntity>
   implements AccountRepositoryInterface
 {
+  searchByAttributesforOne(
+    attributes: keyof AccountEntity,
+    dataToSearch: string,
+  ): AccountEntity {
+    const currentEntity = this.database.find(
+      (entity) => entity[attributes] === dataToSearch,
+    );
+    if (currentEntity) return currentEntity;
+    else throw new NotFoundException();
+  }
+
   searchByAttributes(
     attributes: keyof AccountEntity,
     dataToSearch: string,
@@ -20,7 +31,6 @@ export class AccountRepository
     else throw new NotFoundException();
   }
 
-  
   register(entity: AccountEntity): AccountEntity {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;
@@ -73,9 +83,10 @@ export class AccountRepository
 
   findByCustomer(customerId: string): AccountEntity[] {
     const currentEntity = this.database.filter(
-      (item) => item.outcome.id === customerId,
+      (item) => item.customer.id === customerId,
     );
     if (currentEntity) return currentEntity;
     else throw new NotFoundException();
-  }
+  }  
+
 }

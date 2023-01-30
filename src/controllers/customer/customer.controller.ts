@@ -1,4 +1,27 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Param, Put, Body } from '@nestjs/common';
+import { CustomerDtos } from 'src/dtos/CustomerDtos';
+import { CustomerEntity } from 'src/persistence';
+import { CustomerService } from 'src/services';
 
-@Controller('customer')
-export class CustomerController {}
+@Controller('customers')
+export class CustomerController {
+  constructor(private readonly customerService: CustomerService) {}
+
+
+  @Get(':customerId')
+  getCustomerInfo(@Param('customerId') customerId: string): CustomerEntity {
+    
+    return this.customerService.getCustomerInfo(customerId);
+  }
+
+  @Put(':id')
+  updatedCustomer(@Param('id') id: string, @Body() customer: CustomerDtos): CustomerEntity {
+    return this.customerService.updatedCustomer(id, customer);
+  }
+
+ 
+  @Put('unsubscribe/:id')
+  unsubscribe(@Param('id') id: string): boolean {
+    return this.customerService.unsubscribe(id);
+  }
+}

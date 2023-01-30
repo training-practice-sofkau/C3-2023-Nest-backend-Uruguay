@@ -9,17 +9,31 @@ export class AccountTypeRepository
   extends BaseRepository<AccountTypeEntity>
   implements AccountTypeRepositoryInterface
 {
-  searchByAttributes(attributes: keyof AccountTypeEntity, dataToSearch: string): AccountTypeEntity[] {
+  searchByAttributesforOne(
+    attributes: keyof AccountTypeEntity,
+    dataToSearch: string,
+  ): AccountTypeEntity {
+    const currentEntity = this.database.find(
+      (entity) => entity[attributes] === dataToSearch,
+    );
+    if (currentEntity) return currentEntity;
+    else throw new NotFoundException();
+  }
+
+  searchByAttributes(
+    attributes: keyof AccountTypeEntity,
+    dataToSearch: string,
+  ): AccountTypeEntity[] {
     const currentEntity = this.database.filter(
       (entity) => entity[attributes] === dataToSearch,
     );
-    if (currentEntity) 
-    return currentEntity;
-    else throw new NotFoundException()  }
+    if (currentEntity) return currentEntity;
+    else throw new NotFoundException();
+  }
 
   update(id: string, entity: AccountTypeEntity): AccountTypeEntity {
     const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id 
+      (item) => item.id === id,
     );
     if (indexCurrentEntity >= 0)
       this.database[indexCurrentEntity] = {
@@ -31,14 +45,17 @@ export class AccountTypeRepository
     return this.database[indexCurrentEntity];
   }
   delete(id: string, soft?: boolean | undefined): void {
-    this.database.splice(this.database.findIndex((item) => item.id === id), 1);
+    this.database.splice(
+      this.database.findIndex((item) => item.id === id),
+      1,
+    );
   }
   findAll(): AccountTypeEntity[] {
-    return this.database  
-}
-  findByState(state: boolean): AccountTypeEntity[] {
-     return this.database.filter((item) => ( state === true ? item.state === true : item.state === false  ));    
+    return this.database;
   }
- 
+  findByState(state: boolean): AccountTypeEntity[] {
+    return this.database.filter((item) =>
+      state === true ? item.state === true : item.state === false,
+    );
+  }
 }
-

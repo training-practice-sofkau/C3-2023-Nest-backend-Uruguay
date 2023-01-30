@@ -1,9 +1,10 @@
-import { AccountTypeModel } from '../models';
+import { AccountModel } from './account.model';
 
 export interface TransferModel extends BaseModel {
-  outcome: AccountTypeModel;
-  accountTypeId: AccountTypeModel;
+  outcome: AccountModel;
+  income: AccountModel;
   transferAmount: number;
   transferReason: string;
   dateTime: Date;
+  deletedAt?: Date | number
 }

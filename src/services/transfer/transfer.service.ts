@@ -1,7 +1,15 @@
 import { Injectable } from '@nestjs/common';
+import { TransferEntity } from 'src/persistence';
+import { TransferRepository } from '../../persistence/repositories/transfer.repository';
+import { PaginationModel } from 'src/models/pagination.model';
+import { DataRangeModel } from 'src/models/DataRange.Model';
+import { timeStamp } from 'console';
+import { TransferModel } from 'src/models';
+import { TransferDto } from 'src/dtos/transferDto';
 
 @Injectable()
 export class TransferService {
+  constructor(private readonly TransferRepository: TransferRepository) {}
   /**
    * Crear una transferencia entre cuentas del banco
    *
@@ -9,8 +17,12 @@ export class TransferService {
    * @return {*}  {TransferEntity}
    * @memberof TransferService
    */
-  createTransfer(transfer: TransferModel): TransferEntity {
-    throw new Error('This method is not implemented');
+  createTransfer(transfer: TransferDto): TransferEntity {
+    const newtransfer = new TransferEntity();
+    newtransfer.outcome = transfer.outcome;
+    newtransfer.transferAmount = transfer.transferAmount;
+    newtransfer.state = true;
+    return this.TransferRepository.register(newtransfer);
   }
 
   /**
@@ -27,7 +39,25 @@ export class TransferService {
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    let transfer = this.TransferRepository.searchByAttributes(
+      'id',
+      accountId,
+    );    
+
+    if (dataRange) {
+      let { dateInit, dateEnd = Date.now() } = dataRange;
+      transfer = transfer.filter(
+        (transfer) =>
+        transfer.dateTime.getTime() >= dateInit &&
+        transfer.dateTime.getTime() <= dateEnd,
+      );
+    }
+    if (pagination) {
+      let { offset = 0, limit = 0 } = pagination;
+      transfer = transfer.slice(offset, offset + limit);
+    }
+    
+    return transfer;
   }
 
   /**
@@ -44,7 +74,20 @@ export class TransferService {
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    let transfer = this.TransferRepository.searchByAttributes('id', accountId);
+    if (dataRange) {
+      let { dateInit, dateEnd = Date.now() } = dataRange;
+      transfer = transfer.filter(
+        (transfer) =>
+          transfer.dateTime.getTime() >= dateInit &&
+          transfer.dateTime.getTime() <= dateEnd,
+      );
+    }
+    if (pagination) {
+      let { offset = 0, limit = 0 } = pagination;
+      transfer = transfer.slice(offset, offset + limit);
+    }
+    return transfer;
   }
 
   /**
@@ -61,7 +104,21 @@ export class TransferService {
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    let transfer = this.TransferRepository.searchByAttributes('id', accountId);
+    if (dataRange) {
+      let { dateInit, dateEnd = Date.now() } = dataRange;
+      transfer = transfer.filter(
+        (transfer) =>
+          transfer.dateTime.getTime() >= dateInit &&
+          transfer.dateTime.getTime() <= dateEnd,
+      );
+    }
+
+    if (pagination) {
+      let { offset = 0, limit = 0 } = pagination;
+      transfer = transfer.slice(offset, offset + limit);
+    }
+    return transfer;
   }
 
   /**
@@ -71,6 +128,6 @@ export class TransferService {
    * @memberof TransferService
    */
   deleteTransfer(transferId: string): void {
-    throw new Error('This method is not implemented');
+    this.TransferRepository.delete(transferId);
   }
 }

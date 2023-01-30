@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { DepositModel } from 'src/models';
 
 import { DepositEntity } from '../entities';
 import { BaseRepository } from './base';
@@ -9,6 +10,16 @@ export class DepositRepository
   extends BaseRepository<DepositEntity>
   implements DepositRepositoryInterface
 {
+  searchByAttributesforOne(
+    attributes: keyof DepositEntity,
+    dataToSearch: string,
+  ): DepositEntity {
+    const currentEntity = this.database.find(
+      (entity) => entity[attributes] === dataToSearch,
+    );
+    if (currentEntity) return currentEntity;
+    else throw new NotFoundException();
+  }
   searchByAttributes(
     attributes: keyof DepositEntity,
     dataToSearch: string,
@@ -77,6 +88,18 @@ export class DepositRepository
   ): DepositEntity[] {
     let currentEntity = this.database.filter(
       (item) => item.date_time >= dateInit && item.date_time <= dateEnd,
+    );
+    if (currentEntity) return currentEntity;
+    else throw new NotFoundException();
+  }
+
+
+  searchDeposit(
+    attributes: keyof DepositModel,
+    dataToSearch: string,
+  ): DepositEntity[] {
+    const currentEntity = this.database.filter(
+      (entity) => entity[attributes] === dataToSearch,
     );
     if (currentEntity) return currentEntity;
     else throw new NotFoundException();

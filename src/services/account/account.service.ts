@@ -1,22 +1,26 @@
 import { AccountRepository } from './../../persistence/repositories/account.repository';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { AccountEntity } from '../../persistence/entities/account.entity';
-import { AccountModel } from '../../models/account.model';
 import { AccountTypeEntity } from 'src/persistence';
-
+import { AccountTypeRepository } from '../../persistence/repositories/account-type.repository';
+import { AccountDtos } from 'src/dtos/accountDtos';
 
 @Injectable()
 export class AccountService {
-  constructor(private readonly accountRepository: AccountRepository) {}
+  [x: string]: any;
+  constructor(
+    private readonly accountRepository: AccountRepository,
+    private readonly AccountTypeRepository: AccountTypeRepository,
+  ) {}
 
   /**
-   * Crear una cuenta
    *
-   * @param {AccountModel} account
-   * @return {*}  {AccountEntity}
-   * @memberof AccountService
    */
-  createAccount(account: AccountModel): AccountEntity {
+  createAccount(account: AccountDtos): any {
+    if (!account.customer) {
+      throw new BadRequestException('Customer is required');
+    }
+    
     const newAccount = new AccountEntity();
     newAccount.customer = account.customer;
     newAccount.accountType = account.accountType;
@@ -31,7 +35,11 @@ export class AccountService {
    * @memberof AccountService
    */
   getBalance(accountId: string): number {
-    throw new Error('This method is not implemented');
+    let account = this.accountRepository.searchByAttributesforOne(
+      'id',
+      accountId,
+    );
+    return account.acc_Balance;
   }
 
   /**
@@ -42,7 +50,15 @@ export class AccountService {
    * @memberof AccountService
    */
   addBalance(accountId: string, amount: number): void {
-    throw new Error('This method is not implemented');
+    if (amount <= 0) {
+      throw new NotFoundException();
+    }
+    let account = this.accountRepository.searchByAttributesforOne(
+      'id',
+      accountId,
+    );
+    account.acc_Balance += amount;
+    this.accountRepository.update(accountId, account);
   }
 
   /**
@@ -53,9 +69,16 @@ export class AccountService {
    * @memberof AccountService
    */
   removeBalance(accountId: string, amount: number): void {
-    throw new Error('This method is not implemented');
+    if (amount <= 0) {
+      throw new NotFoundException();
+    }
+    let account = this.accountRepository.searchByAttributesforOne(
+      'id',
+      accountId,
+    );
+    account.acc_Balance -= amount;
+    this.accountRepository.update(accountId, account);
   }
-
   /**
    * Verificar la disponibilidad de un monto a retirar en una cuenta
    *
@@ -65,7 +88,11 @@ export class AccountService {
    * @memberof AccountService
    */
   verifyAmountIntoBalance(accountId: string, amount: number): boolean {
-    throw new Error('This method is not implemented');
+    const balance = this.accountService.getBalance(accountId);
+    if (balance >= amount) {
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -76,7 +103,7 @@ export class AccountService {
    * @memberof AccountService
    */
   getState(accountId: string): boolean {
-    throw new Error('This method is not implemented');
+    return this.accountRepository.searchByAttributesforOne('id', accountId).state;
   }
 
   /**
@@ -87,7 +114,12 @@ export class AccountService {
    * @memberof AccountService
    */
   changeState(accountId: string, state: boolean): void {
-    throw new Error('This method is not implemented');
+    let account = this.accountRepository.searchByAttributesforOne(
+      'id',
+      accountId,
+    );
+    account.state = state;
+    this.AccountTypeRepository.update(accountId, account);
   }
 
   /**
@@ -98,7 +130,7 @@ export class AccountService {
    * @memberof AccountService
    */
   getAccountType(accountId: string): AccountTypeEntity {
-    throw new Error('This method is not implemented');
+    return this.AccountTypeRepository.searchByAttributesforOne("id", accountId);
   }
 
   /**
@@ -109,11 +141,11 @@ export class AccountService {
    * @return {*}  {AccountTypeEntity}
    * @memberof AccountService
    */
-  changeAccountType(
-    accountId: string,
-    accountTypeId: string,
-  ): AccountTypeEntity {
-    throw new Error('This method is not implemented');
+  changeAccntType(accountId: string, accountTypeId: string): AccountTypeEntity {
+    let account = this.getAccountType(accountId);
+    account.id = accountTypeId;
+    this.AccountTypeRepository.update(accountId, account);
+    return account;
   }
 
   /**
@@ -123,6 +155,6 @@ export class AccountService {
    * @memberof AccountService
    */
   deleteAccount(accountId: string): void {
-    Delete
+    this.accountRepository.delete(accountId);
   }
 }

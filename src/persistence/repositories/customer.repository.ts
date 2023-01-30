@@ -9,6 +9,16 @@ export class CustomerRepository
   extends BaseRepository<CustomerEntity>
   implements CustomerRepositoryInterface
 {
+  searchByAttributesforOne(
+    attributes: keyof CustomerEntity,
+    dataToSearch: string,
+  ): CustomerEntity {
+    const currentEntity = this.database.find(
+      (entity) => entity[attributes] === dataToSearch,
+    );
+    if (currentEntity) return currentEntity;
+    else throw new NotFoundException();
+  }
   searchByAttributes(
     attributes: keyof CustomerEntity,
     dataToSearch: string,
@@ -27,7 +37,7 @@ export class CustomerRepository
 
   update(id: string, entity: CustomerEntity): CustomerEntity {
     const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.deletedAt === 'undefined',
+      (item) => item.id === id ,
     );
     if (indexCurrentEntity >= 0)
       this.database[indexCurrentEntity] = {
@@ -47,17 +57,14 @@ export class CustomerRepository
   }
 
   findAll(): CustomerEntity[] {
-    return this.database.filter(
-      (item) => typeof item.deletedAt === 'undefined',
-    );
+    return this.database
   }
 
   findOneByEmailAndPassword(email: string, password: string): boolean {
     const indexCurrentEntity = this.database.findIndex(
       (item) =>
         item.email === email &&
-        item.password === password &&
-        typeof item.deletedAt === 'undefined',
+        item.password === password ,
     );
     return indexCurrentEntity >= -1 ? true : false;
   }
@@ -69,8 +76,7 @@ export class CustomerRepository
     const indexCurrentEntity = this.database.findIndex(
       (item) =>
         item.documentType.id === documentTypeId &&
-        item.document === document &&
-        typeof item.deletedAt === 'undefined',
+        item.document === document,
     );
     return this.database[indexCurrentEntity];
   }
@@ -79,7 +85,7 @@ export class CustomerRepository
     return this.database.filter((item) =>
       state === true
         ? item.state === true
-        : typeof item.deletedAt != 'undefined',
+        : item.state === false,
     );
   }
 }
