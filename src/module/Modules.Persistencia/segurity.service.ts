@@ -1,35 +1,19 @@
-// Libraries
 import {
     Injectable,
     InternalServerErrorException,
     UnauthorizedException,
   } from '@nestjs/common';
   
-
 import jwt  from 'jsonwebtoken';
 import { Response } from 'express';
-
-// Data transfer objects
-
-
-// Models
-import { CustomerModel, CustomerRepository } from 'src/module/cusotmer';
-
-// Repositories
-
-
-// Services
-
-
-
-// Entities
-import { CustomerEntity } from 'src/module/cusotmer/customer.entity';
+import { CustomerEntity } from 'src/module/customer/customer.entity';
 import { AccountTypeEntity } from 'src/module/account/account.Type.Entity';
 import { v4 as uuid } from 'uuid';
-import { AccountEntity } from '../../account/account.entities';
+import { AccountEntity } from '../account/account.entities';
 import { AccountService } from 'src/module/account/service';
-import { Res } from '@nestjs/common/decorators';
-import * as request from 'supertest';
+import { SignInDto } from './dto/sign-in.dto';
+import { SignUpDto } from './dto/sign-up.dto';
+import { CustomerRepository, DocumentTypeEntity } from '../customer';
 
 
 @Injectable()
@@ -39,33 +23,24 @@ export class SegurityService {
       private readonly accountService: AccountService,
     ) {}
       
-  /**
-   * Identificarse en el sistema
-   *
-   * @param {CustomerModel} user
-   * @return {*}  {string}
-   * @memberof SecurityService
-   */
-  signIn(user: CustomerModel): string {
+
+  signIn(user: SignInDto): string {
     const answer = this.customerRepository.findOneByEmailAndPassword(
-      user.email,
-      user.password,
+      user.username,
+      user.password
     );
     if (!answer)  throw new UnauthorizedException();
     
-    return jwt.sign({id: user.id},process.env.TOKEN_SECRET || `tokentest`);
+    return jwt.sign({id: user.username},process.env.TOKEN_SECRET || `tokentest`);
   }
 
-  /**
-   * Crear usuario en el sistema
-   *
-   * @param {CustomerModel} user
-   * @return {*}  {string}
-   * @memberof SecurityService
-   */
-  signUp(user: CustomerModel): string {
+  signUp(user: SignUpDto): string {
+    const documentType= new DocumentTypeEntity();
+    documentType.id = user.documentTypeId
+
     const newCustomer = new CustomerEntity();
-    newCustomer.documentType = user.documentType;
+    newCustomer.documentType = documentType;
+    
     newCustomer.document = user.document;
     newCustomer.fullName = user.fullName;
     newCustomer.email = user.email;
@@ -79,11 +54,11 @@ export class SegurityService {
     const accountType = new AccountTypeEntity();
     accountType.id = uuid();//Se lo asignamos nosotros?
     let newAccount = new AccountEntity();
-    newAccount = {
-      ...newAccount,
-      customer,
-      accountType,
-    };
+    newAccount.coustomer_id = customer
+        newAccount.account_type_id= accountType
+        newAccount.balance = 0
+        newAccount.id = uuid()
+        newAccount.state = false
 
     const account = this.accountService.createAccount(newAccount);
 
@@ -93,12 +68,6 @@ export class SegurityService {
     return jwt.sign({_id: account.id},process.env.TOKEN_SECRET || ` tokentest`) ;  
   }
 
-  /**
-   * Salir del sistema
-   *
-   * @param {string} JWToken
-   * @memberof SecurityService
-   */
   signOut(JWToken: string , res:Response): void {
     res.clearCookie(JWToken);
   }

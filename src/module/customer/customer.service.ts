@@ -1,10 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CustomerRepository } from "./customer.repository";
-import { CustomerEntity } from 'src/module/cusotmer/customer.entity';
+import { CustomerEntity } from 'src/module/customer/customer.entity';
 import { AccountRepository } from '../account/Account.Repositories/account.repository';
-import { CustomerModel } from './customer.model';
-import { accountType } from 'src/models';
-import { AccountTypeRepository } from '../account/Account.Repositories/account-type.repository';
+import { DocumentTypeEntity } from './document-type-Entity';
+import { CustomerDto } from './dto/customer.dto';
+
+
+
 
 
 @Injectable()
@@ -14,14 +16,13 @@ export class CustomerService {
     private readonly accountRepository : AccountRepository) {}
   /**
    * Obtener información de un cliente
-   *
-   * @param {string} customerId
-   * @return {*}  {CustomerEntity}
-   * @memberof CustomerService
    */
-  createCustomer(customer: CustomerModel) {
+  createCustomer(customer: CustomerDto) {
+    const documentType = new DocumentTypeEntity();
+    documentType.id = customer.documentType;
+
     const newCustomer = new CustomerEntity();
-    newCustomer.documentType = customer.documentType;
+    newCustomer.documentType = documentType;
     newCustomer.email = customer.email;
     newCustomer.fullName = customer.fullName;
     newCustomer.password = customer.password;
@@ -31,7 +32,7 @@ export class CustomerService {
   }
 
 
-  getCustomerInfo(customerId: string): CustomerModel {
+  getCustomerInfo(customerId: string): CustomerEntity {
     let customer = this.customerRepository.findOneById(customerId);  
     return customer;
   }
@@ -42,28 +43,29 @@ export class CustomerService {
 
   /**
    * Actualizar información de un cliente
-   *
-   * @param {string} id
-   * @param {CustomerModel} customer
-   * @return {*}  {CustomerEntity}
-   * @memberof CustomerService
    */
-  updatedCustomer(id: string, newCustomer: CustomerModel): CustomerEntity{
+  updatedCustomer(id: string, newCustomer: CustomerDto ): CustomerEntity{
     let customer = this.customerRepository.findOneById(id);
-    customer = {
-      ...customer,
-      ...newCustomer,
-    };
+    
+    
+    const documentType = new DocumentTypeEntity();
+    documentType.id = newCustomer.documentType;
+
+    
+    customer.documentType = documentType;
+
+    customer.document = newCustomer.document;
+    customer.fullName = newCustomer.fullName;
+    customer.email = newCustomer.email;
+    customer.phone = newCustomer.phone;
+    customer.password = newCustomer.password;
+
     return this.customerRepository.update(id,customer);
     
   }
 
   /**
    * Dar de baja a un cliente en el sistema
-   *
-   * @param {string} id
-   * @return {*}  {boolean}
-   * @memberof CustomerService
    */
   unsubscribe(id: string): boolean {
 

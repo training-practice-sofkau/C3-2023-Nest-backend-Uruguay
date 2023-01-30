@@ -15,7 +15,7 @@ export class DepositRepository
         );
 
         if(!indexCurrentEntity){
-            throw new NotFoundException(`No se pudo actualizar porque no se encontro el id : ${id}`)
+            throw new NotFoundException(`No se pudo actualizar porque no se encontro el id : ${entity.id}`)
         }
         this.database.push(entity);
         return this.database.at(-1) ?? entity;

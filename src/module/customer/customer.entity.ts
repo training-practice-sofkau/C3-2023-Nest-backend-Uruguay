@@ -1,8 +1,8 @@
 
-import { CustomerModel } from 'src/module/cusotmer/customer.model';
-import { DocumentTypeEntity } from './document-type.entity';
+import { CustomerModel } from 'src/module/customer/customer.model';
 
 import { v4 as uuid } from 'uuid';
+import { DocumentTypeEntity } from './document-type-Entity';
 
 export class CustomerEntity implements CustomerModel{
     id= uuid();

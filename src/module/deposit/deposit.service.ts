@@ -2,11 +2,11 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 
 
 import { DepositRepository } from '../../module/deposit/deposit.repository';
-import { DataRangeModel } from 'src/module/dataRange.model';
 import { DepositEntity } from './deposit.entities';
 import { AccountService } from '../account/service';
 import { DepositModel } from './deposit.model';
-import { PaginationModel } from '../base';
+import { DataRangeModel, PaginationModel } from '../base';
+
 
 
 @Injectable()

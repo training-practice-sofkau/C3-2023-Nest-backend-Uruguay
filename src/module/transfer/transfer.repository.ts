@@ -2,7 +2,6 @@ import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/c
 import { TransferEntity } from './transfer.entities';
 import { TransferRepositoryInterface } from './transfer-repository.interface';
 import { BaseRepository } from '../base';
-import { transferModel } from './transfer.model';
 
 
 
@@ -35,11 +34,13 @@ export class TransferRepository
             throw new NotFoundException(`Id : ${id} not found`);
         }
         
-        return this.database[indexCurrentEntity] = {
+        this.database[indexCurrentEntity] = {
             ...this.database[indexCurrentEntity],
             ...entity,
             id,
         } as TransferEntity;
+
+        return this.database[indexCurrentEntity];
     }
 
 

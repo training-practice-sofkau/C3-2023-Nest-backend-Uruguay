@@ -101,7 +101,7 @@ findByAccountType(accountTypeId: string): AccountEntity[] {
 }
 
 delete(id: string, soft?: boolean | undefined): void {
-  const indexdelete = this.database.findIndex(index => index.id === id && typeof index.acc_delete_at === `undefined`);
+  const indexdelete = this.database.findIndex(index => index.id === id && typeof index.delete_at === `undefined`);
     soft ? this.softDelete(indexdelete) : this.hardDelete(indexdelete);
 }
 
