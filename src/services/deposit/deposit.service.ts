@@ -51,11 +51,7 @@ export class DepositService {
    */
   getHistory(accountId: string, pagination?: PaginationModel<DepositEntity>, dataRange?: DataRangeModel): DepositEntity[] {
 
-    let history = [];   
-
-    history = this.depositRepository.findBy("accountId", accountId, pagination, dataRange);
-
-    return history;
+    return this.depositRepository.findBy("accountId", accountId, pagination, dataRange);
 
   }
 }

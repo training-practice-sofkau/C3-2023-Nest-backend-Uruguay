@@ -1,19 +1,18 @@
 import { Injectable } from '@nestjs/common';
 
 import { AccountModel } from '../../models';
-import { AccountEntity, AccountTypeEntity } from '../../persistence/entities';
+import { AccountEntity, AccountTypeEntity, CustomerEntity } from '../../persistence/entities';
 import { AccountRepository } from '../../persistence/repositories';
-import { CreateAccountDto } from '../../dtos/account/create-account.dto';
-import { CustomerService } from '../customer/customer.service';
-import { CustomerEntity } from '../../persistence/entities/customer.entity';
+import { CreateAccountDto } from '../../dtos';
+import { AccountTypeRepository } from '../../persistence/repositories/account-type.repository';
 
 
 @Injectable()
 export class AccountService {
 
     constructor(
-      private readonly accountRepository: AccountRepository,
-      private readonly customerService: CustomerService,
+      private readonly accountRepository: AccountRepository,  
+      private readonly accountTypeRepository: AccountTypeRepository,    
       ) {}
     
    /**
@@ -156,8 +155,10 @@ export class AccountService {
    */
   changeAccountType(accountId: string, accountTypeId: string): AccountTypeEntity {
 
-    let accountType = this.accountRepository.getAccountType(accountId);
+    let accountType = this.accountTypeRepository.findOneById(accountTypeId);
 
+    //this.accountRepository.getAccountType(accountId);
+        
     if(accountType.id === accountTypeId){
       throw new Error('The Account Type is already the same');
     }

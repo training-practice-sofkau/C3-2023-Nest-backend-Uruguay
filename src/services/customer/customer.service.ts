@@ -3,11 +3,14 @@ import { Injectable } from '@nestjs/common';
 import { CustomerModel } from '../../models';
 import { CustomerEntity } from '../../persistence/entities';
 import { CustomerRepository } from '../../persistence/repositories';
+import { AccountRepository } from '../../persistence/repositories/account.repository';
 
 @Injectable()
 export class CustomerService {
-    
-  constructor(private readonly customerRepository: CustomerRepository) {}
+
+  constructor(
+    private readonly customerRepository: CustomerRepository,
+    private readonly accountRepository: AccountRepository) { }
 
   /**
    * Get Customer information - OK   *
@@ -16,7 +19,7 @@ export class CustomerService {
    * @memberof CustomerService
    */
   getCustomerInfo(customerId: string): CustomerEntity {
-    
+
     return this.customerRepository.findOneById(customerId);
   }
 
@@ -28,7 +31,7 @@ export class CustomerService {
    * @memberof CustomerService
    */
   updatedCustomer(id: string, customer: CustomerModel): CustomerEntity {
-    
+
     return this.customerRepository.update(id, customer);
 
   }
@@ -41,8 +44,29 @@ export class CustomerService {
    */
   unsubscribe(id: string): boolean {
     
-    return this.customerRepository.setCustomerState(id, false);
+    if (this.checkCustomerBalance(id) == 0) {
+      return this.customerRepository.setCustomerState(id, false);
+    }
+    return true; //the customer state has not change
+  }
 
+  /**
+   * Find all the accounts of a customer and return the total balance
+   * @param id customer id to find
+   * @returns balance 
+   */
+  private checkCustomerBalance(id: string): number {
+
+    let accounts = this.accountRepository.findBy("customerId", id);
+
+    let balance = 0;
+
+    if (accounts.length > 0) {
+      accounts.forEach(element => {
+        balance += element.balance;
+      });
+    }
+    return balance;
   }
 
   /**
@@ -52,7 +76,7 @@ export class CustomerService {
    * @memberof CustomerService
    */
   subscribe(id: string): boolean {
-    
+
     return this.customerRepository.setCustomerState(id, true);
 
   }

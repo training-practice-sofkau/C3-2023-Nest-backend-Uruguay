@@ -75,7 +75,7 @@ export class SecurityService {
 
     if (customer) {
       const accountType = new AccountTypeEntity();
-      accountType.id = accountType.id;
+      accountType.id = customer.id;
 
       const newAccount = new CreateAccountDto();
 
