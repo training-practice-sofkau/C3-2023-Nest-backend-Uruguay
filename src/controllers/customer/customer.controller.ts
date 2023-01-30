@@ -1,8 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, ParseUUIDPipe } from '@nestjs/common';
 
 import { CustomerService } from '../../services';
-import { CustomerModel } from '../../models';
 import { CustomerEntity } from '../../persistence/entities';
+import { UpdateCustomerDto } from '../../dtos';
 
 @Controller('customer')
 export class CustomerController {
@@ -12,11 +12,10 @@ export class CustomerController {
     //TODO: Implment checks and controls - Verify user token
    
 
-    //update account
-    // TODO: implement customerUpdateDTO instead of customerModel
+    //update account    
     @Put('update/:id')
     async updateAccount(@Param('id') customerId: string, 
-                        @Body() newDetails: CustomerModel): 
+                        @Body() newDetails: UpdateCustomerDto): 
                         Promise<CustomerEntity>{
     
         return await this.customerService.updatedCustomer(customerId, newDetails);
@@ -24,21 +23,21 @@ export class CustomerController {
 
     // get customer information
     @Get('/:id')
-    async getInformation(@Param('id') customerId: string): Promise<CustomerEntity>{
+    async getInformation(@Param('id', ParseUUIDPipe) customerId: string): Promise<CustomerEntity>{
         
         return await this.customerService.getCustomerInfo(customerId);        
     }
 
     // Unsuscribe customer
     @Post('unsuscribe/:id')
-    async unsubscribeCustomer(@Param('id') customerId: string): Promise<boolean>{
+    async unsubscribeCustomer(@Param('id', ParseUUIDPipe) customerId: string): Promise<boolean>{
 
         return await this.customerService.unsubscribe(customerId);
     }
 
     // Suscribe customer
     @Post('unsuscribe/:id')
-    async subscribeCustomer(@Param('id') customerId: string): Promise<boolean>{
+    async subscribeCustomer(@Param('id', ParseUUIDPipe) customerId: string): Promise<boolean>{
 
         return await this.customerService.subscribe(customerId);
     }

@@ -1,27 +1,25 @@
 import { Injectable } from '@nestjs/common';
 
-import { AccountModel } from '../../models';
 import { AccountEntity, AccountTypeEntity, CustomerEntity } from '../../persistence/entities';
-import { AccountRepository } from '../../persistence/repositories';
-import { CreateAccountDto } from '../../dtos';
-import { AccountTypeRepository } from '../../persistence/repositories/account-type.repository';
+import { AccountRepository, AccountTypeRepository } from '../../persistence/repositories';
+import { CreateAccountDto, UpdateAccountDto } from '../../dtos';
 
 
 @Injectable()
 export class AccountService {
 
-    constructor(
-      private readonly accountRepository: AccountRepository,  
-      private readonly accountTypeRepository: AccountTypeRepository,    
-      ) {}
-    
-   /**
-   * Create a new account - OK   *
-   * @param {CreateAccountDto} account
-   * @return {*}  {AccountEntity}   
-   */
+  constructor(
+    private readonly accountRepository: AccountRepository,
+    private readonly accountTypeRepository: AccountTypeRepository,
+  ) { }
+
+  /**
+  * Create a new account - OK   *
+  * @param {CreateAccountDto} account
+  * @return {*}  {AccountEntity}   
+  */
   createAccount(account: CreateAccountDto): AccountEntity {
-    
+
     const newAccountType = new AccountTypeEntity();
     newAccountType.id = account.accountTypeId;
 
@@ -33,7 +31,7 @@ export class AccountService {
 
     newAccount.customerId = customer;
     newAccount.accountTypeId = newAccountType;
-    
+
     return this.accountRepository.register(newAccount);
   }
 
@@ -43,9 +41,23 @@ export class AccountService {
    * @param newAccountDetails new data
    * @returns updated entity
    */
-  updateAccount(accountId: string, newAccountDetails: AccountModel) : AccountEntity{
+  updateAccount(accountId: string, newAccountDetails: UpdateAccountDto): AccountEntity {
 
-    return this.accountRepository.update(accountId, newAccountDetails);
+    const newAccount = new AccountEntity();   
+  
+    const newAccountType = new AccountTypeEntity();
+    newAccountType.id = newAccountDetails.accountTypeId;
+    newAccount.accountTypeId = newAccountType;
+      
+    const newCustomer = new CustomerEntity();
+    newCustomer.id = newAccountDetails.customerId;
+    newAccount.customerId = newCustomer;    
+    
+    newAccount.balance = newAccountDetails.balance; 
+
+    newAccount.state = newAccountDetails.state; 
+
+    return this.accountRepository.update(accountId, newAccount);
 
   }
 
@@ -56,7 +68,7 @@ export class AccountService {
    * @memberof AccountService
    */
   getBalance(accountId: string): number {
-    
+
     return this.accountRepository.findOneById(accountId).balance;
 
   }
@@ -68,8 +80,8 @@ export class AccountService {
    * @memberof AccountService
    */
   addBalance(accountId: string, amount: number): void {
-    
-    if(amount < 0){
+
+    if (amount < 0) {
       throw new Error(`Negative amounts are not allowed!`);
     }
 
@@ -84,12 +96,12 @@ export class AccountService {
    * @memberof AccountService
    */
   removeBalance(accountId: string, amount: number): void {
-        
-    if(amount < 0){
+
+    if (amount < 0) {
       throw new Error(`Negative amounts are not allowed!`);
     }
 
-    if(!this.verifyAmountIntoBalance(accountId, amount)) {
+    if (!this.verifyAmountIntoBalance(accountId, amount)) {
       throw new Error(`Not enough founds in Account Balance!`);
     }
 
@@ -105,7 +117,7 @@ export class AccountService {
    * @return {*}  {boolean}
    * @memberof AccountService
    */
-   private verifyAmountIntoBalance(accountId: string, amount: number): boolean {
+  private verifyAmountIntoBalance(accountId: string, amount: number): boolean {
 
     return this.getBalance(accountId) >= amount ? true : false;
 
@@ -118,8 +130,8 @@ export class AccountService {
    * @memberof AccountService
    */
   getState(accountId: string): boolean {
-    
-    return this.accountRepository.findOneById(accountId).state; 
+
+    return this.accountRepository.findOneById(accountId).state;
 
   }
 
@@ -130,7 +142,7 @@ export class AccountService {
    * @memberof AccountService
    */
   changeState(accountId: string, state: boolean): void {
-    
+
     this.accountRepository.setAccountState(accountId, state);
   }
 
@@ -141,7 +153,7 @@ export class AccountService {
    * @memberof AccountService
    */
   getAccountType(accountId: string): AccountTypeEntity {
-    
+
     return this.accountRepository.findOneById(accountId).accountTypeId;
 
   }
@@ -158,8 +170,8 @@ export class AccountService {
     let accountType = this.accountTypeRepository.findOneById(accountTypeId);
 
     //this.accountRepository.getAccountType(accountId);
-        
-    if(accountType.id === accountTypeId){
+
+    if (accountType.id === accountTypeId) {
       throw new Error('The Account Type is already the same');
     }
 

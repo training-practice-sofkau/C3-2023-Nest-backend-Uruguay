@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
 
 import { AccountService } from '../../services';
-import { AccountModel } from '../../models';
 import { AccountEntity } from '../../persistence/entities';
-import { CreateAccountDto } from '../../dtos/account/create-account.dto';
+import { CreateAccountDto, UpdateAccountDto } from '../../dtos';
+
 
 @Controller('account')
 export class AccountController {
@@ -14,24 +14,23 @@ export class AccountController {
     //TODO: Implment checks and controls - Verify user token
 
 
-    // new account
-    // TODO: implement newAccountDTO to use instead of accountModel
+    // new account DONE    
     @Post('create')
     async createAccount(@Body() account: CreateAccountDto): Promise<AccountEntity> {
         
         return await this.accountService.createAccount(account);
     }
 
-    //update account
-    // TODO: implement accountUpdateDTO instead of accountModel
+    //update account DONE   
     @Put('update/:id')
     async updateAccount(@Param('id', ParseUUIDPipe) accountId: string, 
-                        @Body() newDetails: AccountModel): 
+                        @Body() newDetails: UpdateAccountDto): 
                         Promise<AccountEntity>{
     
         return await this.accountService.updateAccount(accountId, newDetails);
     }    
 
+    
     // delete account ( Only soft delete from here )
     @Delete('delete/:id')
     async deleteAccount(@Param('id', ParseUUIDPipe) accountId: string): Promise<void> {

@@ -23,8 +23,7 @@ export class SignUpDto{
     phone: string;
 
     @IsAlphanumeric()
-    @IsNotEmpty({message:'This value cannot be empty!'})    
-   // @Min(5, {message: 'Password must be at least 5 characters long!'}) <- TODO: this throw some error, check
+    @IsNotEmpty({message:'This value cannot be empty!'})       
     password: string;
     
 }

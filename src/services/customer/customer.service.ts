@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 
-import { CustomerModel } from '../../models';
+
+import { UpdateCustomerDto } from '../../dtos';
 import { CustomerEntity } from '../../persistence/entities';
-import { CustomerRepository } from '../../persistence/repositories';
-import { AccountRepository } from '../../persistence/repositories/account.repository';
+import { CustomerRepository, AccountRepository } from '../../persistence/repositories';
+import { DocumentTypeEntity } from '../../persistence/entities/document-type.entity';
+
 
 @Injectable()
 export class CustomerService {
@@ -30,7 +32,21 @@ export class CustomerService {
    * @return {*}  {CustomerEntity}
    * @memberof CustomerService
    */
-  updatedCustomer(id: string, customer: CustomerModel): CustomerEntity {
+  updatedCustomer(id: string, newCustomerDetails: UpdateCustomerDto): CustomerEntity {
+
+    const customer = new CustomerEntity();
+
+    const documentType = new DocumentTypeEntity();
+    documentType.id = newCustomerDetails.documentTypeId;
+    customer.documentType = documentType;
+
+    customer.document = newCustomerDetails.document;
+    customer.email = newCustomerDetails.email;
+    customer.fullname = newCustomerDetails.fullname;
+    customer.password = newCustomerDetails.password;
+    customer.phone = newCustomerDetails.phone;
+    customer.state = newCustomerDetails.state;
+    customer.avatarUrl = newCustomerDetails.avatarUrl;
 
     return this.customerRepository.update(id, customer);
 
@@ -43,7 +59,7 @@ export class CustomerService {
    * @memberof CustomerService
    */
   unsubscribe(id: string): boolean {
-    
+
     if (this.checkCustomerBalance(id) == 0) {
       return this.customerRepository.setCustomerState(id, false);
     }
