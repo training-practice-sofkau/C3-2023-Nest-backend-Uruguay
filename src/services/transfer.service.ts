@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PaginationModel, DataRangeModel } from '../models';
 import { TransferEntity, TransferRepository } from '../persistence';
-import { CreateTransferDto } from '../dtos';
+import { CreateTransferDto, HistoryDto, PaginationDto } from '../dtos';
 import { AccountService } from '.';
 
 @Injectable()
@@ -21,8 +21,8 @@ export class TransferService {
 
   getHistoryOut(
     accountId: string,
-    pagination?: PaginationModel,
-    dataRange?: DataRangeModel,
+    pagination?: PaginationDto,
+    dataRange?: HistoryDto,
   ): TransferEntity[] {
     if (dataRange){
       return this.transferRepository.findOutcomeByDataRange(accountId, dataRange.dateInit, dataRange.dateEnd, pagination);
@@ -31,8 +31,8 @@ export class TransferService {
 
   getHistoryIn(
     accountId: string,
-    pagination?: PaginationModel,
-    dataRange?: DataRangeModel,
+    pagination?: PaginationDto,
+    dataRange?: HistoryDto,
   ): TransferEntity[] {
     if (dataRange){
       return this.transferRepository.findIncomeByDataRange(accountId, dataRange.dateInit, dataRange.dateEnd, pagination);
@@ -41,8 +41,8 @@ export class TransferService {
 
   getHistory(
     accountId: string,
-    pagination: PaginationModel,
-    dataRange?: DataRangeModel,
+    pagination?: PaginationDto,
+    dataRange?: HistoryDto,
   ): TransferEntity[] {
     if (dataRange){
       return this.transferRepository.findIncomeByDataRange(accountId, dataRange.dateInit, dataRange.dateEnd, pagination).concat(this.transferRepository.findOutcomeByDataRange(accountId, dataRange.dateInit, dataRange.dateEnd, pagination));

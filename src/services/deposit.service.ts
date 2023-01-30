@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { PaginationModel, DataRangeModel } from '../models';
 import { DepositEntity, DepositRepository } from '../persistence';
-import { CreateDepositDto } from '../dtos';
+import { CreateDepositDto, HistoryDto, PaginationDto } from '../dtos';
 import { AccountService } from '.';
 
 @Injectable()
@@ -24,8 +24,8 @@ export class DepositService {
 
   getHistory(
     accountId: string,
-    pagination?: PaginationModel,
-    dataRange?: DataRangeModel,
+    pagination?: PaginationDto,
+    dataRange?: HistoryDto,
   ): DepositEntity[] {
     if (dataRange){
       return this.depositRepository.findByDataRange(accountId, dataRange.dateInit, dataRange.dateEnd, pagination);
