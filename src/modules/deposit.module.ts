@@ -1,4 +1,9 @@
 import { Module } from '@nestjs/common';
 
-@Module({})
+@Module({
+    imports: [],
+    controllers: [],
+    providers: [],
+    exports: [],
+})
 export class DepositModule {}

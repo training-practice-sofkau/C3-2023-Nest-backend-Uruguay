@@ -3,7 +3,7 @@
   import { v4 as uuid } from 'uuid';
   
   // Data transfer objects
-  import { SignInDto, SignUpDto } from '../dtos';
+  import { CreateAccountDto, SignInDto, SignUpDto } from '../dtos';
   
   // Repositories
   import { CustomerRepository } from '../persistence';
@@ -12,21 +12,21 @@
   import { AccountService } from '.';
   
   // Entities
-  import { AccountTypeEntity, CustomerEntity, AccountEntity, DocumentTypeEntity } from '../persistence/entities';
-  
+  import { AccountTypeEntity, CustomerEntity, DocumentTypeEntity } from '../persistence/entities';
+  import { CustomerService } from './customer.service';
   // Jwt
   import { JwtService } from '@nestjs/jwt';
   
   @Injectable()
   export class SecurityService {
     constructor(
-      private readonly customerRepository: CustomerRepository,
+      private readonly customerService: CustomerService,
       private readonly accountService: AccountService,
       private readonly jwtService: JwtService
     ) {}
   
     signIn(user: SignInDto): string {
-      const answer = this.customerRepository.findOneByEmailAndPassword(
+      const answer = this.customerService.findOneByEmailAndPassword(
         user.email,
         user.password,
       );
@@ -46,18 +46,16 @@
       newCustomer.phone = user.phone;
       newCustomer.password = user.password;
   
-      const customer = this.customerRepository.register(newCustomer);
+      const customer = this.customerService.register(newCustomer);
   
       if (customer) {
         const accountType = new AccountTypeEntity();
         accountType.id = uuid();
         
-        const newAccount = new AccountEntity()
-        newAccount.customer = customer
-        newAccount.accountType = accountType
-        newAccount.balance = 0
-        newAccount.id = uuid()
-        newAccount.state = false
+        const newAccount = new CreateAccountDto();
+        newAccount.customerId = customer.id;
+        newAccount.accountTypeName = accountType.name;
+        newAccount.balance = 0;
   
         const account = this.accountService.createAccount(newAccount);
   

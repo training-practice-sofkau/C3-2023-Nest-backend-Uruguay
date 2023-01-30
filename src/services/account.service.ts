@@ -1,23 +1,32 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 
 import { AccountRepository, AccountTypeRepository } from '../persistence';
-import { AccountModel } from '../models';
 import { AccountEntity, AccountTypeEntity } from '../persistence/entities';
+import { CustomerService } from '.';
 
 // Data Transfer Object
-import { BalanceDto, ChangeAccountDto, ChangeStateDto } from '../dtos';
+import { CreateAccountDto, BalanceDto, ChangeAccountDto, ChangeStateDto } from '../dtos';
+
 
 @Injectable()
 export class AccountService {
 
+  @Inject(forwardRef(() => CustomerService))
+  private readonly customerService: CustomerService;
+
   constructor(private readonly accountRepository: AccountRepository, private readonly accountTypeRepository: AccountTypeRepository) {}
 
-  createAccount(account: AccountModel): AccountEntity {
+  createAccount(account: CreateAccountDto): AccountEntity {
     const newAccount = new AccountEntity();
-    newAccount.customer = account.customer;
-    newAccount.accountType = account.accountType;
+    newAccount.customer = this.customerService.getCustomerInfo(account.customerId);
+
+    const newAccountType = new AccountTypeEntity();
+    newAccountType.name = account.accountTypeName;
+
+    newAccount.accountType = newAccountType;
     newAccount.balance = 0;
     newAccount.state = false;
+
     return this.accountRepository.register(newAccount);
   }
 

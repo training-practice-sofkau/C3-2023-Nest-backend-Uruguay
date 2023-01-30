@@ -12,6 +12,6 @@ export class UpdateAccountDto {
     accountTypeId: string;
 
     @IsNumberString({ message: "balance is not a number." })
-    balance: number;
+    balance: string;
     
 }

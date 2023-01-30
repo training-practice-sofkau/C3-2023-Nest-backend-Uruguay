@@ -6,10 +6,10 @@ import { Module } from '@nestjs/common';
 // Services
 //import { AccountService, AccountTypeService, CustomerService, DepositService, DocumentTypeService, SecurityService, TransferService } from './services';
 // Modules
-import { SecurityModule } from './modules';
+import { AccountModule, CustomerModule, SecurityModule } from './modules';
 
 @Module({
-  imports: [SecurityModule],
+  imports: [CustomerModule],
   controllers: [],
   providers: [],
 })

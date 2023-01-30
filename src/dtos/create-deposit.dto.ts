@@ -1,4 +1,4 @@
-import { IsNumberString, IsUUID } from "class-validator";
+import { IsDateString, IsNumberString, IsOptional, IsUUID } from "class-validator";
 
 export class CreateDepositDto {
 
@@ -7,5 +7,9 @@ export class CreateDepositDto {
 
     @IsNumberString(undefined, { message: 'the balance is not a number.' })
     balance: string;
+
+    @IsDateString()
+    @IsOptional()
+    dateTime?: Date;
 
 }

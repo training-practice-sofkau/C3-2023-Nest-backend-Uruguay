@@ -1,6 +1,7 @@
 export * from './balance.dto';
 export * from './change-account-type.dto';
 export * from './change-state.dto';
+export * from './create-account.dto';
 export * from './create-deposit.dto';
 export * from './create-transfer.dto';
 export * from './get-history.dto';
