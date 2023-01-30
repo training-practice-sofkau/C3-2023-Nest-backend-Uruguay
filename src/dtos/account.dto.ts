@@ -1,14 +1,14 @@
 import { IsBoolean, IsInt, IsOptional, IsUUID, IsNotEmpty, IsDate } from 'class-validator';
 
+import { CustomerEntity, AccountTypeEntity } from '../persistence/entities';
+
 
 export class AccountDto {
 
-    @IsOptional()
-    @IsUUID(4,{message: 'uuid must to be a valid v4 UUID'})
-    customer: string;
+    @IsNotEmpty()
+    customer: CustomerEntity;
 
-    @IsOptional()
-    @IsUUID(4,{message: 'uuid must to be a valid v4 UUID'})
-    accountType: string
+    @IsNotEmpty()
+    accountType: AccountTypeEntity;
 
 }
