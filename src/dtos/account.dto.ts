@@ -9,6 +9,7 @@ export class CreateAccountDto {
     @IsNotEmpty({ message: ' is required.' })
     accountType: AccountTypeModel;
     
+    @IsNumber()
     balance: number;
 
 }
