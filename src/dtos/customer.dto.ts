@@ -11,22 +11,22 @@ export class CustomerDto {
     documentType: DocumentTypeEntity;
 
     @IsNotEmpty({ message: ' This field should not be empty' })
-    @IsString()
+    @IsString({ message: ' This field should be a string' })
     document: string;
 
     @IsNotEmpty({ message: ' This field should not be empty' })
-    @IsString()
+    @IsString({ message: ' This field should be a string' })
     fullName: string;
 
     @IsNotEmpty({ message: ' This field should not be empty' })
     @IsEmail()
     email: string;
 
-    @IsString()
+    @IsString({ message: ' This field should be a string' })
     @IsNotEmpty({ message: ' This field should not be empty' })
     phone: string;
 
-    @IsString()
+    @IsString({ message: ' This field should be a string' })
     @MinLength(8)
     @MaxLength(100)
     @Matches(
@@ -35,7 +35,7 @@ export class CustomerDto {
     )
     password: string;
 
-    @IsString()
+    @IsString({ message: ' This field should be a string' })
     @IsUrl()
     @IsOptional()
     avatarUrl?: string;
