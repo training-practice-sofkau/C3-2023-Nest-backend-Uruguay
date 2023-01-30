@@ -10,7 +10,6 @@ export class CreateDepositDto{
     @IsPositive({message:'This value must be bigger than 0!'})
     @IsNotEmpty({message:'This value cannot be empty!'})
     @Min(1,{message:'The minimun value is 1!'})
-    amount: number;
-    
+    amount: number;   
     
 }
