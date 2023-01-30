@@ -31,7 +31,3 @@ export class DepositService {
     } else return this.depositRepository.findByAccountId(accountId, pagination);
   }
 }
-
-function uuid(): string {
-  throw new Error('Function not implemented.');
-}
