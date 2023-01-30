@@ -5,6 +5,7 @@ import { PaginationModel } from 'src/models/pagination.model';
 import { DataRangeModel } from 'src/models/DataRange.Model';
 import { timeStamp } from 'console';
 import { TransferModel } from 'src/models';
+import { TransferDto } from 'src/dtos/transferDto';
 
 @Injectable()
 export class TransferService {
@@ -16,7 +17,7 @@ export class TransferService {
    * @return {*}  {TransferEntity}
    * @memberof TransferService
    */
-  createTransfer(transfer: TransferModel): TransferEntity {
+  createTransfer(transfer: TransferDto): TransferEntity {
     const newtransfer = new TransferEntity();
     newtransfer.outcome = transfer.outcome;
     newtransfer.transferAmount = transfer.transferAmount;
