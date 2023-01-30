@@ -1,6 +1,13 @@
-// Libraries
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { SecurityService } from '../services';
 
-@Controller('security')
+@ApiTags('security')
+@Controller('api/security')
 export class SecurityController {
+    constructor(private securityService: SecurityService) {}
+    @Get()
+    All(): string {
+      return 'Not implemented';
+    }
 }
