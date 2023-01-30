@@ -7,23 +7,23 @@ export class CustomerDto {
     @IsUUID(4, { message: "this must to be uuid" })
     id = uuid();
 
-    @IsNotEmpty({ message: ' is required.' })
+    @IsNotEmpty({ message: ' This field should not be empty' })
     documentType: DocumentTypeEntity;
 
-    @IsNotEmpty()
+    @IsNotEmpty({ message: ' This field should not be empty' })
     @IsString()
     document: string;
 
-    @IsNotEmpty()
+    @IsNotEmpty({ message: ' This field should not be empty' })
     @IsString()
     fullName: string;
 
-    @IsNotEmpty()
+    @IsNotEmpty({ message: ' This field should not be empty' })
     @IsEmail()
     email: string;
 
     @IsString()
-    @IsNotEmpty()
+    @IsNotEmpty({ message: ' This field should not be empty' })
     phone: string;
 
     @IsString()
