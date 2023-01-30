@@ -14,12 +14,18 @@ export class AccountController {
     }
     
     //Esto funciona? hay que usar 
-    @Delete(`deleteAccount/:id/:sof`)
-    deleteAccount(@Param(`id`)accountId: string ,
+    @Delete(`deleteSof/:id/:sof`)
+    deleteAccountSof(@Param(`id`)accountId: string ,
     @Param(`sof`) sof? : boolean): void {
         //Evitar estas validaciones en el controller
         return sof?  this.accountService.deleteAccount(accountId,sof) : 
         this.accountService.deleteAccount(accountId);
+    }
+    
+    @Delete(`deleteHard/:id`)
+    deleteAccountHard(@Param(`id`)accountId: string ,
+    @Param(`sof`) sof? : boolean): void {
+        return this.accountService.deleteAccount(accountId);
     }
 
     @Put(`changeAccountType/:accountId/:accountTypeId`)

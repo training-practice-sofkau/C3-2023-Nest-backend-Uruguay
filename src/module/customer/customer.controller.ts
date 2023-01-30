@@ -6,20 +6,16 @@ import { CustomerEntity } from './customer.entity';
 @Controller('customer')
 export class CustomerController {
     constructor(private readonly customerService : CustomerService ){}
-    /**
-     */
 
     @Delete(`deleteCustomerSof/:id/:soft`)
-    deleteCustomer(@Param(`id`)customerId: string,
+    deleteCustomerSof(@Param(`id`)customerId: string,
     @Param(`soft`) soft?: boolean): void {
         return this.customerService.deleteCustomer(customerId,soft);
-
     }
-
-    @Delete(`deleteCustomerSof/:id/:soft`)
-    deleteCustomer(@Param(`id`)customerId: string,
-    @Param(`soft`) soft?: boolean): void {
-        return this.customerService.deleteCustomer(customerId,soft);
+    
+    @Delete(`deleteCustomerHard/:id`)
+    deleteCustomerHard(@Param(`id`)customerId: string): void {
+        return this.customerService.deleteCustomer(customerId);
 
     }
 

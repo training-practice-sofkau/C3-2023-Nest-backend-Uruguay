@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { TransferRepository } from './transfer.repository';
 import { TransferEntity } from './transfer.entities';
-import { TransferModel } from './transfer.model';
-import { DataRangeModel } from '../base/dataRange.model';
-import { PaginationModel } from '../base';
 import { AccountEntity } from '../account/account.entities';
-import { transferDto } from './dto/transfer.dto';
+import { createTransferDto } from './dto/transfer.dto';
+import { dataRangeDto } from './dto/dataRange.dto';
+import { paginationDto } from './dto/Pagination.dto';
 
 @Injectable()
 export class TransferService {
@@ -13,7 +12,7 @@ export class TransferService {
   /**
    * Crear una transferencia entre cuentas del banco
    */
-  createTransfer(transfer: transferDto): TransferEntity {
+  createTransfer(transfer: createTransferDto): TransferEntity {
     const newOucome = new AccountEntity();
     //O tiene que ser al tipo de cuenta porque aca lo hago con la cuenta directamente
     newOucome.id = transfer.outcome;
@@ -32,7 +31,7 @@ export class TransferService {
   /**
    * Obtener historial de transacciones de salida de una cuenta
    */
-  getHistoryOut(accountId: string,pagination?: PaginationModel,dataRange?: DataRangeModel): TransferEntity[] {//dataRange:DataRangeModel
+  getHistoryOut(accountId: string,pagination?: paginationDto,dataRange?: dataRangeDto): TransferEntity[] {//dataRange:DataRangeModel
     dataRange = {
       ...{min: 0 ,max: Date.now()},
       ...dataRange
@@ -47,7 +46,7 @@ export class TransferService {
   /**
    * Obtener historial de transacciones de entrada en una cuenta
    */
-  getHistoryIn(accountId: string,pagination?: PaginationModel,dataRange?: DataRangeModel): TransferEntity[] {//dataRange?: DataRangeModel
+  getHistoryIn(accountId: string,pagination?: paginationDto,dataRange?: dataRangeDto): TransferEntity[] {//dataRange?: DataRangeModel
     dataRange = {
       ...{min: 0 ,max: Date.now()},
       ...dataRange
@@ -60,7 +59,7 @@ export class TransferService {
   /**
    * Obtener historial de transacciones de una cuenta
    */
-  getHistory(accountId: string,pagination: PaginationModel,dataRange?: DataRangeModel): TransferEntity[] {//dataRange?: 
+  getHistory(accountId: string,pagination: paginationDto,dataRange?: dataRangeDto): TransferEntity[] {//dataRange?: 
     let InHisotry = this.getHistoryIn(accountId,pagination,dataRange);
     let outHistory =  this.getHistoryOut(accountId,pagination,dataRange);
     let TotalHistory = InHisotry.concat(outHistory); 
