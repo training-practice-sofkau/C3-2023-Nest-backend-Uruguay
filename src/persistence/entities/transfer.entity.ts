@@ -7,7 +7,7 @@ export class TransferEntity implements TransferModel {
   outcome: AccountModel;
   transferAmount: number;
   transferReason: string;
-  dateTime: Date;
+  dateTime: Date | number;
   state: true  | false;
   deletedAt: Date | number
 }

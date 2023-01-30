@@ -5,6 +5,6 @@ export interface TransferModel extends BaseModel {
   income: AccountModel;
   transferAmount: number;
   transferReason: string;
-  dateTime: Date;
+  dateTime: Date | number;
   deletedAt?: Date | number
 }

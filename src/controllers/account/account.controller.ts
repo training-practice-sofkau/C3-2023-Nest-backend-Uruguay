@@ -31,22 +31,22 @@ export class AccountController {
   }
 
   @Get('getBalance')
-  verifyAmountIntoBalance(accountId: string, amount: number): boolean {
+  verifyAmountIntoBalance(id: string, amount: number): boolean {
     
-    return this.AccountService.verifyAmountIntoBalance(accountId, amount)
+    return this.AccountService.verifyAmountIntoBalance(id, amount)
   }
 
-  @Put('changeState')
-  changeState(@Body() accountId: string, state: boolean): void {
-    return this.AccountService.changeState(accountId, state)
+  @Put('changeState/:id')
+  changeState(@Body()@Param('id') id: string, state: boolean): void {
+    return this.AccountService.changeState(id, state)
   }
  
   @Get('getAccountType')
   getAccountType(accountId: string): AccountTypeEntity{
   return this.AccountService.getAccountType(accountId)
 }
-@Put ('changeAccntType') 
-changeAccntType(@Body() accountId: string, accountTypeId: string): AccountTypeEntity { 
+@Put ('changeAccntType/:id') 
+changeAccntType(@Body()@Param('id') accountId: string, accountTypeId: string): AccountTypeEntity { 
     return this.AccountService.changeAccntType(accountId, accountTypeId);
 }
 
@@ -54,4 +54,7 @@ changeAccntType(@Body() accountId: string, accountTypeId: string): AccountTypeEn
 unsubscribe(@Param('id') accountId: string): void{
   return this.AccountService.deleteAccount(accountId);
 }
-}
+@Put('harddelete/:id')
+hardelete(@Param('id') accountId: string, soft: boolean): void{
+  return this.AccountService.deleteAccount(accountId, soft);
+}}

@@ -1,4 +1,4 @@
 export interface DataRangeModel {
-    dateInit : number;
+    dateInit : Date | number;
     dateEnd ?: number;
 }

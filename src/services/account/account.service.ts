@@ -153,7 +153,7 @@ export class AccountService {
    * @param {string} accountId
    * @memberof AccountService
    */
-  deleteAccount(accountId: string): void {
-    this.accountRepository.delete(accountId);
+  deleteAccount(accountId: string, soft?: boolean): void {
+    this.accountRepository.delete(accountId, soft);
   }
 }

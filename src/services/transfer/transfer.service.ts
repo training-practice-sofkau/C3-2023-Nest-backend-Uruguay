@@ -3,8 +3,6 @@ import { TransferEntity } from 'src/persistence';
 import { TransferRepository } from '../../persistence/repositories/transfer.repository';
 import { PaginationModel } from 'src/models/pagination.model';
 import { DataRangeModel } from 'src/models/DataRange.Model';
-import { timeStamp } from 'console';
-import { TransferModel } from 'src/models';
 import { TransferDto } from 'src/dtos/transferDto';
 
 @Injectable()
@@ -19,7 +17,7 @@ export class TransferService {
    */
   createTransfer(transfer: TransferDto): TransferEntity {
     const newtransfer = new TransferEntity();
-    newtransfer.outcome = transfer.outcome;
+    newtransfer.outcome = transfer.outcome
     newtransfer.transferAmount = transfer.transferAmount;
     newtransfer.state = true;
     return this.TransferRepository.register(newtransfer);
@@ -48,8 +46,8 @@ export class TransferService {
       let { dateInit, dateEnd = Date.now() } = dataRange;
       transfer = transfer.filter(
         (transfer) =>
-        transfer.dateTime.getTime() >= dateInit &&
-        transfer.dateTime.getTime() <= dateEnd,
+        transfer.dateTime >= dateInit &&
+        transfer.dateTime <= dateEnd,
       );
     }
     if (pagination) {
@@ -79,8 +77,8 @@ export class TransferService {
       let { dateInit, dateEnd = Date.now() } = dataRange;
       transfer = transfer.filter(
         (transfer) =>
-          transfer.dateTime.getTime() >= dateInit &&
-          transfer.dateTime.getTime() <= dateEnd,
+          transfer.dateTime >= dateInit &&
+          transfer.dateTime <= dateEnd,
       );
     }
     if (pagination) {
@@ -109,8 +107,8 @@ export class TransferService {
       let { dateInit, dateEnd = Date.now() } = dataRange;
       transfer = transfer.filter(
         (transfer) =>
-          transfer.dateTime.getTime() >= dateInit &&
-          transfer.dateTime.getTime() <= dateEnd,
+          transfer.dateTime >= dateInit &&
+          transfer.dateTime <= dateEnd,
       );
     }
 

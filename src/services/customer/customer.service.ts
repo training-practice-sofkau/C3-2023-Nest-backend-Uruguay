@@ -6,7 +6,6 @@ import { CustomerDtos } from '../../dtos/CustomerDtos';
 @Injectable()
 export class CustomerService {
 
-  [x: string]: any;
   constructor(
     private readonly CustomerRepository: CustomerRepository,    ) {}
 
@@ -42,6 +41,8 @@ export class CustomerService {
    * @memberof CustomerService
    */
   unsubscribe(id: string): boolean {
+    this.CustomerRepository.delete(id)
     return this.CustomerRepository.searchByAttributesforOne("id", id).state 
+
   }
 }
