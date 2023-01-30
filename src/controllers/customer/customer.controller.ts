@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Put, Body } from '@nestjs/common';
+import { Controller, Get, Param, Put, Body, ParseUUIDPipe } from '@nestjs/common';
 import { CustomerDtos } from 'src/dtos/CustomerDtos';
 import { CustomerEntity } from 'src/persistence';
 import { CustomerService } from 'src/services';
@@ -15,13 +15,13 @@ export class CustomerController {
   }
 
   @Put(':id')
-  updatedCustomer(@Param('id') id: string, @Body() customer: CustomerDtos): CustomerEntity {
+  updatedCustomer(@Param('id', ParseUUIDPipe) id: string, @Body() customer: CustomerDtos): CustomerEntity {
     return this.customerService.updatedCustomer(id, customer);
   }
 
  
   @Put('unsubscribe/:id')
-  unsubscribe(@Param('id') id: string): boolean {
+  unsubscribe(@Param('id', ParseUUIDPipe) id: string): boolean {
     return this.customerService.unsubscribe(id);
   }
 }

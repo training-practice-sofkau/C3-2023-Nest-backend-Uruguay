@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
 import { TransferEntity } from 'src/persistence';
 import { TransferService } from '../../services/transfer/transfer.service';
 import { TransferDto } from '../../dtos/transferDto';
@@ -14,12 +14,12 @@ export class TransferController {
     return this.TransferService.createTransfer(transfer);
   }
   @Put('delete/:id')
-  deleteTransfer(@Param('id') id: string): void {
+  deleteTransfer(@Param('id', ParseUUIDPipe) id: string): void {
     return this.TransferService.deleteTransfer(id);
   }
   @Get('getHistory/:id')
   getHistory(
-    @Param('id')
+    @Param('id', ParseUUIDPipe)
     id: string,
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
@@ -28,7 +28,7 @@ export class TransferController {
   }
   @Get('getHistoryIn/:id')
   getHistoryIn(
-    @Param('id')
+    @Param('id', ParseUUIDPipe)
     id: string,
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
@@ -38,7 +38,7 @@ export class TransferController {
 
   @Get('getHistoryOut/:id')
   getHistoryOut(
-    @Param('id')
+    @Param('id', ParseUUIDPipe)
     id: string,
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
