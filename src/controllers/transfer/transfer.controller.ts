@@ -2,6 +2,8 @@ import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
 import { TransferService } from '../../services/transfer/transfer.service';
 import { TransferModel } from '../../models/transfer.model';
 import { TransferEntity } from '../../persistence/entities/transfer.entity';
+import { PaginationModel } from '../../models/pagination.model';
+import { PaginationEntity } from '../../persistence/entities/pagination.entity';
 
 @Controller('transfer')
 export class TransferController {
@@ -28,9 +30,13 @@ export class TransferController {
     // get history by destination account
     //TODO: see how to send values for pagination and date range ( look for info and methods )
     @Get('To/:id')
-    async getTransfersToDestinationAccount(@Param('id') accountId: string): Promise<TransferEntity[]> {
+    async getTransfersToDestinationAccount(@Param('id') accountId: string, @Param('limit') limit: number): Promise<TransferEntity[]> {
+      
+        const page= new PaginationEntity();
+        page.offset = 0;
+        page.limit= limit;
 
-        return await this.transferService.getHistoryIn(accountId);
+        return this.transferService.getHistoryIn(accountId, page);
     }   
 
 
