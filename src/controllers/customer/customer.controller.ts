@@ -15,16 +15,16 @@ export class CustomerController {
     }
 
     @Delete('/soft-delete/:id')
-    unsuscribe(id: string): void {
+    unsuscribe(@Param('id') id: string): void {
         this.customerService.deleteCustomer(id);
     }
     @Delete('/hard-delete/:id')
-    hardDelete(id: string): void {
+    hardDelete(@Param('id') id: string): void {
         this.customerService.deleteCustomer(id);
     }
 
     @Get('/find/:id')
-    getCustomerInfo(@Param() id: string) {
+    getCustomerInfo(@Param('id') id: string) {
         return this.customerService.getCustomerInfo(id);
     }
 
@@ -34,7 +34,7 @@ export class CustomerController {
     }
 
     @Patch('/change-state/:id')
-    changeState(@Param() id: string, @Body() state: boolean): void {
+    changeState(@Param('id') id: string, @Body() state: boolean): void {
         this.customerService.changeState(id, state);
     }
 }

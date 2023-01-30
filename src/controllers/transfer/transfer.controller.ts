@@ -22,17 +22,17 @@ export class TransferController {
     }
 
     @Get('/get-history-out/:id')
-    getHistoryOut(@Param() id: string,@Body() pagination: PaginationModel,@Body() dataRange?: DataRangeModel): TransferEntity[] {
+    getHistoryOut(@Param('id') id: string,@Body() pagination: PaginationModel,@Body() dataRange?: DataRangeModel): TransferEntity[] {
         return this.transferService.getHistoryOut(id, pagination, dataRange);
     }
 
     @Get('/get-history-in/:id')
-    getHistoryIn(@Param() id: string,@Body() pagination: PaginationModel,@Body() dataRange?: DataRangeModel): TransferEntity[] {
+    getHistoryIn(@Param('id') id: string,@Body() pagination: PaginationModel,@Body() dataRange?: DataRangeModel): TransferEntity[] {
         return this.transferService.getHistoryIn(id, pagination, dataRange);
     }
     
     @Get('/get-history/:id')
-    getHistory(@Param() id: string, pagination: PaginationModel, dataRange?: DataRangeModel): TransferEntity[] {
+    getHistory(@Param('id') id: string, pagination: PaginationModel, dataRange?: DataRangeModel): TransferEntity[] {
         return this.transferService.getHistory(id, pagination, dataRange);
     }
 
@@ -42,7 +42,7 @@ export class TransferController {
     }
 
     @Delete('/hard-delete/:id')
-    hardDeleteTransfer(@Param() id: string): void {
+    hardDeleteTransfer(@Param('id') id: string): void {
         this.transferService.deleteTransfer(id);
     }
 }

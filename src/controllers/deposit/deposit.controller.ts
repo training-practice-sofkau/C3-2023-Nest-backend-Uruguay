@@ -19,17 +19,17 @@ export class DepositController {
     }
 
     @Delete('/soft-delete/:id')
-    softDelete(@Param() id: string): void {
+    softDelete(@Param('id') id: string): void {
         this.depositService.deleteDeposit(id, true);
     }
 
     @Delete('/hard-delete/:id')
-    hardDelete(@Param() id: string): void {
+    hardDelete(@Param('id') id: string): void {
         this.depositService.deleteDeposit(id);
     }
 
     @Get('/get-history/:id')
-    getHistory(@Param() id: string, @Body() pagination: PaginationModel, @Body() dateRange?: DataRangeModel): DepositEntity[] {
+    getHistory(@Param('id') id: string, @Body() pagination: PaginationModel, @Body() dateRange?: DataRangeModel): DepositEntity[] {
         return this.depositService.getAccountHistory(id, pagination, dateRange);
     }
 
