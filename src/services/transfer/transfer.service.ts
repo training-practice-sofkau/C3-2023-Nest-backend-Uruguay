@@ -2,6 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { DataRangeModel, PaginationModel, TransferModel } from '../../models';
 import { TransferEntity, TransferRepository } from '../../persistence';
+import { CreateTrasferDto } from '../../dtos/create-transfer.dto';
+import { AccountEntity } from '../../persistence/entities/account.entity';
 
 @Injectable()
 export class TransferService {
@@ -13,10 +15,16 @@ export class TransferService {
    * @return {*}  {TransferEntity}
    * @memberof TransferService
    */
-  createTransfer(transfer: TransferModel): TransferEntity {
+  createTransfer(transfer: CreateTrasferDto): TransferEntity {
+    const accountOutcomeId = new AccountEntity
+    accountOutcomeId.id = transfer.outcome
+
+    const accountIncomeId = new AccountEntity
+    accountIncomeId.id = transfer.income
+
     const newTransfer = new TransferEntity();
-    newTransfer.outcome = transfer.outcome;
-    newTransfer.income = transfer.income;
+    newTransfer.outcome = accountOutcomeId;
+    newTransfer.income = accountIncomeId;
     newTransfer.amount = transfer.amount;
     newTransfer.reason = transfer.reason;
     return this.transferRepository.register(newTransfer);
