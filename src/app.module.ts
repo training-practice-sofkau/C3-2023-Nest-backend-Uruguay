@@ -18,11 +18,12 @@ import {
 import { AccountController } from './controllers/account';
 import { CustomerController } from './controllers/customer/customer.controller';
 import { DepositController } from './controllers/deposit/deposit.controller';
+import { TransferController } from './controllers/transfer/transfer.controller';
 
 
 @Module({
   imports: [],
-  controllers: [SecurityController, AccountController, CustomerController, DepositController],
+  controllers: [SecurityController, AccountController, CustomerController, DepositController, TransferController],
   providers: [
     AccountService,
     CustomerService,
