@@ -48,7 +48,7 @@ import { SignInDto, SignUpDto } from 'src/dtos';
         user.username,
         user.password,
       );
-      if (answer) return jwt.sign({id: user.id}, process.env.TOKEN_SECRET )
+      if (answer) return "any"
       else throw new UnauthorizedException();
     }
   

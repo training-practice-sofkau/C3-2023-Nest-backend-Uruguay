@@ -7,8 +7,10 @@ import { CustomerService } from 'src/services';
 export class CustomerController {
   constructor(private readonly customerService: CustomerService) {}
 
+
   @Get(':customerId')
   getCustomerInfo(@Param('customerId') customerId: string): CustomerEntity {
+    
     return this.customerService.getCustomerInfo(customerId);
   }
 
