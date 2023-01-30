@@ -8,6 +8,9 @@ import { ICustomerModel } from 'src/models/i-customer-model';
 import { Response } from 'express';
 import  jwt from 'jsonwebtoken';
 import { v4 as uuid } from 'uuid';
+import { SignInDto } from 'src/dtos/sign-in-dto';
+import { SignUpDto } from 'src/dtos/sign-up-dto';
+import { DocumentTypeEntity } from 'src/persistence/entities/document-type-entity';
 
 @Injectable()
 export class SecurityService {
@@ -21,9 +24,9 @@ export class SecurityService {
      * @return {*}  {string}
      * @memberof SecurityService
      */
-    signIn(user: ICustomerModel): string {
+    signIn(user: SignInDto): string {
       const answer = this.customerRepository.findOneByEmailAndPassword(
-        user.email,
+        user.username,
         user.password,
       );
       if (answer) return jwt.sign(user, process.env.TOKEN_SECRET || "tokentest");
@@ -37,9 +40,13 @@ export class SecurityService {
      * @return {*}  {string}
      * @memberof SecurityService
      */
-    signUp(user: ICustomerModel): string {
+    signUp(user: SignUpDto): string {
       const newCustomer = new CustomerEntity();
-      newCustomer.documentType = user.documentType;
+
+      const documentType = new DocumentTypeEntity();
+      documentType.id = user.documentTypeId;
+
+      newCustomer.documentType = documentType;
       newCustomer.document = user.document;
       newCustomer.fullName = user.fullName;
       newCustomer.email = user.email;
@@ -49,6 +56,7 @@ export class SecurityService {
       const customer = this.customerRepository.register(newCustomer);
   
       if (customer) {
+        
         const accountType = new AccountEntity();
         accountType.id = uuid();
         const newAccount = {
