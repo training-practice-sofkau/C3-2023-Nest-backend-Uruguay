@@ -1,14 +1,14 @@
 // Libraries
 import { Body, Controller, Param, Post } from '@nestjs/common';
 
-import { CustomerModel } from '../../models';
-import { SignUpDto } from '../../dtos';
-import { SignInDto } from '../../dtos/sign-in.dto';
+//DTOs
+import { SignUpDto, SignInDto } from 'src/dtos';
+import { SecurityService } from '../../services';
 
 @Controller('security')
 export class SecurityController {
 
-    constructor(private securityService: SecurityController) {}
+    constructor(private readonly securityService: SecurityService) {}
 
     //sign in    
     @Post('/signin')

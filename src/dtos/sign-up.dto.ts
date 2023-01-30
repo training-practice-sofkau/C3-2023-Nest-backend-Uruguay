@@ -1,28 +1,30 @@
-import { IsAlphanumeric, IsEmail, IsNotEmpty, IsNumberString, IsString, IsUUID, Matches } from "class-validator/types/decorator/decorators";
+import { IsAlphanumeric, IsEmail, IsNotEmpty, IsNumberString, IsString, IsUUID, Matches, Min } from "class-validator";
 
 export class SignUpDto{
 
     @IsUUID(4, {message:'The value provided is not a UUID valid!' })
-    @IsNotEmpty()
+    @IsNotEmpty({message:'This value cannot be empty!'})
     documentTypeId: string;
                      
     @IsNumberString()
-    @IsNotEmpty()
+    @IsNotEmpty({message:'This value cannot be empty!'})
     document: string;
 
-    @IsNotEmpty()
+    @IsNotEmpty({message:'This value cannot be empty!'})
     @IsString()
     fullname: string;
 
     @IsEmail()
+    @IsNotEmpty({message:'This value cannot be empty!'})
     email: string;
 
     @IsNumberString()
+    @IsNotEmpty({message:'This value cannot be empty!'})
     phone: string;
 
     @IsAlphanumeric()
-    @IsNotEmpty()
-    //@Matches()
+    @IsNotEmpty({message:'This value cannot be empty!'})    
+    @Min(5, {message: 'Password must be at least 5 characters long!'})
     password: string;
     
 }

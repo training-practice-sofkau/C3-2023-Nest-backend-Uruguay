@@ -1,120 +1,117 @@
 // Libraries
-import {Injectable, InternalServerErrorException, UnauthorizedException} from '@nestjs/common';
+import { Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 
-import  jwt  from 'jsonwebtoken';
-
-
-  // Data transfer objects
+import jwt from 'jsonwebtoken';
 
 
-  // Models
-  import { CustomerModel } from '../../models';
+// Data transfer objects
 
-  // Repositories
-  import { CustomerRepository } from '../../persistence/repositories';
 
-  // Services
-  import { AccountService } from '../account';
+// Models
+import { CustomerModel } from '../../models';
 
-  // Entities
-  import { AccountTypeEntity, CustomerEntity, AccountEntity } from '../../persistence/entities';
-import { SignInDto } from '../../dtos/sign-in.dto';
-import { SignUpDto } from 'src/dtos/sign-up.dto';
+// Repositories
+import { CustomerRepository } from '../../persistence/repositories';
+
+// Services
+import { AccountService } from '../account';
+
+// Entities
+import { AccountTypeEntity, CustomerEntity, AccountEntity } from '../../persistence/entities';
+import { SignInDto, SignUpDto } from '../../dtos';
 import { DocumentTypeEntity } from '../../persistence/entities/document-type.entity';
 
 
 
-  @Injectable()
-  export class SecurityService {
+@Injectable()
+export class SecurityService {
 
-    constructor(
-      private readonly customerRepository: CustomerRepository,
-      private readonly accountService: AccountService,
-    ) {}
+  constructor(
+    private readonly customerRepository: CustomerRepository,
+    private readonly accountService: AccountService,
+  ) { }
 
-    /**
-     * Login to the system -
-     *
-     * @param {SignInDto} user
-     * @return {*}  {string}
-     * @memberof SecurityService
-     */
-    signIn(user: SignInDto): string {
-      const answer = this.customerRepository.findOneByEmailAndPassword(
-        user.username,
-        user.password,
-      );
-      if (answer){                
-        return jwt.sign({id:user.username},'secretToken', {expiresIn:"1h"}); // process.env.SECRET_KEY || 
-      } 
-      
-      throw new UnauthorizedException();
-
+  /**
+   * Login to the system -
+   *
+   * @param {SignInDto} user
+   * @return {*}  {string}
+   * @memberof SecurityService
+   */
+  signIn(user: SignInDto): string {
+    const answer = this.customerRepository.findOneByEmailAndPassword(
+      user.username,
+      user.password,
+    );
+    if (answer) {
+      return jwt.sign({ id: user.username }, 'secretToken', { expiresIn: "1h" }); // process.env.SECRET_KEY || 
     }
 
-    /**
-     * Create a new user
-     *
-     * @param {SignUpDto} user
-     * @return {*}  {string}
-     * @memberof SecurityService
-     */
-    signUp(user: SignUpDto): string {
+    throw new UnauthorizedException();
 
-      const newDocumentType= new DocumentTypeEntity();
-      newDocumentType.id= user.documentTypeId;
+  }
 
-      const newCustomer = new CustomerEntity();
-      
-      newCustomer.documentType = newDocumentType;
-      newCustomer.document = user.document;
-      newCustomer.fullname = user.fullname;
-      newCustomer.email = user.email;
-      newCustomer.phone = user.phone;
-      newCustomer.password = user.password;
+  /**
+   * Create a new user
+   *
+   * @param {SignUpDto} user
+   * @return {*}  {string}
+   * @memberof SecurityService
+   */
+  signUp(user: SignUpDto): string {
 
-      const customer = this.customerRepository.register(newCustomer);
+    const newDocumentType = new DocumentTypeEntity();
+    newDocumentType.id = user.documentTypeId;
 
-      if (customer) {
-        const accountType = new AccountTypeEntity();
-        accountType.id = accountType.id;      
+    const newCustomer = new CustomerEntity();
 
-        const newAccount = new AccountEntity();
-        
-        newAccount.customerId = customer;
-        newAccount.accountTypeId = accountType;       
+    newCustomer.documentType = newDocumentType;
+    newCustomer.document = user.document;
+    newCustomer.fullname = user.fullname;
+    newCustomer.email = user.email;
+    newCustomer.phone = user.phone;
+    newCustomer.password = user.password;
 
-        const account = this.accountService.createAccount(newAccount);
+    const customer = this.customerRepository.register(newCustomer);
 
-        if (account) {
-          return jwt.sign({id: customer.id}, 'secretToken' , {expiresIn:"1h"}); // process.env.SECRET_KEY || 
-        }
-        
-        throw new InternalServerErrorException();
+    if (customer) {
+      const accountType = new AccountTypeEntity();
+      accountType.id = accountType.id;
 
-      } 
-      
+      const newAccount = new AccountEntity();
+
+      newAccount.customerId = customer;
+      newAccount.accountTypeId = accountType;
+
+      const account = this.accountService.createAccount(newAccount);
+
+      if (account) {
+        return jwt.sign({ id: customer.id }, 'secretToken', { expiresIn: "1h" }); // process.env.SECRET_KEY || 
+      }
+
       throw new InternalServerErrorException();
+
     }
 
-    /**
-     * Salir del sistema
-     *
-     * @param {string} JWToken
-     * @memberof SecurityService
-     */
-    signOut(JWToken: string): void {
-      
-      const token = jwt.verify(JWToken, 'secretToken') as string; // process.env.SECRET_KEY || 
+    throw new InternalServerErrorException();
+  }
 
-      if(token === this.customerRepository.findOneByEmail(token).email){ // verify the user email
-        
-        console.log('Logging Out!');
+  /**
+   * Salir del sistema
+   *
+   * @param {string} JWToken
+   * @memberof SecurityService
+   */
+  signOut(JWToken: string): void {
 
-        //TODO: save token in a blocklist to check from unauthorized possible future access until expires
+    const token = jwt.verify(JWToken, 'secretToken') as string; // process.env.SECRET_KEY || 
 
-      }  
+    if (token === this.customerRepository.findOneByEmail(token).email) { // verify the user email
 
-      
+      console.log('Logging Out!');
+
+      //TODO: save token in a blocklist to check from unauthorized possible future access until expires
+
     }
   }
+}

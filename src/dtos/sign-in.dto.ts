@@ -1,5 +1,4 @@
-import { IsEmail } from "class-validator";
-import { IsAlphanumeric, IsNotEmpty, Matches } from "class-validator/types/decorator/decorators";
+import { IsEmail, IsAlphanumeric, IsNotEmpty, Matches } from "class-validator";
 
 export class SignInDto {
 
