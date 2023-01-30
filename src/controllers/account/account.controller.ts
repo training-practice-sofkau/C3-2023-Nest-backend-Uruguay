@@ -33,7 +33,7 @@ export class AccountController {
     }    
 
     // delete account ( Only soft delete from here )
-    @Delete('/:id')
+    @Delete('delete/:id')
     async deleteAccount(@Param('id', ParseUUIDPipe) accountId: string): Promise<void> {
         await this.accountService.deleteAccount(accountId);
     }
