@@ -5,6 +5,7 @@ import { PaginationModel } from '../../models/pagination-model.model';
 import { DataRangeModel } from 'src/models/data-range.model';
 import { DepositRepository } from '../../persistence/repositories/deposit.repository';
 import { AccountService } from '../account/account.service';
+import { CreateDepositDTO } from '../../dtos/create-deposit.dto';
 
 @Injectable()
 export class DepositService {
@@ -19,11 +20,14 @@ export class DepositService {
    * @return {*}  {DepositEntity}
    * @memberof DepositService
    */
-  createDeposit(deposit: DepositModel): DepositEntity {
+  createDeposit(deposit: CreateDepositDTO): DepositEntity {
     const newDeposit = new DepositEntity();
+
+    const account = this.accountService.findOneById(deposit.accountId);
+    
     newDeposit.account = deposit.account;
     newDeposit.amount = deposit.amount;
-    newDeposit.amount = Date.now();
+    newDeposit.dateTime = Date.now();
 
     return this.depositRepository.register(newDeposit);
   }

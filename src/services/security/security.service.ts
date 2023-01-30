@@ -7,6 +7,8 @@ import { SingInDTO } from '../../dtos/sing-in.dto';
 import { SingUpDTO } from '../../dtos/sing-up-dto';
 import { DocumentTypeEntity } from '../../persistence/entities/document-type.entity';
 import { Response } from 'express';
+import { AccountDTO } from '../../dtos/account.dto';
+import { CreateAccountDTO } from '../../dtos/create-account.dto';
 
 @Injectable()
 export class SecurityService {
@@ -58,12 +60,9 @@ export class SecurityService {
         if (customer) {
           const accountType = new AccountTypeEntity();
           accountType.id = 'Falta el ID por defecto del tipo de cuenta';
-          let newAccount = new AccountEntity();
-          newAccount = {
-            ...newAccount,
-            customer,
-            accountType,
-          };
+          let newAccount = new CreateAccountDTO();
+          newAccount.customerId = customer.id;
+          newAccount.accountTypeId = accountType.id;
     
           const account = this.accountService.createAccount(newAccount);
     
@@ -79,7 +78,7 @@ export class SecurityService {
        * @param {string} JWToken
        * @memberof SecurityService
        */
-      signOut(JWToken: string, res: Response): void {
-        res.clearCookie(JWToken);
+      signOut(JWToken: string): void {
+        // res.clearCookie(JWToken);
       }
 }
