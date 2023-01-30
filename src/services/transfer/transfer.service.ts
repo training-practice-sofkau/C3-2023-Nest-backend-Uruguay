@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 
-import { DataRangeModel, PaginationModel, TransferModel } from '../../models';
+import { DataRangeModel, PaginationModel } from '../../models';
 import { TransferEntity } from '../../persistence/entities';
 import { TransferRepository } from '../../persistence/repositories';
+import { CreateTransferDto } from '../../dtos';
 
 @Injectable()
 export class TransferService {
@@ -16,7 +17,7 @@ export class TransferService {
    * @return {*}  {TransferEntity}
    * @memberof TransferService
    */
-  createTransfer(transfer: TransferModel): TransferEntity {
+  createTransfer(transfer: CreateTransferDto): TransferEntity {
 
     const newTransfer = new TransferEntity();
 

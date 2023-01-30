@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsPositive, IsUUID, Min, IsString } from 'class-validator';
 
-export class CreateDepositDto{
+export class CreateTransferDto{
     
     @IsUUID(4, {message:'The value provided is not a UUID valid!' })
     @IsNotEmpty({message:'This value cannot be empty!'})

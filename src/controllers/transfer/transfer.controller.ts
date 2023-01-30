@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
-import { TransferService } from '../../services/transfer/transfer.service';
-import { TransferModel } from '../../models/transfer.model';
-import { TransferEntity } from '../../persistence/entities/transfer.entity';
-import { PaginationEntity } from '../../persistence/entities/pagination.entity';
+
+import { TransferService } from '../../services';
+import { TransferEntity, PaginationEntity } from '../../persistence/entities';
+import { CreateTransferDto } from '../../dtos';
 
 @Controller('transfer')
 export class TransferController {
@@ -13,7 +13,7 @@ export class TransferController {
     // create tranfer
     // TODO: implement newTranferDTO to use instead of transferModel
     @Post('register')
-    async createTransfer(@Body() transfer: TransferModel): Promise<TransferEntity>{
+    async createTransfer(@Body() transfer: CreateTransferDto): Promise<TransferEntity>{
 
         return await this.transferService.createTransfer(transfer);
     }

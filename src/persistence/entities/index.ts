@@ -3,4 +3,5 @@ export * from './account.entity';
 export * from './customer.entity';
 export * from './deposit.entity';
 export * from './document-type.entity';
+export * from './pagination.entity';
 export * from './transfer.entity';
