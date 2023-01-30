@@ -7,6 +7,7 @@ export class AccountDtos {
   customer: CustomerModel;
   @IsNotEmpty({message: 'Please enter a Account Type model.'})
   accountType: AccountTypeModel;
+  @IsNotEmpty({message: 'Please enter a balance.'})
   @IsNumber(undefined,{message: 'Enter account balance.'})
   acc_Balance: number;
  

@@ -9,7 +9,7 @@ import { PaginationModel } from 'src/models/pagination.model';
 export class TransferController {
   constructor(private readonly TransferService: TransferService) {}
 
-  @Post('newTramsfer')
+  @Post('newTransfer')
   creatDeposit(@Body() transfer: TransferDto): TransferEntity {
     return this.TransferService.createTransfer(transfer);
   }

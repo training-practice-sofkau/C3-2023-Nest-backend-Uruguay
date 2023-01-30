@@ -13,25 +13,25 @@ export class AccountController {
     
     return this.AccountService.createAccount(account)
   }
-  @Get('getBalance')
-  getBalance(accountId: string): number {
+  @Get('getBalance/:id')
+  getBalance(@Param('id')accountId: string): number {
     
     return this.AccountService.getBalance(accountId)
   }
-  @Post('AddBalance')
-  addBalance(@Body() accountId: string, amount: number): void{
+  @Post('AddBalance/:id')
+  addBalance(@Body()@Param('id') accountId: string, amount: number): void{
     
     return this.AccountService.addBalance(accountId,amount )
   }
 
-  @Post('removeBalance')
-  removeBalance(@Body() accountId: string, amount: number): void{
+  @Post('removeBalance/:id')
+  removeBalance(@Body()@Param('id') accountId: string, amount: number): void{
     
     return this.AccountService.removeBalance(accountId,amount )
   }
 
-  @Get('getBalance')
-  verifyAmountIntoBalance(id: string, amount: number): boolean {
+  @Get('verification/:id')
+  verifyAmountIntoBalance(@Param('id')id: string, amount: number): boolean {
     
     return this.AccountService.verifyAmountIntoBalance(id, amount)
   }
@@ -41,8 +41,8 @@ export class AccountController {
     return this.AccountService.changeState(id, state)
   }
  
-  @Get('getAccountType')
-  getAccountType(accountId: string): AccountTypeEntity{
+  @Get('getAccountType/:id')
+  getAccountType(@Param('id') accountId: string): AccountTypeEntity{
   return this.AccountService.getAccountType(accountId)
 }
 @Put ('changeAccntType/:id') 
