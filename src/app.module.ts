@@ -15,11 +15,12 @@ import {
   SecurityService, 
   TransferService 
 } from './services';
+import { AccountController } from './controllers/account';
 
 
 @Module({
   imports: [],
-  controllers: [SecurityController],
+  controllers: [SecurityController, AccountController],
   providers: [
     AccountService,
     CustomerService,
