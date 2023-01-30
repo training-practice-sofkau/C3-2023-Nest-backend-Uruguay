@@ -84,7 +84,7 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
      * @param pagination optional pagination to consider
      * @returns Array of entities 
      */
-    findAll(pagination?: PaginationModel): AccountTypeEntity[] {
+    findAll(pagination?: PaginationModel<AccountTypeEntity>): AccountTypeEntity[] {
 
         try{ 
         
@@ -153,7 +153,7 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
          * @param pagination optional pagination to consider         
          * @returns array of entities or and exception
          */
-    findBy(property: keyof AccountTypeEntity, value: string | number | boolean, pagination?: PaginationModel): AccountTypeEntity[] {
+    findBy(property: keyof AccountTypeEntity, value: string | number | boolean, pagination?: PaginationModel<AccountTypeEntity>): AccountTypeEntity[] {
             
         try{ 
 

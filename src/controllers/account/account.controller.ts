@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
 
 import { AccountService } from '../../services';
 import { AccountModel } from '../../models';
@@ -24,7 +24,7 @@ export class AccountController {
     //update account
     // TODO: implement accountUpdateDTO instead of accountModel
     @Put('update/:id')
-    async updateAccount(@Param('id') accountId: string, 
+    async updateAccount(@Param('id', ParseUUIDPipe) accountId: string, 
                         @Body() newDetails: AccountModel): 
                         Promise<AccountEntity>{
     
@@ -33,20 +33,20 @@ export class AccountController {
 
     // delete account ( Only soft delete from here )
     @Delete('/:id')
-    async deleteAccount(@Param('id') accountId: string): Promise<void> {
+    async deleteAccount(@Param('id', ParseUUIDPipe) accountId: string): Promise<void> {
         await this.accountService.deleteAccount(accountId);
     }
 
     // get account balance
     @Get('/:id')
-    async getBalance(@Param('id') accountId: string): Promise<number>{
+    async getBalance(@Param('id', ParseUUIDPipe) accountId: string): Promise<number>{
         
         return await this.accountService.getBalance(accountId);        
     }
 
     // add amount to balance ( )
     @Post('addBalance/:id')
-    async addBalance(@Param('id') accountId: string, 
+    async addBalance(@Param('id', ParseUUIDPipe) accountId: string, 
                      @Body() amount: number): 
                      Promise<void>{
 
@@ -55,7 +55,7 @@ export class AccountController {
 
     // remove amount to balance
     @Post('removeBalance/:id')
-    async removeBalance(@Param('id') accountId: string, 
+    async removeBalance(@Param('id', ParseUUIDPipe) accountId: string, 
                      @Body() amount: number): 
                      Promise<void>{
 

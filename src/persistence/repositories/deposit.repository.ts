@@ -125,7 +125,7 @@ export class DepositRepository extends BankInternalControl<DepositEntity> implem
      * @param pagination optional pagination to be consider
      * @returns Array of entities  
      */
-    findAll(pagination?: PaginationModel): DepositEntity[] {
+    findAll(pagination?: PaginationModel<DepositEntity>): DepositEntity[] {
                 
         try{ 
         
@@ -229,7 +229,7 @@ export class DepositRepository extends BankInternalControl<DepositEntity> implem
      */
     findBy(property: keyof DepositEntity, 
         value: string | number | boolean, 
-        pagination?: PaginationModel, 
+        pagination?: PaginationModel<DepositEntity>, 
         dataRange?: DataRangeModel): DepositEntity[] {
             
         try{ 

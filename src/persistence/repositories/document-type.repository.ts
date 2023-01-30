@@ -80,7 +80,7 @@ export class DocumentTypeRepository extends BankInternalControl <DocumentTypeEnt
      * @param paginator optional pagination to consider
      * @returns Array of entities 
      */
-    findAll(paginator?: PaginationModel): DocumentTypeEntity[] {
+    findAll(paginator?: PaginationModel<DocumentTypeEntity>): DocumentTypeEntity[] {
 
         try{ 
         
@@ -150,7 +150,9 @@ export class DocumentTypeRepository extends BankInternalControl <DocumentTypeEnt
      * @param paginator optional pagination to consider         
      * @returns array of entities or and exception
      */
-    findBy(property: keyof DocumentTypeEntity, value: string | number | boolean, paginator?: PaginationModel): DocumentTypeEntity[] {
+    findBy(property: keyof DocumentTypeEntity,
+            value: string | number | boolean, 
+            paginator?: PaginationModel<DocumentTypeEntity>): DocumentTypeEntity[] {
             
         try{ 
 

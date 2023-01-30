@@ -124,7 +124,7 @@ export class TransferRepository extends BankInternalControl<TransferEntity> impl
      * @param pagination optional pagination to be consider
      * @returns Array of entities  
      */
-    findAll(pagination?: PaginationModel): TransferEntity[] {
+    findAll(pagination?: PaginationModel<TransferEntity>): TransferEntity[] {
                 
         try{ 
         
@@ -203,7 +203,7 @@ export class TransferRepository extends BankInternalControl<TransferEntity> impl
      */
     findBy(property: keyof TransferEntity, 
         value: string | number | boolean, 
-        pagination?: PaginationModel, 
+        pagination?: PaginationModel<TransferEntity>, 
         dataRange?: DataRangeModel): TransferEntity[] {
             
         try{ 

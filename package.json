@@ -23,6 +23,7 @@
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
+    "class-validator": "^0.14.0",
     "dotenv": "^16.0.3",
     "jsonwebtoken": "^9.0.0",
     "reflect-metadata": "^0.1.13",

@@ -153,7 +153,7 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
      * @param pagination optional pagination to be consider
      * @returns Array of entities  
      */
-    findAll(pagination?: PaginationModel): CustomerEntity[] {
+    findAll(pagination?: PaginationModel<CustomerEntity>): CustomerEntity[] {
                 
         try{ 
         
@@ -316,7 +316,9 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
      * @param pagination optional pagination to consider         
      * @returns array of entities or and exception
     */
-    findBy(property: keyof CustomerEntity, value: string | number | boolean, pagination?: PaginationModel): CustomerEntity[] {
+    findBy(property: keyof CustomerEntity, 
+            value: string | number | boolean, 
+            pagination?: PaginationModel<CustomerEntity>): CustomerEntity[] {
             
         try{ 
 

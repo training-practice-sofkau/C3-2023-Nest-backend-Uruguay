@@ -38,7 +38,9 @@ export class TransferService {
    * @return {*}  {TransferEntity[]}
    * @memberof TransferService
    */
-  getHistoryOut(accountId: string, pagination?: PaginationModel, dataRange?: DataRangeModel): TransferEntity[] {
+  getHistoryOut(accountId: string, 
+                pagination?: PaginationModel<TransferEntity>, 
+                dataRange?: DataRangeModel): TransferEntity[] {
 
     let history = [];
 
@@ -57,7 +59,9 @@ export class TransferService {
    * @return {*}  {TransferEntity[]}
    * @memberof TransferService
    */
-  getHistoryIn(accountId: string, paginator?: PaginationModel, dataRange?: DataRangeModel): TransferEntity[] {
+  getHistoryIn(accountId: string, 
+              paginator?: PaginationModel<TransferEntity>, 
+              dataRange?: DataRangeModel): TransferEntity[] {
     
     let history = [];
 
@@ -75,7 +79,9 @@ export class TransferService {
    * @return {*}  {TransferEntity[]}
    * @memberof TransferService
    */
-  getHistory( accountId: string, pagination?: PaginationModel, dataRange?: DataRangeModel): TransferEntity[] {
+  getHistory(accountId: string, 
+            pagination?: PaginationModel<TransferEntity>, 
+            dataRange?: DataRangeModel): TransferEntity[] {
     
     let history = [];
 

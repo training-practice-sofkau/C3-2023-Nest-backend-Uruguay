@@ -48,7 +48,7 @@ export class DepositService {
    * @return {*}  {DepositEntity[]}
    * @memberof DepositService
    */
-  getHistory(accountId: string, pagination?: PaginationModel, dataRange?: DataRangeModel): DepositEntity[] {
+  getHistory(accountId: string, pagination?: PaginationModel<DepositEntity>, dataRange?: DataRangeModel): DepositEntity[] {
 
     let history = [];   
 

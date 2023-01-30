@@ -8,11 +8,11 @@ export interface RepositoryMethodsInterface<T> {
 
     delete(id: string, soft?: boolean): void;
 
-    findAll(pagination?: PaginationModel): T[];
+    findAll(pagination?: PaginationModel<T>): T[];
     
     findOneById(id: string): T;
 
-    findBy(property: keyof T, value: string | number | boolean, pagination?: PaginationModel, dataRange?: DataRangeModel): T[]
+    findBy(property: keyof T, value: string | number | boolean, pagination?: PaginationModel<T>, dataRange?: DataRangeModel): T[]
 
     findIndexById(id: string): number;
 
