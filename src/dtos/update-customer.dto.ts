@@ -28,10 +28,4 @@ export class UpdateCustomerDto {
     @IsOptional()
     avatarUrl?: string;
 
-    @IsBoolean({ message: "state is not a boolean." })
-    state: boolean;
-
-    @IsDate({ message: "deletedat must to be a date." })
-    @IsOptional()
-    deletedAt?: Date;
 }

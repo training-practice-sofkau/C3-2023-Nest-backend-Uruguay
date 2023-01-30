@@ -13,12 +13,5 @@ export class UpdateAccountDto {
 
     @IsNumberString({ message: "balance is not a number." })
     balance: number;
-
-    @IsBoolean({ message: "state is not state." })
-    state: boolean;
-
-    @IsDate({ message: "deletedat must to be a date." })
-    @IsOptional()
-    deletedAt?: Date;
     
 }

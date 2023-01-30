@@ -37,9 +37,9 @@ export class AccountService {
     if (current.balance < 0) this.accountRepository.update(balance.accountId, current); else throw new BadRequestException();
   }
 
-  verifyAmountIntoBalance(accountId: string, amount: number): boolean {
-    const current = this.accountRepository.findOneById(accountId);
-    if (current.balance >= amount) return true; else return false;
+  verifyAmountIntoBalance(balance: BalanceDto): boolean {
+    const current = this.accountRepository.findOneById(balance.accountId);
+    if (current.balance >= +balance.amount) return true; else return false;
   }
 
   getState(accountId: string): boolean {
@@ -50,6 +50,10 @@ export class AccountService {
     const current = this.accountRepository.findOneById(accountId);
     current.state = state;
     this.accountRepository.update(accountId, current)
+  }
+
+  getAccountById(accountId: string): AccountEntity {
+    return this.accountRepository.findOneById(accountId)
   }
 
   getAccountType(accountId: string): AccountTypeEntity {
