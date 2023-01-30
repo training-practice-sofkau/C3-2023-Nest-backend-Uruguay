@@ -22,3 +22,4 @@ export class DepositController {
         return this.depositService.getHistory(depositId);
     } 
 }
+
