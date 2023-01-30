@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { AccountModule } from './account/account.module';
-import { TransferModule } from './transfer/transfer.module';
-import { DepositModule } from './deposit/deposit.module';
-import { CusotmerModule } from './cusotmer/cusotmer.module';
+import { TransferModule } from './transfer';
+import { DepositModule } from './deposit';
+import { CusotmerModule } from './customer';
 
 @Module({
-  imports: [AccountModule, TransferModule, DepositModule, CusotmerModule]
+  imports: [AccountModule,TransferModule,DepositModule,CusotmerModule]
 })
 export class ModuleModule {}
