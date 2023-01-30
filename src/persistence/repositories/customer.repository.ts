@@ -30,7 +30,6 @@ export class CustomerRepository
 
   delete(id: string, soft?: boolean | undefined): void {
     const indexToDelete = this.database.findIndex(i => i.id === id)
-    //const indexToDelete = this.database.indexOf(this.findOneById(id))
     this.database.splice(indexToDelete, 1)
   }
 
@@ -55,7 +54,7 @@ export class CustomerRepository
         && item.password === password
         && typeof item.deletedAt === 'undefined',
     );
-    return indexCurrentEntity >= -1 ? true : false;
+    return indexCurrentEntity > -1 ? true : false;
   }
 
   findOneByDocumentTypeAndDocument(

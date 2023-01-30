@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
+import { PaginationModel } from "src/models";
 import { TransferEntity } from "../entities/transfer.entity";
 import { BaseRepository } from "./base";
 import { TrasnferRepositoryInterface } from "./interfaces";
@@ -22,9 +23,9 @@ export class TransferRepository
                 ...this.database[indexCurrentEntity],
                 ...entity,
                 id,
-            } as TransferEntity;
-        else throw new NotFoundException();
-        return this.database[indexCurrentEntity];
+            } as TransferEntity
+        else throw new NotFoundException()
+        return this.database[indexCurrentEntity]
     }
 
     delete(id: string, soft?: boolean): void {
@@ -32,7 +33,6 @@ export class TransferRepository
             i => i.id === id &&
                 typeof i.deletedAt === 'undefined'
         )
-        //const indexToDelete = this.database.indexOf(this.findOneById(id))
         soft ? this.softDelete(indexToDelete) : this.hardDelete(indexToDelete)
     }
 
@@ -68,13 +68,14 @@ export class TransferRepository
         dateEnd: Date | number,
     ): TransferEntity[] {
         const currentEntity = this.database.filter(
-            (item) => item.id === accountId
-                && dateInit > item.dateTime
-                && item.dateTime < dateEnd
+            (item) =>
+                item.id === accountId
+                && dateInit >= item.dateTime
+                && item.dateTime <= dateEnd
                 && typeof item.deletedAt === "undefined"
         )
         if (!currentEntity) throw new NotFoundException()
-        else return currentEntity.filter(item => item.outcome)
+        else return currentEntity.filter(item => item.outcome.id === accountId)
     }
 
     findIncomeByDataRange(
@@ -89,6 +90,6 @@ export class TransferRepository
                 && typeof item.deletedAt === "undefined"
         )
         if (!currentEntity) throw new NotFoundException()
-        else return currentEntity.filter(item => item.income)
+        else return currentEntity.filter(item => item.income.id === accountId)
     }
 }
