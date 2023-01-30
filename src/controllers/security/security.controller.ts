@@ -1,5 +1,5 @@
 // Libraries
-import { Controller, Param, ParseUUIDPipe, Put, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { SecurityService } from '../../services/security';
 import { SignUpDto, SignInDto } from '../../dtos';
 
