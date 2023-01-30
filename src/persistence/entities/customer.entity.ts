@@ -1,5 +1,5 @@
 import { DocumentTypeEntity } from '../entities';
-import { CustomerModel, DocumentTypeModel } from '../../models';
+import { CustomerModel } from '../../models';
 
 import { v4 as uuid } from 'uuid';
 

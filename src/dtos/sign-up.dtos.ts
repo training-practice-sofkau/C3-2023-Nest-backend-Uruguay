@@ -2,21 +2,21 @@ import { IsEmail,IsNumberString, IsUUID, IsString } from 'class-validator';
 
 export class SignUpDto {
 
-    @IsUUID(4, { message: "this must to be uuid" })
-    documentTypeId: string;
+    @IsUUID(4, { message: 'This must be a valid UUID version 4' })
+  documentTypeId: string;
 
-    @IsNumberString()
-    document: string;
+  @IsNumberString(undefined,{ message: 'This must be a string of numbers' })
+  document: string;
 
-    @IsString()
-    fullName: string;
+  @IsString({ message: 'This must be a string' })
+  fullName: string;
 
-    @IsEmail()
-    email: string;
+  @IsEmail(undefined, { message: 'This must be a valid email address' })
+  email: string;
 
-    @IsNumberString()
-    phone: string;
+  @IsNumberString(undefined, { message: 'This must be a string of numbers' })
+  phone: string;
 
-    @IsString()
-    password: string;
+  @IsString({ message: 'This must be a string' })
+  password: string;
 }
