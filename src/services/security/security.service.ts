@@ -17,7 +17,7 @@ import { CustomerRepository } from '../../persistence/repositories';
 import { AccountService } from '../account';
 
 // Entities
-import { AccountTypeEntity, CustomerEntity } from '../../persistence/entities';
+import { AccountEntity, AccountTypeEntity, CustomerEntity } from '../../persistence/entities';
 import { SignInDto } from '../../dtos/sign-in.dto';
 import { DocumentTypeEntity } from '../../persistence/entities/document-type.entity';
 import { SignUpDto } from '../../dtos/sign-up.dto';
@@ -57,13 +57,10 @@ export class SecurityService {
     if (customer) {
       const accountType = new AccountTypeEntity();
       accountType.id = 'Falta el ID por defecto del tipo de cuenta';
-      const newAccount = {
-        customer,
-        accountType,
-      };
-
+      const newAccount = new AccountEntity() 
+      newAccount.customer =  customer,
+      newAccount.accountType = accountType
       const account = this.accountService.createAccount(newAccount);
-
       if (account) return 'Falta retornar un JWT';
       else throw new InternalServerErrorException();
     } else throw new InternalServerErrorException();

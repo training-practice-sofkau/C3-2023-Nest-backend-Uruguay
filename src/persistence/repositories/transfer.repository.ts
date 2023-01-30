@@ -56,7 +56,33 @@ export class TransferRepository
     else throw new NotFoundException('El id no existe en base de datos');
   }
 
-  findOutcomeByDataRange() {}
+  findOutcomeByDataRange(accountId: string,
+    dateInit: Date | number,
+    dateEnd: Date | number,) {
+    let busquedaRango = this.database.filter(
+      (item) =>
+        item.dateTime >= dateInit &&
+        item.dateTime <= dateEnd &&
+        item.id === accountId,
+    );
+    if (busquedaRango) return busquedaRango;
+    else throw new NotFoundException();
+  }
 
-  findIncomeByDataRange() {}
-}
+  findIncomeByDataRange(accountId: string,
+    dateInit: Date | number,
+    dateEnd: Date | number,) {
+    let busquedaRango = this.database.filter(
+      (item) =>
+        item.dateTime <= dateInit &&
+        item.dateTime >= dateEnd &&
+        item.id === accountId,
+    );
+    if (busquedaRango) return busquedaRango;
+    else throw new NotFoundException();
+  }
+
+  }
+
+  
+

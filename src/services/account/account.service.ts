@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { AccountModel } from 'src/models';
 import { AccountEntity, AccountTypeEntity } from 'src/persistence';
 import { AccountRepository } from '../../persistence/repositories';
+import { CreateAccountDto } from '../../dtos/account.dto';
 
 @Injectable()
 export class AccountService {
@@ -15,8 +16,8 @@ export class AccountService {
    * @return {*}  {AccountEntity}
    * @memberof AccountService
    */
-  createAccount(account: AccountModel): AccountEntity {
-    const newAccount = new AccountEntity(); //Desde ahi
+  createAccount(account: CreateAccountDto): AccountEntity {
+    const newAccount = new AccountEntity(); 
     newAccount.customer = account.customer;
     newAccount.accountType = account.accountType;
     return this.accountRepository.register(newAccount);
@@ -41,8 +42,8 @@ export class AccountService {
    * @memberof AccountService
    */
   addBalance(accountId: string, amount: number): void {
-    let accBalance = new AccountEntity();
-    accBalance = this.accountRepository.findOneById(accountId);
+    
+    let accBalance = this.accountRepository.findOneById(accountId);
     accBalance.balance = accBalance.balance + amount;
     this.accountRepository.update(accountId, accBalance);
   }
@@ -55,8 +56,8 @@ export class AccountService {
    * @memberof AccountService
    */
   removeBalance(accountId: string, amount: number): void {
-    let accBalance = new AccountEntity();
-    accBalance = this.accountRepository.findOneById(accountId);
+    
+    let accBalance = this.accountRepository.findOneById(accountId);
     accBalance.balance = accBalance.balance - amount;
     this.accountRepository.update(accountId, accBalance);
   }
@@ -70,8 +71,8 @@ export class AccountService {
    * @memberof AccountService
    */
   verifyAmountIntoBalance(accountId: string, amount: number): boolean {
-    let accBalance = new AccountEntity();
-    accBalance = this.accountRepository.findOneById(accountId);
+    
+   let accBalance = this.accountRepository.findOneById(accountId);
     if (accBalance.balance > amount) {
       return true;
     }
@@ -97,9 +98,11 @@ export class AccountService {
    * @memberof AccountService
    */
   changeState(accountId: string, state: boolean): void {
-    let account = new AccountEntity();
-    account = this.accountRepository.findOneById(accountId);
+    
+    let account = this.accountRepository.findOneById(accountId);
     account.state = state;
+    this.accountRepository.update(accountId,account)
+
   }
 
   /**
@@ -110,9 +113,9 @@ export class AccountService {
    * @memberof AccountService
    */
   getAccountType(accountId: string): AccountTypeEntity {
-    let account = new AccountTypeEntity();
-    account = this.accountRepository.findOneById(accountId).accountType;
-    return account;
+    
+    return this.accountRepository.findOneById(accountId).accountType;
+    
   }
 
   /**

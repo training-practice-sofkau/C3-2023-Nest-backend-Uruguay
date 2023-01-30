@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { transferEntity, TransferRepository } from '../../persistence';
-
+import { TranfersModel } from 'src/models';
 @Injectable()
 export class TransferService {
   constructor(private readonly transferRepository: TransferRepository) {}
@@ -11,8 +11,14 @@ export class TransferService {
    * @return {*}  {TransferEntity}
    * @memberof TransferService
    */
-  createTransfer(transfer: TransferModel): TransferEntity {
-    const newAccount = new transferEntity; //Desde ahi
+  createTransfer(transfer: TranfersModel): transferEntity { 
+    const newAccount = new transferEntity();
+    newAccount.amount = transfer.amount
+    newAccount.inCome = transfer.inCome
+    newAccount.outCome = transfer.outCome
+    newAccount.reason = transfer.reason
+    newAccount.dateTime = transfer.dateTime
+  
     return this.transferRepository.register(newAccount);
   }
 
@@ -25,13 +31,14 @@ export class TransferService {
    * @return {*}  {TransferEntity[]}
    * @memberof TransferService
    */
-  getHistoryOut(
-    accountId: string,
-    pagination?: PaginationModel,
-    dataRange?: DataRangeModel,
-  ): TransferEntity[] {
-    throw new Error('This method is not implemented');
-  }
+
+  //>>>>>>>>>>>>>PENDIENTEEE<<<<<<<<<<<
+  // getHistoryOut(
+  //   accountId: string,
+  //   pagination?: PaginationModel,
+  //   dataRange?: DataRangeModel,
+  // ): TransferEntity[] {
+  //   let objeto = this.transferRepository.findIncomeByDataRange
 
   /**
    * Obtener historial de transacciones de entrada en una cuenta
@@ -42,13 +49,14 @@ export class TransferService {
    * @return {*}  {TransferEntity[]}
    * @memberof TransferService
    */
-  getHistoryIn(
-    accountId: string,
-    pagination?: PaginationModel,
-    dataRange?: DataRangeModel,
-  ): TransferEntity[] {
-    throw new Error('This method is not implemented');
-  }
+  //>>>>>>>>>>PENDIENTEEE <<<<<<<<<<<
+  // getHistoryIn(
+  //   accountId: string,
+  //   pagination?: PaginationModel,
+  //   dataRange?: DataRangeModel,
+  // ): TransferEntity[] {
+  //   throw new Error('This method is not implemented');
+  // }
 
   /**
    * Obtener historial de transacciones de una cuenta
@@ -59,13 +67,15 @@ export class TransferService {
    * @return {*}  {TransferEntity[]}
    * @memberof TransferService
    */
-  getHistory(
-    accountId: string,
-    pagination: PaginationModel,
-    dataRange?: DataRangeModel,
-  ): TransferEntity[] {
-    throw new Error('This method is not implemented');
-  }
+
+  //>>>>>>>>>>>>>>PENDIENTE<<<<<<<<<<<<<<<<<
+  // getHistory(
+  //   accountId: string,
+  //   pagination: PaginationModel,
+  //   dataRange?: DataRangeModel,
+  // ): TransferEntity[] {
+  //   throw new Error('This method is not implemented');
+  // }
 
   /**
    * Borrar una transacción

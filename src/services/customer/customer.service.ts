@@ -13,9 +13,9 @@ export class CustomerService {
    * @memberof CustomerService
    */
   getCustomerInfo(customerId: string): CustomerEntity {
-    let customer = new CustomerEntity();
-    customer = this.costumerRepository.findOneById(customerId);
-    return customer;
+  
+    return this.costumerRepository.findOneById(customerId);
+    
   }
 
   /**
@@ -27,8 +27,7 @@ export class CustomerService {
    * @memberof CustomerService
    */
   updatedCustomer(id: string, customer: CustomerModel): CustomerEntity {
-    const customerU = new CustomerEntity();
-    customerU.id = customer.id;
+   
     return this.costumerRepository.update(id, customer);
   }
 
@@ -40,10 +39,11 @@ export class CustomerService {
    * @memberof CustomerService
    */
   unsubscribe(id: string): boolean {
-    let unsubscribe = new CustomerEntity();
-    unsubscribe = this.costumerRepository.findOneById(id);
+    
+    let unsubscribe = this.costumerRepository.findOneById(id);
     if (unsubscribe.state == true) {
       unsubscribe.state = false;
+      this.costumerRepository.update(id,unsubscribe)
     }
     return unsubscribe.state;
   }

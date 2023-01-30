@@ -12,6 +12,7 @@ import { DepositRepository } from './persistence/repositories/deposit.repository
 import { DocumentTypeRepository } from './persistence/repositories/document-type.repository';
 import { TransferRepository } from './persistence/repositories/transfer.repository';
 
+
 @Module({
   imports: [],
   controllers: [SecurityController],

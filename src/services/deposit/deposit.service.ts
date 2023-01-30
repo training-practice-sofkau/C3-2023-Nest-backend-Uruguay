@@ -13,9 +13,9 @@ export class DepositService {
    * @memberof DepositService
    */
   createDeposit(deposit: depositModel): depositEntity {
-    const newAccount = new depositEntity(); //Desde ahi
-    newAccount.account = deposit.account;
-    return this.depositRepository.register(newAccount);
+    const newDeposit = new depositEntity(); 
+    newDeposit.account = deposit.account;
+    return this.depositRepository.register(newDeposit);
   }
 
   /**
@@ -38,9 +38,13 @@ export class DepositService {
    * @return {*}  {DepositEntity[]}
    * @memberof DepositService
    */
+  
+  
+  // Pendiente
   getHistory(
-    depositId: string,
-    pagination?: PaginationModel,
-    dataRange?: DataRangeModel,
-  ): DepositEntity[] {}
+    depositId: string, pagination?: PaginationModel, dataRange?: DataRangeModel,): DepositEntity[] {
+      let objeto = this.depositRepository.findByAccountType(depositId)
+      return objeto
+
+    }
 }
