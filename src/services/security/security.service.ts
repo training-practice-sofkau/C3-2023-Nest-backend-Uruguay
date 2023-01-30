@@ -16,11 +16,13 @@ import {
   
   // Services
   import { AccountService } from '../account';
+  import { SignInDto, SignUpDto } from '../../dtos';
   
   // Entities
   import {
     AccountTypeEntity,
     CustomerEntity,
+    DocumentTypeEntity,
   } from '../../persistence/entities';
   
   @Injectable()
@@ -37,9 +39,9 @@ import {
      * @return {*}  {string}
      * @memberof SecurityService
      */
-    signIn(user: CustomerModel): string {
+    signIn(user: SignInDto): string {
       const answer = this.customerRepository.findOneByEmailAndPassword(
-        user.email,
+        user.username,
         user.password,
       );
       if (answer) return 'Falta retornar un JWT';
@@ -53,9 +55,12 @@ import {
      * @return {*}  {string}
      * @memberof SecurityService
      */
-    signUp(user: CustomerModel): string {
+    signUp(user: SignUpDto): string {
+      const documentType = new DocumentTypeEntity()
+      documentType.id = user.documentTypeId;
+      
       const newCustomer = new CustomerEntity();
-      newCustomer.documentType = user.documentType;
+      newCustomer.documentType = documentType;
       newCustomer.document = user.document;
       newCustomer.fullName = user.fullName;
       newCustomer.email = user.email;
