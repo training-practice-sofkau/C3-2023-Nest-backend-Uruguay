@@ -1,4 +1,4 @@
-import { IsNumber, IsString, IsUUID } from "class-validator";
+import { IsDate, IsNumberString, IsOptional, IsString, IsUUID } from "class-validator";
 
 export class CreateTransferDto {
 
@@ -8,10 +8,14 @@ export class CreateTransferDto {
     @IsUUID(4, { message: "income id must to be uuid" })
     incomeId: string;
 
-    @IsNumber(undefined, { message: 'the balance is not a number.' })
-    balance: number;
+    @IsNumberString(undefined, { message: 'the balance is not a number.' })
+    balance: string;
 
     @IsString({ message: 'the reason is not a string.' })
     reason: string;
+    
+    @IsDate()
+    @IsOptional()
+    dateTime?: Date;
 
 }

@@ -5,7 +5,7 @@ export class CreateDepositDto {
     @IsUUID(4, { message: "account id must to be uuid" })
     accountId: string;
 
-    @IsNumberString(undefined, { message: 'the amount is not a number.' })
-    amount: string;
+    @IsNumberString(undefined, { message: 'the balance is not a number.' })
+    balance: string;
 
 }

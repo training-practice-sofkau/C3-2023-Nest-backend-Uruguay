@@ -1,20 +1,22 @@
 import { Injectable } from '@nestjs/common';
-import { PaginationModel, DataRangeModel, TransferModel } from '../models';
+import { PaginationModel, DataRangeModel } from '../models';
 import { TransferEntity, TransferRepository } from '../persistence';
+import { CreateTransferDto } from '../dtos';
+import { AccountService } from '.';
 
 @Injectable()
 export class TransferService {
 
-  constructor(private readonly transferRepository: TransferRepository) {}
+  constructor(private readonly transferRepository: TransferRepository, private readonly accountService: AccountService) {}
 
-  createTransfer(transfer: TransferModel): TransferEntity {
+  createTransfer(transfer: CreateTransferDto): TransferEntity {
     const newTransfer = new TransferEntity();
-    newTransfer.income = transfer.income;
-    newTransfer.outcome = transfer.outcome;
-    newTransfer.balance = 0;
-    newTransfer.dateTime = Date.now();
+    newTransfer.income = this.accountService.getAccountById(transfer.incomeId);
+    newTransfer.outcome = this.accountService.getAccountById(transfer.outcomeId);
+    newTransfer.balance = +transfer.balance;
+    newTransfer.dateTime = transfer.dateTime || Date.now();
     newTransfer.reason = transfer.reason;
-    return this.transferRepository.register(newTransfer)
+    return this.transferRepository.register(newTransfer);
   }
 
   getHistoryOut(
