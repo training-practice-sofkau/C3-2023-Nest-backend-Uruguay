@@ -1,4 +1,5 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { CustomerDto } from 'src/dtos/customer.dto';
 
 import { CustomerRepository } from 'src/persistence';
 import { CustomerModel } from '../../models';
@@ -31,9 +32,18 @@ export class CustomerService {
    * @return {*}  {CustomerEntity}
    * @memberof CustomerService
    */
-  updatedCustomer(id: string, customer: CustomerModel): CustomerEntity {
+  updatedCustomer(id: string, customer: CustomerDto): CustomerEntity {
     try {
-      return this.customerRepository.update(id, customer)
+      const updatedCustomer = new CustomerEntity()
+      updatedCustomer.id = id
+      updatedCustomer.fullName = customer.fullName
+      updatedCustomer.email = customer.email
+      updatedCustomer.password = customer.password
+      updatedCustomer.document = customer.document
+      updatedCustomer.documentType = customer.documentType
+      updatedCustomer.phone = customer.phone
+      
+      return this.customerRepository.update(id, updatedCustomer)
     } catch (error) {
       throw new InternalServerErrorException(error)
     }
