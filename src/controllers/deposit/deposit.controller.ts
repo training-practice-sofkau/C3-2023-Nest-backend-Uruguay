@@ -1,4 +1,4 @@
-import { Controller, Get, Delete, Post, Body, ParseUUIDPipe, Param } from '@nestjs/common';
+import { Controller, Get, Delete, Post, Body, ParseUUIDPipe, Param, Put } from '@nestjs/common';
 import { DepositDto } from 'src/dtos/deposit.dto';
 import { DepositService } from 'src/services';
 import { depositEntity } from '../../persistence';
@@ -7,17 +7,17 @@ import { depositEntity } from '../../persistence';
 export class DepositController {
   constructor(private readonly depositService: DepositService) {}
 
-  @Post()
+  @Post('newRepo')
   createDeposit(@Body() deposit: DepositDto): depositEntity {
     return this.depositService.createDeposit(deposit);
   }
 
-  @Delete()
-  deleteDeposit(depositId: string): void {
+  @Put("delete/:depositId")
+  deleteDeposit(@Param("depositId") depositId: string): void {
     this.depositService.deleteDeposit(depositId);
   }
 
-  @Get()
+  @Get("/:id")
   getHistory(@Param('id', ParseUUIDPipe)depositId: string): depositEntity[] {
     return this.depositService.getHistory(depositId);
   }
