@@ -4,37 +4,33 @@ import { TransferEntity } from './transfer.entities';
 import { TransferModel } from './transfer.model';
 import { DataRangeModel } from '../base/dataRange.model';
 import { PaginationModel } from '../base';
+import { AccountEntity } from '../account/account.entities';
+import { transferDto } from './dto/transfer.dto';
 
 @Injectable()
 export class TransferService {
   constructor(private readonly TransferRepo : TransferRepository){}
   /**
    * Crear una transferencia entre cuentas del banco
-   *
-   * @param {TransferModel} transfer
-   * @return {*}  {TransferEntity}
-   * @memberof TransferService
    */
-  createTransfer(transfer: TransferModel): TransferEntity {
+  createTransfer(transfer: transferDto): TransferEntity {
+    const newOucome = new AccountEntity();
+    //O tiene que ser al tipo de cuenta porque aca lo hago con la cuenta directamente
+    newOucome.id = transfer.outcome;
+
+    const newIncome = new AccountEntity();
+    newIncome.id = transfer.income;
+
     const newTransfer = new TransferEntity();
+    newTransfer.outcome = newOucome;
+    newTransfer.income = newIncome;
     newTransfer.amount = transfer.amount;
-    newTransfer.date_time = transfer.date_time;
-    newTransfer.delete_at = transfer.delete_at;
-    newTransfer.id = transfer.id;
-    newTransfer.income = transfer.income;
-    newTransfer.outcome = transfer.outcome;
     newTransfer.reason = transfer.reason;
     return this.TransferRepo.register(newTransfer);
   }
 
   /**
    * Obtener historial de transacciones de salida de una cuenta
-   *
-   * @param {string} accountId
-   * @param {PaginationModel} pagination
-   * @param {DataRangeModel} [dataRange]
-   * @return {*}  {TransferEntity[]}
-   * @memberof TransferService
    */
   getHistoryOut(accountId: string,pagination?: PaginationModel,dataRange?: DataRangeModel): TransferEntity[] {//dataRange:DataRangeModel
     dataRange = {
@@ -50,12 +46,6 @@ export class TransferService {
 
   /**
    * Obtener historial de transacciones de entrada en una cuenta
-   *
-   * @param {string} accountId
-   * @param {PaginationModel} pagination
-   * @param {DataRangeModel} [dataRange]
-   * @return {*}  {TransferEntity[]}
-   * @memberof TransferService
    */
   getHistoryIn(accountId: string,pagination?: PaginationModel,dataRange?: DataRangeModel): TransferEntity[] {//dataRange?: DataRangeModel
     dataRange = {
@@ -69,12 +59,6 @@ export class TransferService {
 
   /**
    * Obtener historial de transacciones de una cuenta
-   *
-   * @param {string} accountId
-   * @param {PaginationModel} pagination
-   * @param {DataRangeModel} [dataRange]
-   * @return {*}  {TransferEntity[]}
-   * @memberof TransferService
    */
   getHistory(accountId: string,pagination: PaginationModel,dataRange?: DataRangeModel): TransferEntity[] {//dataRange?: 
     let InHisotry = this.getHistoryIn(accountId,pagination,dataRange);
@@ -85,9 +69,6 @@ export class TransferService {
 
   /**
    * Borrar una transacción
-   *
-   * @param {string} transferId
-   * @memberof TransferService
    */
   deleteTransfer(transferId: string , sof? : boolean): void {
     if(sof)this.TransferRepo.delete(transferId,sof);

@@ -1,21 +1,23 @@
 import { Injectable, NotAcceptableException } from '@nestjs/common';
-
 import { AccountRepository, AccountTypeRepository } from '../Account.Repositories';
 import { AccountEntity } from '../account.entities';
-import { AccountModel } from '../accountModel.interface';
 import { AccountTypeEntity } from '../account.Type.Entity';
 import { CreateAccountdto } from '../dto/create-account.dto';
+
 @Injectable()
 export class AccountService {
 constructor(
   private readonly accountRepository: AccountRepository,
   private readonly accountTypeRepository: AccountTypeRepository) {}
 
-
   createAccount(account: CreateAccountdto): AccountEntity {
 
+    const accountType = new AccountTypeEntity();
+    accountType.id = account.accountTypeId;
+
+
     const newAccount = new AccountEntity();
-    newAccount.id = account.AccountId;
+    newAccount.account_type_id = accountType;
 
     return this.accountRepository.register(newAccount);
   }

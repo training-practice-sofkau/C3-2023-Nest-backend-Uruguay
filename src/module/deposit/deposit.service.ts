@@ -6,6 +6,9 @@ import { DepositEntity } from './deposit.entities';
 import { AccountService } from '../account/service';
 import { DepositModel } from './deposit.model';
 import { DataRangeModel, PaginationModel } from '../base';
+import { depositDto } from './dto/deposit.dto';
+import { AccountTypeEntity } from '../account/account.Type.Entity';
+import { AccountEntity } from '../account/account.entities';
 
 
 
@@ -15,20 +18,15 @@ export class DepositService {
     private readonly depositRepository : DepositRepository,
     private readonly accountService : AccountService){}
 
-  /**
-   * Crear un deposito
-   *
-   * @param {DepositModel} deposit
-   * @return {*}  {DepositEntity}
-   * @memberof DepositService
-   */
-  createDeposit(deposit: DepositModel): DepositEntity {
+
+  createDeposit(deposit: depositDto): DepositEntity {
+    const newAccountType = new AccountEntity();
+    newAccountType.id = deposit.accountTypeId;
+    
     const newDeposit = new DepositEntity();
-    newDeposit.account = deposit.account;
+    newDeposit.account = newAccountType;
     newDeposit.amount = deposit.amount;
-    newDeposit.date_time = deposit.date_time;
-    newDeposit.delete_at = deposit.delete_at;
-    newDeposit.id = deposit.id;
+    
     return this.depositRepository.register(newDeposit);
   }
 
