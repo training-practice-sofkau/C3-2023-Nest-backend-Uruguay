@@ -62,7 +62,7 @@ import { SignInDto, SignUpDto } from 'src/dtos';
     signUp(user: SignUpDto): string {
 
       const documentType = new DocumentTypeEntity()
-      documentType.id = user.documentTypeId;
+      documentType.id = user.documentTypeId
 
       const newCustomer = new CustomerEntity();
       newCustomer.documentType = documentType;

@@ -1,7 +1,6 @@
 import { AccountRepository } from './../../persistence/repositories/account.repository';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { AccountEntity } from '../../persistence/entities/account.entity';
-import { AccountModel } from '../../models/account.model';
 import { AccountTypeEntity } from 'src/persistence';
 import { AccountTypeRepository } from '../../persistence/repositories/account-type.repository';
 import { AccountDtos } from 'src/dtos/accountDtos';
@@ -17,7 +16,11 @@ export class AccountService {
   /**
    *
    */
-  createAccount(account: AccountDtos): AccountEntity {
+  createAccount(account: AccountDtos): any {
+    if (!account.customer) {
+      throw new BadRequestException('Customer is required');
+    }
+    
     const newAccount = new AccountEntity();
     newAccount.customer = account.customer;
     newAccount.accountType = account.accountType;
