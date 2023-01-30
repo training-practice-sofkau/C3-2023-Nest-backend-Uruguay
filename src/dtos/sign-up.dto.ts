@@ -11,10 +11,10 @@ export class SignUpDto {
     @IsString()
     fullName: string;
 
-    @IsEmail()
+    @IsEmail(undefined, { message: 'the data provider is not a valid email.' })
     email: string;
 
-    @IsNumberString()
+    @IsNumberString(undefined, { message: 'the data provider is not a valid number.' })
     phone: string;
 
     @IsString()
