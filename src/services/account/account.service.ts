@@ -227,6 +227,10 @@ export class AccountService {
     
       }
 
+
+      findOneById(accountId: string): AccountEntity {
+        return this.getAccount(accountId);
+      }
       
 
 }

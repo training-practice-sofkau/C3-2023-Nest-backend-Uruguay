@@ -1,5 +1,5 @@
 
 export interface IDataRangeModel {
-    dataInit: Date | number;
-    dataFinal: Date | number;
+    dateStart: Date | number;
+    dateEnd: Date | number;
 }

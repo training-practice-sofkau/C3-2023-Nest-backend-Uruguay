@@ -6,6 +6,7 @@ import { DepositRepositoryInterface } from "./interface/i-deposit-repo";
 import { PaginationModel } from "src/models/i-pagination-model";
 
 export class DepositRepository extends BaseRepository<DepositEntity> implements DepositRepositoryInterface {
+    [x: string]: any;
     
      
     
@@ -103,6 +104,20 @@ export class DepositRepository extends BaseRepository<DepositEntity> implements 
     findIndexById(id: string): number {
         throw new Error("Method not implemented.");
     }
+
+
+    findByAccountIdAndDataRange(
+        pagination: PaginationModel,
+        accountId: string,
+        dateInit: Date | number,
+        dateEnd: Date | number,
+      ): DepositEntity[]  {
+        const paginations = this.paginationMethod(pagination);
+    
+        return this.database.filter(
+          (item) => item.account.id === accountId && item.dateTime >= dateInit && item.dateTime <= dateEnd && typeof item.deletedAt === 'undefined',
+        ).slice(paginations.offset, pagination.offset + (pagination.limit || 0));
+      }
     
 
     
