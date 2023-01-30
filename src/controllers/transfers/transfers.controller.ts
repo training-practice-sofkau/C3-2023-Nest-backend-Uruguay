@@ -7,12 +7,12 @@ import { TransferService } from 'src/services';
 export class TransferController {
   constructor(private readonly transferService: TransferService) {}
 
-  @Post()
+  @Post("newTransfer")
 createTransfer(@Body() transfer: TransferDto) {
     return this.transferService.createTransfer(transfer);
   }
 
-  @Delete()
+  @Delete("/:id")
    deleteTransfer(@Param('id', ParseUUIDPipe) transferId: string){
     return this.transferService.deleteTransfer(transferId);
   }
