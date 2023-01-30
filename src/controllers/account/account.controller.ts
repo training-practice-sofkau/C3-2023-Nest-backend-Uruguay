@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseBoolPipe, ParseUUIDPipe, Post, Put, Query } from '@nestjs/common';
 import { AccountService } from '../../services/account';
 import { CreateAccountDto } from '../../dtos';
 import { AccountEntity, AccountTypeEntity } from '../../persistence/entities';
@@ -13,47 +13,47 @@ export class AccountController {
     }
 
     @Get('getBalance/:id')
-    getBalance(@Param('id')  accountId: string): number {
+    getBalance(@Param('id', ParseUUIDPipe)  accountId: string): number {
         return this.accountService.getBalance(accountId);
     }
 
     @Post('addBalance/:id')
-    addBalance(@Body() @Param('id') accountId: string, amount: number): void {
+    addBalance(@Param('id', ParseUUIDPipe) accountId: string,@Body()  amount: number): void {
         return this.accountService.addBalance(accountId, amount);
     }
 
     @Post('removeBalance/:id')
-    removeBalance(@Body() @Param('id') accountId: string, amount: number): void {
+    removeBalance(@Param('id', ParseUUIDPipe) accountId: string,@Body()  amount: number): void {
         return this.accountService.removeBalance(accountId, amount);
     }
 
     @Get('verifyAmount/:id')
-    verifyAmountIntoBalance(@Param('id') accountId: string, amount: number): boolean {
+    verifyAmountIntoBalance(@Param('id', ParseUUIDPipe) accountId: string, amount: number): boolean {
         return this.accountService.verifyAmountIntoBalance(accountId, amount);
     }
 
     @Get('getState/:id')
-    getState(@Param('id') accountId: string): boolean {
+    getState(@Param('id', ParseUUIDPipe) accountId: string): boolean {
         return this.accountService.getState(accountId);
     }
 
     @Put('changeState/:id')
-    changeState(@Body() @Param('id') accountId: string, state: boolean): void{
+    changeState(@Body() @Param('id', ParseUUIDPipe) accountId: string,@Query('state', ParseBoolPipe) state: boolean): void{
         return this.accountService.changeState(accountId, state);
     }
 
     @Get('getAccountType/:id')
-    getAccountType(@Param('id') accountId: string): AccountTypeEntity {
+    getAccountType(@Param('id', ParseUUIDPipe) accountId: string): AccountTypeEntity {
         return this.accountService.getAccountType(accountId);
     }
 
     @Put('changeAccountType/:id')
-    changeAccountType(@Param('id') accountId: string, accountTypeId: string): AccountTypeEntity {
+    changeAccountType(@Param('id', ParseUUIDPipe) accountId: string,@Param('accountTypeId', ParseUUIDPipe) accountTypeId: string): AccountTypeEntity {
         return this.accountService.changeAccountType(accountId, accountTypeId);
     }
 
     @Delete('deleteAccount/:id')
-    deleteAccount(@Param('id') accountId: string, soft?: boolean): void {
+    deleteAccount(@Param('id', ParseUUIDPipe) accountId: string,@Query('soft', ParseBoolPipe) soft?: boolean): void {
         return this.accountService.deleteAccount(accountId, soft);
     }
 }

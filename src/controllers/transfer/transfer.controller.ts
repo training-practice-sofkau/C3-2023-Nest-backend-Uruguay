@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Param } from '@nestjs/common';
+import { Controller, Delete, Get, Param, ParseUUIDPipe, Query } from '@nestjs/common';
 import { DataRangeModel, PaginationModel } from '../../models';
 import { TransferEntity } from '../../persistence';
 import { TransferService } from '../../services';
@@ -8,22 +8,22 @@ export class TransferController {
     constructor(private readonly transferService: TransferService) { }
 
     @Get('getHOut/:id') 
-    getHistoryOut(@Param('id') accountId: string, pagination?: PaginationModel, dataRange?: DataRangeModel): TransferEntity[] {
+    getHistoryOut(@Param('id', ParseUUIDPipe) accountId: string,@Query('pagination') pagination?: PaginationModel,@Query('dataRange') dataRange?: DataRangeModel): TransferEntity[] {
         return this.transferService.getHistoryOut( accountId, pagination, dataRange );
     }
 
     @Get('getHIn/:id')
-    getHistoryIn(@Param('id') accountId: string, pagination?: PaginationModel, dataRange?: DataRangeModel): TransferEntity[] {
+    getHistoryIn(@Param('id', ParseUUIDPipe) accountId: string,@Query('pagination') pagination?: PaginationModel,@Query('dataRange') dataRange?: DataRangeModel): TransferEntity[] {
         return this.transferService.getHistoryIn( accountId, pagination, dataRange );
     }
 
     @Get('getHistory/:id')
-    getHistory(@Param('id') accountId: string, pagination: PaginationModel, dataRange?: DataRangeModel): TransferEntity[] {
+    getHistory(@Param('id', ParseUUIDPipe) accountId: string,@Query('pagination') pagination: PaginationModel,@Query('dataRange') dataRange?: DataRangeModel): TransferEntity[] {
         return this.transferService.getHistory( accountId, pagination, dataRange );
     } 
 
     @Delete('deleteTransfer/:id')
-    deleteTransfer(@Param('id') transferId: string): void {
+    deleteTransfer(@Param('id', ParseUUIDPipe) transferId: string): void {
         return this.transferService.deleteTransfer(transferId);
     }
 }
