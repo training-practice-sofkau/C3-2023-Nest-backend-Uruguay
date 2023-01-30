@@ -3,9 +3,7 @@
   import { v4 as uuid } from 'uuid';
   
   // Data transfer objects
-  
-  // Models
-  import { CustomerModel } from '../models';
+  import { SignInDto, SignUpDto } from '../dtos';
   
   // Repositories
   import { CustomerRepository } from '../persistence';
@@ -14,7 +12,7 @@
   import { AccountService } from '.';
   
   // Entities
-  import { AccountTypeEntity, CustomerEntity, AccountEntity } from '../persistence/entities';
+  import { AccountTypeEntity, CustomerEntity, AccountEntity, DocumentTypeEntity } from '../persistence/entities';
   
   // Jwt
   import { JwtService } from '@nestjs/jwt';
@@ -27,18 +25,21 @@
       private readonly jwtService: JwtService
     ) {}
   
-    signIn(user: CustomerModel): string {
+    signIn(user: SignInDto): string {
       const answer = this.customerRepository.findOneByEmailAndPassword(
         user.email,
         user.password,
       );
-      if (answer) return this.jwtService.sign({id: user.id});
+      if (answer) return this.jwtService.sign({id: answer.id});
       else throw new UnauthorizedException();
     }
 
-    signUp(user: CustomerModel): string {
+    signUp(user: SignUpDto): string {
+      const documentType = new DocumentTypeEntity()
+      documentType.id = user.documentTypeId;
+
       const newCustomer = new CustomerEntity();
-      newCustomer.documentType = user.documentType;
+      newCustomer.documentType = documentType;
       newCustomer.document = user.document;
       newCustomer.fullName = user.fullName;
       newCustomer.email = user.email;
@@ -50,6 +51,7 @@
       if (customer) {
         const accountType = new AccountTypeEntity();
         accountType.id = uuid();
+        
         const newAccount = new AccountEntity()
         newAccount.customer = customer
         newAccount.accountType = accountType

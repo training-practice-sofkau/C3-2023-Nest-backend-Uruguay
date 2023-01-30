@@ -74,14 +74,15 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
     return finded
   }
 
-  findOneByEmailAndPassword(email: string, password: string): boolean {
-    const indexCurrentEntity = this.database.findIndex(
+  findOneByEmailAndPassword(email: string, password: string): CustomerEntity {
+    const finded = this.database.find(
       (item) =>
         item.email === email &&
         item.password === password &&
         typeof item.deletedAt === undefined
     );
-    return indexCurrentEntity >= -1 ? true : false;
+    if (finded === undefined) throw new NotFoundException();
+    return finded;
   }
 
   findOneByDocumentTypeAndDocument( documentTypeId: string, document: string ): CustomerEntity {

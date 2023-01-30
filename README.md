@@ -49,7 +49,7 @@ $ npm run start:prod
 
 ```bash
 # Title of the delivery
-[Workshop Week 1 - Day 4] - Dependency Injection
+[Workshop Week 2 - Day 1] - Rest API: Restful Design - name
 
 # Body of the delivery
 [Any short description]
@@ -59,11 +59,12 @@ $ npm run start:prod
 
 The following are the guidelines that should be taken into account for the development of the workshop to be submitted:
 
-1. Code all the services of the proposed system.
-2. If you consider that a service should have an additional method, feel free to implement and code it in relation to the existing repositories and methods.
-3. If you consider that additional method is required in the existing repositories, you may also code it according to your needs.
+1. create all DTOs.
+2. validate all dtos.
+3. implement dto instead of models ( review mapping )
+4. create all controller.
 
-Do not forget to consult the Nest documentation if you consider it necessary: [Nest Documentation](https://docs.nestjs.com/).
+Do not forget to consult the Nest documentation if you consider it necessary: [Nest Documentation](https://docs.nestjs.com/controllers).
 
 ### Important note
 Do not forget that for this workshop, you should make at least 10 commits properly documented (title and message body).
