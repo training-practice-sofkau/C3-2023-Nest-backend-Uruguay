@@ -1,0 +1,20 @@
+import { IsEmail, IsNumberString, IsUUID, IsString } from 'class-validator';
+export class SingUpDTO {
+    @IsUUID(4, { message: "this must to be uuid" })
+    documentTypeId: string;
+
+    @IsNumberString()
+    document: string;
+
+    @IsString()
+    fullName: string;
+
+    @IsEmail()
+    email: string;
+
+    @IsNumberString()
+    phone: string;
+
+    @IsString()
+    password: string;
+}
