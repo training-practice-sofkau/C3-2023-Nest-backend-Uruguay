@@ -3,13 +3,13 @@ import { AccountTypeModel, CustomerModel } from "src/models";
 
 export class CreateAccountDto {
     
-    @IsNotEmpty({ message: ' is required.' })
+    @IsNotEmpty({ message: 'This field should not be empty' })
     customer: CustomerModel;
    
-    @IsNotEmpty({ message: ' is required.' })
+    @IsNotEmpty({ message: ' This field should not be empty' })
     accountType: AccountTypeModel;
     
-    @IsNumber()
+    @IsNumber(undefined, { message: ' The field must be a valid number.' })
     balance: number;
 
 }
