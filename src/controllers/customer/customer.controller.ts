@@ -7,17 +7,17 @@ import { CustomerEntity } from 'src/persistence';
 export class CustomerController {
     constructor (private readonly customerService : CustomerService) {}
 
-    @Get()
+    @Get('/:id')
     getCustomerInfo(@Param('id', ParseUUIDPipe) customerId: string ): CustomerEntity {
         return this.customerService.getCustomerInfo(customerId)
     }
     
-    @Put()
+    @Put('/:id')
     updateCustomer(@Param('id', ParseUUIDPipe) id: string, @Body() customer: CustomerDto): CustomerEntity {
         return this.customerService.updatedCustomer(id, customer)
     }
     
-    @Patch()
+    @Patch('/:id')
     unsubscribe(@Param('id', ParseUUIDPipe) id: string): boolean {
         return this.customerService.unsubscribe(id)
     }
