@@ -3,7 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { GeneralCRUD } from './base';
 import { AccountEntity } from '../entities';
 import { IAccountRepository, IDisableable, INameable } from './interfaces';
-import { PaginatorModel } from '../../models';
+import { PaginationModel } from '../../models';
 
 @Injectable()
 export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAccountRepository, IDisableable<AccountEntity>, INameable<AccountEntity> {
@@ -56,13 +56,13 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
     // });
   }
 
-  findAll(paginator: PaginatorModel): AccountEntity[] {
+  findAll(paginator: PaginationModel): AccountEntity[] {
     
     let finded = this.database.filter(
         (item) => typeof item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException();
-    return finded;
+    return finded.slice(paginator?.offset, paginator?.limit);
   }
 
   findOneById(id: string): AccountEntity {

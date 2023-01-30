@@ -3,7 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { GeneralCRUD } from './base';
 import { CustomerEntity } from '../entities';
 import { IDisableable, INameable, ICustomerRepository } from './interfaces';
-import { PaginatorModel } from '../../models';
+import { PaginationModel } from '../../models';
 
 @Injectable()
 export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements ICustomerRepository, IDisableable<CustomerEntity>, INameable<CustomerEntity> {
@@ -56,12 +56,12 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
     // });
   }
 
-  findAll(paginator: PaginatorModel): CustomerEntity[] {
+  findAll(paginator: PaginationModel): CustomerEntity[] {
     let finded = this.database.filter(
       (item) => typeof item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException()
-    return finded
+    return finded.slice(paginator?.offset, paginator?.limit);
   }
 
   findOneById(id: string): CustomerEntity {
@@ -74,14 +74,15 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
     return finded
   }
 
-  findOneByEmailAndPassword(email: string, password: string): boolean {
-    const indexCurrentEntity = this.database.findIndex(
+  findOneByEmailAndPassword(email: string, password: string): CustomerEntity {
+    const finded = this.database.find(
       (item) =>
         item.email === email &&
         item.password === password &&
         typeof item.deletedAt === undefined
     );
-    return indexCurrentEntity >= -1 ? true : false;
+    if (finded === undefined) throw new NotFoundException();
+    return finded;
   }
 
   findOneByDocumentTypeAndDocument( documentTypeId: string, document: string ): CustomerEntity {

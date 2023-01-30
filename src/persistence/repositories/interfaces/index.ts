@@ -4,6 +4,6 @@ export * from './customer.repository.interface';
 export * from './deposit.repository.interface';
 export * from './disableable.repository.interface';
 export * from './document-type.repository.interface';
-export * from './IGeneral.interface';
+export * from './general.interface';
 export * from './nameable.repository.interface';
 export * from './transfer.repository.interface';

@@ -3,7 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { GeneralCRUD } from './base';
 import { DocumentTypeEntity } from '../entities';
 import { IDisableable, IDocumentTypeRepositoryInterface, INameable } from './interfaces';
-import { PaginatorModel } from '../../models';
+import { PaginationModel } from '../../models';
 
 @Injectable()
 export class DocumentTypeRepository extends GeneralCRUD<DocumentTypeEntity> implements IDocumentTypeRepositoryInterface, IDisableable<DocumentTypeEntity>, INameable<DocumentTypeEntity> {
@@ -36,7 +36,7 @@ export class DocumentTypeRepository extends GeneralCRUD<DocumentTypeEntity> impl
     this.database.splice(finded, 1);
   }
 
-  findAll(paginator: PaginatorModel): DocumentTypeEntity[] {
+  findAll(paginator: PaginationModel): DocumentTypeEntity[] {
     let finded = this.database;
     if (finded === undefined) throw new NotFoundException();
     return finded;
