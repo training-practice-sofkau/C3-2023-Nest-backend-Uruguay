@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { transferEntity, TransferRepository } from '../../persistence';
-import { TranfersModel } from 'src/models';
+import { TransferDto } from '../../dtos/transfer.dto';
 @Injectable()
 export class TransferService {
   constructor(private readonly transferRepository: TransferRepository) {}
@@ -11,7 +11,7 @@ export class TransferService {
    * @return {*}  {TransferEntity}
    * @memberof TransferService
    */
-  createTransfer(transfer: TranfersModel): transferEntity { 
+  createTransfer(transfer: TransferDto): transferEntity { 
     const newAccount = new transferEntity();
     newAccount.amount = transfer.amount
     newAccount.inCome = transfer.inCome

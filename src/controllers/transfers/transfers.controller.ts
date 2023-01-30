@@ -1,4 +1,19 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Post, Body, Delete, Param, ParseUUIDPipe } from '@nestjs/common';
+import { TransferDto } from 'src/dtos/transfer.dto';
+import { TransferService } from 'src/services';
 
-@Controller('transfers')
-export class TransfersController {}
+
+@Controller('transfer')
+export class TransferController {
+  constructor(private readonly transferService: TransferService) {}
+
+  @Post()
+createTransfer(@Body() transfer: TransferDto) {
+    return this.transferService.createTransfer(transfer);
+  }
+
+  @Delete()
+   deleteTransfer(@Param('id', ParseUUIDPipe) transferId: string){
+    return this.transferService.deleteTransfer(transferId);
+  }
+}

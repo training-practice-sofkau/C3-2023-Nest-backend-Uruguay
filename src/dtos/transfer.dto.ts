@@ -1,7 +1,7 @@
 import { IsAlphanumeric, IsDate, IsNotEmpty, IsNumber, IsPositive, Min } from "class-validator";
 import { AccountModel } from "src/models";
 
-export class DepositDto {
+export class TransferDto {
 
     @IsNumber()
     @IsNotEmpty()
