@@ -4,6 +4,9 @@ import { AccountRepository, AccountTypeRepository } from '../persistence';
 import { AccountModel } from '../models';
 import { AccountEntity, AccountTypeEntity } from '../persistence/entities';
 
+// Data Transfer Object
+import { BalanceDto } from '../dtos/balance.dto';
+
 @Injectable()
 export class AccountService {
 
@@ -22,16 +25,16 @@ export class AccountService {
     return this.accountRepository.findOneById(accountId).balance;
   }
 
-  addBalance(accountId: string, amount: number): void {
-    const current = this.accountRepository.findOneById(accountId);
-    current.balance += Math.abs(amount);
-    this.accountRepository.update(accountId, current);
+  addBalance(balance: BalanceDto): void {
+    const current = this.accountRepository.findOneById(balance.accountId);
+    current.balance += Math.abs(+balance.amount);
+    this.accountRepository.update(balance.accountId, current);
   }
 
-  removeBalance(accountId: string, amount: number): void {
-    const current = this.accountRepository.findOneById(accountId);
-    current.balance -= amount;
-    if (current.balance < 0) this.accountRepository.update(accountId, current); else throw new BadRequestException();
+  removeBalance(balance: BalanceDto): void {
+    const current = this.accountRepository.findOneById(balance.accountId);
+    current.balance -= +balance.amount;
+    if (current.balance < 0) this.accountRepository.update(balance.accountId, current); else throw new BadRequestException();
   }
 
   verifyAmountIntoBalance(accountId: string, amount: number): boolean {
