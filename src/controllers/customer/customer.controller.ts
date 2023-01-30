@@ -20,7 +20,7 @@ export class CustomerController {
   }
 
  
-  @Put(':id/unsubscribe')
+  @Put('unsubscribe/:id')
   unsubscribe(@Param('id') id: string): boolean {
     return this.customerService.unsubscribe(id);
   }

@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Put, Body, Post } from '@nestjs/common';
 import { AccountDtos } from 'src/dtos/accountDtos';
-import { AccountEntity } from 'src/persistence';
+import { AccountEntity, AccountTypeEntity } from 'src/persistence';
 import { AccountService } from '../../services/account/account.service';
 
 @Controller('account')
@@ -35,4 +35,15 @@ export class AccountController {
     
     return this.AccountService.verifyAmountIntoBalance(accountId, amount)
   }
+
+  @Put('changeState')
+  changeState(accountId: string, state: boolean): void {
+    return this.AccountService.changeState(accountId, state)
+  }
+ 
+  @Get('getAccountType')
+  getAccountType(accountId: string): AccountTypeEntity{
+  return this.AccountService.getAccountType(accountId)
+}
+@Put ('changeAccntType')
 }
