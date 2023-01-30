@@ -1,9 +1,11 @@
 
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
-import { AccountDto } from 'src/dtos/account-dto';
+import { AccountDTO } from 'src/dtos/account-dto';
+import { CreateAccountDto } from 'src/dtos/create-account-dto';
 import { PaginationModel } from 'src/models/i-pagination-model';
 import { AccountEntity } from 'src/persistence/entities/account-entity';
 import { AccountTypeEntity } from 'src/persistence/entities/account-type-entity';
+import { CustomerEntity } from 'src/persistence/entities/customer-entity';
 import { AccountRepository } from 'src/persistence/repositories/AccountRepo';
 import { AccountTypeRepository } from 'src/persistence/repositories/TypeAccountRepo';
 
@@ -22,7 +24,7 @@ export class AccountService {
    * @return {*}  {AccountEntity}
    * @memberof AccountService
    */
-    createAccount(accountDto: AccountDto): AccountEntity {  //Le paso DTO para crear un entity
+    createAccount(accountDto: CreateAccountDto): AccountEntity {  //Le paso DTO para crear un entity
 
         const accountTypeEntity = new AccountTypeEntity();
         accountTypeEntity.id = accountDto.accountTypeId;
@@ -203,19 +205,28 @@ export class AccountService {
         return currentEntity
       }
 
+      //Entreverada la mano
+      updateAccount(accountId: string, newAccountData: AccountDTO) : AccountEntity{
 
-      updateAccount(accountId: string, newAccountData: AccountDto) : AccountEntity{
+        const currentEntity = this.accountRepository.findOneById(accountId);
 
         const accountTypeEntity = new AccountTypeEntity();
-        accountTypeEntity.id = newAccountData.accountTypeId;
+        accountTypeEntity.id = newAccountData.accountType;
 
         const newAccountEntity = new AccountEntity();
         newAccountEntity.accountTypeId = accountTypeEntity;
 
+        const newCustomerEntity = new CustomerEntity();
+        newCustomerEntity.id = newAccountData.customer;
+        
 
+        currentEntity.balance = newAccountData.balance;
+        currentEntity.state = newAccountData.state;
 
         return this.accountRepository.update(accountId, newAccountEntity);
     
       }
+
+      
 
 }

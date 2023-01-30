@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { BaseRepository } from "./repo-base/base-repository";
 import { AccountEntity } from "../entities/account-entity";
 import { IAccountModel } from "src/models/i-account-model";
+import { PaginationModel } from "src/models/i-pagination-model";
 
 
 @Injectable()
@@ -59,7 +60,6 @@ export class AccountRepository extends BaseRepository<AccountEntity>  implements
       return this.database.filter((obj) => typeof obj.daletedAt === 'undefined');
     }
   
-
 
     findOneById(id: string): IAccountModel {
 

@@ -1,5 +1,6 @@
 import { Body, Controller, Param, Post, Put, Delete, Get, Patch } from '@nestjs/common';
-import { CreateCustomerDto, CustomerDto } from 'src/dtos/create-customer-dto';
+import { CreateCustomerDto } from 'src/dtos/create-customer-dto';
+import { UpdateCustomerDTO } from 'src/dtos/update-customer-dto';
 import { PaginationModel } from 'src/models/i-pagination-model';
 import { CustomerEntity } from 'src/persistence/entities/customer-entity';
 import { CustomerService } from 'src/services/customer/customer.service';
@@ -16,7 +17,7 @@ export class CustomerController {
     }
 
     @Put('/update/:id')
-    updateCustomer(@Param() id: string ,@Body() newCustomer: CustomerDto): CustomerEntity {
+    updateCustomer(@Param() id: string ,@Body() newCustomer: UpdateCustomerDTO ): CustomerEntity {
         return this.customerService.updatedCustomer(id, newCustomer);
     }
 

@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { CustomerRepo } from 'src/persistence/repositories/CustomerRepo';
 import { AccountService } from '../account/account.service';
-import { ICustomerModel } from 'src/models/i-customer-model';
 import { CustomerEntity } from 'src/persistence/entities/customer-entity';
 import { PaginationModel } from 'src/models/i-pagination-model';
-import { CustomerDto } from 'src/dtos/create-customer-dto';
+import { CreateCustomerDto } from 'src/dtos/create-customer-dto';
 import { DocumentTypeEntity } from 'src/persistence/entities/document-type-entity';
+import { UpdateCustomerDTO } from 'src/dtos/update-customer-dto';
 
 @Injectable()
 export class CustomerService {
@@ -14,7 +14,7 @@ export class CustomerService {
     constructor(private readonly customerRepository: CustomerRepo,
                 private readonly accountService: AccountService) { }
 
-    createCustomer(customer: CustomerDto) {
+    createCustomer(customer: CreateCustomerDto) {
 
         const documentTypeEntity = new DocumentTypeEntity;
         documentTypeEntity.id = customer.documentType;
@@ -58,7 +58,7 @@ export class CustomerService {
      * @memberof CustomerService
      */
 
-    updatedCustomer(id: string, newCustomer: CustomerDto): CustomerEntity {
+    updatedCustomer(id: string, newCustomer: UpdateCustomerDTO): CustomerEntity {
 
         const currentEntity = this.customerRepository.findOneById(id); // Creo una constante y la igualo segun Id
 
