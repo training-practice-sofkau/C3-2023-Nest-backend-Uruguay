@@ -49,7 +49,7 @@ $ npm run start:prod
 
 ```bash
 # Title of the delivery
-[Workshop Week 2 - Day 1] - API - name
+[Workshop Week 2 - Day 1] - API Rest: Diseño Restful - name
 
 # Body of the delivery
 [Any short description]
