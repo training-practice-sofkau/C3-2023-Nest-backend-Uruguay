@@ -58,7 +58,7 @@ export class AccountTypeRepository
 
     return this.database.filter(
       (item) => item.state === state
-    ).slice(pagination.offset, pagination.offset + (pagination.limit || 0));
+    ).slice(paginations.offset, paginations.offset + (paginations.limit || 0));
   }
 
   findByName(pagination: PaginationModel,name: string): AccountTypeEntity[] {
@@ -67,7 +67,7 @@ export class AccountTypeRepository
     return this.database.filter(
       (item) =>
         item.name === name
-    ).slice(paginations.offset, pagination.offset + (pagination.limit || 0));
+    ).slice(paginations.offset, paginations.offset + (paginations.limit || 0));
   }
 
   private findIndex(id: string): number {

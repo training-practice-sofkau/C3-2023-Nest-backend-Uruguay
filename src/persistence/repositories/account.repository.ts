@@ -71,12 +71,10 @@ export class AccountRepository
     ).slice(paginations.offset, paginations.offset + (paginations.limit || 0));
   }
 
-  findByCustomer(pagination: PaginationModel, customerId: string): AccountEntity[] {
-    const paginations = this.paginationMethod(pagination);
-
+  findByCustomer(customerId: string): AccountEntity[] {
     return this.database.filter(
       (item) => item.customer.id === customerId && typeof item.deletedAt === 'undefined',
-    ).slice(paginations.offset, paginations.offset + (paginations.limit || 0));
+    );
   }
 
   findByAccountType(pagination: PaginationModel ,accountTypeId: string): AccountEntity[] {
