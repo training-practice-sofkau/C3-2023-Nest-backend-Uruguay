@@ -1,7 +1,6 @@
 import {
   IsEmail,
   IsNotEmpty,
-  IsPhoneNumber,
   IsString,
   Matches,
   MaxLength,
@@ -10,15 +9,15 @@ import {
 import { DocumentTypeModel } from 'src/models';
 
 export class CustomerDtos {
-  @IsNotEmpty()
+  @IsNotEmpty({message: 'Document Type is required.'})
   documentType: DocumentTypeModel;
 
   @IsNotEmpty()
-  @IsString()
+  @IsString({message: 'Please insert a valid document.' })
   document: string;
 
   @IsNotEmpty()
-  @IsString()
+  @IsString({message: 'Enter your full name for your account.'})
   fullName: string;
 
   @IsNotEmpty()
@@ -28,7 +27,6 @@ export class CustomerDtos {
   @IsNotEmpty()
   @IsString({ message: 'Invalid phone number' } )
   @Matches(/^(?:\+\d{1,3}[- ]?)?\d{10,12}$/)
-
   phone: string;
 
   @IsNotEmpty()
@@ -41,10 +39,10 @@ export class CustomerDtos {
   })
   password: string;
 
-  @IsString()
+  @IsString({message: 'Please enter a valid avatar url'})
   avatarUrl?: string;
 
   @IsNotEmpty()
-  @IsString()
+  @IsString({ message: 'Enter a name for your account.' })
   name: string;
 }
