@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
-import { CustomerModel } from '../../models';
+import { CustomerModel } from '../../data/models';
 import { CustomerEntity } from '../../persistence/entities';
 import { CustomerService } from '../../services/customer';
 

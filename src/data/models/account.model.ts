@@ -1,5 +1,5 @@
 
-import { CustomerModel, AccountTypeModel } from '../models';
+import { CustomerModel, AccountTypeModel } from '.';
 
 export interface AccountModel {
     id: string;
