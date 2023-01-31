@@ -14,7 +14,7 @@ import {
   
   // Services
   import { AccountService } from '../account';
-  import { SignInDto, SignUpDto } from '../../dtos';
+  import { CreateAccountDto, SignInDto, SignUpDto } from '../../dtos';
   
   // Entities
   import {
@@ -68,14 +68,14 @@ import {
       const customer = this.customerRepository.register(newCustomer);
   
       if (customer) {
-        const accountType = new AccountTypeEntity();
-        accountType.id = 'Falta el ID por defecto del tipo de cuenta';
-        const newAccount = {
-          customer,
-          accountType,
-        };
+        const accountType = new AccountTypeEntity();      
+
+        const newAccount = new CreateAccountDto();
   
-        const account = this.accountService.createAccount(newAccount);
+        newAccount.customerId = customer.id;
+        newAccount.accountTypeId = accountType.id;
+  
+        const account = this.accountService.createAccount(newAccount);      
   
         if (account) return 'Falta retornar un JWT';
         else throw new InternalServerErrorException();
