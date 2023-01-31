@@ -8,7 +8,8 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { DocumentTypeModel } from 'src/models';
+import { DocumentTypeModel } from 'src/Data';
+
 
 export class CustomerDtos {
   @IsNotEmpty({ message: 'Document Type is required.' })

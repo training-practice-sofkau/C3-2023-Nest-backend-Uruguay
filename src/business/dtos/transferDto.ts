@@ -1,5 +1,6 @@
 import { IsDate, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
-import { AccountModel } from "src/models";
+import { AccountModel } from "src/Data";
+
 
 export class TransferDto {
     @IsNotEmpty({ message: 'Outcome account is required' })

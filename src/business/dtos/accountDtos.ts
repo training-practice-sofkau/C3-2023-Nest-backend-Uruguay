@@ -1,5 +1,6 @@
 import { IsNotEmpty, IsNumber } from "class-validator";
-import { AccountTypeModel, CustomerModel } from "src/models";
+import { CustomerModel, AccountTypeModel } from "src/Data";
+
 
 
 export class AccountDtos {

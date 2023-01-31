@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
-
+import { TransferDto, TransferService} from 'src/business';
+import { TransferEntity, PaginationModel, DataRangeModel } from 'src/Data';
 
 @Controller('transfer')
 export class TransferController {
