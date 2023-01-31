@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { transferEntity, TransferRepository } from '../../persistence';
-import { TransferDto } from '../../dtos/transfer.dto';
+import { TransferRepository, transferEntity } from 'src/Capa-Data/persistence';
+import { TransferDto } from 'src/Capa-Presentacion/dtos/transfer.dto';
+
 @Injectable()
 export class TransferService {
   constructor(private readonly transferRepository: TransferRepository) {}

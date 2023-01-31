@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { CustomerEntity, CustomerRepository } from '../../persistence';
-import { CustomerDto } from '../../dtos/customer.dto';
+import { CustomerRepository, CustomerEntity } from 'src/Capa-Data/persistence';
+import { CustomerDto } from 'src/Capa-Presentacion/dtos/customer.dto';
+
 
 @Injectable()
 export class CustomerService {

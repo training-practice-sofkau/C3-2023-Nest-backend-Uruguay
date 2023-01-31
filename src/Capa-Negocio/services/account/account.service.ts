@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { AccountModel } from 'src/models';
-import { AccountEntity, AccountTypeEntity } from 'src/persistence';
-import { AccountRepository } from '../../persistence/repositories';
-import { CreateAccountDto } from '../../dtos/account.dto';
+import { AccountRepository, AccountEntity, AccountTypeEntity } from 'src/Capa-Data/persistence';
+import { CreateAccountDto } from 'src/Capa-Presentacion/dtos/account.dto';
+
 
 @Injectable()
 export class AccountService {

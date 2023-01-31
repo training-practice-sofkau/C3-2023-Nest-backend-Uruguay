@@ -4,6 +4,9 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { CustomerRepository, DocumentTypeEntity, CustomerEntity, AccountTypeEntity, AccountEntity } from 'src/Capa-Data/persistence';
+import { SignInDto } from 'src/Capa-Presentacion/dtos/sign-in.dto';
+import { SignUpDto } from 'src/Capa-Presentacion/dtos/sign-up.dto';
 
 // Data transfer objects
 
@@ -11,16 +14,13 @@ import {
 
 
 // Repositories
-import { CustomerRepository } from '../../persistence/repositories';
+
 
 // Services
 import { AccountService } from '../account';
 
 // Entities
-import { AccountEntity, AccountTypeEntity, CustomerEntity } from '../../persistence/entities';
-import { SignInDto } from '../../dtos/sign-in.dto';
-import { DocumentTypeEntity } from '../../persistence/entities/document-type.entity';
-import { SignUpDto } from '../../dtos/sign-up.dto';
+
 
 @Injectable()
 export class SecurityService {
