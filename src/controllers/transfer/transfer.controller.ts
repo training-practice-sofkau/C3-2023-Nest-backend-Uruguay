@@ -1,5 +1,6 @@
 
 import { Controller, Get, Param, Post, Body, Delete } from '@nestjs/common';
+import { PaginationDto } from 'src/dtos/pagination.dto';
 import { DataRangeModel } from 'src/models/dataRange.model';
 import { PaginationModel } from 'src/models/pagination.model';
 import { TransferService } from 'src/services';
@@ -18,7 +19,7 @@ export class TransferController {
   @Get('/history-out/:accountId')
   getHistoryOut(
     @Param('accountId') accountId: string,
-    @Body('pagination') pagination?: PaginationModel,
+    @Body('pagination') pagination?: PaginationDto,
     @Body('dataRange') dataRange?: DataRangeModel,
   ) {
     return this.transferService.getHistoryOut(accountId, pagination, dataRange);
@@ -27,7 +28,7 @@ export class TransferController {
   @Get('/history-in/:accountId')
   getHistoryIn(
     @Param('accountId') accountId: string,
-    @Body('pagination') pagination?: PaginationModel,
+    @Body('pagination') pagination?: PaginationDto,
     @Body('dataRange') dataRange?: DataRangeModel,
   ) {
     return this.transferService.getHistoryIn(accountId, pagination, dataRange);
@@ -36,7 +37,7 @@ export class TransferController {
   @Get('/history/:accountId')
   getHistory(
     @Param('accountId') accountId: string,
-    @Body('pagination') pagination?: PaginationModel,
+    @Body('pagination') pagination?: PaginationDto,
     @Body('dataRange') dataRange?: DataRangeModel,
   ) {
     return this.transferService.getHistory(accountId, pagination, dataRange);

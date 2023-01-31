@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { PaginationDto } from 'src/dtos/pagination.dto';
 import { TransferModel } from 'src/models';
 import { DataRangeModel } from 'src/models/dataRange.model';
 import { PaginationModel } from 'src/models/pagination.model';
@@ -40,7 +41,7 @@ export class TransferService {
    */
   getHistoryOut(
     accountId: string,
-    pagination?: PaginationModel,
+    pagination?: PaginationDto,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
     throw new Error('This method is not implemented');
@@ -57,7 +58,7 @@ export class TransferService {
    */
   getHistoryIn(
     accountId: string,
-    pagination?: PaginationModel,
+    pagination?: PaginationDto,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
     throw new Error('This method is not implemented');
@@ -74,7 +75,7 @@ export class TransferService {
    */
   getHistory(
     accountId: string,
-    pagination: PaginationModel,
+    pagination: PaginationDto,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
     throw new Error('This method is not implemented');
