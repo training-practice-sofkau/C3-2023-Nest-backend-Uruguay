@@ -13,8 +13,13 @@ export class DepositService {
     return this.depositRepository.register(deposit);
   }
 
-  deleteDeposit(depositId: string): void {
-    this.depositRepository.delete(depositId);
+  deleteDeposit(depositId: string): boolean {
+    try{
+      this.depositRepository.delete(depositId);
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   getHistory(

@@ -42,7 +42,12 @@ export class TransferService {
     } else return this.transferRepository.findByIncomeId(accountId, pagination).concat(this.transferRepository.findByOutcomeId(accountId, pagination));
   }
 
-  deleteTransfer(transferId: string): void {
-    this.transferRepository.delete(transferId);
+  deleteTransfer(transferId: string): boolean {
+    try{
+      this.transferRepository.delete(transferId);
+      return true;
+    } catch {
+      return false;
+    }
   }
 }

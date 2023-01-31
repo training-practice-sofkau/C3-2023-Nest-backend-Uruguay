@@ -40,6 +40,7 @@ export class CustomerService {
     if (this.getCustomerInfo(customerId)) {
       this.customerRepository.delete(customerId, soft)
       return true;
-    } else return false;
+    } else 
+      return false;
   }
 }

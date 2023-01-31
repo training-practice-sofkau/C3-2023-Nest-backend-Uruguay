@@ -30,14 +30,12 @@ export class AccountController {
     
     @Post('/add-balance')
     addBalance(@Body() balance: BalanceDto): string {
-        this.accountService.addBalance(balance);
-        return 'ready';
+        return this.accountService.addBalance(balance).toString();
     }
 
     @Post('/remove-balance')
     removeBalance(@Body() balance: BalanceDto): string {
-        this.accountService.removeBalance(balance);
-        return 'ready';
+        return this.accountService.removeBalance(balance).toString();
     }
 
     @Post('/verify-amount-into-balance')
@@ -45,34 +43,38 @@ export class AccountController {
         return this.accountService.verifyAmountIntoBalance(balance).toString();
     }
 
-    @Post('/get-state')
-    getState(@Body() account: string): string {
+    @Get('/get-state')
+    getState(@Query('account') account: string): string {
         return this.accountService.getState(account).toString();
     }
 
     @Post('/change-state')
     changeState(@Body() account: ChangeStateDto): string {
-        this.accountService.changeState(account);
-        return 'ready';
+        return this.accountService.changeState(account).toString();
     }
 
-    @Post('/get-account-by-id')
-    getAccountById(@Body() account: string): string {
+    @Get('/get-account-by-id')
+    getAccountById(@Query('account') account: string): string {
         return this.accountService.getAccountById(account).toString();
     }
 
-    @Post()
-    getAccountType(@Body() account: string): string {
-        return this.accountService.getAccountType(account).toString();
+    @Get()
+    getAccountTypeById(@Query('account') account: string): string {
+        return this.accountService.getAccountTypeById(account).toString();
+    }
+
+    @Get()
+    getAccountTypeWithId(@Query('accountType') accountType: string): string {
+        return this.accountService.getAccountTypeWithId(accountType).toString();
     }
 
     @Post()
-    changeAccountType(@Body() account: ChangeAccountDto): string {
-        return this.accountService.changeAccountType(account).toString();
+    changeAccountType(@Body() accountType: ChangeAccountDto): string {
+        return this.accountService.changeAccountType(accountType).toString();
     }
 
-    @Post()
-    deleteAccount(@Body() account: string): string {
-        return 'Not implemented';
+    @Get()
+    deleteAccount(@Query('account') account: string): string {
+        return this.accountService.deleteAccount(account).toString();
     }
 }

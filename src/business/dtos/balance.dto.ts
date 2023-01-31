@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNumberString, IsUUID } from "class-validator";
+import { IsNumber, IsUUID } from "class-validator";
 
 export class BalanceDto {
 
@@ -8,7 +8,7 @@ export class BalanceDto {
     accountId: string;
 
     @ApiProperty()
-    @IsNumberString(undefined, { message: 'the amount is not a number.' })
-    amount: string;
+    @IsNumber(undefined, { message: 'the amount is not a number.' })
+    amount: number;
 
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AccountService, DepositService } from '../../business/services';
 import { CreateDepositDto, HistoryDto, PaginationDto } from '../../business/dtos';
@@ -20,9 +20,8 @@ export class DepositController {
     }
     
     @Post('/delete-deposit')
-    deleteDeposit(@Body() deposit: string): string {
-        this.depositService.deleteDeposit(deposit);
-        return 'ready';
+    deleteDeposit(@Query('deposit') deposit: string): string {
+        return this.depositService.deleteDeposit(deposit).toString();
     }
     
     @Post('/get-history')

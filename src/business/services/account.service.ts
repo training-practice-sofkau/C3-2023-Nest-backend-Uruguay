@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { AccountRepository, AccountTypeRepository } from '../../data/persistence';
 import { AccountEntity, AccountTypeEntity } from '../../data/persistence/entities';
@@ -24,48 +24,73 @@ export class AccountService {
     return this.accountRepository.findOneById(accountId).balance;
   }
 
-  addBalance(balance: BalanceDto): void {
+  addBalance(balance: BalanceDto): boolean {
     const current = this.accountRepository.findOneById(balance.accountId);
-    current.balance += Math.abs(+balance.amount);
-    this.accountRepository.update(balance.accountId, current);
+    current.balance += Math.abs(balance.amount);
+    try{
+      this.accountRepository.update(balance.accountId, current);
+      return true;
+    } catch {
+      return false;
+    }
   }
 
-  removeBalance(balance: BalanceDto): void {
+  removeBalance(balance: BalanceDto): boolean {
     const current = this.accountRepository.findOneById(balance.accountId);
-    current.balance -= Math.abs(+balance.amount);
-    if (current.balance >= 0) this.accountRepository.update(balance.accountId, current); else throw new BadRequestException();
+    current.balance -= Math.abs(balance.amount);
+    try{
+      this.accountRepository.update(balance.accountId, current);
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   verifyAmountIntoBalance(balance: BalanceDto): boolean {
     const current = this.accountRepository.findOneById(balance.accountId);
-    if (current.balance >= +balance.amount) return true; else return false;
+    if (current.balance >= balance.amount) return true; else return false;
   }
 
   getState(accountId: string): boolean {
-    return this.accountRepository.findOneById(accountId).state
+    return this.accountRepository.findOneById(accountId).state;
   }
 
-  changeState(account: ChangeStateDto): void {
+  changeState(account: ChangeStateDto): boolean {
     const current = this.accountRepository.findOneById(account.accountId);
     current.state = account.state;
-    this.accountRepository.update(account.accountId, current)
+    try{
+      this.accountRepository.update(account.accountId, current);
+      return true;
+    } catch {
+      return false;
+    } 
   }
 
   getAccountById(accountId: string): AccountEntity {
-    return this.accountRepository.findOneById(accountId)
+    return this.accountRepository.findOneById(accountId);
   }
 
-  getAccountType(accountId: string): AccountTypeEntity {
-    return this.accountRepository.findOneById(accountId).accountType
+  getAccountTypeById(accountId: string): AccountTypeEntity {
+    return this.accountRepository.findOneById(accountId).accountType;
+  }
+
+  getAccountTypeWithId(accountTypeId: string): AccountTypeEntity {
+    return this.accountTypeRepository.findOneById(accountTypeId);
   }
 
   changeAccountType(account: ChangeAccountDto): AccountTypeEntity {
     const current = this.accountRepository.findOneById(account.accountId);
     current.accountType = this.accountTypeRepository.findOneById(account.accountTypeId);
-    return this.accountRepository.update(account.accountId, current).accountType
+    return this.accountRepository.update(account.accountId, current).accountType;
   }
 
-  deleteAccount(accountId: string, soft?: boolean): void {
-    this.accountRepository.delete(accountId, soft);
+  deleteAccount(accountId: string, soft?: boolean): boolean {
+    try{
+      this.accountRepository.delete(accountId, soft);
+      return true;
+    } catch {
+      return false;
+    }
+    
   }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AccountService, TransferService } from '../../business/services';
 import { CreateTransferDto, HistoryDto, PaginationDto } from '../../business/dtos';
@@ -22,9 +22,8 @@ export class TransferController {
     }
     
     @Post('/delete-transfer')
-    deleteTransfer(@Body() transfer: string): string {
-        this.transferService.deleteTransfer(transfer);
-        return 'ready';
+    deleteTransfer(@Query('transfer') transfer: string): string {
+        return this.transferService.deleteTransfer(transfer).toString();
     }
     
     @Post('/get-history')
