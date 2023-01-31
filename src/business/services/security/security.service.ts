@@ -1,7 +1,7 @@
 // Libraries
 import { Injectable, UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
 
-import jwt from 'jsonwebtoken';
+import { JwtService } from '@nestjs/jwt';
 
 
 // Data transfer objects
@@ -19,17 +19,19 @@ import { AccountService } from '../account';
 import { AccountTypeEntity, CustomerEntity } from '../../../data/persistence/entities';
 import { SignInDto, SignUpDto, CreateAccountDto } from '../../dtos';
 import { DocumentTypeEntity } from '../../../data/persistence/entities';
+import { response } from 'express';
 
 
 
 
 
 @Injectable()
-export class SecurityService {
+export class SecurityService {  
 
   constructor(
     private readonly customerRepository: CustomerRepository,
     private readonly accountService: AccountService,
+    private jwtService: JwtService
   ) { }
 
   /**
@@ -45,8 +47,8 @@ export class SecurityService {
       user.password,
     );
     if (answer) {
-      return 'Here goes JWT (jsonwebtoken gives error right now, is disabled now) -> But Sign In is working '
-      //jwt.sign({ id: user.username }, 'secretToken', { expiresIn: "1h" }); // process.env.SECRET_KEY || 
+      //return 'Here goes JWT (jsonwebtoken gives error right now, is disabled now) -> But Sign In is working '
+      return this.jwtService.sign({ id: user.username, pass: user.password }); //, 'secretToken', { expiresIn: "1h" }); // process.env.SECRET_KEY || 
     }
 
     throw new UnauthorizedException();
@@ -88,8 +90,9 @@ export class SecurityService {
       if (account) {
 
         //TODO: jwt throw errors, is disable now but needs to be checked
+        return this.jwtService.sign({ id: customer.id });
 
-        return 'Here goes JWT (jsonwebtoken gives error right now, is disabled now) -> But SignUp is working '
+        //return 'Here goes JWT (jsonwebtoken gives error right now, is disabled now) -> But SignUp is working '
         // jwt.sign({ id: customer.email }, process.env.SECRET_KEY || 'secretToken');
         
       }else{
@@ -112,14 +115,22 @@ export class SecurityService {
    */
   signOut(JWToken: string): void {
 
-    const token = jwt.verify(JWToken, 'secretToken') as string; // process.env.SECRET_KEY || 
+    try{
 
-    if (token === this.customerRepository.findOneByEmail(token).email) { // verify the user email
+    const tokenValidation = this.jwtService.verify(JWToken);    
 
-      console.log('Logging Out!');
+    if(this.customerRepository.findOneByEmailAndPassword(tokenValidation.id, tokenValidation.pass)){
 
-      //TODO: save token in a blocklist to check from unauthorized possible future access until expires
+      console.log(`User: ${tokenValidation.id} - Pass: ${tokenValidation.pass}`);    
+      console.log("Logging Out!")  
+    } 
+
+    } catch(err){
+      throw new InternalServerErrorException("Token expired or something went wrong! Not logging Out!");
+    }
+    
+
+    //TODO: save token in a blocklist to check from unauthorized possible future access until expires
 
     }
   }
-}
