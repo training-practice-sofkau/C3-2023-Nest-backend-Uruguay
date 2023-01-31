@@ -1,1 +1,1 @@
-export * from '../controllers/security';
+export * from './controllers/security';

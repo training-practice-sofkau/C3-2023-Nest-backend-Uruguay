@@ -1,11 +1,14 @@
 import { Module } from '@nestjs/common';
 import { SecurityController } from './presentation';
-import { AccountService } from './services';
-import { CustomerService } from './services/customer/customer.service';
-import { DepositService } from './services/deposit/deposit.service';
-import { SecurityService } from './services/security/security.service';
-import { TransferService } from './services/transfer/transfer.service';
-import { AccountController } from './controllers/account/account.controller';
+import { AccountService } from './business/services';
+import { CustomerService } from './business/services/customer/customer.service';
+import { DepositService } from './business/services/deposit/deposit.service';
+import { SecurityService } from './business/services/security/security.service';
+import { TransferService } from './business/services/transfer/transfer.service';
+import { AccountController } from './presentation/controllers/account/account.controller';
+import { CustomerRepository } from './data/persistence/repositories/customer.repository';
+import { AccountTypeRepository } from './data/persistence/repositories/account-type.repository';
+import { AccountRepository, DepositRepository, DocumentTypeRepository, TranferRepository } from './data/persistence';
 
 @Module({
   imports: [],
@@ -15,7 +18,16 @@ import { AccountController } from './controllers/account/account.controller';
     CustomerService,
     DepositService,
     SecurityService,
-    TransferService
+    TransferService,
+
+    AccountRepository,
+    AccountTypeRepository,
+    CustomerRepository,
+    DepositRepository,
+    DocumentTypeRepository,
+    TranferRepository
+
+    
   ],
 })
 export class AppModule { }

@@ -1,5 +1,4 @@
-import { IsEmail } from "class-validator";
-import { IsNotEmpty, IsString, Min } from "class-validator/types/decorator/decorators";
+import { IsNotEmpty, IsString } from "class-validator";
 
 export class AccountTypeDto {
 

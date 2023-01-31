@@ -1,5 +1,4 @@
-import { IsDate, IsNumber } from "class-validator";
-
+import { IsNumber, IsDate } from "class-validator";
 
 export class DataRangeDto {
 
