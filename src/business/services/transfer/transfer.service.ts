@@ -63,11 +63,7 @@ export class TransferService {
                 pagination?: PaginationModel<TransferEntity>, 
                 dataRange?: DataRangeModel): TransferEntity[] {
 
-    let history = [];
-
-    history = this.transferRepository.findBy("outcome",accountId, pagination, dataRange);    
-
-    return history;
+    return this.transferRepository.findBy("outcome",accountId, pagination, dataRange);;
 
   }
 
@@ -84,11 +80,7 @@ export class TransferService {
               paginator?: PaginationModel<TransferEntity>, 
               dataRange?: DataRangeModel): TransferEntity[] {
     
-    let history = this.transferRepository.findAll();
-
-    history = this.transferRepository.findBy("income",accountId, paginator, dataRange);    
-
-    return history;
+    return this.transferRepository.findBy("income",accountId, paginator, dataRange); ;
   }
 
   /**
@@ -102,11 +94,15 @@ export class TransferService {
    */
   getHistory(accountId: string, 
             pagination?: PaginationModel<TransferEntity>, 
-            dataRange?: DataRangeModel): TransferEntity[] {
-    
-    let history = [];
+            dataRange?: DataRangeModel): TransferEntity[] {   
 
-    history = this.getHistoryOut(accountId, pagination, dataRange).concat(this.getHistoryIn(accountId, pagination, dataRange));    
+    let history= [];
+   
+    history = this.getHistoryOut(accountId, pagination, dataRange);
+
+    if(this.getHistoryIn(accountId).length > 0){       
+          history.concat(this.getHistoryIn(accountId, pagination, dataRange));
+    }
 
     return history;
 

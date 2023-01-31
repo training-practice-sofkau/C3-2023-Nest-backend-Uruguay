@@ -29,13 +29,13 @@ export class TransferController {
     // get history by destination account
     //TODO: see how to send values for pagination and date range ( look for info and methods )
     @Get('to/:id')
-    async getTransfersToDestinationAccount(@Param('id', ParseUUIDPipe) accountId: string, @Param('limit') limit: number): Promise<TransferEntity[]> {
+    async getTransfersToDestinationAccount(@Param('id', ParseUUIDPipe) accountId: string): Promise<TransferEntity[]> {
       
-        const page= new PaginationEntity();
-        page.offset = 0;
-        page.limit= limit;
+        //const page= new PaginationEntity();
+        //page.offset = 0;
+        //page.limit= limit;
 
-        return this.transferService.getHistoryIn(accountId, page);
+        return this.transferService.getHistoryIn(accountId);
     }   
 
 
