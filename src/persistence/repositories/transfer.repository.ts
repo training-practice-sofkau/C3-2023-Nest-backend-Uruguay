@@ -45,7 +45,7 @@ export class TranferRepository extends Base<TransferEntity> implements CRUD<Tran
   }
 
   private softDelete(index: number): void {
-    //this.database[index].deleted_at = Date.now()
+    this.database[index].deleted_at = Date.now()
   }
 
   findAll(): TransferEntity[] {

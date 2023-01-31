@@ -3,7 +3,7 @@ import { DataRangeModel } from 'src/models/dataRange.model';
 import { PaginationModel } from 'src/models/pagination.model';
 import { DepositEntity } from 'src/persistence';
 import { DepositService } from 'src/services';
-import { depositDto } from '../../dtos/deposit';
+import { depositDto } from '../../data/dtos/deposit';
 
 
 

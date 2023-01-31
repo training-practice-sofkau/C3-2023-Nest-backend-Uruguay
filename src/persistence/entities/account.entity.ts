@@ -7,6 +7,5 @@ export class AccountEntity implements AccountModel{
     account_type_id: AccountTypeModel;
     balance: number;
     state: boolean;
-    deleted_at: number | Date;
-        
+    deleted_at: number | Date; 
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CustomerDto } from 'src/dtos/customer';
+import { CustomerDto } from 'src/data/dtos/customer';
 import { CustomerEntity } from 'src/persistence';
 import { CustomerRepository } from '../../persistence/repositories/customer.repository';
 

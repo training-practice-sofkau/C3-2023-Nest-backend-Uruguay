@@ -1,10 +1,10 @@
 
 import { Controller, Get, Param, Post, Body, Delete } from '@nestjs/common';
-import { DataRangeDto } from 'src/dtos/datarange.dto';
-import { PaginationDto } from 'src/dtos/pagination.dto';
+import { DataRangeDto } from 'src/data/dtos/datarange.dto';
+import { PaginationDto } from 'src/data/dtos/pagination.dto';
 import { DataRangeModel } from 'src/models/dataRange.model';
 import { TransferService } from 'src/services';
-import { transferDto } from '../../dtos/transfer';
+import { transferDto } from '../../data/dtos/transfer';
 
 
 @Controller('transfer')

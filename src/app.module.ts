@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { SecurityController } from './controllers';
+import { SecurityController } from './presentation';
 import { AccountService } from './services';
 import { CustomerService } from './services/customer/customer.service';
 import { DepositService } from './services/deposit/deposit.service';

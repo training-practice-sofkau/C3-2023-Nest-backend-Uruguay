@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Param, Post, Put } from '@nestjs/common';
-import { AccountTypeDto } from 'src/dtos/accountType.dto';
+import { AccountTypeDto } from 'src/data/dtos/accountType.dto';
 import { AccountTypeEntity } from 'src/persistence';
 import { AccountService } from 'src/services';
 
