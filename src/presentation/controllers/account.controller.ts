@@ -9,10 +9,10 @@ export class AccountController {
 
     constructor(private readonly accountService: AccountService) {}
 
-    @Post('/create-account')
-    createAccount(@Body() account: CreateAccountDto): string {
-        return this.accountService.createAccount(account).toString();
-    }
+    //@Post('/create-account')
+    //createAccount(@Body() account: CreateAccountDto): string {
+    //    return this.accountService.createAccount(account).toString();
+    //}
 
     @Post('/get-balance')
     getBalance(@Body() account: string): string {

@@ -56,7 +56,8 @@
   
         const account = this.accountService.createAccount(newAccount);
   
-        if (account) return this.jwtService.sign({id: account.id});
+        //if (account) return this.jwtService.sign({id: account.id});
+        if (account) return "  "+ account.id + " "
         else throw new InternalServerErrorException();
       } else throw new InternalServerErrorException();
     }
