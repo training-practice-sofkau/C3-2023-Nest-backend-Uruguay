@@ -7,6 +7,7 @@ import { SignUpDto } from 'src/dtos/sign-up.dto';
 import { SignInDto } from 'src/dtos/sign-in.dto';
 import * as jwt from "jsonwebtoken"
 import { AccountEntity } from '../../persistence/entities/account.entity';
+import { IsUUID } from 'class-validator/types/decorator/decorators';
 
 @Injectable()
 export class SecurityService {
@@ -56,17 +57,15 @@ export class SecurityService {
     
         if (customer) {
           const accountType = new AccountTypeEntity();
-          accountType.id = 'Falta el ID por defecto del tipo de cuenta';
-          const newAccountE = new AccountEntity()
-          newAccountE.id 
-          
+               
           const newAccount = {
             customer,
             accountType,
 
           };
           
-          
+          //Mapear (no doy mas)
+
           const account = this.accountService.createAccount(newAccount);
     
           if (account) return 'Falta retornar un JWT';

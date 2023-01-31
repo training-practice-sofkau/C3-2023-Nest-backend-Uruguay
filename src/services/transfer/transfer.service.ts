@@ -5,11 +5,14 @@ import { DataRangeModel } from 'src/models/dataRange.model';
 import { PaginationModel } from 'src/models/pagination.model';
 import { TranferRepository, TransferEntity } from 'src/persistence';
 import { transferDto } from '../../dtos/transfer';
+import { AccountService } from '../account';
 
 @Injectable()
 export class TransferService {
   constructor(
-    private readonly transferRepocitory: TranferRepository
+    private readonly transferRepocitory: TranferRepository,
+    private readonly accountService: AccountService
+
 
   ) { }
   /**
@@ -21,12 +24,15 @@ export class TransferService {
      */
   createTransfer(transfer: transferDto): TransferEntity {
     const newTransfer = new TransferEntity
+    
     //const newAaccount =
 
     newTransfer.amount = transfer.amount
-    newTransfer.income_id.id = transfer.income_id
-    newTransfer.outcome_id.id = transfer.outcome_id
-    newTranser.
+    newTransfer.income_id = this.accountService.getId(transfer.income_id)
+    newTransfer.outcome_id = this.accountService.getId(transfer.outcome_id)
+    newTransfer.reason = transfer.reason
+    newTransfer.date_time = Date.now()
+
     return this.transferRepocitory.register(newTransfer)
   }
 
