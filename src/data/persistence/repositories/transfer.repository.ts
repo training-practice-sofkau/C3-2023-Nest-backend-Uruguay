@@ -4,8 +4,8 @@ import { InternalServerErrorException, NotFoundException } from '@nestjs/common/
 import { TransferEntity } from '../entities';
 import { BankInternalControl } from './base';
 import { RepositoryMethodsInterface } from "./interfaces";
-import { PaginationModel } from '../../models/pagination.model';
-import { DataRangeModel } from '../../models/data-range.model';
+import { PaginationModel, DataRangeModel } from '../../../business/models';
+
 
 @Injectable()
 export class TransferRepository extends BankInternalControl<TransferEntity> implements RepositoryMethodsInterface<TransferEntity> {

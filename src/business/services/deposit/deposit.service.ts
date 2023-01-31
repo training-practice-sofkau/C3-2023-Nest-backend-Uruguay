@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
-import { DepositEntity } from '../../persistence/entities';
+import { DepositEntity } from '../../../data/persistence/entities';
 import { DataRangeModel, DepositModel, PaginationModel } from '../../models';
-import { DepositRepository } from '../../persistence/repositories';
+import { DepositRepository } from '../../../data/persistence/repositories';
 import { CreateDepositDto } from '../../dtos/create-deposit.dto';
 
 @Injectable()

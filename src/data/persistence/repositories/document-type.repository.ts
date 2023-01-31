@@ -4,7 +4,7 @@ import { InternalServerErrorException, NotFoundException } from '@nestjs/common/
 import { DocumentTypeEntity } from '../entities';
 import { BankInternalControl } from './base';
 import { DocumentTypeRepositoryInterface } from './interfaces';
-import { PaginationModel } from '../../models';
+import { PaginationModel } from 'src/business/models';
 
 @Injectable()
 export class DocumentTypeRepository extends BankInternalControl <DocumentTypeEntity> implements DocumentTypeRepositoryInterface{

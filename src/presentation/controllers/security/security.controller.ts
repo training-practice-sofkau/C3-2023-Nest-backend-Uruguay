@@ -2,8 +2,8 @@
 import { Body, Controller, Param, Post } from '@nestjs/common';
 
 //DTOs
-import { SignUpDto, SignInDto } from '../../dtos';
-import { SecurityService } from '../../services';
+import { SignUpDto, SignInDto } from 'src/business/dtos';
+import { SecurityService } from 'src/business/services';
 
 @Controller('security')
 export class SecurityController {

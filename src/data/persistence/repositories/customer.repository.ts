@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common/decorators';
 import { CustomerEntity } from '../entities';
 import { BankInternalControl } from './base';
 import { CustomerRepositoryInterface } from './interfaces';
-import { PaginationModel } from '../../models';
+import { PaginationModel } from '../../../business/models';
 
 @Injectable()
 export class CustomerRepository extends BankInternalControl<CustomerEntity> implements CustomerRepositoryInterface {

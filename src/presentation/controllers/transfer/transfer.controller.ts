@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
 
-import { TransferService } from '../../services';
-import { TransferEntity, PaginationEntity } from '../../persistence/entities';
-import { CreateTransferDto } from '../../dtos';
+import { TransferService } from 'src/business/services';
+import { TransferEntity, PaginationEntity } from 'src/data/persistence/entities';
+import { CreateTransferDto } from 'src/business/dtos';
 
 @Controller('transfer')
 export class TransferController {

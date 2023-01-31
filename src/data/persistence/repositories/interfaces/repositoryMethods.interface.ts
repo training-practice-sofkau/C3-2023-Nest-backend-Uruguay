@@ -1,5 +1,5 @@
-import { PaginationModel } from '../../../models/pagination.model';
-import { DataRangeModel } from '../../../models/data-range.model';
+import { PaginationModel, DataRangeModel } from '../../../../business/models';
+
 export interface RepositoryMethodsInterface<T> {
 
     register(entity: T): T;

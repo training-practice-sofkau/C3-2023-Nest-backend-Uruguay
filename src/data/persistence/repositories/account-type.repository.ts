@@ -4,7 +4,7 @@ import { InternalServerErrorException, NotFoundException } from '@nestjs/common/
 import { AccountTypeEntity } from "../entities";
 import { BankInternalControl } from "./base";
 import { AccountTypeRepositoryInterface } from "./interfaces";
-import { PaginationModel } from '../../models/pagination.model';
+import { PaginationModel } from '../../../business/models';
 
 
 @Injectable()

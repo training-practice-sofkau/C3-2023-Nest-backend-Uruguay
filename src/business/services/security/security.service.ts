@@ -10,15 +10,15 @@ import jwt from 'jsonwebtoken';
 // Models
 
 // Repositories
-import { CustomerRepository } from '../../persistence/repositories';
+import { CustomerRepository } from '../../../data/persistence/repositories';
 
 // Services
 import { AccountService } from '../account';
 
 // Entities
-import { AccountTypeEntity, CustomerEntity } from '../../persistence/entities';
+import { AccountTypeEntity, CustomerEntity } from '../../../data/persistence/entities';
 import { SignInDto, SignUpDto, CreateAccountDto } from '../../dtos';
-import { DocumentTypeEntity } from '../../persistence/entities';
+import { DocumentTypeEntity } from '../../../data/persistence/entities';
 
 
 

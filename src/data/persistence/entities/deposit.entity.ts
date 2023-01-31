@@ -1,4 +1,4 @@
-import { DepositModel } from '../../models';
+import { DepositModel } from '../../../business/models';
 
 import { v4 as uuid } from 'uuid';
 

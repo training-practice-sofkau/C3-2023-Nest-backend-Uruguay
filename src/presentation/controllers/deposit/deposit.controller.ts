@@ -1,9 +1,8 @@
 import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
-import { DepositEntity } from 'src/persistence/entities';
 
-import { DepositService } from '../../services';
-import { DepositModel } from '../../models/deposit.model';
-import { CreateDepositDto } from '../../dtos/create-deposit.dto';
+import { DepositEntity } from 'src/data/persistence/entities';
+import { DepositService } from 'src/business/services';
+import { CreateDepositDto } from 'src/business/dtos';
 
 @Controller('deposit')
 export class DepositController {

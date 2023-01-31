@@ -1,9 +1,7 @@
 import { Injectable } from "@nestjs/common/decorators";
 import { InternalServerErrorException, NotFoundException } from "@nestjs/common/exceptions";
 
-
-
-import { PaginationModel } from "../../models";
+import { PaginationModel } from "../../../business/models";
 import { AccountEntity, AccountTypeEntity } from '../entities';
 import { BankInternalControl } from "./base";
 import { AccountRepositoryInterface } from './interfaces';

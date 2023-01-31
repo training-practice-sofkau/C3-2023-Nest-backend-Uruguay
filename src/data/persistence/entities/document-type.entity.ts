@@ -1,4 +1,4 @@
-import { DocumentTypeModel } from "../../models";
+import { DocumentTypeModel } from "../../../business/models";
 
 import { v4 as uuid } from "uuid";
 

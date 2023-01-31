@@ -1,11 +1,8 @@
 import { ConsoleLogger, Injectable } from '@nestjs/common';
 
-
 import { UpdateCustomerDto } from '../../dtos';
-import { CustomerEntity } from '../../persistence/entities';
-import { CustomerRepository, AccountRepository } from '../../persistence/repositories';
-import { DocumentTypeEntity } from '../../persistence/entities/document-type.entity';
-
+import { CustomerEntity, DocumentTypeEntity } from '../../../data/persistence/entities';
+import { CustomerRepository, AccountRepository } from '../../../data/persistence/repositories';
 
 @Injectable()
 export class CustomerService {

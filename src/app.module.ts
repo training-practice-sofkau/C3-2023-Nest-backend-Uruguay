@@ -7,20 +7,20 @@ import {
          DepositController,
          SecurityController,
          TransferController,
-         } from './controllers';
+         } from './presentation/controllers';
 
 import { AccountService, 
          CustomerService, 
          DepositService, 
          TransferService, 
-         SecurityService, } from './services';
+         SecurityService, } from './business/services';
 
 import { AccountRepository, 
          CustomerRepository, 
          DepositRepository, 
          TransferRepository, 
          AccountTypeRepository, 
-         DocumentTypeRepository, } from './persistence/repositories';
+         DocumentTypeRepository, } from './data/persistence/repositories';
 
 
 @Module({  
