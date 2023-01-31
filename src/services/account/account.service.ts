@@ -1,20 +1,25 @@
 // Libraries
 import { Injectable } from '@nestjs/common';
 import { InternalServerErrorException } from '@nestjs/common/exceptions';
-
-// Models
-import { AccountModel } from 'src/models/account.model';
+import { CreateAccountDto } from 'src/dtos/createAccount.dto';
 
 // Entities
-import { AccountEntity, AccountTypeEntity } from 'src/persistence';
+import { AccountEntity, AccountTypeEntity, AccountTypeRepository } from 'src/persistence';
 
 // Repositories
 import { AccountRepository } from 'src/persistence'
+import { ChangeAccountTypeDto } from '../../dtos/changeAccountType.dto';
 
 @Injectable()
 export class AccountService {
-  constructor(private readonly accountRepository: AccountRepository) { }
+  constructor(private readonly accountRepository: AccountRepository,
+    private readonly accountTypeRepository: AccountTypeRepository) { }
 
+
+  getId(id: string):AccountEntity{
+    const account = this.accountRepository.findOneById(id)
+    return account
+  }
   /**
    * Crear una cuenta
    *
@@ -22,10 +27,11 @@ export class AccountService {
    * @return {*}  {AccountEntity}
    * @memberof AccountService
    */
-  createAccount(account: AccountModel): AccountEntity {
+  createAccount(account: CreateAccountDto): AccountEntity {
     const newAccount = new AccountEntity();
-    newAccount.customer = account.customer;
-    newAccount.accountType = account.accountType;
+    const newAccountType = new AccountTypeEntity()
+    newAccountType.id = account.accountTypeId
+    newAccount.accountType = newAccountType;
     return this.accountRepository.register(newAccount);
   }
 
@@ -112,7 +118,7 @@ export class AccountService {
    * @param {boolean} state
    * @memberof AccountService
    */
-  changeState(accountId: string, state: boolean): void {
+  changeState(accountId: string, state?: boolean): void {
     try {
       let actualState = this.accountRepository.findOneById(accountId);
       actualState.state = !actualState.state
@@ -146,12 +152,12 @@ export class AccountService {
    * @memberof AccountService
    */
   changeAccountType(
-    accountId: string,
-    accountTypeId: string,
+    account: ChangeAccountTypeDto
   ): AccountTypeEntity {
     try {
-      this.accountRepository.findOneById(accountId).accountType.id = accountTypeId
-
+      const changeType = this.accountRepository.findOneById(account.accountId)
+      changeType.accountType = this.accountTypeRepository.findOneById(account.accountTypeId)
+      return this.accountRepository.update(account.accountId, changeType).accountType
     } catch (error) {
       throw new InternalServerErrorException(error)
     }

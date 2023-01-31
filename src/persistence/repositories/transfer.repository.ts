@@ -66,6 +66,7 @@ export class TransferRepository
         accountId: string,
         dateInit: Date | number,
         dateEnd: Date | number,
+        paginator?: PaginationModel,
     ): TransferEntity[] {
         const currentEntity = this.database.filter(
             (item) =>
@@ -75,13 +76,14 @@ export class TransferRepository
                 && typeof item.deletedAt === "undefined"
         )
         if (!currentEntity) throw new NotFoundException()
-        else return currentEntity.filter(item => item.outcome.id === accountId)
+        else return currentEntity.filter(item => item.outcome.id === accountId).slice(paginator?.offset, paginator?.limit)
     }
 
     findIncomeByDataRange(
         accountId: string,
         dateInit: Date | number,
         dateEnd: Date | number,
+        paginator?: PaginationModel,
     ): TransferEntity[] {
         const currentEntity = this.database.filter(
             (item) => item.id === accountId
@@ -90,6 +92,6 @@ export class TransferRepository
                 && typeof item.deletedAt === "undefined"
         )
         if (!currentEntity) throw new NotFoundException()
-        else return currentEntity.filter(item => item.income.id === accountId)
+        else return currentEntity.filter(item => item.income.id === accountId).slice(paginator?.offset, paginator?.limit)
     }
 }
