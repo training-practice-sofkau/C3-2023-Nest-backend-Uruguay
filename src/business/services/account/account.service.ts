@@ -27,12 +27,10 @@ export class AccountService {
     accountType.id = account.accountTypeId;
     newAccount.accountTypeId = accountType;
 
-
     const customer = new CustomerEntity();
     customer.id = account.customerId;
     newAccount.customerId = customer;
     
-
     return this.accountRepository.register(newAccount);
   }
 
@@ -57,6 +55,7 @@ export class AccountService {
     newAccount.balance = newAccountDetails.balance; 
 
     newAccount.state = newAccountDetails.state; 
+    console.log("aca paso")
 
     return this.accountRepository.update(accountId, newAccount);
 

@@ -1,10 +1,8 @@
 import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put, Query } from '@nestjs/common';
 
-//import { AccountService } from './business/services';
 import { AccountEntity } from 'src/data/persistence/entities';
 import { CreateAccountDto, UpdateAccountDto, AccountTransactionDto } from 'src/business/dtos';
 import { AccountService } from 'src/business/services';
-import { query } from 'express';
 import { ParseBoolPipe } from '@nestjs/common/pipes';
 
 
@@ -26,6 +24,9 @@ export class AccountController {
                         @Body() newDetails: UpdateAccountDto): 
                         Promise<AccountEntity>{
     
+
+                            console.log("controller")
+                            
         return await this.accountService.updateAccount(accountId, newDetails);
     }    
 

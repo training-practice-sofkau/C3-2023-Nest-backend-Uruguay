@@ -21,7 +21,7 @@ export class AccountRepository extends BankInternalControl<AccountEntity> implem
         try { // try to add the entity to the array
 
             this.database.push(entity);
-
+            
             return this.database.at(-1) ?? entity; // all good, returns the new entity 
 
         } catch (err) { // something went wrong, push didn't work
