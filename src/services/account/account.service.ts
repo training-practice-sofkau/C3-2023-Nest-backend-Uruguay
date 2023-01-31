@@ -28,8 +28,7 @@ export class AccountService {
    */
   createAccount(account: CreateAccountDTO): AccountEntity {
     const customer = this.customerRepository.findOneById(account.customerId);
-    const accountType = this.accountTypeRepository.findOneById(account.accountTypeId);
-
+    const accountType = new AccountTypeEntity();
 
     const newAccount = new AccountEntity();
     newAccount.customer = customer;
@@ -88,13 +87,11 @@ export class AccountService {
     return this.getAccount(accountId).state;
   }
 
-  updateAccount(accountId: string, newAccount: AccountDTO) {
+  updateAccount(accountId: string , newAccount: AccountDTO) {
     let account = this.getAccount(accountId);
-    const customer = this.customerRepository.findOneById(newAccount.customer);
-    const accountType = this.accountTypeRepository.findOneById(newAccount.accountType);
+    // const accountType = this.accountTypeRepository.findOneById(newAccount.accountType);
 
-    account.accountType = accountType;
-    account.customer = customer;
+    // account.accountType = accountType;
     account.balance = newAccount.balance;
     account.state = newAccount.state;
 
@@ -110,7 +107,9 @@ export class AccountService {
    */
   addBalance(accountId: string, amount: number): void {
     const account = this.getAccount(accountId);
-    account.balance += amount;
+    let balance: number = account.balance; 
+    balance += amount;
+    account.balance = balance;
 
     this.accountRepository.update(accountId, account);
   }
@@ -180,7 +179,9 @@ export class AccountService {
     if (removeAll) this.cleanBalance(accountId);
 
     const account = this.getAccount(accountId);
-    account.balance -= amount;
+    let balance: number = account.balance; 
+    balance += amount;
+    account.balance = balance;
 
     this.accountRepository.update(accountId, account);
   }

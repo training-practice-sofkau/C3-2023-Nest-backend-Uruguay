@@ -25,7 +25,7 @@ export class DepositService {
 
     const account = this.accountService.findOneById(deposit.accountId);
     
-    newDeposit.account = deposit.account;
+    newDeposit.account = account;
     newDeposit.amount = deposit.amount;
     newDeposit.dateTime = Date.now();
 

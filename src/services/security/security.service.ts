@@ -58,15 +58,15 @@ export class SecurityService {
         const customer = this.customerRepository.register(newCustomer);
     
         if (customer) {
-          const accountType = new AccountTypeEntity();
-          accountType.id = 'Falta el ID por defecto del tipo de cuenta';
-          let newAccount = new CreateAccountDTO();
+          // const accountType = new AccountTypeEntity();
+          // accountType.id = 'Falta el ID por defecto del tipo de cuenta';
+          const newAccount = new CreateAccountDTO();
           newAccount.customerId = customer.id;
-          newAccount.accountTypeId = accountType.id;
+          // newAccount.accountTypeId = accountType.id;
     
           const account = this.accountService.createAccount(newAccount);
     
-          if (account) throw new InternalServerErrorException();
+          if (!account) throw new InternalServerErrorException();
 
           return jwt.sign({id: user.email}, process.env.TOKEN_SECRET || 'tokentest');
         } else throw new InternalServerErrorException();

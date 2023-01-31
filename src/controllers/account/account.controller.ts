@@ -8,23 +8,18 @@ import { CustomerEntity, AccountTypeEntity, AccountEntity} from '../../persisten
 export class AccountController {
     constructor(private readonly accountService: AccountService) {}
 
-    @Post('/create')
-    createAccount(@Body() account: CreateAccountDTO): AccountEntity {
-        return this.accountService.createAccount(account);
-    }
-
     @Put('/update/:accountId')
-    updateAccount(@Param() accountId: string, @Body() newAccount: AccountDTO): AccountEntity {
+    updateAccount(@Param('accountId') accountId: string, @Body() newAccount: AccountDTO): AccountEntity {
         return this.accountService.updateAccount(accountId, newAccount);
     }
 
     @Delete('/soft-delete/:accountId')
-    softDeleteAccount(@Param() accountId: string): void {
+    softDeleteAccount(@Param('accountId') accountId: string): void {
         this.accountService.deleteAccount(accountId, true);
     }
 
     @Delete('/hard-delete/:accountId')
-    hardDeleteAccount(@Param() accountId: string): void {
+    hardDeleteAccount(@Param('accountId') accountId: string): void {
         this.accountService.deleteAccount(accountId);
     }
 
@@ -34,42 +29,42 @@ export class AccountController {
     }
 
     @Get('/find/:accountId')
-    findOneById(@Param() accountId: string): AccountEntity {
+    findOneById(@Param('accountId') accountId: string): AccountEntity {
         return this.accountService.findOneById(accountId);
     }
 
     @Get('/find-by-customer/:customerId')
     findByCustomer(@Body() pagination: PaginationModel, @Param() customerId: string): AccountEntity[] {
-        return this.findByCustomer(pagination, customerId);
+        return this.accountService.findByCustomer(customerId);
     }
 
     @Get('/balance/:accountId')
-    getBalance(@Param() accountId: string): number {
+    getBalance(@Param('accountId') accountId: string): number {
         return this.accountService.getBalance(accountId);
     }
 
     @Get('/account-type/:accountId')
-    getAccountType(@Param() accountId: string): AccountTypeEntity {
+    getAccountType(@Param('accountId') accountId: string): AccountTypeEntity {
         return this.accountService.getAccountType(accountId);
     }
 
     @Get('/customer/:accountId')
-    getCustomer(@Param() accountId: string): CustomerEntity {
+    getCustomer(@Param('accountId') accountId: string): CustomerEntity {
         return this.accountService.getCustomer(accountId);
     }
 
     @Get('/state/:accountId')
-    getState(@Param() accountId: string): boolean {
+    getState(@Param('accountId') accountId: string): boolean {
         return this.accountService.getState(accountId);
     }
 
     @Post('/add-balance/:accountId')
-    addBalance(@Param() accountId: string, @Body() amount: number) {
+    addBalance(@Param('accountId') accountId: string, @Body() amount: number) {
         this.accountService.addBalance(accountId, amount);
     }
 
-    @Patch('/change-account-type/:accountId')
-    changeAccountType(@Param() accountId: string,@Body() accountTypeId: string): AccountEntity {
+    @Patch('/change-account-type')
+    changeAccountType(@Param('accountId') accountId: string,@Body() accountTypeId: string): AccountEntity {
         return this.changeAccountType(accountId, accountTypeId);
     }
 
@@ -79,12 +74,12 @@ export class AccountController {
     }
 
     @Post('/remove-all-balance/:accountId')
-    removeAllBalance(@Param() accountId: string): void {
+    removeAllBalance(@Param('accountId') accountId: string): void {
         return this.accountService.removeBalance(accountId, 0, true);
     }
 
     @Post('/remove-balance/:accountId')
-    removeBalance(@Param() accountId: string, @Body() amount: number): void {
+    removeBalance(@Param('accountId') accountId: string, @Body() amount: number): void {
         return this.accountService.removeBalance(accountId, amount);
     }
 }

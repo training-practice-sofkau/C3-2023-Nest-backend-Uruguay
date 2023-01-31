@@ -1,6 +1,5 @@
 import { IsEmail, IsNumberString, IsUUID, IsString } from 'class-validator';
 export class SingUpDTO {
-    @IsUUID(4, { message: "this must to be uuid" })
     documentTypeId: string;
 
     @IsNumberString()
