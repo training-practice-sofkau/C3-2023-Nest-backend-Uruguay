@@ -1,8 +1,8 @@
 import { BadRequestException, ForbiddenException, HttpException, Injectable } from '@nestjs/common';
 
-import { PaginationModel } from '../../models';
-import { AccountEntity, AccountTypeEntity } from '../../persistence/entities';
-import { AccountRepository, AccountTypeRepository } from '../../persistence/repositories';
+import { PaginationModel } from '../../../data/models';
+import { AccountEntity, AccountTypeEntity } from '../../../data/persistence/entities';
+import { AccountRepository, AccountTypeRepository } from '../../../data/persistence/repositories';
 import { AccountDto } from '../../dtos';
 
 @Injectable()

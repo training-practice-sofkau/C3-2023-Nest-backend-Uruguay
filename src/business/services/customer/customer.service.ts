@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
-import { CustomerModel, PaginationModel } from '../../models';
-import { CustomerEntity } from '../../persistence/entities';
-import { CustomerRepository } from '../../persistence/repositories';
+import { CustomerModel, PaginationModel } from '../../../data/models';
+import { CustomerEntity } from '../../../data/persistence/entities';
+import { CustomerRepository } from '../../../data/persistence/repositories';
 import { CustomerDto } from '../../dtos';
 
 @Injectable()

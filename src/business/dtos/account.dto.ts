@@ -1,6 +1,6 @@
 import { IsBoolean, IsInt, IsOptional, IsUUID, IsNotEmpty, IsDate } from 'class-validator';
 
-import { CustomerEntity, AccountTypeEntity } from '../persistence/entities';
+import { CustomerEntity, AccountTypeEntity } from '../../data/persistence';
 
 
 export class AccountDto {

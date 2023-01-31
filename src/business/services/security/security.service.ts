@@ -11,10 +11,10 @@ import jwt from 'jsonwebtoken';
   import { SignOutDto, SignUpDto, SignInDto, AccountDto } from '../../dtos';
 
   // Models
-  import { AccountModel, CustomerModel } from '../../models';
+  import { AccountModel, CustomerModel } from '../../../data/models';
   
   // Repositories
-  import { CustomerRepository } from '../../persistence/repositories';
+  import { CustomerRepository } from '../../../data/persistence/repositories';
   
   // Services
   import { AccountService } from '../account';
@@ -24,7 +24,7 @@ import jwt from 'jsonwebtoken';
     AccountTypeEntity,
     CustomerEntity,
     DocumentTypeEntity,
-  } from '../../persistence/entities';
+  } from '../../../data/persistence/entities';
   
   @Injectable()
   export class SecurityService {

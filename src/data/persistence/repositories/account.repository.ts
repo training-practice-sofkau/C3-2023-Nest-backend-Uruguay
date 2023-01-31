@@ -3,7 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { AccountEntity } from '../entities';
 import { BaseRepository } from './base';
 import { AccountRepositoryInterface } from './interfaces';
-import { AccountDto } from '../../dtos';
+import { AccountDto } from '../../../business/dtos';
 
 
 @Injectable()

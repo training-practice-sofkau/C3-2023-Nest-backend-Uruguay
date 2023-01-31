@@ -1,7 +1,7 @@
 import { Body, UsePipes, Controller, Get, Post, Param, ParseUUIDPipe, ValidationPipe, Put, Patch, Delete } from '@nestjs/common';
 
-import { CustomerService } from '../../services';
-import { PatchCustomerDto, CustomerDto } from '../../business/dtos';
+import { CustomerService } from '../../../business/services';
+import { PatchCustomerDto, CustomerDto } from '../../../business/dtos';
 
 @Controller('customer')
 export class CustomerController {

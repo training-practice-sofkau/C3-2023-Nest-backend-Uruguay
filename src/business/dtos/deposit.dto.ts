@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
 
-import { AccountEntity } from '../persistence/entities';
+import { AccountEntity } from '../../data/persistence/entities';
 
 export class DepositDto {
 
