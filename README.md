@@ -49,17 +49,22 @@ $ npm run start:prod
 
 ```bash
 # Title of the delivery
-[Workshop Week 2 - Day 1] - API
+[Workshop Week 2 - Day 2] - Layer Design - Edinson Acosta Gancharov
 
 # Body of the delivery
 [Any short description]
+¿Que se esta entregando?
+
+¿Que falto entregar?
+
+¿Que dificultad se tuvo?
 ```
 
 ## Workshop
 
 The following are the guidelines that should be taken into account for the development of the workshop to be submitted:
 
-1. Create all DTOs.
+1. Organize the prject
 2. Validate all DTOs.
 3. Implement DTOs instead of models ( review all the mappings )
 4. Create all Controllers.
