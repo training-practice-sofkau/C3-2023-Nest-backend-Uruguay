@@ -1,23 +1,32 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { AccountService } from '../../business/services';
+import { Body, Controller, Post, Param } from '@nestjs/common';
+import { AccountService, CustomerService } from '../../business/services';
 import { BalanceDto, ChangeAccountDto, ChangeStateDto, CreateAccountDto } from '../../business/dtos';
 import { ApiTags } from '@nestjs/swagger';
+import { AccountEntity, AccountTypeEntity } from '../../data/persistence';
 
 @ApiTags('account')
 @Controller('api/account')
 export class AccountController {
 
-    constructor(private readonly accountService: AccountService) {}
+    constructor(private readonly accountService: AccountService, private readonly customerService: CustomerService) {}
 
-    //@Post('/create-account')
-    //createAccount(@Body() account: CreateAccountDto): string {
-    //    return this.accountService.createAccount(account).toString();
-    //}
+    @Post('/create-account')
+    createAccount(@Body() account: CreateAccountDto) {
+        const newAccount = new AccountEntity();
+        const newAccountType = new AccountTypeEntity();
+        newAccountType.name = account.accountTypeName;
+
+        newAccount.accountType = newAccountType;
+        newAccount.balance = account.balance;
+        newAccount.customer = this.customerService.getCustomerInfo(newAccount.id);
+        const newAccountFinal = this.accountService.createAccount(newAccount);
+        return newAccountFinal;
+    }
 
     @Post('/get-balance')
-    getBalance(@Body() account: string): string {
+    getBalance(@Param('account') account: string): string {
         return this.accountService.getBalance(account).toString();
-      }
+    }
     
     @Post('/add-balance')
     addBalance(@Body() balance: BalanceDto): string {

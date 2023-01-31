@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { DepositEntity, DepositRepository } from '../../data/persistence';
-import { CreateDepositDto, HistoryDto, PaginationDto } from '../../business/dtos';
+import { HistoryDto, PaginationDto } from '../../business/dtos';
 import { AccountService } from '.';
 
 @Injectable()
@@ -9,12 +9,8 @@ export class DepositService {
 
   constructor(private readonly depositRepository: DepositRepository, private readonly accountService: AccountService) {}
 
-  createDeposit(deposit: CreateDepositDto): DepositEntity {
-    const newDeposit = new DepositEntity();
-    newDeposit.account = this.accountService.getAccountById(deposit.accountId);
-    newDeposit.amount = +deposit.balance;
-    newDeposit.dateTime = newDeposit.dateTime || Date.now();
-    return this.depositRepository.register(newDeposit);
+  createDeposit(deposit: DepositEntity): DepositEntity {
+    return this.depositRepository.register(deposit);
   }
 
   deleteDeposit(depositId: string): void {

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { TransferEntity, TransferRepository } from '../../data/persistence';
-import { CreateTransferDto, HistoryDto, PaginationDto } from '../../business/dtos';
+import { HistoryDto, PaginationDto } from '../../business/dtos';
 import { AccountService } from '.';
 
 @Injectable()
@@ -8,14 +8,8 @@ export class TransferService {
 
   constructor(private readonly transferRepository: TransferRepository, private readonly accountService: AccountService) {}
 
-  createTransfer(transfer: CreateTransferDto): TransferEntity {
-    const newTransfer = new TransferEntity();
-    newTransfer.income = this.accountService.getAccountById(transfer.incomeId);
-    newTransfer.outcome = this.accountService.getAccountById(transfer.outcomeId);
-    newTransfer.balance = +transfer.balance;
-    newTransfer.dateTime = transfer.dateTime || Date.now();
-    newTransfer.reason = transfer.reason;
-    return this.transferRepository.register(newTransfer);
+  createTransfer(transfer: TransferEntity): TransferEntity {
+    return this.transferRepository.register(transfer);
   }
 
   getHistoryOut(

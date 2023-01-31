@@ -1,7 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { ParseUUIDPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -19,7 +18,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config, );
   SwaggerModule.setup('api', app, document);
 
-  app.useGlobalPipes(new ParseUUIDPipe());
+  //app.useGlobalPipes(new ParseUUIDPipe());
 
   await app.listen(3000);
 }

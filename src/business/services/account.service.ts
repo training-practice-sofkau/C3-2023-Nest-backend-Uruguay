@@ -5,7 +5,7 @@ import { AccountEntity, AccountTypeEntity } from '../../data/persistence/entitie
 import { CustomerService } from '.';
 
 // Data Transfer Object
-import { CreateAccountDto, BalanceDto, ChangeAccountDto, ChangeStateDto } from '../../business/dtos';
+import { BalanceDto, ChangeAccountDto, ChangeStateDto } from '../../business/dtos';
 
 
 @Injectable()
@@ -16,18 +16,12 @@ export class AccountService {
 
   constructor(private readonly accountRepository: AccountRepository, private readonly accountTypeRepository: AccountTypeRepository) {}
 
-  createAccount(account: CreateAccountDto): AccountEntity {
-    const newAccount = new AccountEntity();
-    newAccount.customer = this.customerService.getCustomerInfo(account.customerId);
+  createAccount(account: AccountEntity): AccountEntity {
+    return this.accountRepository.register(account);
+  }
 
-    const newAccountType = new AccountTypeEntity();
-    newAccountType.name = account.accountTypeName;
-
-    newAccount.accountType = newAccountType;
-    newAccount.balance = 0;
-    newAccount.state = false;
-
-    return this.accountRepository.register(newAccount);
+  getAccountTypeRepo(): AccountTypeRepository {
+    return this.accountTypeRepository;
   }
 
   getBalance(accountId: string): number {

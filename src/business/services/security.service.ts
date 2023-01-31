@@ -1,9 +1,7 @@
   import { Injectable, InternalServerErrorException, UnauthorizedException} from '@nestjs/common';
-
-  import { v4 as uuid } from 'uuid';
   
   // Data transfer objects
-  import { CreateAccountDto, SignInDto, SignUpDto } from '../../business/dtos';
+  import { SignInDto, SignUpDto } from '../../business/dtos';
   
   // Services
   import { AccountService } from '.';
@@ -13,6 +11,7 @@
   import { CustomerService } from './customer.service';
   // Jwt
   import { JwtService } from '@nestjs/jwt';
+  import { AccountEntity } from '../../data/persistence/entities/account.entity';
   
   @Injectable()
   export class SecurityService {
@@ -27,13 +26,13 @@
         user.email,
         user.password,
       );
-      if (answer) return this.jwtService.sign({id: answer.id});
+      if (answer) return this.jwtService.sign({ answer }, { secret: "Sofka", expiresIn: "30d" });
       else throw new UnauthorizedException();
     }
 
-    signUp(user: SignUpDto): string {
+    signUp(user: SignUpDto): Array<Object> {
       const documentType = new DocumentTypeEntity()
-      documentType.id = user.documentTypeId;
+      documentType.name = user.documentTypeName;
 
       const newCustomer = new CustomerEntity();
       newCustomer.documentType = documentType;
@@ -42,22 +41,27 @@
       newCustomer.email = user.email;
       newCustomer.phone = user.phone;
       newCustomer.password = user.password;
-  
+
+      this.customerService.getCustomerTypeRepo().register(documentType);
       const customer = this.customerService.register(newCustomer);
   
       if (customer) {
         const accountType = new AccountTypeEntity();
-        accountType.id = uuid();
+        accountType.name = user.AccountTypeName;
+        this.accountService.getAccountTypeRepo().register(accountType);
         
-        const newAccount = new CreateAccountDto();
-        newAccount.customerId = customer.id;
-        newAccount.accountTypeName = accountType.name;
-        newAccount.balance = 0;
+        const newAccount = new AccountEntity();
+        newAccount.accountType = accountType;
+        newAccount.balance = user.balance || 0;
+        newAccount.customer = customer;
   
         const account = this.accountService.createAccount(newAccount);
   
         //if (account) return this.jwtService.sign({id: account.id});
-        if (account) return "  "+ account.id + " "
+        if (account) {
+          const token = this.jwtService.sign({ account }, { secret: "Sofka", expiresIn: "30d" })
+          return [account, customer, token];
+        }
         else throw new InternalServerErrorException();
       } else throw new InternalServerErrorException();
     }

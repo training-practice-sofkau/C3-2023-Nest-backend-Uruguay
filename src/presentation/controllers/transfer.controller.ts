@@ -1,17 +1,24 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { TransferService } from '../../business/services';
+import { AccountService, TransferService } from '../../business/services';
 import { CreateTransferDto, HistoryDto, PaginationDto } from '../../business/dtos';
+import { TransferEntity } from '../../data/persistence';
 
 @ApiTags('transfer')
 @Controller('api/transfer')
 export class TransferController {
 
-    constructor(private readonly transferService: TransferService) {}
+    constructor(private readonly transferService: TransferService, private readonly accountService: AccountService) {}
 
     @Post('/create-transfer')
-    createTransfer(@Body() transfer: CreateTransferDto): string {
-        return this.transferService.createTransfer(transfer).toString();
+    createTransfer(@Body() transfer: CreateTransferDto) {
+        const newTransfer = new TransferEntity();
+        newTransfer.balance = transfer.balance;
+        newTransfer.income = this.accountService.getAccountById(transfer.incomeId);
+        newTransfer.outcome = this.accountService.getAccountById(transfer.outcomeId);
+        newTransfer.reason = transfer.reason;
+        newTransfer.dateTime = transfer.dateTime || Date.now(); 
+        return this.transferService.createTransfer(newTransfer);
     }
     
     @Post('/delete-transfer')

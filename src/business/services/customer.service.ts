@@ -12,6 +12,10 @@ export class CustomerService {
     return this.customerRepository.findOneById(customerId);
   }
 
+  getCustomerTypeRepo(): DocumentTypeRepository {
+    return this.documentTypeRepository;
+  }
+
   findOneByEmailAndPassword(email: string, password: string) : CustomerEntity {
     return this.customerRepository.findOneByEmailAndPassword(email, password);
   }
