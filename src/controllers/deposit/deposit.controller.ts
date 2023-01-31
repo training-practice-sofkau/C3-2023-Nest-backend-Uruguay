@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post } from '@nestjs/common';
-import { CreateDepositDto } from '../../dtos';
+import { CreateDepositDto } from '../../business/dtos';
 import { DepositEntity } from '../../persistence';
 import { DepositService } from '../../services';
 
