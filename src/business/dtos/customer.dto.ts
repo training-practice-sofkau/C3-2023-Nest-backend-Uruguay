@@ -1,6 +1,5 @@
 import { IsUUID, IsNotEmpty, IsString, IsEmail, MinLength, MaxLength, IsAlphanumeric, IsUrl, IsOptional } from "class-validator";
 
-
 export class CustomerDto {
 
     @IsUUID(4, { message: "this must to be uuid" })

@@ -2,7 +2,6 @@
 import { Controller, Get, Param, Post, Body, Delete } from '@nestjs/common';
 import { DataRangeDto } from 'src/business/dtos/datarange.dto';
 import { PaginationDto } from 'src/business/dtos/pagination.dto';
-import { DataRangeModel } from 'src/data/models/dataRange.model';
 import { TransferService } from 'src/business/services';
 import { transferDto } from '../../../business/dtos/transfer.dto';
 
