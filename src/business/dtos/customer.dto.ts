@@ -1,6 +1,6 @@
 import { IsUUID, IsBoolean, IsDate, IsEmail, IsNotEmpty, IsOptional, IsPhoneNumber, IsString } from 'class-validator';
 
-import { DocumentTypeModel } from '../../models';
+import { DocumentTypeModel } from '../../data/models';
 
 export class CustomerDto {
 

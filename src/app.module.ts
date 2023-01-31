@@ -1,11 +1,8 @@
 import { Module } from '@nestjs/common';
 
-import { SecurityController } from './controllers';
-import { AccountService, CustomerService, DepositService, SecurityService, TransferService } from './services';
-import { CustomerRepository, AccountRepository, AccountTypeRepository, TransferRepository, DepositRepository, DocumentTypeRepository, } from './persistence/repositories';
-import { CustomerController } from './controllers/customer/customer.controller';
-import { AccountController } from './controllers/account/account.controller';
-import { DepositController } from './controllers/deposit/deposit.controller';
+import { AccountService, CustomerService, DepositService, SecurityService, TransferService } from './business/services';
+import { CustomerRepository, AccountRepository, AccountTypeRepository, TransferRepository, DepositRepository, DocumentTypeRepository, } from './data/persistence/repositories';
+import { SecurityController, DepositController,AccountController, CustomerController } from './presentation/controllers/';
 
 @Module({
   imports: [],
