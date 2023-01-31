@@ -1,34 +1,35 @@
 import { Module } from '@nestjs/common';
-import { SecurityController } from './controllers';
-import { AccountService } from './services';
-import { AccountController } from './account/account.controller';
-import { CustomerController } from './controllers/customer/customer.controller';
-import { TransfersController } from './controllers/transfers/transfers.controller';
-import { DepositController } from './controllers/deposit/deposit.controller';
-import { AccountsService } from './accounts/accounts.service';
-import { DepositService } from './deposit/deposit.service';
-import { CustomerService } from './customer/customer.service';
-import { TransfersService } from './transfers/transfers.service';
-import { AccountService } from './account/account.service';
-import { AccountService } from './services/account/account.service';
-import { AuthModule } from './modules/auth/auth.module';
-import { AccountService } from './services/account/account.service';
+import { AccountRepository, AccountTypeRepository, CustomerRepository, DepositRepository, DocumentTypeRepository, TransferRepository } from './Capa-Data/persistence';
+import { AccountService, CustomerService, DepositService, SecurityService, TransferService } from './Capa-Negocio/services';
+import { SecurityController } from './Capa-Presentacion/controllers/security/security.controller';
+import { AccountController } from './Capa-Presentacion/controllers/account/account.controller';
+import { CustomerController } from './Capa-Presentacion/controllers/customer/customer.controller';
+import { DepositController } from './Capa-Presentacion/controllers/deposit/deposit.controller';
+import { TransferController } from './Capa-Presentacion/controllers/transfers/transfers.controller';
+
+
+
+
 
 @Module({
-  imports: [AuthModule],
-  controllers: [
-    SecurityController,
-    AccountController,
-    CustomerController,
-    TransfersController,
-    DepositController,
-  ],
+  imports: [],
+  controllers: [SecurityController, AccountController,CustomerController,DepositController,TransferController],
   providers: [
     AccountService,
-    AccountsService,
-    DepositService,
     CustomerService,
-    TransfersService,
+    DepositService,
+    SecurityService,
+    TransferService,
+
+
+    //Repositorios (?)
+    AccountRepository,
+    AccountTypeRepository,
+    CustomerRepository,
+    DepositRepository,
+    DocumentTypeRepository,
+    TransferRepository
+
   ],
 })
-export class AppModule {}
+export class AppModule { }
