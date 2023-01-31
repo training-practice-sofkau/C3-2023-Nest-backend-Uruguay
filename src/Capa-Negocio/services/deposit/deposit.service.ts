@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { PaginationModel } from 'src/Capa-Data/models';
 import { DepositRepository, depositEntity } from 'src/Capa-Data/persistence';
 import { DepositDto } from 'src/Capa-Presentacion/dtos/deposit.dto';
 
@@ -43,10 +42,10 @@ export class DepositService {
   
   
   // Pendiente
-  getHistory(
-    depositId: string, pagination?: PaginationModel, dataRange?: DataRangeModel,): DepositEntity[] {
-      let objeto = this.depositRepository.findByAccountType(depositId)
-      return objeto
+  // getHistory(
+  //   depositId: string, pagination?: PaginationModel, dataRange?: DataRangeModel,): DepositEntity[] {
+  //     let objeto = this.depositRepository.findByAccountType(depositId)
+  //     return objeto
 
-    }
+  //   }
 }

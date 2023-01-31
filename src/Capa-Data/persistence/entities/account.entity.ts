@@ -1,4 +1,5 @@
-import { AccountModel, AccountTypeModel, CustomerModel } from 'src/models';
+
+import { AccountModel, CustomerModel, AccountTypeModel } from 'src/Capa-Data/models';
 import { v4 as uuid } from 'uuid';
 
 export class AccountEntity implements AccountModel {

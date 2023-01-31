@@ -1,4 +1,5 @@
-import { TranfersModel } from 'src/models';
+
+import { TranfersModel } from 'src/Capa-Data/models';
 import { v4 as uuid } from 'uuid';
 import { AccountEntity } from './account.entity';
 

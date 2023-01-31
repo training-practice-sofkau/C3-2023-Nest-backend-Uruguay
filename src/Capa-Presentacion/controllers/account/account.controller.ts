@@ -1,14 +1,15 @@
 import { Controller, Get, Post, Put, Delete, Param, Body, Query, ParseUUIDPipe } from '@nestjs/common';
-import { CreateAccountDto } from 'src/dtos/account.dto';
-import { AccountEntity, AccountTypeEntity } from 'src/persistence';
-import { AccountService } from 'src/services';
+import { AccountEntity, AccountTypeEntity } from 'src/Capa-Data/persistence';
+import { AccountService } from 'src/Capa-Negocio/services';
+import { CreateAccountDto } from 'src/Capa-Presentacion/dtos/account.dto';
+
 
 
 @Controller('accounts')
 export class AccountController {
 constructor(private readonly accountService: AccountService) {}
 
-@Post()
+@Post('new')
 createAccount(@Body() account: CreateAccountDto): AccountEntity {
 return this.accountService.createAccount(account);
 }

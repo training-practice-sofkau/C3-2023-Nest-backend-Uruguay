@@ -1,15 +1,13 @@
-import { IsNotEmpty, IsNumber } from "class-validator";
-import { AccountTypeModel, CustomerModel } from "src/models";
+
+import { IsNotEmpty, IsNumber, IsUUID } from "class-validator";
+import { CustomerModel, AccountTypeModel } from "src/Capa-Data/models";
+
 
 export class CreateAccountDto {
     
-    @IsNotEmpty({ message: 'This field should not be empty' })
-    customer: CustomerModel;
-   
-    @IsNotEmpty({ message: ' This field should not be empty' })
-    accountType: AccountTypeModel;
-    
-    @IsNumber(undefined, { message: ' The field must be a valid number.' })
-    balance: number;
+    @IsUUID(4,{message: "Debe tener algo we"})
+    accountType: string
 
+    @IsUUID(4, {message: "hola"})
+    customer: string
 }

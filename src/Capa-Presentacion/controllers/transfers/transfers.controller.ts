@@ -1,6 +1,7 @@
 import { Controller, Post, Body, Delete, Param, ParseUUIDPipe } from '@nestjs/common';
-import { TransferDto } from 'src/dtos/transfer.dto';
-import { TransferService } from 'src/services';
+import { TransferService } from 'src/Capa-Negocio/services';
+import { TransferDto } from 'src/Capa-Presentacion/dtos/transfer.dto';
+
 
 
 @Controller('transfer')

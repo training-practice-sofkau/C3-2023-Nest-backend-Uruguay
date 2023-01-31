@@ -1,7 +1,9 @@
 import { Body, Controller, Get, Param, ParseUUIDPipe, Patch ,Put } from '@nestjs/common';
-import { CustomerService } from '../../services/customer/customer.service';
+import { CustomerEntity } from 'src/Capa-Data/persistence';
+import { CustomerService } from 'src/Capa-Negocio/services';
+
 import { CustomerDto } from '../../dtos/customer.dto';
-import { CustomerEntity } from 'src/persistence';
+
 
 @Controller('customer')
 export class CustomerController {

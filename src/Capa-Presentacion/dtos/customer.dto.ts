@@ -1,5 +1,7 @@
-import { IsNotEmpty, IsUUID, IsString, IsEmail, MinLength, MaxLength, Matches, IsOptional, IsUrl } from 'class-validator';
-import { DocumentTypeEntity } from "src/persistence";
+
+import { IsUUID, IsNotEmpty, IsString, IsEmail, MinLength, MaxLength, Matches, IsUrl, IsOptional } from 'class-validator';
+import { DocumentTypeEntity } from 'src/Capa-Data/persistence';
+
 import { v4 as uuid } from 'uuid';
 
 export class CustomerDto {

@@ -1,4 +1,5 @@
-import { IsEmail,IsNumberString, IsUUID, IsString, Matches } from 'class-validator';
+import { IsUUID, IsNumberString, IsString, IsEmail } from "class-validator";
+
 
 export class SignUpDto {
 

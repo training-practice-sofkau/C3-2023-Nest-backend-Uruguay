@@ -5,13 +5,7 @@ import { TransferDto } from 'src/Capa-Presentacion/dtos/transfer.dto';
 @Injectable()
 export class TransferService {
   constructor(private readonly transferRepository: TransferRepository) {}
-  /**
-   * Crear una transferencia entre cuentas del banco
-   *
-   * @param {TransferModel} transfer
-   * @return {*}  {TransferEntity}
-   * @memberof TransferService
-   */
+ 
   createTransfer(transfer: TransferDto): transferEntity { 
     const newAccount = new transferEntity();
     newAccount.amount = transfer.amount

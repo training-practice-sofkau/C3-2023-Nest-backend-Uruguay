@@ -1,5 +1,7 @@
-import { IsNotEmpty, IsNumber, IsPositive, IsUUID, Min } from "class-validator";
-import { AccountEntity } from "src/persistence";
+
+import { IsUUID, IsNotEmpty, IsNumber, IsPositive, Min } from "class-validator";
+import { AccountEntity } from "src/Capa-Data/persistence";
+
 import { v4 as uuid } from 'uuid';
 
 export class DepositDto { 

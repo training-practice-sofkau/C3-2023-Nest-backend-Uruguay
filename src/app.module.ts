@@ -1,21 +1,19 @@
 import { Module } from '@nestjs/common';
-import { SecurityController } from './controllers';
-import { AccountService } from './services';
-import { CustomerService } from './services/customer/customer.service';
-import { DepositService } from './services/deposit/deposit.service';
-import { SecurityService } from './services/security/security.service';
-import { TransferService } from './services/transfer/transfer.service';
-import { AccountRepository } from './persistence/repositories/account.repository';
-import { AccountTypeRepository } from './persistence/repositories/account-type.repository';
-import { CustomerRepository } from './persistence/repositories/customer.repository';
-import { DepositRepository } from './persistence/repositories/deposit.repository';
-import { DocumentTypeRepository } from './persistence/repositories/document-type.repository';
-import { TransferRepository } from './persistence/repositories/transfer.repository';
+import { AccountRepository, AccountTypeRepository, CustomerRepository, DepositRepository, DocumentTypeRepository, TransferRepository } from './Capa-Data/persistence';
+import { AccountService, CustomerService, DepositService, SecurityService, TransferService } from './Capa-Negocio/services';
+import { SecurityController } from './Capa-Presentacion/controllers/security/security.controller';
+import { AccountController } from './Capa-Presentacion/controllers/account/account.controller';
+import { CustomerController } from './Capa-Presentacion/controllers/customer/customer.controller';
+import { DepositController } from './Capa-Presentacion/controllers/deposit/deposit.controller';
+import { TransferController } from './Capa-Presentacion/controllers/transfers/transfers.controller';
+
+
+
 
 
 @Module({
   imports: [],
-  controllers: [SecurityController],
+  controllers: [SecurityController, AccountController,CustomerController,DepositController,TransferController],
   providers: [
     AccountService,
     CustomerService,

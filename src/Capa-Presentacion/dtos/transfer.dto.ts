@@ -1,5 +1,6 @@
 import { IsAlphanumeric, IsDate, IsNotEmpty, IsNumber, IsPositive, Min } from "class-validator";
-import { AccountModel } from "src/models";
+import { AccountModel } from "src/Capa-Data/models";
+
 
 export class TransferDto {
 
