@@ -9,7 +9,6 @@ import { AccountEntity, AccountTypeEntity, AccountTypeRepository } from 'src/per
 // Repositories
 import { AccountRepository } from 'src/persistence'
 import { ChangeAccountTypeDto } from '../../dtos/changeAccountType.dto';
-import { IsUUID } from 'class-validator';
 
 @Injectable()
 export class AccountService {

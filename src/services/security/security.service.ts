@@ -72,7 +72,7 @@ export class SecurityService {
 
     if (customer) {
       const accountEnt = new AccountEntity()
-      accountEnt.id = uuid();
+      accountEnt.id = uuid()
       const accountType = new AccountTypeEntity()
       accountEnt.accountType = accountType
       const newAccount = new CreateAccountDto()
