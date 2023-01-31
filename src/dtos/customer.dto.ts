@@ -1,6 +1,5 @@
-import { IsNumberString, IsUUID } from 'class-validator';
+import { IsNumberString, IsUUID, IsAlphanumeric, IsEmail, IsString  } from 'class-validator';
 import { DocumentTypeModel } from 'src/models';
-import { IsAlphanumeric, IsEmail, IsString } from 'class-validator/types/decorator/decorators';
 
 export class CustomerDto{
     
