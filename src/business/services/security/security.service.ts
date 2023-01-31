@@ -102,8 +102,4 @@ export class SecurityService {
   
     console.log('SingOut Completed')
   }
-
-  encontrar(documentId: string) {
-    return this.accountTypeRepository.findOneById(documentId);
-  }
 }

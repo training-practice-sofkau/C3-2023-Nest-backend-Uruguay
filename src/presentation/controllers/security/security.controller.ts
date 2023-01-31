@@ -26,9 +26,4 @@ export class SecurityController {
     singOut(@Param('token') token: string): void {
         this.securityService.signOut(token);
     }
-
-    @Get('/algo/:id')
-    encontrar(@Param('id') id: string) {
-        return this.securityService.encontrar(id);
-    }
 }
