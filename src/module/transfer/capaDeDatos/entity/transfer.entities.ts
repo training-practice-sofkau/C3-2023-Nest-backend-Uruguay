@@ -1,6 +1,6 @@
-import { TransferModel } from '../../capaDeDatos/model/transfer.model';
+import { TransferModel } from '../model/transfer.model';
 import { v4 as uuid } from 'uuid';
-import { AccountEntity } from '../../../account/capaLogicaDeNegocio/entity/account.entities';
+import { AccountEntity } from '../../../account/capaDeDato/entity/account.entities';
 
 
 export class TransferEntity implements TransferModel{

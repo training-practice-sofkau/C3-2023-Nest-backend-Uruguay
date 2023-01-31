@@ -1,9 +1,9 @@
 import { Inject, Injectable, forwardRef, NotFoundException } from '@nestjs/common';
 import { CustomerRepository } from "../../capaDeDato/repository/customer.repository";
-import { CustomerEntity } from 'src/module/customer/capaLogicaDeNegocio/entity/customer.entity';
+import { CustomerEntity } from 'src/module/customer/capaDeDato/entity/customer.entity';
 import { CustomerDto } from '../dto/customer.dto';
 import { AccountService } from 'src/module/account/capaLogicaDeNegocio/service';
-import { DocumentTypeEntity } from '../entity';
+import { DocumentTypeEntity } from '../../capaDeDato/entity';
 import { DocumentTypeRepository } from '../../capaDeDato/repository';
 
 

@@ -2,7 +2,7 @@ import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/c
 
 import { DepositRepositoryInterface } from './deposit-repository.interface';
 import { BaseRepository } from 'src/module/base/repositories';
-import { DepositEntity } from '../../capaLogicaDeNegocio/entity';
+import { DepositEntity } from '../entity';
 
 
 @Injectable()

@@ -1,6 +1,6 @@
 import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { TransferRepository } from '../../capaDeDatos/repository/transfer.repository';
-import { TransferEntity } from '../entity/transfer.entities';
+import { TransferEntity } from '../../capaDeDatos/entity/transfer.entities';
 import { CreateTransferDto } from '../dto/transfer.dto';
 import { dataRangeDto } from '../dto/dataRange.dto';
 import { paginationDto } from '../dto/Pagination.dto';

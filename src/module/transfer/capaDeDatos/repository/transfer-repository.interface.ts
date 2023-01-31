@@ -1,5 +1,5 @@
 import { BaseRepositoryInterface } from '../../../base/repositories/base-repository.interface';
-import { TransferEntity } from '../../capaLogicaDeNegocio/entity/transfer.entities';
+import { TransferEntity } from '../entity/transfer.entities';
 
 
 

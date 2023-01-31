@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { NotAcceptableException } from '@nestjs/common/exceptions/not-acceptable.exception';
-import { AccountEntity } from '../../capaLogicaDeNegocio/entity/account.entities';
+import { AccountEntity } from '../entity/account.entities';
 import { AccountRepositoryInterface } from './account-repository.interface';
 import { BaseRepository } from 'src/module/base/repositories';
 

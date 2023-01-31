@@ -1,10 +1,10 @@
 import { Inject, Injectable, NotAcceptableException, forwardRef } from '@nestjs/common';
 import { AccountRepository, AccountTypeRepository } from '../../capaDeDato/repositories';
-import { AccountEntity } from '../entity/account.entities';
+import { AccountEntity } from '../../capaDeDato/entity/account.entities';
 import { CreateAccountdto } from '../dto/create-account.dto';
 import { CustomerService } from 'src/module/customer';
 import { AccountDto } from '../dto/account.dto';
-import { AccountTypeEntity } from '../entity';
+import { AccountTypeEntity } from '../../capaDeDato/entity';
 
 @Injectable()
 export class AccountService {

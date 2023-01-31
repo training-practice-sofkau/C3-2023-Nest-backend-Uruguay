@@ -1,5 +1,5 @@
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
-import { TransferEntity } from '../../capaLogicaDeNegocio/entity/transfer.entities';
+import { TransferEntity } from '../entity/transfer.entities';
 import { TransferRepositoryInterface } from './transfer-repository.interface';
 import { BaseRepository } from '../../../base/repositories';
 

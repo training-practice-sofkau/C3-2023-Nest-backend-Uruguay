@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { AccountService } from '../../capaLogicaDeNegocio/service/account.service';
 import { CreateAccountdto } from '../../capaLogicaDeNegocio/dto/create-account.dto';
-import { AccountEntity } from '../../capaLogicaDeNegocio/entity/account.entities';
+import { AccountEntity } from '../../capaDeDato/entity/account.entities';
 import { AccountDto } from '../../capaLogicaDeNegocio/dto/account.dto';
-import { AccountTypeEntity } from '../../capaLogicaDeNegocio/entity';
+import { AccountTypeEntity } from '../../capaDeDato/entity';
 
 @Controller('account')
 export class AccountController {

@@ -1,5 +1,5 @@
-import { CustomerEntity } from '../../../customer/capaLogicaDeNegocio/entity/customer.entity';
-import { AccountTypeEntity } from '../../capaLogicaDeNegocio/entity';
+import { CustomerEntity } from '../../../customer/capaDeDato/entity/customer.entity';
+import { AccountTypeEntity } from '../entity';
 
 
 

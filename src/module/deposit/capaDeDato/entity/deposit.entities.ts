@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid';
-import { DepositModel } from '../../capaDeDato/models';
-import { AccountEntity } from 'src/module/account/capaLogicaDeNegocio/entity';
+import { DepositModel } from '../models';
+import { AccountEntity } from 'src/module/account/capaDeDato/entity';
 
 
 export class DepositEntity implements DepositModel  {

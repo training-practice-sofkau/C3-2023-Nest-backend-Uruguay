@@ -1,7 +1,7 @@
 import { Controller, Post ,Body, Get, Param, Delete } from '@nestjs/common';
 import { DepositService } from '../../capaLogicaDeNegocio/service';
 import { depositDto } from '../../capaLogicaDeNegocio/dto';
-import { DepositEntity } from '../../capaLogicaDeNegocio/entity';
+import { DepositEntity } from '../../capaDeDato/entity';
 
 
 @Controller('deposit')

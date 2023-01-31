@@ -8,15 +8,15 @@ import {
   
 import jwt  from 'jsonwebtoken';
 import { Response } from 'express';
-import { CustomerEntity } from 'src/module/customer/capaLogicaDeNegocio/entity/customer.entity';
+import { CustomerEntity } from 'src/module/customer/capaDeDato/entity/customer.entity';
 import { v4 as uuid } from 'uuid';
-import { AccountEntity } from '../../../account/capaLogicaDeNegocio/entity/account.entities';
+import { AccountEntity } from '../../../account/capaDeDato/entity/account.entities';
 import { AccountService } from 'src/module/account/capaLogicaDeNegocio/service';
 import { SignInDto } from '../dto/sign-in.dto';
 import { SignUpDto } from '../dto/sign-up.dto';
 import { CustomerRepository, DocumentTypeEntity } from '../../../customer';
 import { CreateAccountdto } from '../../../account/capaLogicaDeNegocio/dto/create-account.dto';
-import { AccountTypeEntity } from '../../../account/capaLogicaDeNegocio/entity';
+import { AccountTypeEntity } from '../../../account/capaDeDato/entity';
 
 
 @Injectable()

@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { CustomerService } from '../../capaLogicaDeNegocio/service/customer.service';
-import { CustomerEntity } from '../../capaLogicaDeNegocio/entity/customer.entity';
+import { CustomerEntity } from '../../capaDeDato/entity/customer.entity';
 import { CustomerDto } from '../../capaLogicaDeNegocio/dto';
 
 @Controller('customer')
@@ -31,7 +31,7 @@ export class CustomerController {
         return this.customerService.findAll();
     }
     @Get(`/credeciales/:email/:password`)
-    findOneByEmailAndPassword(@Param()email: string,@Param()password: string):CustomerEntity{
+    findOneByEmailAndPassword(@Param("email")email: string,@Param("password")password: string):CustomerEntity{
         return this.customerService.findOneByEmailAndPassword(email,password);   
     }
 

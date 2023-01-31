@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { BaseRepository } from '../../../base/repositories/base.repository';
 
 import { AccountTypeRepositoryInterface } from '.';
-import { AccountTypeEntity } from '../../capaLogicaDeNegocio/entity';
+import { AccountTypeEntity } from '../entity';
 
 
 
