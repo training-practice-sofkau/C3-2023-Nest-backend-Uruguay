@@ -8,6 +8,7 @@ import * as jwt from "jsonwebtoken"
 import { JsonWebTokenError } from 'jsonwebtoken';
 import { AccountEntity } from '../../../data/persistence/entities/account.entity';
 import { AccountTypeRepository } from '../../../data/persistence/repositories/account-type.repository';
+import { JwtService } from '@nestjs/jwt';
 
 
 @Injectable()
@@ -18,7 +19,8 @@ export class SecurityService {
         private readonly customerRepository: CustomerRepository,
         private readonly accountService: AccountService,
         private readonly documentTypeRepository:DocumentTypeRepository,
-        private readonly accountTypeRepository: AccountTypeRepository
+        private readonly accountTypeRepository: AccountTypeRepository,
+        private jwtService: JwtService
         
       ) {}
     
@@ -69,7 +71,7 @@ export class SecurityService {
           const account = this.accountService.createAccount(newAccount);
           if (account) {
            
-            return customer.id
+            return this.jwtService.sign(customer.id)
           
           } else throw new InternalServerErrorException();
         } else throw new InternalServerErrorException();

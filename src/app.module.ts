@@ -9,11 +9,18 @@ import { AccountController } from './presentation/controllers/account/account.co
 import { CustomerRepository } from './data/persistence/repositories/customer.repository';
 import { AccountTypeRepository } from './data/persistence/repositories/account-type.repository';
 import { AccountRepository, DepositRepository, DocumentTypeRepository, TranferRepository } from './data/persistence';
+import { JwtModule } from '@nestjs/jwt';
+
 
 @Module({
-  imports: [],
+  imports: [JwtModule.register({
+    secret: 'process.env.JWT_SECRET',
+    signOptions: { expiresIn: '30m'}}
+  )],
   controllers: [SecurityController, AccountController],
   providers: [
+
+
     AccountService,
     CustomerService,
     DepositService,
@@ -27,7 +34,7 @@ import { AccountRepository, DepositRepository, DocumentTypeRepository, TranferRe
     DocumentTypeRepository,
     TranferRepository
 
-    
+
   ],
 })
 export class AppModule { }
