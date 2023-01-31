@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 
-import { AccountEntity, AccountRepository, AccountTypeEntity, CustomerEntity } from '../../persistence';
+import { AccountEntity, AccountRepository, AccountTypeEntity, CustomerEntity } from '../../../data/persistence';
 import { CreateAccountDto } from '../../dtos';
 
 @Injectable()

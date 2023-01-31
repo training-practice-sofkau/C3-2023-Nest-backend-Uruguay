@@ -10,7 +10,7 @@ import {
   // Models
   
   // Repositories
-  import { CustomerRepository } from '../../persistence/repositories';
+  import { CustomerRepository } from '../../../data';
   
   // Services
   import { AccountService } from '../account';
@@ -21,7 +21,7 @@ import {
     AccountTypeEntity,
     CustomerEntity,
     DocumentTypeEntity,
-  } from '../../persistence/entities';
+  } from '../../../data/persistence';
   
   @Injectable()
   export class SecurityService {

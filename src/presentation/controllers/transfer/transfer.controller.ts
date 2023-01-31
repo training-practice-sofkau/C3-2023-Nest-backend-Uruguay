@@ -1,7 +1,7 @@
 import { Controller, Delete, Get, Param, ParseUUIDPipe, Query } from '@nestjs/common';
-import { DataRangeModel, PaginationModel } from '../../data/models';
-import { TransferEntity } from '../../persistence';
-import { TransferService } from '../../services';
+
+import { TransferService } from '../../../business';
+import { PaginationModel, DataRangeModel, TransferEntity } from '../../../data';
 
 @Controller('transfer')
 export class TransferController {

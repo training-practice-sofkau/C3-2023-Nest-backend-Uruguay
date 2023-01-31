@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { AccountEntity, DataRangeModel, PaginationModel, TransferEntity, TransferRepository } from 'src/data';
 
-import { DataRangeModel, PaginationModel } from '../../models';
-import { TransferEntity, TransferRepository } from '../../persistence';
+
 import { CreateTrasferDto } from '../../dtos';
-import { AccountEntity } from '../../persistence/entities';
+
 
 @Injectable()
 export class TransferService {

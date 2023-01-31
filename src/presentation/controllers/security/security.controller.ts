@@ -1,7 +1,9 @@
 // Libraries
 import { Controller, Post, Body } from '@nestjs/common';
-import { SecurityService } from '../../services/security';
-import { SignUpDto, SignInDto } from '../../business/dtos';
+
+import { SecurityService } from 'src/business/services/security/security.service';
+
+import { SignUpDto, SignInDto } from '../../../business/dtos';
 
 
 @Controller('security')

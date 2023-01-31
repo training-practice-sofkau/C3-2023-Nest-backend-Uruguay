@@ -1,7 +1,8 @@
 import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
-import { CustomerModel } from '../../data/models';
-import { CustomerEntity } from '../../persistence/entities';
-import { CustomerService } from '../../services/customer';
+import { CustomerService } from '../../../business';
+import { CustomerEntity, CustomerModel } from '../../../data';
+
+
 
 @Controller('customer')
 export class CustomerController {
