@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { SegurityService } from './segurity.service';
 import { SegurityController } from './segurity.controller';
+import { CustomerRepository } from '../customer';
 
 @Module({
-    imports: [],
+  imports: [],
   controllers: [SegurityController],
-  providers: [SegurityService]
+  providers: [SegurityService,CustomerRepository]
 })
 export class SegurityModule {}

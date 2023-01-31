@@ -6,11 +6,12 @@ import { DepositEntity } from './deposit.entities';
 @Controller('deposit')
 export class DepositController {
     constructor(private readonly depositServer : DepositService){}
-    @Post()
+    // FALTA > getHistory(depositId: string , pagination?: PaginationModel,dataRange?: DataRangeModel): DepositEntity[]
+    @Post(`create`)
     createDeposit(@Body() newDeposit : depositDto):DepositEntity{
         return this.depositServer.createDeposit(newDeposit);
     }
-    @Get() // Tiene que pasarle un rango (Pagination)
+    @Get(`all`) // Tiene que pasarle un rango (Pagination)
     findAll():DepositEntity[]{
         return this.depositServer.findAll();
     }

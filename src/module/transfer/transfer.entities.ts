@@ -1,6 +1,6 @@
 import { TransferModel } from './transfer.model';
 import { v4 as uuid } from 'uuid';
-import { AccountEntity } from '../account/account.entities';
+import { AccountEntity } from '../account/entity/account.entities';
 
 
 export class TransferEntity implements TransferModel{

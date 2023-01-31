@@ -1,4 +1,4 @@
-import { AccountModel } from 'src/module/account/accountModel.interface';
+import { AccountModel } from 'src/module/account/models/accountModel.interface';
 
 
 

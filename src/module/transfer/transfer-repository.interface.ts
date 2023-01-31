@@ -1,4 +1,4 @@
-import { BaseRepositoryInterface } from '../base/base-repository.interface';
+import { BaseRepositoryInterface } from '../base/repositories/base-repository.interface';
 import { TransferEntity } from './transfer.entities';
 
 

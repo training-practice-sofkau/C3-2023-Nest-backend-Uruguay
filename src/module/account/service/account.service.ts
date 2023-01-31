@@ -1,26 +1,58 @@
 import { Injectable, NotAcceptableException } from '@nestjs/common';
-import { AccountRepository, AccountTypeRepository } from '../Account.Repositories';
-import { AccountEntity } from '../account.entities';
-import { AccountTypeEntity } from '../account.Type.Entity';
+import { AccountRepository, AccountTypeRepository } from '../repositories';
+import { AccountEntity } from '../entity/account.entities';
 import { CreateAccountdto } from '../dto/create-account.dto';
+import { CustomerService } from 'src/module/customer';
+import { AccountDto } from '../dto/account.dto';
+import { AccountTypeEntity } from '../entity';
 
 @Injectable()
 export class AccountService {
 constructor(
   private readonly accountRepository: AccountRepository,
-  private readonly accountTypeRepository: AccountTypeRepository) {}
+  private readonly accountTypeRepository: AccountTypeRepository,
+  private readonly customerServer : CustomerService) {}
 
   createAccount(account: CreateAccountdto): AccountEntity {
-
+    const customer = this.customerServer.getCustomerInfo(account.customer);
+    
     const accountType = new AccountTypeEntity();
     accountType.id = account.accountTypeId;
 
 
     const newAccount = new AccountEntity();
     newAccount.account_type_id = accountType;
-
+    newAccount.coustomer_id = customer;
+    
     return this.accountRepository.register(newAccount);
   }
+
+  updateAccount(accountId: string, newAccount: AccountDto) {
+    let account = this.accountRepository.findOneById(accountId);
+    const customer = this.customerServer.getCustomerInfo(newAccount.id);
+    const accountType = this.accountTypeRepository.findOneById(newAccount.accountType);
+
+    account.account_type_id = accountType;
+    account.coustomer_id = customer;
+    account.balance = newAccount.balance;
+    account.state = newAccount.state;
+
+    return this.accountRepository.update(accountId, account);
+  }
+
+  findByCustomer(
+    customerId: string,
+  ): AccountEntity[] {
+    return this.accountRepository.findByCustomer(customerId);
+  }
+  getById(accountId : string):AccountEntity{
+
+    const accountEntity = this.accountRepository.findOneById(accountId); 
+
+    return accountEntity;
+  }
+
+
 
   getBalance(accountId: string):number{
     
@@ -31,7 +63,6 @@ constructor(
 
   addBalance(accountId: string, amount: number): void {
     const account = this.accountRepository.findOneById(accountId);
-    //validar el amount 
     account.balance += amount;
     this.accountRepository.update(accountId,account);
   }

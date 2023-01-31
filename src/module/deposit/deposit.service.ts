@@ -4,11 +4,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { DepositRepository } from '../../module/deposit/deposit.repository';
 import { DepositEntity } from './deposit.entities';
 import { AccountService } from '../account/service';
-import { DepositModel } from './deposit.model';
-import { DataRangeModel, PaginationModel } from '../base';
+
 import { depositDto } from './dto/deposit.dto';
-import { AccountTypeEntity } from '../account/account.Type.Entity';
-import { AccountEntity } from '../account/account.entities';
+import { DataRangeModel, PaginationModel } from '../base/models';
 
 
 
@@ -20,12 +18,13 @@ export class DepositService {
 
 
   createDeposit(deposit: depositDto): DepositEntity {
-    const newAccountType = new AccountEntity();
-    newAccountType.id = deposit.accountTypeId;
-    
+
+    const account = this.accountService.getById(deposit.accountId);
+
     const newDeposit = new DepositEntity();
-    newDeposit.account = newAccountType;
+    newDeposit.account = account;
     newDeposit.amount = deposit.amount;
+    newDeposit.date_time = Date.now();
     
     return this.depositRepository.register(newDeposit);
   }
@@ -36,8 +35,6 @@ export class DepositService {
 
   /**
    * Borrar un deposito
-   * @param {string} depositId
-   * @memberof DepositService
    */
   deleteDeposit(depositId: string,sof? : boolean): void {
     if(sof)this.depositRepository.delete(depositId,sof);
@@ -47,12 +44,6 @@ export class DepositService {
 
   /**
    * Obtener el historial de los depósitos en una cuenta
-   *
-   * @param {string} depositId
-   * @param {PaginationModel} pagination
-   * @param {DataRangeModel} [dataRange]
-   * @return {*}  {DepositEntity[]}
-   * @memberof DepositService
    */
   getHistory(depositId: string , pagination?: PaginationModel,dataRange?: DataRangeModel): DepositEntity[] {
     //Lo que me falta es que es de todos los depositos 

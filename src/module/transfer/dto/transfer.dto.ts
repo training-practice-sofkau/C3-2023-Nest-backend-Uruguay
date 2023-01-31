@@ -1,5 +1,5 @@
 import { IsPositive, IsString, IsUUID } from 'class-validator'
-export class transferDto {
+export class createTransferDto {
     
     @IsUUID()
     outcome: string;
