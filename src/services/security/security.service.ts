@@ -53,17 +53,14 @@ export class SecurityService {
     
         if (customer) {
           const accountType = new AccountTypeEntity();
-               
           const newAccount = {
             customer,
             accountType,
-
           };
           
           //Mapear (no doy mas)
 
           const account = this.accountService.createAccount(newAccount);
-    
           if (account) return 'Falta retornar un JWT';
           else throw new InternalServerErrorException();
         } else throw new InternalServerErrorException();
