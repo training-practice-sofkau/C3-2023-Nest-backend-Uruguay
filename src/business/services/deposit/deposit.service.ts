@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { DataRangeModel } from 'src/data/models/dataRange.model';
 import { DepositEntity } from 'src/data/persistence';
 import { DepositRepository } from '../../../data/persistence/repositories/deposit.repository';
-import { depositDto } from '../../../data/dtos/deposit.dto';
+import { depositDto } from '../../dtos/deposit.dto';
 import { AccountEntity } from '../../../data/persistence/entities/account.entity';
-import { PaginationDto } from '../../../data/dtos/pagination.dto';
-import { DataRangeDto } from 'src/data/dtos/datarange.dto';
+import { PaginationDto } from '../../dtos/pagination.dto';
+import { DataRangeDto } from 'src/business/dtos/datarange.dto';
 
 @Injectable()
 export class DepositService {

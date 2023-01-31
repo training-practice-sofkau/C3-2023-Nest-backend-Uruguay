@@ -3,9 +3,9 @@ import { DataRangeModel } from 'src/data/models/dataRange.model';
 import { PaginationModel } from 'src/data/models/pagination.model';
 import { DepositEntity } from 'src/data/persistence';
 import { DepositService } from 'src/business/services';
-import { depositDto } from 'src/data/dtos/deposit.dto';
-import { PaginationDto } from 'src/data/dtos/pagination.dto';
-import { DataRangeDto } from 'src/data/dtos/datarange.dto';
+import { depositDto } from 'src/business/dtos/deposit.dto';
+import { PaginationDto } from 'src/business/dtos/pagination.dto';
+import { DataRangeDto } from 'src/business/dtos/datarange.dto';
 
 
 

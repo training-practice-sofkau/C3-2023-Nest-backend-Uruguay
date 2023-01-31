@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { DataRangeDto } from 'src/data/dtos/datarange.dto';
-import { PaginationDto } from 'src/data/dtos/pagination.dto';
+import { DataRangeDto } from 'src/business/dtos/datarange.dto';
+import { PaginationDto } from 'src/business/dtos/pagination.dto';
 import { TranferRepository, TransferEntity } from 'src/data/persistence';
-import { transferDto } from '../../../data/dtos/transfer.dto';
+import { transferDto } from '../../dtos/transfer.dto';
 import { AccountService } from '../account';
 
 @Injectable()

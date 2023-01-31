@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, ParseUUIDPipe, Patch, Put } from "@nestjs/common"
-import { CustomerDto } from "src/data/dtos/customer.dto"
+import { CustomerDto } from "src/business/dtos/customer.dto"
 import { CustomerEntity } from "src/data/persistence"
 import { CustomerService } from "src/business/services"
 
