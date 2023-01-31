@@ -12,7 +12,6 @@ export class DepositService {
 
     constructor(
         private readonly depositRepocitory: DepositRepository
-
     ) { }
 
     /**
@@ -27,10 +26,8 @@ export class DepositService {
     createDeposit(deposit: depositDto): DepositEntity {
         const newDeposit = new DepositEntity()
         const newAccount = new AccountEntity
-        newAccount.id =deposit.account_id
-        
+        newAccount.id = deposit.account_id
         newDeposit.account_id = newAccount
-
         newDeposit.amount = deposit.amount
         newDeposit.date_time = Date.now()
         return this.depositRepocitory.register(newDeposit);
