@@ -2,7 +2,6 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { CustomerService } from '../../business/services/customer.service';
 import { UpdateCustomerDto } from '../../business/dtos';
 import { ApiTags } from '@nestjs/swagger';
-import { CustomerEntity } from '../../data/persistence/entities/customer.entity';
 
 @ApiTags('customer')
 @Controller('api/customer')

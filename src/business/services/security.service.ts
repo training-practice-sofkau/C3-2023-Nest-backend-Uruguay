@@ -60,7 +60,7 @@
         //if (account) return this.jwtService.sign({id: account.id});
         if (account) {
           const token = this.jwtService.sign({ account }, { secret: "Sofka", expiresIn: "30d" })
-          return [account, customer, token];
+          return [account, token];
         }
         else throw new InternalServerErrorException();
       } else throw new InternalServerErrorException();

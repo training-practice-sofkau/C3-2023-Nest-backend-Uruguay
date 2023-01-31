@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Param } from '@nestjs/common';
+import { Body, Controller, Post, Get, Query } from '@nestjs/common';
 import { AccountService, CustomerService } from '../../business/services';
 import { BalanceDto, ChangeAccountDto, ChangeStateDto, CreateAccountDto } from '../../business/dtos';
 import { ApiTags } from '@nestjs/swagger';
@@ -23,8 +23,8 @@ export class AccountController {
         return newAccountFinal;
     }
 
-    @Post('/get-balance')
-    getBalance(@Param('account') account: string): string {
+    @Get('/get-balance')
+    getBalance(@Query('account') account: string): string {
         return this.accountService.getBalance(account).toString();
     }
     

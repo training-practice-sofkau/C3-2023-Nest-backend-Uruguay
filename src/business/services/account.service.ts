@@ -1,8 +1,7 @@
-import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { AccountRepository, AccountTypeRepository } from '../../data/persistence';
 import { AccountEntity, AccountTypeEntity } from '../../data/persistence/entities';
-import { CustomerService } from '.';
 
 // Data Transfer Object
 import { BalanceDto, ChangeAccountDto, ChangeStateDto } from '../../business/dtos';
@@ -10,9 +9,6 @@ import { BalanceDto, ChangeAccountDto, ChangeStateDto } from '../../business/dto
 
 @Injectable()
 export class AccountService {
-
-  @Inject(forwardRef(() => CustomerService))
-  private readonly customerService: CustomerService;
 
   constructor(private readonly accountRepository: AccountRepository, private readonly accountTypeRepository: AccountTypeRepository) {}
 
@@ -25,6 +21,7 @@ export class AccountService {
   }
 
   getBalance(accountId: string): number {
+    console.log(accountId);
     return this.accountRepository.findOneById(accountId).balance;
   }
 

@@ -57,7 +57,6 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
   }
 
   findAll(paginator: PaginationModel): AccountEntity[] {
-    
     let finded = this.database.filter(
         (item) => typeof item.deletedAt === undefined
     );
@@ -71,6 +70,8 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
           item.id === id &&
           typeof item.deletedAt === undefined
     );
+    console.log(this.database);
+    console.log(finded);
     if (finded === undefined) throw new NotFoundException();
     return finded;
   }
