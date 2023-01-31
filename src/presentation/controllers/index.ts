@@ -1,7 +1,6 @@
 
 export * from './account.controller';
 
-
 export * from './customer.controller';
 
 export * from './deposit.controller';
