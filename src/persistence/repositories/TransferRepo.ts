@@ -58,26 +58,26 @@ export class TransferRepository extends BaseRepository<TransferEntity> implement
 
     findAll(): TransferEntity[] {
 
-        return this.database.filter((objAll) => typeof objAll.deletedAt === 'undefined');
+        return this.database.filter((item) => typeof item.deletedAt === 'undefined');
     }
 
 
 
     findOneById(id: string): TransferEntity {
 
-        const currentEntity = this.database.find((objId) => objId.id === id && typeof objId.deletedAt === 'undefined');
+        const currentEntity = this.database.find((item) => item.id === id && typeof item.deletedAt === 'undefined'); //si esta indefinido no fue borrado
 
         if(!currentEntity ) throw new NotFoundException('Lo siento, nada por aquí! =(');
 
         return currentEntity;
     }
 
-
-
-
+    
+    //Encontrar resultado por rango de fechas
+    
     findOutcomeByDataRange(accountId: string, dateInit: Date | number, dateEnd: Date | number): TransferEntity[] {
         
-        const currentEntity = this.database.filter((objORange) => objORange.outcome.id === accountId && objORange.dateTime >= dateInit && objORange.dateTime <= dateEnd && typeof objORange.deletedAt === 'undefined');
+        const currentEntity = this.database.filter((item) => item.outcome.id === accountId && item.dateTime >= dateInit && item.dateTime <= dateEnd && typeof item.deletedAt === 'undefined');
         
         if(!currentEntity ) throw new NotFoundException('Lo siento, nada por aquí! =(');
 

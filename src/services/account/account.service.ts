@@ -205,7 +205,7 @@ export class AccountService {
         return currentEntity
       }
 
-      //Entreverada la mano
+      //Entreverada la mano??
       updateAccount(accountId: string, newAccountData: AccountDTO) : AccountEntity{
 
         const currentEntity = this.accountRepository.findOneById(accountId);
@@ -229,7 +229,16 @@ export class AccountService {
 
 
       findOneById(accountId: string): AccountEntity {
+        
         return this.getAccount(accountId);
+      }
+
+
+      getById(accountId : string):AccountEntity{
+
+        const accountEntity = this.accountRepository.findOneById(accountId); 
+    
+        return accountEntity;
       }
       
 
