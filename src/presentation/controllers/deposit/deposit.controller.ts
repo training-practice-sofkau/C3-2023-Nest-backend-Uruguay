@@ -2,7 +2,7 @@ import { Controller, Get, Param, UsePipes, ValidationPipe, ParseUUIDPipe, Post, 
 
 import { DepositEntity } from '../../persistence/entities';
 import { DepositService } from '../../services';
-import { DepositDto } from '../../dtos';
+import { DepositDto } from '../../business/dtos';
 
 @Controller('deposit')
 export class DepositController {
