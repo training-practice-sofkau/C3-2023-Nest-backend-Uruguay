@@ -1,13 +1,10 @@
 import { Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
-import { CustomerModel } from 'src/models';
 import { AccountTypeEntity, CustomerEntity, CustomerRepository, DocumentTypeEntity } from 'src/persistence';
 import { AccountService } from '../account';
 import { DocumentTypeRepository } from '../../persistence/repositories/document-type.repository';
 import { SignUpDto } from 'src/dtos/sign-up.dto';
 import { SignInDto } from 'src/dtos/sign-in.dto';
 import * as jwt from "jsonwebtoken"
-import { AccountEntity } from '../../persistence/entities/account.entity';
-import { IsUUID } from 'class-validator/types/decorator/decorators';
 
 @Injectable()
 export class SecurityService {
@@ -44,7 +41,6 @@ export class SecurityService {
       signUp(user: SignUpDto): string {
         const documentType = new DocumentTypeEntity()
         documentType.id = user.documentTypeId;
-  
         const newCustomer = new CustomerEntity();
         newCustomer.documentType = documentType;
         newCustomer.document = user.document;
