@@ -9,7 +9,7 @@ export class depositDto {
     @IsNumber({ })
     amount: number;
 
-    @IsDate({ message: "this must to be date_time" })
+    @IsDate({message: "this must to be date_time"})
     @IsNumber({})
     date_time: Date|number;
 

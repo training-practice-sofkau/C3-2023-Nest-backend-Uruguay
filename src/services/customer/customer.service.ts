@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { CustomerDto } from 'src/dtos/customer';
 import { CustomerEntity } from 'src/persistence';
 import { CustomerRepository } from '../../persistence/repositories/customer.repository';
 
@@ -28,7 +29,7 @@ export class CustomerService {
      * @return {*}  {CustomerEntity}
      * @memberof CustomerService
      */
-    updatedCustomer(id: string, customer: CustomerEntity): CustomerEntity {
+    updatedCustomer(id: string, customer: customerDto): CustomerEntity {
         return this.customerRepository.update(id, customer)
     }
 

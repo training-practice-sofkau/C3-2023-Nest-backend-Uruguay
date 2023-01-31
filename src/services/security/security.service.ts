@@ -4,6 +4,7 @@ import { AccountTypeEntity, CustomerEntity, CustomerRepository, DocumentTypeEnti
 import { AccountService } from '../account';
 import { DocumentTypeRepository } from '../../persistence/repositories/document-type.repository';
 import { SignUpDto } from 'src/dtos/sign-up.dto';
+import { SignInDto } from 'src/dtos/sign-in.dto';
 
 
 @Injectable()
@@ -22,9 +23,9 @@ export class SecurityService {
        * @return {*}  {string}
        * @memberof SecurityService
        */
-      signIn(user: CustomerModel): string {
+      signIn(user: SignInDto): string {
         const answer = this.customerRepository.findOneByEmailAndPassword(
-          user.email,
+          user.username,
           user.password,
         );
         if (answer) return 'Falta retornar un JWT';

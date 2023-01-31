@@ -3,6 +3,7 @@ import { TransferModel } from 'src/models';
 import { DataRangeModel } from 'src/models/dataRange.model';
 import { PaginationModel } from 'src/models/pagination.model';
 import { TranferRepository, TransferEntity } from 'src/persistence';
+import { transferDto } from '../../dtos/transfer';
 
 @Injectable()
 export class TransferService {
@@ -17,10 +18,15 @@ export class TransferService {
      * @return {*}  {TransferEntity}
      * @memberof TransferService
      */
-  createTransfer(transfer: TransferModel): TransferEntity {
-    const transfer1 = new TransferEntity
-    transfer1 = transfer
-    return this.transferRepocitory.register(transfer1)
+  createTransfer(transfer: transferDto): TransferEntity {
+    const newTransfer = new TransferEntity
+    //const newAaccount =
+
+    newTransfer.amount = transfer.amount
+    newTransfer.income_id.id = transfer.income_id
+    newTransfer.outcome_id.id = transfer.outcome_id
+    newTranser.
+    return this.transferRepocitory.register(newTransfer)
   }
 
   /**
