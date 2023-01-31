@@ -49,23 +49,27 @@ $ npm run start:prod
 
 ```bash
 # Title of the delivery
-[Workshop Week 2 - Day 1] - API Rest: Diseño Restful - name
+[Workshop Week 2 - Day 2] - Diseño de capas - name
 
 # Body of the delivery
-[Any short description]
+¿Qué está entregando?
+
+¿Qué hizo falta?
+
+¿Qué dificultades se tuvieron?
 ```
+
 
 ## Workshop
 
 The following are the guidelines that should be taken into account for the development of the workshop to be submitted:
 
-1. create all DTOs.
-2. validate all dtos.
-3. implement dto instead of models ( review mapping )
-4. create all controller.
+1. Organize the project structure in at least 3 layers: business, data and presentation.
+2. Add the layers you consider necessary and justify why and for what you did it.
 
-Do not forget to consult the Nest documentation if you consider it necessary: [Nest Documentation](https://docs.nestjs.com/controllers).
+Do not forget to consult the Nest documentation if you consider it necessary: [Nest Documentation](https://docs.nestjs.com/).
 
 ### Important note
-Do not forget that for this workshop, you should make at least 10 commits properly documented (title and message body).
+
+Do not forget that for this workshop, you should make at least 3 commits properly documented (title and message body).
 
