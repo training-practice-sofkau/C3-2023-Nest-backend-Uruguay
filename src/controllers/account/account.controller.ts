@@ -2,7 +2,8 @@ import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put } from '
 
 import { AccountService } from '../../services';
 import { AccountEntity } from '../../persistence/entities';
-import { CreateAccountDto, UpdateAccountDto } from '../../dtos';
+import { CreateAccountDto, UpdateAccountDto, AccountTransactionDto } from '../../dtos';
+
 
 
 @Controller('account')
@@ -52,20 +53,16 @@ export class AccountController {
     }
 
     // add amount to balance ( )
-    @Post('addBalance/:id')
-    async addBalance(@Param('id', ParseUUIDPipe) accountId: string, 
-                     @Body() amount: number): 
-                     Promise<void>{
-
-        await this.accountService.addBalance(accountId, amount);
+    @Post('addBalance')
+    async addBalance(@Body() transaction: AccountTransactionDto): Promise<void>{
+                    
+        await this.accountService.addBalance(transaction.accountId, transaction.amount);
     }
 
     // remove amount to balance
-    @Post('removeBalance/:id')
-    async removeBalance(@Param('id', ParseUUIDPipe) accountId: string, 
-                     @Body() amount: number): 
-                     Promise<void>{
+    @Post('removeBalance')
+    async removeBalance(@Body() transaction: AccountTransactionDto): Promise<void>{
 
-        await this.accountService.removeBalance(accountId, amount);
+        await this.accountService.removeBalance(transaction.accountId, transaction.amount);
     }
 }

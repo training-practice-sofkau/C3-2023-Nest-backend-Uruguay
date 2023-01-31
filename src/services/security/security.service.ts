@@ -1,5 +1,5 @@
 // Libraries
-import { Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
 
 import jwt from 'jsonwebtoken';
 
@@ -8,7 +8,6 @@ import jwt from 'jsonwebtoken';
 
 
 // Models
-import { CustomerModel } from '../../models';
 
 // Repositories
 import { CustomerRepository } from '../../persistence/repositories';
@@ -19,7 +18,8 @@ import { AccountService } from '../account';
 // Entities
 import { AccountTypeEntity, CustomerEntity } from '../../persistence/entities';
 import { SignInDto, SignUpDto, CreateAccountDto } from '../../dtos';
-import { DocumentTypeEntity } from '../../persistence/entities/document-type.entity';
+import { DocumentTypeEntity } from '../../persistence/entities';
+
 
 
 
@@ -45,7 +45,8 @@ export class SecurityService {
       user.password,
     );
     if (answer) {
-      return jwt.sign({ id: user.username }, 'secretToken', { expiresIn: "1h" }); // process.env.SECRET_KEY || 
+      return 'Here goes JWT (jsonwebtoken gives error right now, is disabled now) -> But Sign In is working '
+      //jwt.sign({ id: user.username }, 'secretToken', { expiresIn: "1h" }); // process.env.SECRET_KEY || 
     }
 
     throw new UnauthorizedException();
@@ -88,17 +89,17 @@ export class SecurityService {
 
         //TODO: jwt throw errors, is disable now but needs to be checked
 
-        return 'eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjcxM2M3OGI4MTYwM2YxNjA0ZjNmNGU4ZTVhNzQ4MzEwIn0.e30.1OmZZ-XrYqB3c7teD7X10kuaMX8BQcAOs9IR77j7iNRRdcMa8ry5pNbR0idTsdYo8uelYR1BnM1AfrXIhmUr1w'
+        return 'Here goes JWT (jsonwebtoken gives error right now, is disabled now) -> But SignUp is working '
         // jwt.sign({ id: customer.email }, process.env.SECRET_KEY || 'secretToken');
         
       }else{
         
-        throw new Error('cuenta no creada');
+        throw new Error('Error creating Account');
       }
     
     } else {     
       
-      throw new Error("something went wrong!");
+      throw new InternalServerErrorException("Something went wrong!");
     }    
     
   }
