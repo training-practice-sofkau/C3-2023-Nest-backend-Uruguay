@@ -60,12 +60,12 @@ export class SecurityService {
    */
    signUp(user: SignUpDto): string {
 
-    const newDocumentType = new DocumentTypeEntity();
-    newDocumentType.id = user.documentTypeId;
+    const documentType = new DocumentTypeEntity();
+    documentType.id = user.documentTypeId;
 
     const newCustomer = new CustomerEntity();
 
-    newCustomer.documentType = newDocumentType;
+    newCustomer.documentType = documentType;
     newCustomer.document = user.document;
     newCustomer.fullname = user.fullname;
     newCustomer.email = user.email;
@@ -75,8 +75,8 @@ export class SecurityService {
     const customer = this.customerRepository.register(newCustomer);
 
     if (customer) {
-      const accountType = new AccountTypeEntity();
-      accountType.id = customer.id;
+      
+      const accountType = new AccountTypeEntity();      
 
       const newAccount = new CreateAccountDto();
 

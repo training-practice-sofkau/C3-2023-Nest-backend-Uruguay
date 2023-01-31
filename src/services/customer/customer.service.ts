@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConsoleLogger, Injectable } from '@nestjs/common';
 
 
 import { UpdateCustomerDto } from '../../dtos';
@@ -70,7 +70,7 @@ export class CustomerService {
    */
   unsubscribe(id: string): boolean {
 
-    if (this.checkCustomerBalance(id) == 0) {
+    if (this.checkCustomerBalance(id) === 0) {
       return this.customerRepository.setCustomerState(id, false);
     }
     return true; //the customer state has not change
@@ -83,9 +83,9 @@ export class CustomerService {
    */
   private checkCustomerBalance(id: string): number {
 
-    let accounts = this.accountRepository.findBy("customerId", id);
+    let balance = 0;    
 
-    let balance = 0;
+    let accounts = this.accountRepository.findByCustomer(id);    
 
     if (accounts.length > 0) {
       accounts.forEach(element => {

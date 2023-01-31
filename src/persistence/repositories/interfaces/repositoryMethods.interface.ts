@@ -16,4 +16,4 @@ export interface RepositoryMethodsInterface<T> {
 
     findIndexById(id: string): number;
 
-}
+} 

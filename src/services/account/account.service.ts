@@ -21,17 +21,17 @@ export class AccountService {
   */
   createAccount(account: CreateAccountDto): AccountEntity {
 
-    const newAccountType = new AccountTypeEntity();
-    newAccountType.id = account.accountTypeId;
-
-    // search for existing customer
-    const customer = new CustomerEntity();
-    customer.id = account.customerId;
-
     const newAccount = new AccountEntity();
 
+    const accountType = new AccountTypeEntity();
+    accountType.id = account.accountTypeId;
+    newAccount.accountTypeId = accountType;
+
+
+    const customer = new CustomerEntity();
+    customer.id = account.customerId;
     newAccount.customerId = customer;
-    newAccount.accountTypeId = newAccountType;
+    
 
     return this.accountRepository.register(newAccount);
   }

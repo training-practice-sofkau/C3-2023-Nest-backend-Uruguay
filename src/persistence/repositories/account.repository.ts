@@ -301,8 +301,8 @@ export class AccountRepository extends BankInternalControl<AccountEntity> implem
             
         try{ // try to find an element with a given Id
 
-            const index = this.database.findIndex(entity => entity.id === id 
-                            && typeof entity.deletedAt === 'undefined' ) ; 
+            const index = this.database.findIndex(account => account.id === id 
+                            && typeof account.deletedAt === 'undefined' ) ; 
 
             if(index == -1) { throw new NotFoundException(); }
 
@@ -321,9 +321,7 @@ export class AccountRepository extends BankInternalControl<AccountEntity> implem
          * @param pagination optional pagination to consider         
          * @returns array of entities or and exception
          */
-    findBy(property: keyof AccountEntity, 
-            value: string | number | boolean, 
-            pagination?: PaginationModel<AccountEntity>): AccountEntity[] {
+    findBy(property: keyof AccountEntity, value: string | number | boolean , pagination?: PaginationModel<AccountEntity>): AccountEntity[] {
             
         try{ 
 
@@ -346,7 +344,28 @@ export class AccountRepository extends BankInternalControl<AccountEntity> implem
         }
     } 
 
+    /**
+     * Searchs in the DB all the accounts of on customer
+     * @param customerId unique key identifier of the customer
+     * @returns array of accounts or and exception
+     */
+    findByCustomer(customerId: string): AccountEntity[] {
 
+        try { // try to find all entities with a given CustomerId
+
+            const searchResult = this.database.filter(entity => entity.customerId.id === customerId &&
+                typeof entity.deletedAt === 'undefined'); //searchs for entities that matches the criteria
+
+            if (searchResult.length <= 0) { // if the result of the search is empty
+                throw new NotFoundException('User not found!'); // gives and exception
+            }
+            return searchResult; // all good, return the entity 
+
+        } catch (err) { // something wrong happened
+
+            throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
+        }
+    }
 
 /*     /**
      * Find in the database all the entities with a given state
@@ -371,28 +390,7 @@ export class AccountRepository extends BankInternalControl<AccountEntity> implem
         }
     }
 
-    /**
-     * Searchs in the DB all the accounts of on customer
-     * @param customerId unique key identifier of the customer
-     * @returns array of accounts or and exception
-     */
-/*    findByCustomer(customerId: string): AccountEntity[] {
-
-        try { // try to find all entities with a given CustomerId
-
-            const searchResult = this.database.filter(entity => entity.customerId.id === customerId &&
-                typeof entity.deletedAt === undefined); //searchs for entities that matches the criteria
-
-            if (searchResult.length <= 0) { // if the result of the search is empty
-                throw new NotFoundException(); // gives and exception
-            }
-            return searchResult; // all good, return the entity 
-
-        } catch (err) { // something wrong happened
-
-            throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
-        }
-    }
+    
 
     /**
      * Searchs in the DB all de account of a type

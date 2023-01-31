@@ -11,10 +11,6 @@ export class AccountController {
 
     constructor( private readonly accountService: AccountService) {}
 
-
-    //TODO: Implment checks and controls - Verify user token
-
-
     // new account DONE    
     @Post('create')
     async createAccount(@Body() account: CreateAccountDto): Promise<AccountEntity> {
