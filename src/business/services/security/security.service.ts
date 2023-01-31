@@ -4,8 +4,6 @@ import { AccountService } from '../account';
 import { DocumentTypeRepository } from '../../../data/persistence/repositories/document-type.repository';
 import { SignUpDto } from 'src/business/dtos/sign-up.dto';
 import { SignInDto } from 'src/business/dtos/sign-in.dto';
-import * as jwt from "jsonwebtoken"
-import { JsonWebTokenError } from 'jsonwebtoken';
 import { AccountEntity } from '../../../data/persistence/entities/account.entity';
 import { AccountTypeRepository } from '../../../data/persistence/repositories/account-type.repository';
 import { JwtService } from '@nestjs/jwt';
