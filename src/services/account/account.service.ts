@@ -9,12 +9,18 @@ import { AccountEntity, AccountTypeEntity, AccountTypeRepository } from 'src/per
 // Repositories
 import { AccountRepository } from 'src/persistence'
 import { ChangeAccountTypeDto } from '../../dtos/changeAccountType.dto';
+import { IsUUID } from 'class-validator';
 
 @Injectable()
 export class AccountService {
   constructor(private readonly accountRepository: AccountRepository,
     private readonly accountTypeRepository: AccountTypeRepository) { }
 
+
+  getId(id: string):AccountEntity{
+    const account = this.accountRepository.findOneById(id)
+    return account
+  }
   /**
    * Crear una cuenta
    *

@@ -9,12 +9,12 @@ export class SecurityController {
 
     constructor(private readonly securityService: SecurityService) { }
 
-    @Post()
+    @Post("signup")
     signUp(@Body() signUp: SignUpDto): string{
         return this.securityService.signUp(signUp);
     }
 
-    @Post()
+    @Post("signin")
     signIn(@Body() signIn: SignInDto): string{
         return this.securityService.signIn(signIn)
     }
