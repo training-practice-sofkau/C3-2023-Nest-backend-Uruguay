@@ -1,9 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CustomerRepository } from "./customer.repository";
-import { CustomerEntity } from 'src/module/customer/customer.entity';
-import { AccountRepository } from '../account/Account.Repositories/account.repository';
-import { DocumentTypeEntity } from './document-type-Entity';
-import { CustomerDto } from './dto/customer.dto';
+import { CustomerRepository } from "../repository/customer.repository";
+import { CustomerEntity } from 'src/module/customer/entity/customer.entity';
+import { AccountRepository } from '../../account/repositories/account.repository';
+import { DocumentTypeEntity } from '../entity/document-type-Entity';
+import { CustomerDto } from '../dto/customer.dto';
+import { AccountService } from 'src/module/account/service';
 
 
 
@@ -13,7 +14,7 @@ import { CustomerDto } from './dto/customer.dto';
 export class CustomerService {
   constructor(
     private readonly customerRepository: CustomerRepository,
-    private readonly accountRepository : AccountRepository) {}
+    private readonly accountService : AccountService) {}
     
   /**
    * Obtener información de un cliente
@@ -70,11 +71,17 @@ export class CustomerService {
    */
   unsubscribe(id: string): boolean {
 
-    const customers = this.accountRepository.findByCustomer(id);
-    const index = customers.findIndex(item => item.balance != 0);
+    const accounts = this.accountService.findByCustomer(id);
 
-    if(!index) throw new NotFoundException(`Id : ${id} no tiene cuentas con balance 0`);
-    
+    const index = accounts.findIndex((account) => account.balance != 0);
+
+    if (index != -1)
+      throw new Error(
+        'Cannot Delete this Customer. Your accounts need a balance of 0',
+      );
+      
+    this.customerRepository.delete(id, true);
+
     return true;
 
   }

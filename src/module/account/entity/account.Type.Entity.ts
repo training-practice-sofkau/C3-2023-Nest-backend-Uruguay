@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { AccountTypeModel } from "./account-type-model.interface";
+import { AccountTypeModel } from "../models";
 
 
 export class AccountTypeEntity implements AccountTypeModel{

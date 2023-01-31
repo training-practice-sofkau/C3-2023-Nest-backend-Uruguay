@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
-import { BaseRepository } from '../base';
+
 import { CustomerRepositoryInterface } from './customer-repository.interface';
-import { CustomerEntity } from './customer.entity';
-import { CustomerModel } from './customer.model';
+import { CustomerEntity } from '../entity/customer.entity';
+import { BaseRepository } from 'src/module/base/repositories';
 ;
 
 

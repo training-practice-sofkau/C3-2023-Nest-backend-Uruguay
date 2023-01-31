@@ -1,5 +1,6 @@
-import { CustomerEntity } from '../customer/customer.entity';
-import { AccountTypeEntity } from './account.Type.Entity';
+import { CustomerEntity } from '../../customer/entity/customer.entity';
+import { AccountTypeEntity } from '../entity';
+
 
 
 

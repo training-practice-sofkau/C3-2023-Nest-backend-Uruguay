@@ -4,8 +4,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { DepositRepository } from '../../module/deposit/deposit.repository';
 import { DepositEntity } from './deposit.entities';
 import { AccountService } from '../account/service';
-import { DataRangeModel, PaginationModel } from '../base';
+
 import { depositDto } from './dto/deposit.dto';
+import { DataRangeModel, PaginationModel } from '../base/models';
 
 
 

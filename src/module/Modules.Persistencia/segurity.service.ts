@@ -6,16 +6,16 @@ import {
   
 import jwt  from 'jsonwebtoken';
 import { Response } from 'express';
-import { CustomerEntity } from 'src/module/customer/customer.entity';
-import { AccountTypeEntity } from 'src/module/account/account.Type.Entity';
+import { CustomerEntity } from 'src/module/customer/entity/customer.entity';
 import { v4 as uuid } from 'uuid';
-import { AccountEntity } from '../account/account.entities';
+import { AccountEntity } from '../account/entity/account.entities';
 import { AccountService } from 'src/module/account/service';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 import { CustomerRepository, DocumentTypeEntity } from '../customer';
 import { CreateCustomerDto } from '../customer/dto/create-customer.dto';
 import { CreateAccountdto } from '../account/dto/create-account.dto';
+import { AccountTypeEntity } from '../account/entity';
 
 
 @Injectable()

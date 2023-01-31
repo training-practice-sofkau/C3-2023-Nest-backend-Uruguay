@@ -1,5 +1,5 @@
 
-import { CustomerModel } from 'src/module/customer/customer.model';
+import { CustomerModel } from 'src/module/customer/models/customer.model';
 
 import { v4 as uuid } from 'uuid';
 import { DocumentTypeEntity } from './document-type-Entity';

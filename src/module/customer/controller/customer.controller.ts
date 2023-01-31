@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { CustomerService } from './customer.service';
-import { CustomerDto } from './dto/customer.dto';
-import { CustomerEntity } from './customer.entity';
+import { CustomerService } from '../service/customer.service';
+import { CustomerDto } from '../dto/customer.dto';
+import { CustomerEntity } from '../entity/customer.entity';
 
 @Controller('customer')
 export class CustomerController {
