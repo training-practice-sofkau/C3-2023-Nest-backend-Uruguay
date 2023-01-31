@@ -29,8 +29,17 @@ export class CustomerService {
      * @return {*}  {CustomerEntity}
      * @memberof CustomerService
      */
-    updatedCustomer(id: string, customer: customerDto): CustomerEntity {
-        return this.customerRepository.update(id, customer)
+    updatedCustomer(id: string, customer: CustomerDto): CustomerEntity {
+        const newCustomer = new CustomerEntity();
+        newCustomer.id = customer.id
+        newCustomer.password = customer.password
+        newCustomer.fullName = customer.fullName
+        newCustomer.phone = customer.phone
+        newCustomer.email = customer.email
+        newCustomer.documentType = customer.documentType
+        newCustomer.document = customer.document
+
+        return this.customerRepository.update(id, newCustomer)
     }
 
     /**

@@ -6,6 +6,7 @@ import { DepositEntity } from 'src/persistence';
 import { DepositRepository } from '../../persistence/repositories/deposit.repository';
 import { depositDto } from '../../dtos/deposit';
 import { AccountEntity } from '../../persistence/entities/account.entity';
+import { PaginationDto } from '../../dtos/pagination.dto';
 
 @Injectable()
 export class DepositService {
@@ -57,13 +58,12 @@ export class DepositService {
      */
     getHistory(
         depositId: string,
-        pagination?: PaginationModel,
+        pagination?: PaginationDto,
         dataRange?: DataRangeModel,
     ): DepositEntity[] {
         let deposit = this.depositRepocitory.findAll
 
         if (pagination)
-
             let { offset = 0, limit = 0 } = pagination;
         deposit = deposit.slice(offset, offset + limit);
 

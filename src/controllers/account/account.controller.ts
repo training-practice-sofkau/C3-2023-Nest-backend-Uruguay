@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Param, Post, Put } from '@nestjs/common';
 import { AccountTypeDto } from 'src/dtos/accountType.dto';
+import { AccountTypeEntity } from 'src/persistence';
 import { AccountService } from 'src/services';
 
 
@@ -19,10 +20,11 @@ export class AccountController {
         this.accountService.deleteAccount(accountId, sof)
     }
 
-    @Put('changeAccountType/:accountId/:accountTypeId')
-    AccountType(@Param('accountId') accountId: AccountTypeDto,
-        @Param('accountTypeId') accountTypeId: string,) AccountTypeEntity{
-    return this.accountService.changeAccountType(accountId, accountTypeId)
+    @Put('changeAccountType/:accountAccType')
+    AccountType(@Param('accountId') accountAccType: AccountTypeDto) : AccountTypeEntity{
+
+    return this.accountService.changeAccountType(accountAccType)
+        
 }
 
 

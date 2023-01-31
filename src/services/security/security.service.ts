@@ -5,7 +5,8 @@ import { AccountService } from '../account';
 import { DocumentTypeRepository } from '../../persistence/repositories/document-type.repository';
 import { SignUpDto } from 'src/dtos/sign-up.dto';
 import { SignInDto } from 'src/dtos/sign-in.dto';
-
+import * as jwt from "jsonwebtoken"
+import { AccountEntity } from '../../persistence/entities/account.entity';
 
 @Injectable()
 export class SecurityService {
@@ -56,9 +57,13 @@ export class SecurityService {
         if (customer) {
           const accountType = new AccountTypeEntity();
           accountType.id = 'Falta el ID por defecto del tipo de cuenta';
+          const newAccountE = new AccountEntity()
+          newAccountE.id 
+          
           const newAccount = {
             customer,
             accountType,
+
           };
           
           
@@ -76,8 +81,8 @@ export class SecurityService {
        * @memberof SecurityService
        */
       signOut(JWToken: string): void {
-        
-           jwt.verify(JWToken, 'secret', (err, decoded) => {
+               
+           jwt.verify(JWToken, 'secret'), (err, decoded) => {
             if (err) {
                 console.log('Invalid token');
             } else {
@@ -89,3 +94,4 @@ export class SecurityService {
       }
 
 }
+
