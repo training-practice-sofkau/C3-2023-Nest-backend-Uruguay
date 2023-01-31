@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { DataRangeDto } from 'src/dtos/datarange.dto';
 import { PaginationDto } from 'src/dtos/pagination.dto';
 import { TransferModel } from 'src/models';
 import { DataRangeModel } from 'src/models/dataRange.model';
@@ -48,9 +49,13 @@ export class TransferService {
   getHistoryOut(
     accountId: string,
     pagination?: PaginationDto,
-    dataRange?: DataRangeModel,
+    dataRange?: DataRangeDto,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+
+    if (!dataRange?.Min || !dataRange?.Max)
+    throw new Error('Invalid Value Range');
+
+    return this.transferRepocitory.findOutcomeByDataRange(accountId,dataRange.Min,dataRange.Max)
   }
 
   /**
@@ -65,9 +70,12 @@ export class TransferService {
   getHistoryIn(
     accountId: string,
     pagination?: PaginationDto,
-    dataRange?: DataRangeModel,
+    dataRange?: DataRangeDto,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+       if (!dataRange?.Min || !dataRange?.Max)
+    throw new Error('Invalid Value Range');
+    
+    return this.transferRepocitory.findIncomeByDataRange(accountId,dataRange.Min,dataRange.Max)
   }
 
   /**
@@ -82,7 +90,7 @@ export class TransferService {
   getHistory(
     accountId: string,
     pagination: PaginationDto,
-    dataRange?: DataRangeModel,
+    dataRange?: DataRangeDto,
   ): TransferEntity[] {
     throw new Error('This method is not implemented');
   }
