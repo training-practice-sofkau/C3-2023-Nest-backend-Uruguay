@@ -53,11 +53,11 @@ $ npm run start:prod
 
 # Body of the delivery
 [Any short description]
-¿Que se esta entregando?
+What is being delivered?
 
-¿Que falto entregar?
+What am I missing to deliver?
 
-¿Que dificultad se tuvo?
+What difficulty did you have?
 ```
 
 ## Workshop
