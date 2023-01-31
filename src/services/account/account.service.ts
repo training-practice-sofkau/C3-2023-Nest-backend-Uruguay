@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { AccountModel} from 'src/models';
 import { AccountEntity, AccountTypeEntity } from 'src/persistence';
 import { AccountRepository } from '../../persistence/repositories/account.repository';
+import { AccountTypeDto } from '../../dtos/accountType.dto';
 
 @Injectable()
 export class AccountService {
@@ -128,15 +129,11 @@ export class AccountService {
      * @memberof AccountService
      */
     changeAccountType(
-        accountId: string,
-        accountTypeId: string,
+        chAccountType:AccountTypeDto
     ): AccountTypeEntity {
-
-        let acc = this.accountRepository.findOneById(accountId)
-       
-        acc.account_type_id.id = accountTypeId
-
-        return this.accountRepository.update(accountId, acc).account_type_id
+        let acc = this.accountRepository.findOneById(chAccountType.accountId)
+        acc.account_type_id.id = chAccountType.accountTypeId
+        return this.accountRepository.update(chAccountType.accountId, acc).account_type_id
     }
 
     /**
@@ -145,9 +142,9 @@ export class AccountService {
      * @param {string} accountId
      * @memberof AccountService
      */
-    deleteAccount(accountId: string): void {
+    deleteAccount(accountId: string, sof?: boolean): void {
 
-        this.accountRepository.delete(accountId)
+        this.accountRepository.delete(accountId, sof)
 
     }
 
