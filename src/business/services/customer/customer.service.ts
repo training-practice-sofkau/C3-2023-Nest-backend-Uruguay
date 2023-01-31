@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CustomerEntity, CustomerRepository } from 'src/data';
-import { CustomerDto } from 'src/presentation/dtos';
+import { CustomerDto } from 'src/data/dtos';
 
 @Injectable()
 export class CustomerService {

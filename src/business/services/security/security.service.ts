@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 // Data transfer objects
-import { CreateAccountDto, SignInDto, SignUpDto } from 'src/presentation/dtos';
+import { CreateAccountDto, SignInDto, SignUpDto } from 'src/data/dtos';
 // Repositories & Entities
 import { AccountEntity, AccountTypeEntity, CustomerEntity, 
   CustomerRepository, DocumentTypeEntity } from 'src/data';

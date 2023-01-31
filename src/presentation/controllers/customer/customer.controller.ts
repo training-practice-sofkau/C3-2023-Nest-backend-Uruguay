@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { CustomerService } from 'src/business/services';
 import { CustomerEntity } from 'src/data';
-import { CustomerDto } from 'src/presentation/dtos';
+import { CustomerDto } from 'src/data/dtos';
 
 @Controller('customer')
 export class CustomerController {

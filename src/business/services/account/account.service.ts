@@ -1,7 +1,7 @@
 // Libraries
 import { Injectable } from '@nestjs/common';
 import { InternalServerErrorException } from '@nestjs/common/exceptions';
-import { ChangeAccountTypeDto, CreateAccountDto } from 'src/presentation/dtos';
+import { ChangeAccountTypeDto, CreateAccountDto } from 'src/data/dtos';
 
 // Repositories & Entities
 import { AccountEntity, AccountRepository, AccountTypeEntity, AccountTypeRepository } from 'src/data';

@@ -1,5 +1,5 @@
 import { IsNumber, IsPositive, IsUUID } from "class-validator"
-import { AccountEntity } from '../../data/persistance/entities/account.entity';
+import { AccountEntity } from '../persistance/entities/account.entity';
 
 export class DepositDto {
 

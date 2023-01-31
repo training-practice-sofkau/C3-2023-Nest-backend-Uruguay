@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Patch, Post, Delete } from '@nestjs/common';
 import { TransferService } from 'src/business/services';
 import { TransferEntity } from 'src/data';
-import { DataRangeDto, PaginationDto, TransferDto } from 'src/presentation/dtos';
+import { DataRangeDto, PaginationDto, TransferDto } from 'src/data/dtos';
 
 @Controller('transfer')
 export class TransferController {
