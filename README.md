@@ -49,22 +49,26 @@ $ npm run start:prod
 
 ```bash
 # Title of the delivery
-[Workshop Week 2 - Day 1] - API
+[Workshop Week 2 - Day 2] - Layer Design - Edinson Acosta Gancharov
 
 # Body of the delivery
 [Any short description]
+What is being delivered?
+
+What am I missing to deliver?
+
+What difficulty did you have?
 ```
 
 ## Workshop
 
 The following are the guidelines that should be taken into account for the development of the workshop to be submitted:
 
-1. Create all DTOs.
-2. Validate all DTOs.
-3. Implement DTOs instead of models ( review all the mappings )
-4. Create all Controllers.
+1. Organize the project structure in at least 3 layers: business, data and presentation.
+2. Add the layers you consider necessary and justify why and for what you did it.
+
 Do not forget to consult the Nest documentation if you consider it necessary: [Nest Documentation](https://docs.nestjs.com/).
 
 ### Important note
-Do not forget that for this workshop, you should make at least 10 commits properly documented (title and message body).
+Do not forget that for this workshop, you should make at least 3 commits properly documented (title and message body).
 
