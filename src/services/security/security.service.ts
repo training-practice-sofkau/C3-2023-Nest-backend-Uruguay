@@ -6,10 +6,8 @@ import {
   } from '@nestjs/common';
   
   // Data transfer objects
-
   
   // Models
-  import { CustomerModel } from '../../models';
   
   // Repositories
   import { CustomerRepository } from '../../persistence/repositories';
