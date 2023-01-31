@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { DataRangeModel } from 'src/data/models/dataRange.model';
 import { DepositEntity } from 'src/data/persistence';
 import { DepositRepository } from '../../../data/persistence/repositories/deposit.repository';
 import { depositDto } from '../../dtos/deposit.dto';
