@@ -1,9 +1,11 @@
-import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put, Query } from '@nestjs/common';
 
 //import { AccountService } from './business/services';
 import { AccountEntity } from 'src/data/persistence/entities';
 import { CreateAccountDto, UpdateAccountDto, AccountTransactionDto } from 'src/business/dtos';
 import { AccountService } from 'src/business/services';
+import { query } from 'express';
+import { ParseBoolPipe } from '@nestjs/common/pipes';
 
 
 @Controller('account')
@@ -30,8 +32,10 @@ export class AccountController {
     
     // delete account ( Only soft delete from here )
     @Delete('delete/:id')
-    async deleteAccount(@Param('id', ParseUUIDPipe) accountId: string): Promise<void> {
-        await this.accountService.deleteAccount(accountId);
+    async deleteAccount(@Param('id', ParseUUIDPipe) accountId: string,
+                        @Query('soft', ParseBoolPipe) soft?: boolean): Promise<void> {
+
+        await this.accountService.deleteAccount(accountId, soft);
     }
 
     // show all accounts

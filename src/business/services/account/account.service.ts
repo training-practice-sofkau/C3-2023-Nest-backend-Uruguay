@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 
 import { AccountEntity, AccountTypeEntity, CustomerEntity } from '../../../data/persistence/entities';
 import { AccountRepository, AccountTypeRepository } from '../../../data/persistence/repositories';
@@ -193,9 +193,17 @@ export class AccountService {
    * @param {string} accountId
    * @memberof AccountService
    */
-  deleteAccount(accountId: string): void {
+  deleteAccount(accountId: string, soft?: boolean): void {
 
-    this.accountRepository.delete(accountId, true); //TODO: Soft Delete by Default, implement hard/soft selection. 
+    //Validate if account has zero balance
+    if(this.getBalance(accountId) === 0){
+      
+      this.accountRepository.delete(accountId, soft); //TODO: Soft Delete by Default, implement hard/soft selection. 
+
+    }else{
+      
+      throw new InternalServerErrorException("Account is not Empty!. Delete Canceled");
+    }
 
   }
 }

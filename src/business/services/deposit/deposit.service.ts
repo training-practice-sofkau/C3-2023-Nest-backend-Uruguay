@@ -35,9 +35,9 @@ export class DepositService {
    * @param {string} depositId
    * @memberof DepositService
    */
-  deleteDeposit(depositId: string): void {
+  deleteDeposit(depositId: string, soft?: boolean): void {
 
-    this.depositRepository.delete(depositId, true); //TODO: Soft Delete by Default,  implement hard/soft selection. 
+    this.depositRepository.delete(depositId, soft); //TODO: Soft Delete by Default,  implement hard/soft selection. 
   }
 
   /**

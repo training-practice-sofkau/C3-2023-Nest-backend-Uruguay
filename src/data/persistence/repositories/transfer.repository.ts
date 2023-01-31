@@ -12,16 +12,16 @@ export class TransferRepository extends BankInternalControl<TransferEntity> impl
     
     /**
      * Adds a new Transfer entity to the Array of tranfers
-     * @param entity new object to be inserted in the array
+     * @param transfer new object to be inserted in the array
      * @returns new entity added
      */
-    register(entity: TransferEntity): TransferEntity {
+    register(transfer: TransferEntity): TransferEntity {
 
         try{ // try to add the entity to the array
             
-            this.database.push(entity);
+            this.database.push(transfer);
             
-            return this.database.at(-1) ?? entity; // all good, returns the new entity 
+            return this.database.at(-1) ?? transfer; // all good, returns the new entity 
 
         } catch (err){ // something went wrong, push didn't work
 

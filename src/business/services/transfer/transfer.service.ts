@@ -1,14 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 
 import { DataRangeModel, PaginationModel } from '../../models';
 import { TransferEntity } from '../../../data/persistence/entities';
 import { TransferRepository } from '../../../data/persistence/repositories';
 import { CreateTransferDto } from '../../dtos';
+import { AccountService } from '../account/';
 
 @Injectable()
 export class TransferService {
 
-  constructor(private readonly transferRepository: TransferRepository) {}
+  constructor(
+    private readonly transferRepository: TransferRepository,
+    private readonly accountService: AccountService) {}
 
   /**
    * Make a new transfer between accounts - OK
@@ -19,15 +22,32 @@ export class TransferService {
    */
   createTransfer(transfer: CreateTransferDto): TransferEntity {
 
-    const newTransfer = new TransferEntity();
+    // validate that origin account has enough balance
+    if(this.accountService.getBalance(transfer.outcome) >= transfer.amount){    
 
-    newTransfer.outcome = transfer.outcome;
-    newTransfer.income = transfer.income;
-    newTransfer.amount = transfer.amount;
-    newTransfer.reason = transfer.reason;
+      //validate account is active
+      if(this.accountService.getState(transfer.income)){
+
+        const newTransfer = new TransferEntity();
+
+        newTransfer.outcome = transfer.outcome;
+        newTransfer.income = transfer.income;
+        newTransfer.amount = transfer.amount;
+        newTransfer.reason = transfer.reason;
+            
+        const transferDone =  this.transferRepository.register(newTransfer);
         
-    return this.transferRepository.register(newTransfer);
+        if( transferDone){
 
+          this.accountService.removeBalance(transfer.outcome, transfer.amount);
+          this.accountService.addBalance(transfer.income, transfer.amount);          
+          return transferDone;
+        }
+      }  
+    }
+    
+    throw new InternalServerErrorException("Not enough Balance or Destination account inactive. Null Transfer! ");
+    
   }
 
   /**
@@ -64,7 +84,7 @@ export class TransferService {
               paginator?: PaginationModel<TransferEntity>, 
               dataRange?: DataRangeModel): TransferEntity[] {
     
-    let history = [];
+    let history = this.transferRepository.findAll();
 
     history = this.transferRepository.findBy("income",accountId, paginator, dataRange);    
 
@@ -98,9 +118,9 @@ export class TransferService {
    * @param {string} transferId
    * @memberof TransferService
    */
-  deleteTransfer(transferId: string): void {
+  deleteTransfer(transferId: string, soft?: boolean): void {
         
-    this.transferRepository.delete(transferId, true); //TODO: Soft Delete by Default, implement hard/soft selection. 
+    this.transferRepository.delete(transferId, soft); //TODO: Soft Delete by Default, implement hard/soft selection. 
     
   }
 }
