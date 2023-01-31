@@ -7,10 +7,6 @@ import { CustomerController } from './Capa-Presentacion/controllers/customer/cus
 import { DepositController } from './Capa-Presentacion/controllers/deposit/deposit.controller';
 import { TransferController } from './Capa-Presentacion/controllers/transfers/transfers.controller';
 
-
-
-
-
 @Module({
   imports: [],
   controllers: [SecurityController, AccountController,CustomerController,DepositController,TransferController],
@@ -20,7 +16,6 @@ import { TransferController } from './Capa-Presentacion/controllers/transfers/tr
     DepositService,
     SecurityService,
     TransferService,
-
 
     //Repositorios (?)
     AccountRepository,

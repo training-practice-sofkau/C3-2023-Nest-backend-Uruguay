@@ -18,6 +18,7 @@ import { SignUpDto } from 'src/Capa-Presentacion/dtos/sign-up.dto';
 
 // Services
 import { AccountService } from '../account';
+import { DocumentTypeRepository } from '../../../Capa-Data/persistence/repositories/document-type.repository';
 
 // Entities
 
@@ -27,6 +28,7 @@ export class SecurityService {
   constructor(
     private readonly customerRepository: CustomerRepository,
     private readonly accountService: AccountService,
+    private readonly documentTypeRepository : DocumentTypeRepository
   ) {}
 
 
@@ -46,6 +48,7 @@ export class SecurityService {
     
     const newCustomer = new CustomerEntity();
     newCustomer.documentType = documentType;
+    const newAccount = new AccountEntity()
     newCustomer.document = user.document;
     newCustomer.fullName = user.fullName;
     newCustomer.email = user.email;
@@ -53,10 +56,11 @@ export class SecurityService {
     newCustomer.password = user.password;
 
     const customer = this.customerRepository.register(newCustomer);
+     this.documentTypeRepository.register(documentType);
 
     if (customer) {
       const accountType = new AccountTypeEntity();
-      accountType.id = 'Falta el ID por defecto del tipo de cuenta';
+      accountType.name = accountType.name
       const newAccount = new AccountEntity() 
       newAccount.customer =  customer,
       newAccount.accountType = accountType

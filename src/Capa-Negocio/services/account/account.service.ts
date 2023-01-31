@@ -18,6 +18,7 @@ export class AccountService {
   createAccount(account: CreateAccountDto): AccountEntity {
     const newAccount = new AccountEntity();
     newAccount.customer = account.customer;
+    newAccount.balance = account.balance;
     newAccount.accountType = account.accountType;
     return this.accountRepository.register(newAccount);
   }
