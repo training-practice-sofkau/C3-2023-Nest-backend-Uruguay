@@ -15,7 +15,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
 
   update(id: string, entity: CustomerEntity): CustomerEntity {
     const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.deletedAt === undefined
+      (item) => item.id === id && item.deletedAt === undefined
     );
     if (indexCurrentEntity >= 0)
       this.database[indexCurrentEntity] = {
@@ -58,7 +58,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
 
   findAll(paginator: PaginationModel): CustomerEntity[] {
     let finded = this.database.filter(
-      (item) => typeof item.deletedAt === undefined
+      (item) => item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException()
     return finded.slice(paginator?.offset, paginator?.limit);
@@ -68,7 +68,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
     let finded = this.database.find(
       (item) => 
         item.id === id &&
-        typeof item.deletedAt === undefined
+        item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException()
     return finded
@@ -79,7 +79,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
       (item) =>
         item.email === email &&
         item.password === password &&
-        typeof item.deletedAt === undefined
+        item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException();
     return finded;
@@ -90,7 +90,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
       (item) => 
         item.documentType.id === documentTypeId &&
         item.document === document &&
-        typeof item.deletedAt === undefined
+        item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException();
     return finded;
@@ -100,7 +100,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
     let finded = this.database.find(
       (item) => 
         item.email === email &&
-        typeof item.deletedAt === undefined
+        item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException();
     return finded;
@@ -110,7 +110,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
     let finded = this.database.find(
       (item) => 
         item.phone === phone &&
-        typeof item.deletedAt === undefined
+        item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException();
     return finded;
@@ -130,7 +130,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
   findByName(name: string): CustomerEntity[] {
     let finded: CustomerEntity[] | undefined
     this.database.forEach((item) => {
-        if (item.fullName === name && typeof item.deletedAt === undefined){
+        if (item.fullName === name && item.deletedAt === undefined){
           finded = finded?.concat([item]);
         }
       }

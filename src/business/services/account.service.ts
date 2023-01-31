@@ -21,7 +21,6 @@ export class AccountService {
   }
 
   getBalance(accountId: string): number {
-    console.log(accountId);
     return this.accountRepository.findOneById(accountId).balance;
   }
 

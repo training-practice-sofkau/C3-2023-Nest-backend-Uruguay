@@ -15,7 +15,7 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> implements IDe
 
   update(id: string, entity: DepositEntity): DepositEntity {
     const indexCurrentEntity = this.database.findIndex(
-        (item) => item.id === id && typeof item.deletedAt === undefined
+        (item) => item.id === id && item.deletedAt === undefined
     );
     if (indexCurrentEntity >= 0)
       this.database[indexCurrentEntity] = {
@@ -46,7 +46,7 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> implements IDe
 
   findAll(paginator?: PaginationModel): DepositEntity[] {
     let finded = this.database.filter(
-        (item) => typeof item.deletedAt === undefined 
+        (item) => item.deletedAt === undefined 
     );
     if (finded === undefined) throw new NotFoundException();
     return finded.slice(paginator?.offset, paginator?.limit);
@@ -56,7 +56,7 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> implements IDe
     let finded = this.database.find(
         (item) => 
           item.id === id &&
-          typeof item.deletedAt === undefined
+          item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException();
     return finded;
@@ -66,7 +66,7 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> implements IDe
     let finded = this.database.filter(
         (item) => 
           item.account.id === accountId &&
-          typeof item.deletedAt === undefined
+          item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException();
     return finded.slice(paginator?.offset, paginator?.limit);
@@ -75,7 +75,7 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> implements IDe
   findByDataRange(accountId: string, dateInit: Date | number, dateEnd: Date | number, paginator?: PaginationModel): DepositEntity[] {
     let finded = this.database.filter(
         (item) => 
-          typeof item.deletedAt === undefined &&
+          item.deletedAt === undefined &&
           item.dateTime >= dateInit &&
           item.dateTime <= dateEnd && 
           item.account.id === accountId

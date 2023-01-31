@@ -15,7 +15,7 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
 
   update(id: string, entity: AccountEntity): AccountEntity {
     const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.deletedAt === undefined
+      (item) => item.id === id && item.deletedAt === undefined
     );
     if (indexCurrentEntity >= 0)
       this.database[indexCurrentEntity] = {
@@ -58,7 +58,7 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
 
   findAll(paginator: PaginationModel): AccountEntity[] {
     let finded = this.database.filter(
-        (item) => typeof item.deletedAt === undefined
+        (item) => item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException();
     return finded.slice(paginator?.offset, paginator?.limit);
@@ -68,10 +68,8 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
     let finded = this.database.find(
         (item) => 
           item.id === id &&
-          typeof item.deletedAt === undefined
+          item.deletedAt === undefined
     );
-    console.log(this.database);
-    console.log(finded);
     if (finded === undefined) throw new NotFoundException();
     return finded;
   }
@@ -80,7 +78,7 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
     let finded = this.database.filter(
         (item) => 
           item.state === state &&
-          typeof item.deletedAt === undefined
+          item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException();
     return finded;
@@ -90,7 +88,7 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
     let finded = this.database.filter(
         (item) => 
           item.customer.id === customerId &&
-          typeof item.deletedAt === undefined
+          item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException();
     return finded;
@@ -100,7 +98,7 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
     let finded = this.database.find(
         (item) => 
           item.accountType.id === accountTypeId &&
-          typeof item.deletedAt === undefined
+          item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException();
     return finded;
@@ -110,7 +108,7 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
     let finded = this.database.filter(
         (item) => 
           item.customer.fullName === name &&
-          typeof item.deletedAt === undefined
+          item.deletedAt === undefined
     );
     if (finded === undefined) throw new NotFoundException();
     return finded;
