@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { JwtModule } from "@nestjs/jwt";
 
 import {  
          AccountController,
@@ -24,7 +25,10 @@ import { AccountRepository,
 
 
 @Module({  
-  imports: [ConfigModule.forRoot()],
+  imports: [ConfigModule.forRoot(), 
+            JwtModule.register({ secret: 'secretKey',
+                           signOptions: { expiresIn: '30s' },
+  })],
   controllers: [AccountController, CustomerController, DepositController, TransferController, SecurityController, ],
   providers: [AccountService, 
               CustomerService, 

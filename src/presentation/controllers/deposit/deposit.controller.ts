@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseBoolPipe, ParseUUIDPipe, Post, Put, Query } from '@nestjs/common';
 
 import { DepositEntity } from 'src/data/persistence/entities';
 import { DepositService } from 'src/business/services';
@@ -12,8 +12,7 @@ export class DepositController {
 
     //TODO: verify JWT for the user ( if is allow to make transactions )
 
-    // Create new deposit    
-    // TODO: implement newDepositDTO to use instead of depositModel
+    // Create new deposit        
     @Post('register')
     async createDeposit(@Body() deposit: CreateDepositDto): Promise<DepositEntity>{
 
@@ -22,13 +21,14 @@ export class DepositController {
 
     // delete Deposit ( Only soft delete from here )
     @Delete('delete/:id')
-    async deleteDeposit(@Param('id', ParseUUIDPipe) depositId: string): Promise<void> {
-        await this.depositService.deleteDeposit(depositId);
+    async deleteDeposit(@Param('id', ParseUUIDPipe) depositId: string,
+                        @Query('soft', ParseBoolPipe) soft?: boolean): Promise<void> {
+                            
+        await this.depositService.deleteDeposit(depositId, soft);
     }
 
 
-    // Get historical Data
-    //TODO: see how to send values for pagination and date range ( look for info and methods )
+    // Get historical Data    
     @Get('/:id')
     async getDeposit(@Param('id', ParseUUIDPipe) depositId: string): Promise<DepositEntity[]> {
 
