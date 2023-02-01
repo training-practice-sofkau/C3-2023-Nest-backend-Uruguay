@@ -1,13 +1,13 @@
 
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateTransferDTO } from 'src/data-access/dtos/create-transfer-dto';
+import { CreateTransferDTO } from 'src/business-logic/dtos/create-transfer-dto';
 import { IDataRangeModel } from 'src/data-access/models/i-data-range-model';
 import { PaginationModel } from 'src/data-access/models/i-pagination-model';
 import { ITransferModel } from 'src/data-access/models/i-transfer-model';
 import { TransferEntity } from 'src/data-access/entities/transfer-entity';
 import { TransferRepository } from 'src/data-access/repositories/TransferRepo';
 import { AccountService } from '../account';
-import { DataRangeDto } from 'src/data-access/dtos/data-range-dto';
+import { DataRangeDto } from 'src/business-logic/dtos/data-range-dto';
 
 @Injectable()
 export class TransferService {

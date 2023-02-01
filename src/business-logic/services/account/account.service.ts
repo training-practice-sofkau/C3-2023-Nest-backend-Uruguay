@@ -1,29 +1,43 @@
 
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
-import { AccountDTO } from 'src/data-access/dtos/account-dto';
-import { CreateAccountDto } from 'src/data-access/dtos/create-account-dto';
+import { AccountDTO } from 'src/business-logic/dtos/account-dto';
+import { CreateAccountDto } from 'src/business-logic/dtos/create-account-dto';
 import { PaginationModel } from 'src/data-access/models/i-pagination-model';
 import { AccountEntity } from 'src/data-access/entities/account-entity';
 import { AccountTypeEntity } from 'src/data-access/entities/account-type-entity';
 import { CustomerEntity } from 'src/data-access/entities/customer-entity';
 import { AccountRepository } from 'src/data-access/repositories/AccountRepo';
 import { AccountTypeRepository } from 'src/data-access/repositories/TypeAccountRepo';
+import { CustomerService } from '../customer/customer.service';
+import { CustomerRepo } from 'src/data-access/repositories/CustomerRepo';
 
 @Injectable()
 export class AccountService {
 
     constructor(private readonly accountRepository: AccountRepository,
                 private readonly accountTypeRepository: AccountTypeRepository
-                ) {
-    }
+                ) {}
 
-    /**
-   Crear una cuenta
-   *
-   * @param {AccountModel} account
-   * @return {*}  {AccountEntity}
-   * @memberof AccountService
-   */
+   
+    //createAditionalAccount by DTO
+     /*
+    createAditionalAccount(account: AccountDTO): AccountEntity {
+
+        const newAditionalAccount = new AccountEntity();
+        const newAditionalAccountType = new AccountTypeEntity();
+
+        newAditionalAccountType.name = account.accountTypeName;
+
+        newAditionalAccount.accountTypeId = newAditionalAccountType;
+        newAditionalAccount.balance = account.balance;
+        newAditionalAccount.customerId = this.customerService.getCustomerInfo(account.customerId); //??
+
+        const aditionalAccount = this.createAccount(newAditionalAccount);
+         
+         return newAditionalAccount
+        }
+    */
+
     createAccount(account: AccountEntity): AccountEntity {  //Le paso DTO para crear un entity
  
         return this.accountRepository.register(account);
@@ -210,7 +224,7 @@ export class AccountService {
         newAccountEntity.accountTypeId = accountTypeEntity;
 
         const newCustomerEntity = new CustomerEntity();
-        newCustomerEntity.id = newAccountData.customer;
+        newCustomerEntity.id = newAccountData.customerId;
         
 
         currentEntity.balance = newAccountData.balance;

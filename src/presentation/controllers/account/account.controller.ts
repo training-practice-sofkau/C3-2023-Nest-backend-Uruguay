@@ -1,6 +1,6 @@
 import { Body, Controller, Param, Post, Put, Get, Delete,Patch } from '@nestjs/common';
-import { AccountDTO } from 'src/data-access/dtos/account-dto';
-import { CreateAccountDto } from 'src/data-access/dtos/create-account-dto';
+import { AccountDTO } from 'src/business-logic/dtos/account-dto';
+import { CreateAccountDto } from 'src/business-logic/dtos/create-account-dto';
 import { PaginationModel } from 'src/data-access/models/i-pagination-model';
 import { AccountEntity } from 'src/data-access/entities/account-entity';
 import { AccountTypeEntity } from 'src/data-access/entities/account-type-entity';
@@ -11,12 +11,27 @@ import { CustomerService } from 'src/business-logic/services/customer/customer.s
 @Controller('account')
 export class AccountController {
 
-    constructor(private readonly accountService : AccountService ){}
+    constructor(private readonly accountService : AccountService,
+        private readonly customerService : CustomerService){}
     
-    @Post('/create')
-    createAccount(@Body() account: AccountEntity): AccountEntity {
-        return this.accountService.createAccount(account);
+    
+    @Post('/create') //A quien le creo esta cuenta
+    createAccount(@Body() account: AccountDTO): AccountEntity {
+
+        const newAditionalAccount = new AccountEntity();
+        const newAditionalAccountType = new AccountTypeEntity();
+
+        newAditionalAccountType.name = account.accountTypeName;
+
+        newAditionalAccount.accountTypeId = newAditionalAccountType;
+        newAditionalAccount.balance = account.balance;
+        newAditionalAccount.customerId = this.customerService.getCustomerInfo(account.customerId); //??
+
+        const aditionalAccount = this.accountService.createAccount(newAditionalAccount);
+
+        return aditionalAccount;
     }
+    
 
     @Put('/update/:accountId')
     updateAccount(@Param() accountId: string, @Body() newAccount: AccountDTO): AccountEntity {
