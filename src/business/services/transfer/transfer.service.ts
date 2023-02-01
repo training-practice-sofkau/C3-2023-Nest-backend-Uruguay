@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { DataRangeModel, PaginationModel, TransferModel } from '../../../data/models';
 import { TransferEntity } from '../../../data/persistence/entities';
 import { TransferRepository } from '../../../data/persistence/repositories';
+import { TransferDto } from '../../../business/dtos';
 
 @Injectable()
 export class TransferService {
@@ -11,10 +12,15 @@ export class TransferService {
   /**
    * Crear una transferencia entre cuentas del banco
    */
-  // createTransfer(transfer: TransferDto): TransferEntity {
-  //   this.transferRepository.register(transfer);
-  //   return transfer;
-  // }
+  createTransfer(transfer: TransferDto): TransferEntity {
+    let newTransfer = new TransferEntity();
+    newTransfer = {
+      ...newTransfer,
+      ...transfer
+    }
+    this.transferRepository.register(newTransfer);
+    return newTransfer;
+  }
 
   /**
    * Obtener historial de transacciones de salida de una cuenta
