@@ -2,6 +2,7 @@ import { Controller, Post, Body, Get, Param, Put, ParseUUIDPipe } from '@nestjs/
 import { AccountDtos } from 'src/business';
 import { AccountEntity, AccountTypeEntity } from 'src/Data';
 import { AccountService } from 'src/business';
+import { baseDto } from 'src/business/dtos/amountDtos';
 
 @Controller('account')
 export class AccountController {
@@ -19,26 +20,37 @@ export class AccountController {
     return this.AccountService.getBalance(accountId)
   }
   @Post('AddBalance/:id')
-  addBalance(@Body()@Param('id', ParseUUIDPipe ) accountId: string, amount: number): void{
+  addBalance(
+    @Param('id', ParseUUIDPipe) accountId: string,
+    @Body() addBalanceDto: baseDto
+  ): void{
     
-    return this.AccountService.addBalance(accountId,amount )
+    return this.AccountService.addBalance(accountId, addBalanceDto.amount )
   }
 
   @Post('removeBalance/:id')
-  removeBalance(@Body()@Param('id', ParseUUIDPipe) accountId: string, amount: number): void{
+  removeBalance(
+    @Param('id', ParseUUIDPipe) accountId: string,
+    @Body() addBalanceDto: baseDto
+  ): void{
     
-    return this.AccountService.removeBalance(accountId,amount )
+    return this.AccountService.removeBalance(accountId,addBalanceDto.amount )
   }
 
   @Get('verification/:id')
-  verifyAmountIntoBalance(@Param('id', ParseUUIDPipe)id: string, amount: number): boolean {
+  verifyAmountIntoBalance(
+    @Param('id', ParseUUIDPipe) accountId: string,
+    @Body() baseDto: baseDto
+  ): boolean {
     
-    return this.AccountService.verifyAmountIntoBalance(id, amount)
+    return this.AccountService.verifyAmountIntoBalance(accountId, baseDto.amount)
   }
 
   @Put('changeState/:id')
-  changeState(@Body()@Param('id', ParseUUIDPipe) id: string, state: boolean): void {
-    return this.AccountService.changeState(id, state)
+  changeState(@Param('id', ParseUUIDPipe) accountId: string,
+  @Body() baseDto: baseDto
+): void {
+    return this.AccountService.changeState(accountId, baseDto.state)
   }
  
   @Get('getAccountType/:id')
@@ -46,8 +58,9 @@ export class AccountController {
   return this.AccountService.getAccountType(accountId)
 }
 @Put ('changeAccntType/:id') 
-changeAccntType(@Body()@Param('id', ParseUUIDPipe) accountId: string, accountTypeId: string): AccountTypeEntity { 
-    return this.AccountService.changeAccntType(accountId, accountTypeId);
+changeAccntType(@Param('id', ParseUUIDPipe) accountId: string,
+  @Body() baseDto: baseDto): AccountTypeEntity { 
+    return this.AccountService.changeAccntType(accountId, baseDto.accountTypeId);
 }
 
 @Put('delete/:id')
@@ -55,6 +68,8 @@ unsubscribe(@Param('id', ParseUUIDPipe) accountId: string): void{
   return this.AccountService.deleteAccount(accountId);
 }
 @Put('harddelete/:id')
-hardelete(@Param('id', ParseUUIDPipe) accountId: string, soft: boolean): void{
-  return this.AccountService.deleteAccount(accountId, soft);
+hardelete(@Param('id', ParseUUIDPipe) accountId: string,
+@Body() baseDto: baseDto
+): void{
+  return this.AccountService.deleteAccount(accountId, baseDto.soft);
 }}

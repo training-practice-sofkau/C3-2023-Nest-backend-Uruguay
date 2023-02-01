@@ -1,6 +1,9 @@
+import { AccountRepository } from './../../../Data/persistence/repositories/account.repository';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { AccountDtos } from 'src/business/dtos/accountDtos';
-import { AccountEntity, AccountRepository, AccountTypeEntity, AccountTypeRepository } from 'src/Data/persistence';
+import { AccountEntity,  AccountTypeEntity, AccountTypeRepository } from 'src/Data/persistence';
+import { CustomerRepository } from '../../../Data/persistence/repositories/customer.repository';
+
 
 
 
@@ -8,17 +11,18 @@ import { AccountEntity, AccountRepository, AccountTypeEntity, AccountTypeReposit
 export class AccountService {
   constructor(
     private readonly accountRepository: AccountRepository,
-    private readonly AccountTypeRepository: AccountTypeRepository,
+    private readonly AccountTypeRepository: AccountTypeRepository,private readonly CustomerRepository: CustomerRepository
   ) {}
 
   /**
    *
    */
   createAccount(account: AccountDtos): AccountEntity {
-      
     const newAccount = new AccountEntity();
     newAccount.customer = account.customer;
     newAccount.accountType = account.accountType;
+    newAccount.acc_Balance = account.acc_Balance;
+    this.CustomerRepository.register(newAccount.customer)
     return this.accountRepository.register(newAccount);
   }
 
@@ -34,7 +38,8 @@ export class AccountService {
       'id',
       accountId,
     );
-    return account.acc_Balance;
+    console.log(account);
+    return Number(account.acc_Balance|| 0);
   }
 
   /**
@@ -45,14 +50,21 @@ export class AccountService {
    * @memberof AccountService
    */
   addBalance(accountId: string, amount: number): void {
+    console.log(accountId)
+    if (typeof amount !== 'number') {
+       amount =parseInt(amount)
+    }
+    console.log(amount)
     if (amount <= 0) {
-      throw new NotFoundException();
+      throw new NotFoundException("afas");
     }
     let account = this.accountRepository.searchByAttributesforOne(
       'id',
       accountId,
     );
-    account.acc_Balance += amount;
+    console.log(account)
+    console.log(amount)
+    account.acc_Balance = account.acc_Balance + amount;
     this.accountRepository.update(accountId, account);
   }
 
