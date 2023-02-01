@@ -1,8 +1,8 @@
-import { Controller, Delete, Get, Param, ParseUUIDPipe, Patch, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 
 import { TransferService } from '../../../business/services';
 import { TransferEntity } from '../../../data/persistence/entities';
-import { ParseBoolPipe } from '@nestjs/common/pipes';
+import { TransferDto } from '../../../business/dtos';
 
 @Controller('transfer')
 export class TransferController {
@@ -12,6 +12,11 @@ export class TransferController {
     @UsePipes(new ValidationPipe())
     getTransfersAccount(@Param('id', ParseUUIDPipe) id: string): TransferEntity[] {
         return this.transferService.getHistory(id);
+    }
+    
+    @Post()
+    createTransfer(@Body()transfer: TransferDto): TransferEntity {
+        return this.transferService.createTransfer(transfer);
     }
 
     @Get('in/:id')
