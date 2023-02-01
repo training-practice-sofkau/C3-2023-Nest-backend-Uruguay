@@ -32,13 +32,12 @@ export class DepositController {
     // Get historical Data    
     @Get('/:id')
     getDeposit(@Param('id', ParseUUIDPipe) depositId: string,
-        @Query('offset') offset?: number, @Query('limit') limit?: number)
+        @Query('limit') limit?: number)
         : DepositEntity[] {
 
         const page = new PaginationEntity();
-        page.limit = limit;
-        if(offset)
-        page.offset = offset;
+        page.limit = limit;        
+        page.offset = 0;
 
         return this.depositService.getHistory(depositId, page);
 
