@@ -1,4 +1,4 @@
-import { IsEmail,IsNumberString, IsUUID, IsString } from 'class-validator';
+import { IsEmail,IsNumberString, IsUUID, IsString, IsNotEmpty, Length } from 'class-validator';
 
 export class SignUpDto {
 
@@ -17,6 +17,8 @@ export class SignUpDto {
     @IsNumberString()
     phone: string;
 
+    @IsNotEmpty({ message: 'the password is required.' })
     @IsString()
+    @Length(5, 30)
     password: string;
 }

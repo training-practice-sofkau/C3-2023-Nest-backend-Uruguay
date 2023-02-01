@@ -17,12 +17,6 @@ export class CustomerController {
         return this.customerService.getCustomerInfo(id);
     }
 
-    @Post()
-    @UsePipes(new ValidationPipe())
-    createCustomer(@Body() customer: CustomerDto): CustomerDto {
-        return this.customerService.createCustomer(customer);
-    }
-
     @Put(':id')
     @UsePipes(new ValidationPipe())
     updateCustomer(@Param('id', ParseUUIDPipe) id: string ,@Body() customer: CustomerDto): CustomerDto {

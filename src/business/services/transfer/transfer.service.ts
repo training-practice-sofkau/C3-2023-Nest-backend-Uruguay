@@ -10,64 +10,71 @@ export class TransferService {
 
   /**
    * Crear una transferencia entre cuentas del banco
-   *
-   * @param {TransferModel} transfer
-   * @return {*}  {TransferEntity}
-   * @memberof TransferService
    */
-  createTransfer(transfer: TransferModel): TransferEntity {
-    throw new Error('This method is not implemented');
-  }
+  // createTransfer(transfer: TransferDto): TransferEntity {
+  //   this.transferRepository.register(transfer);
+  //   return transfer;
+  // }
 
   /**
    * Obtener historial de transacciones de salida de una cuenta
-   *
-   * @param {string} accountId
-   * @param {PaginationModel} pagination
-   * @param {DataRangeModel} [dataRange]
-   * @return {*}  {TransferEntity[]}
-   * @memberof TransferService
    */
   getHistoryOut(
     accountId: string,
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    let transfers = this.transferRepository.findAll();
+    let transfersOfAccount = transfers.filter(transfer => transfer.outcome.id === accountId)
+    let transfersPaginated: TransferEntity[] = [];
+
+    if(pagination) {
+      return transfersPaginated = transfersOfAccount.slice(pagination.offset, pagination.limit);
+    }
+    return transfersOfAccount;
   }
 
   /**
    * Obtener historial de transacciones de entrada en una cuenta
-   *
-   * @param {string} accountId
-   * @param {PaginationModel} pagination
-   * @param {DataRangeModel} [dataRange]
-   * @return {*}  {TransferEntity[]}
-   * @memberof TransferService
    */
   getHistoryIn(
     accountId: string,
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    let transfers = this.transferRepository.findAll();
+    let transfersOfAccount = transfers.filter(transfer => transfer.income.id === accountId)
+    let transfersPaginated: TransferEntity[] = [];
+
+    if(pagination) {
+      return transfersPaginated = transfersOfAccount.slice(pagination.offset, pagination.limit);
+    }
+    return transfersOfAccount;
   }
 
   /**
    * Obtener historial de transacciones de una cuenta
-   *
-   * @param {string} accountId
-   * @param {PaginationModel} pagination
-   * @param {DataRangeModel} [dataRange]
-   * @return {*}  {TransferEntity[]}
-   * @memberof TransferService
    */
   getHistory(
     accountId: string,
-    pagination: PaginationModel,
+    pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    let transfers: TransferEntity[] = [];
+    const transterIn = this.getHistoryIn(accountId);
+    const transterOut = this.getHistoryOut(accountId);
+
+    transfers = [
+      ...transterIn,
+      ...transterOut
+    ];
+
+    let transfersPaginated: TransferEntity[] = [];
+
+    if(pagination) {
+      return transfersPaginated = transfers.slice(pagination.offset, pagination.limit);
+    }
+    return transfers;
   }
 
   /**

@@ -4,9 +4,8 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { v4 as uuid } from 'uuid';
-import jwt from 'jsonwebtoken';
-  
+import { JwtService } from '@nestjs/jwt';
+
   // Data transfer objects
   import { SignOutDto, SignUpDto, SignInDto, AccountDto } from '../../dtos';
 
@@ -17,7 +16,7 @@ import jwt from 'jsonwebtoken';
   import { CustomerRepository } from '../../../data/persistence/repositories';
   
   // Services
-  import { AccountService } from '../account';
+  import { AccountService,  CustomerService } from '../../services';
   
   // Entities
   import {
@@ -31,6 +30,7 @@ import jwt from 'jsonwebtoken';
     constructor(
       private readonly customerRepository: CustomerRepository,
       private readonly accountService: AccountService,
+      private jwtService: JwtService
     ) {}
   
     /**
@@ -41,7 +41,7 @@ import jwt from 'jsonwebtoken';
         user.username,
         user.password,
       );
-      const token: string = jwt.sign({id: user.id}, process.env.TOKEN_SECRET || 'tokentest');
+      const token: string = this.jwtService.sign({username: user.username, password: user.password});
 
       if (answer) return token;
       else throw new UnauthorizedException();
@@ -51,6 +51,7 @@ import jwt from 'jsonwebtoken';
      * Crear usuario en el sistema
      */
     signUp(user: SignUpDto): string {
+      
       const documentType = new DocumentTypeEntity()
       documentType.id = user.documentTypeId;
 
@@ -72,27 +73,31 @@ import jwt from 'jsonwebtoken';
           customer,
           accountType,
         };
-  
+        
         const account = this.accountService.createAccount(newAccount);
-
-        const token: string = jwt.sign({id: account.id}, process.env.TOKEN_SECRET || 'tokentest');
-  
+        
+        const token: string = this.jwtService.sign({id: account.id});
+        
         if (account) return token;
-        else throw new InternalServerErrorException();
-      } else throw new InternalServerErrorException();
+        else throw new InternalServerErrorException({statusCode: 500, message: 'account cannot be created'});
+      } else throw new InternalServerErrorException({statusCode: 500, message: 'Customer cannot be register'});
     }
   
     /**
      * Salir del sistema
      */
-    // signOut(JWToken: string): void {
-    //   const jwtPayload = jwt.verify(JWToken, process.env.TOKEN_SECRET || 'tokentest');
+    signOut(JWToken: SignOutDto): void {
+      const customer = this.jwtService.verify(JWToken.jwt);
       
-    //   if(jwtPayload instanceof Object) {
-    //     const account = <SignOutDto>jwtPayload;
-    //     this.accountService.changeState(account.id, false);
-    //   }
-    //   else throw new InternalServerErrorException();
-    // }
+      if(customer) {
+        const answer = this.customerRepository.findOneByEmailAndPassword(
+          customer.username,
+          customer.password,
+        );
+
+        if(answer) console.log('The user signed out');
+      }
+      else throw new InternalServerErrorException();
+    }
     
   }

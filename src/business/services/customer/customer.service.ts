@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 
 import { CustomerModel, PaginationModel } from '../../../data/models';
-import { CustomerEntity } from '../../../data/persistence/entities';
+import { CustomerEntity, DocumentTypeEntity } from '../../../data/persistence/entities';
 import { CustomerRepository } from '../../../data/persistence/repositories';
 import { CustomerDto } from '../../dtos';
 
@@ -17,7 +17,8 @@ export class CustomerService {
     const newACustomer = new CustomerEntity();
     newACustomer.fullName = customer.fullName;
     newACustomer.document = customer.document;
-    newACustomer.documentType = customer.documentType;
+    newACustomer.documentType = new DocumentTypeEntity();
+    newACustomer.documentType.name = customer.documentType.name;
     newACustomer.email = customer.email;
     newACustomer.password = customer.password;
     newACustomer.phone = customer.phone;
@@ -79,6 +80,20 @@ export class CustomerService {
       return customersPaginated = customers.slice(pagination.offset, pagination.limit);
     }
     return customers;
+  }
+
+  /**
+   * Cambiar el estado de un cliente
+   */
+  changeState(customerId: string, state: boolean): void {
+    try {
+      let customerUpdated = this.customerRepository.findOneById(customerId);
+      customerUpdated.state = state;
+      this.customerRepository.update(customerId, customerUpdated);
+
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
 }

@@ -1,6 +1,6 @@
-import { IsUUID, IsBoolean, IsDate, IsEmail, IsNotEmpty, IsOptional, IsPhoneNumber, IsString } from 'class-validator';
+import { IsUUID, IsBoolean, IsDate, IsEmail, IsNotEmpty, IsOptional, IsPhoneNumber, IsString, Length } from 'class-validator';
 
-import { DocumentTypeModel } from '../../data/models';
+import { DocumentTypeEntity } from '../../data/persistence/entities';
 
 export class CustomerDto {
 
@@ -8,8 +8,8 @@ export class CustomerDto {
     @IsUUID(4,{message: 'uuid must to be a valid v4 UUID'})
     id: string;
 
-    @IsNotEmpty()
-    documentType: DocumentTypeModel;
+    @IsNotEmpty({message: 'documentType must have a name'})
+    documentType: DocumentTypeEntity;
 
     @IsString()
     document: string;
@@ -20,12 +20,13 @@ export class CustomerDto {
     @IsEmail()
     email: string;
 
-    @IsPhoneNumber('UY', {message: 'phoneNumber must to be a uruguayan valid phone number'})
+    @IsPhoneNumber('UY', {message: 'phone must to be a uruguayan valid phone number'})
     @IsString()
     phone: string;
 
+    @IsNotEmpty({ message: 'the password is required.' })
     @IsString()
-    @IsNotEmpty()
+    @Length(5, 30)
     password: string;
     
     @IsOptional()
