@@ -5,7 +5,7 @@ import { SecurityModule, AccountModule, CustomerModule, DepositModule, TransferM
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-imports: [SecurityModule, AccountModule, CustomerModule, DepositModule, TransferModule, JwtModule.register({ secret: 'Sofka' })],
+    imports: [SecurityModule, AccountModule, CustomerModule, DepositModule, TransferModule, JwtModule.register({ secret: 'Sofka' })],
     controllers: [],
     providers: [],
 })

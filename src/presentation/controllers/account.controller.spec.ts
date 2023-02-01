@@ -2,14 +2,15 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AccountController } from '.';
 import { AccountService } from '../../business/services';
 import { AccountRepository, AccountTypeRepository } from '../../data/persistence';
-import { AccountModule } from '../../application/modules';
+import { AccountModule, CustomerModule } from '../../application/modules';
+import { forwardRef } from '@nestjs/common';
 
 describe('AccountController', () => {
   let controller: AccountController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [AccountModule],
+      imports: [AccountModule, forwardRef( () => CustomerModule)],
       controllers: [AccountController],
       providers: [
         {
