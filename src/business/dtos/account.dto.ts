@@ -1,14 +1,13 @@
-import { IsBoolean, IsInt, IsOptional, IsUUID, IsNotEmpty, IsDate } from 'class-validator';
-
-import { CustomerEntity, AccountTypeEntity } from '../../data/persistence';
-
+import { IsUUID, IsNotEmpty } from 'class-validator';
 
 export class AccountDto {
 
     @IsNotEmpty()
-    customer: CustomerEntity;
+    @IsUUID()
+    customer: string;
 
     @IsNotEmpty()
-    accountType: AccountTypeEntity;
+    @IsUUID()
+    accountType: string;
 
 }

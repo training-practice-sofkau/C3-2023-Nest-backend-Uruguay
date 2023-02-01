@@ -4,20 +4,30 @@ import { DataRangeModel, PaginationModel, TransferModel } from '../../../data/mo
 import { TransferEntity } from '../../../data/persistence/entities';
 import { TransferRepository } from '../../../data/persistence/repositories';
 import { TransferDto } from '../../../business/dtos';
+import { AccountService } from '../../services';
 
 @Injectable()
 export class TransferService {
-  constructor(private readonly transferRepository: TransferRepository) {}
+  constructor(
+    private readonly transferRepository: TransferRepository,
+    private readonly accountService: AccountService) {}
 
   /**
    * Crear una transferencia entre cuentas del banco
    */
   createTransfer(transfer: TransferDto): TransferEntity {
+    this.accountService.removeBalance(transfer.outcome, transfer.amount);
+    this.accountService.addBalance(transfer.income, transfer.amount);
+    
+    let accountIncome = this.accountService.findOneAccountById(transfer.income);
+    let accountOutcome = this.accountService.findOneAccountById(transfer.outcome);
+    
     let newTransfer = new TransferEntity();
-    newTransfer = {
-      ...newTransfer,
-      ...transfer
-    }
+    newTransfer.income = accountIncome;
+    newTransfer.outcome = accountOutcome;
+    newTransfer.amount = transfer.amount;
+    newTransfer.reason = transfer.reason;
+
     this.transferRepository.register(newTransfer);
     return newTransfer;
   }

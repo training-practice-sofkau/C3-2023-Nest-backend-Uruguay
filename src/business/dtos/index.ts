@@ -6,3 +6,4 @@ export * from './sign-in.dto';
 export * from './sign-out.dto';
 export * from './sign-up.dto';
 export * from './transfer.dto';
+export * from './update-account.dto';

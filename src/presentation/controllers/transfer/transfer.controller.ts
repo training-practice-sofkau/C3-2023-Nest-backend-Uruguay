@@ -15,6 +15,7 @@ export class TransferController {
     }
     
     @Post()
+    @UsePipes( new ValidationPipe())
     createTransfer(@Body()transfer: TransferDto): TransferEntity {
         return this.transferService.createTransfer(transfer);
     }

@@ -2,25 +2,26 @@ import { BadRequestException, ForbiddenException, HttpException, Injectable } fr
 
 import { PaginationModel } from '../../../data/models';
 import { AccountEntity, AccountTypeEntity } from '../../../data/persistence/entities';
-import { AccountRepository, AccountTypeRepository } from '../../../data/persistence/repositories';
-import { AccountDto } from '../../dtos';
+import { AccountRepository, AccountTypeRepository, CustomerRepository } from '../../../data/persistence/repositories';
+import { AccountDto, UpdateAccountDto } from '../../dtos';
 
 @Injectable()
 export class AccountService {
   constructor(
     private readonly accountRepository: AccountRepository,
-    private readonly accountTypeRepository: AccountTypeRepository) {}
+    private readonly accountTypeRepository: AccountTypeRepository,
+    private readonly customerRepository: CustomerRepository) {}
 
   /**
    * Crear una cuenta
    */
   createAccount(account: AccountDto): AccountEntity {
+    const accountTypeExisting  = this.accountTypeRepository.findOneById(account.accountType);
+    const customerExisting = this.customerRepository.findOneById(account.customer);
+    
     let newAccount = new AccountEntity();
-
-    newAccount = {
-      ...newAccount,
-      ...account
-    };
+    newAccount.accountType = accountTypeExisting;
+    newAccount.customer = customerExisting;
 
     return this.accountRepository.register(newAccount);
   }
@@ -146,9 +147,9 @@ export class AccountService {
   /**
    * Obtener todas las cuentas
    */
-  findAllAccounts(pagination?: PaginationModel): AccountDto[] {
+  findAllAccounts(pagination?: PaginationModel): AccountEntity[] {
     const accounts = this.accountRepository.findAll();
-    let accountsPaginated: AccountDto[] =[];
+    let accountsPaginated: AccountEntity[] =[];
 
     if(pagination) {
       return accountsPaginated = accounts.slice(pagination.offset, pagination.limit);
@@ -159,7 +160,7 @@ export class AccountService {
   /**
    * Obtener una cuenta por id
    */
-  findOneAccountById(id: string): AccountDto {
+  findOneAccountById(id: string): AccountEntity {
     const account = this.accountRepository.findOneById(id);
     return account;
   }
@@ -167,7 +168,26 @@ export class AccountService {
   /**
    * Actualizar información de una cuenta
    */
-  updatedAccount(id: string, account: AccountDto): AccountEntity {
-    return this.accountRepository.update(id, account);
+  updatedAccount(id: string, account: UpdateAccountDto): AccountEntity {
+    let accountUpdated  = this.accountRepository.findOneById(id);
+
+    if(account.accountType) {
+      const accountTypeExisting = this.accountTypeRepository.findOneById(account.accountType.id);
+      accountUpdated.accountType = accountTypeExisting;
+    }
+    if(account.customer) {
+      const customerExisting = this.customerRepository.findOneById(account.customer.id);
+      accountUpdated.customer = customerExisting;
+    }
+    if(account.balance) {
+      accountUpdated.balance = account.balance;
+    }
+    if(account.deletedAt) {
+      accountUpdated.deletedAt = account.deletedAt;
+    }
+    if(account.state) {
+      accountUpdated.state = account.state;
+    }
+    return this.accountRepository.update(id, accountUpdated);
   }
 }

@@ -1,16 +1,15 @@
-import { IsNotEmpty, IsNumber, IsPositive, IsString } from 'class-validator';
-
-import { AccountEntity } from '../../data/persistence/entities';
+import { IsNotEmpty, IsPositive, IsString, IsUUID } from 'class-validator';
 
 export class TransferDto {
 
     @IsNotEmpty()
-    outcome: AccountEntity;
+    @IsUUID()
+    outcome: string;
 
     @IsNotEmpty()
-    income: AccountEntity;
+    @IsUUID()
+    income: string;
 
-    @IsNumber()
     @IsPositive()
     @IsNotEmpty()
     amount: number;

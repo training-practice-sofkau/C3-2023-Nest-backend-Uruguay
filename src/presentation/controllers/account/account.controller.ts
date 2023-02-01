@@ -27,7 +27,7 @@ export class AccountController {
         return this.accountService.getBalance(id);
     }
 
-    @Post(':id/balance/:amount')
+    @Patch(':id/balance/:amount')
     @UsePipes(new ValidationPipe())
     addBalance(
         @Param('id',ParseUUIDPipe) id: string,

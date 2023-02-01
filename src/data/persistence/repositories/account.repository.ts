@@ -16,7 +16,7 @@ export class AccountRepository
         return this.database.at(-1) ?? entity;
     }
 
-    update(id: string, entity: AccountDto): AccountEntity {
+    update(id: string, entity: AccountEntity): AccountEntity {
         const indexCurrentEntity = this.database.findIndex(
             (item) => item.id === id && typeof item.deletedAt === 'undefined'
         );
