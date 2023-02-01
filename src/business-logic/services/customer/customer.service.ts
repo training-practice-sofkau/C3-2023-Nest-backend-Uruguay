@@ -12,7 +12,9 @@ export class CustomerService {
 
 
     constructor(private readonly customerRepository: CustomerRepo,
-                private readonly accountService: AccountService) { }
+                private readonly accountService: AccountService) {}
+
+               // 
     /*    
     createCustomer(customer: CreateCustomerDto) {
 
@@ -91,6 +93,8 @@ export class CustomerService {
      * @return {*}  {boolean}
      * @memberof CustomerService
      */
+    
+    
     unsubscribe(pagination: PaginationModel, id: string): boolean {
         const accounts = this.accountService.findByCustomer(pagination, id);
 
@@ -100,7 +104,7 @@ export class CustomerService {
 
         return true;
     }
-
+    
     deleteCustomer(customerId: string, soft?: boolean): void {
         
         if (soft) this.customerRepository.delete(customerId, soft);

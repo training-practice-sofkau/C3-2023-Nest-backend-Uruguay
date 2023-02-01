@@ -11,12 +11,27 @@ import { CustomerService } from 'src/business-logic/services/customer/customer.s
 @Controller('account')
 export class AccountController {
 
-    constructor(private readonly accountService : AccountService ){}
+    constructor(private readonly accountService : AccountService,
+        private readonly customerService : CustomerService){}
     
-    @Post('/create')
-    createAccount(@Body() account: AccountEntity): AccountEntity {
-        return this.accountService.createAccount(account);
+    
+    @Post('/create') //A quien le creo esta cuenta
+    createAccount(@Body() account: AccountDTO): AccountEntity {
+
+        const newAditionalAccount = new AccountEntity();
+        const newAditionalAccountType = new AccountTypeEntity();
+
+        newAditionalAccountType.name = account.accountTypeName;
+
+        newAditionalAccount.accountTypeId = newAditionalAccountType;
+        newAditionalAccount.balance = account.balance;
+        newAditionalAccount.customerId = this.customerService.getCustomerInfo(account.customerId); //??
+
+        const aditionalAccount = this.accountService.createAccount(newAditionalAccount);
+
+        return aditionalAccount;
     }
+    
 
     @Put('/update/:accountId')
     updateAccount(@Param() accountId: string, @Body() newAccount: AccountDTO): AccountEntity {

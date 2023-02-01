@@ -8,9 +8,7 @@ import { CustomerService } from 'src/business-logic/services/customer/customer.s
 @Controller('customer')
 export class CustomerController {
 
-
     constructor(private readonly customerService : CustomerService ){}
-
 
     @Put('/update/:id')
     updateCustomer(@Param() id: string ,@Body() newCustomer: UpdateCustomerDTO ): CustomerEntity {

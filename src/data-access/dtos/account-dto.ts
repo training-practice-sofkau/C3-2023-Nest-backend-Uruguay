@@ -1,18 +1,22 @@
-import { IsEmail, IsNumberString, IsUUID, IsString, IsNotEmpty, IsBoolean } from 'class-validator';
+import { IsEmail, IsNumberString, IsUUID, IsString, IsNotEmpty, IsBoolean, IsNumber } from 'class-validator';
 
 export class AccountDTO {
 
-    @IsUUID(4, { message: "The value is not a UUID valid!" })
-    id: string;
+    
+    @IsString()
+    @IsNotEmpty({message:'This value cannot be empty!'})
+    accountTypeName: string;
 
+    @IsString()
+    @IsNotEmpty({message:'This value cannot be empty!'})
+    customerId: string;
 
-    customer: string;
-
-
+    @IsString()
+    @IsNotEmpty({message:'This value cannot be empty!'})
     accountType: string;
 
-
-    balance: number;
+    @IsNumber()
+    balance: number = 0;
 
     @IsBoolean()
     state: boolean;

@@ -16,10 +16,11 @@ import { CustomerRepo } from './data-access/repositories/CustomerRepo';
 import { DepositRepository } from './data-access/repositories/DepositRepo';
 import { TransferRepository } from './data-access/repositories/TransferRepo';
 import { DocumentTypeRepository } from './data-access/repositories/DocumentTypeRepo';
+import { JwtModule } from '@nestjs/jwt';
 
 
 @Module({
-  imports: [],
+  imports: [JwtModule.register({secret: 'process.env.JWT_SECRET', signOptions: { expiresIn: '20m'}})],
   
   controllers: [SecurityController,
                 AccountController,
