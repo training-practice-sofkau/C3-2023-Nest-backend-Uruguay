@@ -48,9 +48,9 @@ export class AccountController {
 
     // get account balance
     @Get('/:id')
-    async getBalance(@Param('id', ParseUUIDPipe) accountId: string): Promise<number>{
+     getBalance(@Param('id', ParseUUIDPipe) accountId: string): number{
         
-        return await this.accountService.getBalance(accountId);        
+        return  this.accountService.getBalance(accountId);        
     }
 
     // add amount to balance ( )

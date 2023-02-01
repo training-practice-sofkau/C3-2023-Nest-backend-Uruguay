@@ -58,7 +58,6 @@ export class AccountService {
     console.log("aca paso")
 
     return this.accountRepository.update(accountId, newAccount);
-
   }
 
   /**

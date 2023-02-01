@@ -5,6 +5,7 @@ import { AccountTypeEntity } from "../entities";
 import { BankInternalControl } from "./base";
 import { AccountTypeRepositoryInterface } from "./interfaces";
 import { PaginationModel } from '../../../business/models';
+import { AccountTypeDto } from "../../../business/dtos";
 
 
 @Injectable()
@@ -13,15 +14,18 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
 
     /**
      * Adds a new AccountType Entity to the Array of Accounts
-     * @param entity new object to be inserted in the array
+     * @param accountType new object to be inserted in the array
      * @returns new entity added
      */
-    register(entity: AccountTypeEntity): AccountTypeEntity {
+    register(accountType: AccountTypeDto): AccountTypeEntity {
         
-        try{ // try to add the entity to the array
+        try{ 
             
-            const res = this.database.push(entity);            
-            return this.database.at(-1) ?? entity; // all good, returns the new entity 
+            const newAccountType = new AccountTypeEntity();
+            newAccountType.name = accountType.name;
+
+            const res = this.database.push(newAccountType);            
+            return this.database.at(-1) ?? newAccountType; // all good, returns the new entity 
 
         } catch (err){ // something went wrong, push didn't work
 
