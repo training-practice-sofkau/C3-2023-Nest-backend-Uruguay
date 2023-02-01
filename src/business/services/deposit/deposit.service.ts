@@ -1,15 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 
 import { DepositEntity } from '../../../data/persistence/entities';
 import { DataRangeModel, DepositModel, PaginationModel } from '../../models';
 import { DepositRepository } from '../../../data/persistence/repositories';
 import { CreateDepositDto } from '../../dtos/create-deposit.dto';
+import { AccountService } from '../account/account.service';
 
 @Injectable()
 export class DepositService {
 
 
-  constructor(private readonly depositRepository: DepositRepository) { }
+  constructor(
+    private readonly depositRepository: DepositRepository,
+    private readonly accountService: AccountService) { }
 
   /**
    * Make a new Deposit - OK
@@ -20,13 +23,21 @@ export class DepositService {
    */
   createDeposit(deposit: CreateDepositDto): DepositEntity {
 
-    const newDeposit = new DepositEntity();
-    
-    newDeposit.accountId = deposit.accountId;
-    newDeposit.amount = deposit.amount;
+    if (this.accountService.getState(deposit.accountId)) {
+      const newDeposit = new DepositEntity();
 
-    return this.depositRepository.register(newDeposit);
+      newDeposit.accountId = deposit.accountId;
+      newDeposit.amount = deposit.amount;
 
+      const depositDone = this.depositRepository.register(newDeposit);
+
+      if (depositDone) {
+
+        this.accountService.addBalance(deposit.accountId, deposit.amount);
+        return depositDone;
+      }
+    }
+    throw new InternalServerErrorException("Something went Wrong. Null Deposit! ");
   }
 
   /**
@@ -36,6 +47,8 @@ export class DepositService {
    * @memberof DepositService
    */
   deleteDeposit(depositId: string, soft?: boolean): void {
+
+    //TODO: apply validations for allow to delete the deposit ( don't know the logic )
 
     this.depositRepository.delete(depositId, soft); //TODO: Soft Delete by Default,  implement hard/soft selection. 
   }

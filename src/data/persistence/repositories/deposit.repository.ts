@@ -81,7 +81,7 @@ export class DepositRepository extends BankInternalControl<DepositEntity> implem
 
         } catch (err){// something wrong happened
 
-            throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
+            throw new InternalServerErrorException(`no encontrado Internal Error! (${err})`) // throws an internal Error
 
         }
     }
@@ -180,8 +180,8 @@ export class DepositRepository extends BankInternalControl<DepositEntity> implem
             
         try{ // try to find an element with a given Id
 
-            const index = this.database.findIndex(entity => entity.id === id 
-                            && typeof entity.deletedAt === undefined ) ; 
+            const index = this.database.findIndex(deposit => deposit.id === id 
+                            && typeof deposit.deletedAt === 'undefined' ) ; 
 
             if(index == -1) { throw new NotFoundException(); }
 

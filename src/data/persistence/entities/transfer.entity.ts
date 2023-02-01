@@ -8,6 +8,6 @@ export class TransferEntity implements TransferModel{
     income: string;
     amount: number;
     reason: string;
-    dateTime: Date; //dateTime can be set automatic or must receive data from service??
+    dateTime = new Date(); //dateTime can be set automatic or must receive data from service??
     deletedAt?: number | Date;
 }
