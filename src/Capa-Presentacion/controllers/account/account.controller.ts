@@ -5,9 +5,14 @@ import { CreateAccountDto } from 'src/Capa-Presentacion/dtos/account.dto';
 
 
 
-@Controller('accounts')
+@Controller('account')
 export class AccountController {
 constructor(private readonly accountService: AccountService) {}
+
+@Get('saludo')
+saludar(){
+    console.log("hola")
+}
 
 @Post('new')
 createAccount(@Body() account: CreateAccountDto): AccountEntity {

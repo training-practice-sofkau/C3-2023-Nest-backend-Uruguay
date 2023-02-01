@@ -11,7 +11,7 @@ export class SecurityController {
     constructor (private readonly securityService : SecurityService) {}
 
 
-    @Post()
+    @Post('newUser')
     signUp(@Body() signUp: SignUpDto): string{
         return this.securityService.signUp(signUp);
     }
