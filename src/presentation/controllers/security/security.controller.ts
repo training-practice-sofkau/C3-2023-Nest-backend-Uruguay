@@ -3,6 +3,7 @@ import { Controller, Post, Body, UsePipes, ValidationPipe } from '@nestjs/common
 
 import { CustomerService, SecurityService } from '../../../business/services';
 import { CustomerDto, SignInDto, SignOutDto, SignUpDto } from '../../../business/dtos';
+import { CustomerEntity } from '../../../data/persistence/entities';
 
 @Controller('security')
 export class SecurityController {
@@ -31,7 +32,7 @@ export class SecurityController {
 
     @Post('customer')
     @UsePipes(new ValidationPipe())
-    createCustomer(@Body() customer: CustomerDto): CustomerDto {
+    createCustomer(@Body() customer: CustomerDto): CustomerEntity {
         return this.customerService.createCustomer(customer);
     }
 }

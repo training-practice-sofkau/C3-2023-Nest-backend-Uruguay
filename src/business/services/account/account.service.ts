@@ -3,7 +3,7 @@ import { BadRequestException, ForbiddenException, HttpException, Injectable } fr
 import { PaginationModel } from '../../../data/models';
 import { AccountEntity, AccountTypeEntity } from '../../../data/persistence/entities';
 import { AccountRepository, AccountTypeRepository, CustomerRepository } from '../../../data/persistence/repositories';
-import { AccountDto, UpdateAccountDto } from '../../dtos';
+import { AccountDto, AccountTypeDto, UpdateAccountDto } from '../../dtos';
 
 @Injectable()
 export class AccountService {
@@ -172,11 +172,11 @@ export class AccountService {
     let accountUpdated  = this.accountRepository.findOneById(id);
 
     if(account.accountType) {
-      const accountTypeExisting = this.accountTypeRepository.findOneById(account.accountType.id);
+      const accountTypeExisting = this.accountTypeRepository.findOneById(account.accountType);
       accountUpdated.accountType = accountTypeExisting;
     }
     if(account.customer) {
-      const customerExisting = this.customerRepository.findOneById(account.customer.id);
+      const customerExisting = this.customerRepository.findOneById(account.customer);
       accountUpdated.customer = customerExisting;
     }
     if(account.balance) {
@@ -190,4 +190,14 @@ export class AccountService {
     }
     return this.accountRepository.update(id, accountUpdated);
   }
+
+  createAccountType(dto: AccountTypeDto): AccountTypeEntity {
+    let newAccountType = new AccountTypeEntity();
+    newAccountType = {
+        ...newAccountType,
+        ...dto
+    }
+    this.accountTypeRepository.register(newAccountType)
+    return newAccountType;
+}
 }

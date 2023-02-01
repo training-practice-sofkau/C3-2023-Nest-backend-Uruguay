@@ -1,23 +1,26 @@
 import { Body, UsePipes, Controller, Get, Post, Param, ParseUUIDPipe, ValidationPipe, Put, Patch, Delete, ParseIntPipe } from '@nestjs/common';
 
 import { AccountService } from '../../../business/services';
-import { AccountDto } from '../../../business/dtos';
+import { AccountDto, UpdateAccountDto, AccountTypeDto } from '../../../business/dtos';
 import { AccountEntity } from '../../../data/persistence/entities';
 import { ParseBoolPipe } from '@nestjs/common/pipes';
 import { AccountTypeEntity } from '../../../data/persistence/entities/account-type.entity';
+import { AccountTypeRepository } from '../../../data/persistence/repositories/';
 
 @Controller('account')
 export class AccountController {
-    constructor(private readonly accountService: AccountService) {}
+    constructor(
+        private readonly accountService: AccountService,
+        private readonly accountTypeRepository: AccountTypeRepository) {}
 
     @Get()
-    findAll(): AccountDto[] {
+    findAll(): AccountEntity[] {
         return this.accountService.findAllAccounts();
     }
 
     @Get(':id')
     @UsePipes(new ValidationPipe())
-    findOneAccountById(@Param('id',ParseUUIDPipe) id: string ): AccountDto {
+    findOneAccountById(@Param('id',ParseUUIDPipe) id: string ): AccountEntity {
         return this.accountService.findOneAccountById(id);
     }
 
@@ -91,13 +94,13 @@ export class AccountController {
 
     @Put(':id')
     @UsePipes(new ValidationPipe())
-    updateAccount(@Param('id', ParseUUIDPipe) id: string ,@Body() account: AccountDto): AccountEntity {
+    updateAccount(@Param('id', ParseUUIDPipe) id: string ,@Body() account: UpdateAccountDto): AccountEntity {
         return this.accountService.updatedAccount(id, account);
     }
 
     @Patch(':id')
     @UsePipes(new ValidationPipe())
-    updateSomePropertiesAccount(@Param('id', ParseUUIDPipe) id: string ,@Body() account: AccountDto): AccountEntity {
+    updateSomePropertiesAccount(@Param('id', ParseUUIDPipe) id: string ,@Body() account: UpdateAccountDto): AccountEntity {
         return this.accountService.updatedAccount(id, account);
     }
 
@@ -106,5 +109,10 @@ export class AccountController {
     @UsePipes(new ValidationPipe())
     hardDeleteAccount(@Param('id', ParseUUIDPipe) id: string): void {
         this.accountService.deleteAccount(id);
+    }
+
+    @Post('type')
+    createAccountType(@Body() accountType: AccountTypeDto): AccountTypeEntity {
+        return this.accountService.createAccountType(accountType);
     }
 }

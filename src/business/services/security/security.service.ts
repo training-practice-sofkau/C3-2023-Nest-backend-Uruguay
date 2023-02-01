@@ -7,28 +7,27 @@ import {
 import { JwtService } from '@nestjs/jwt';
 
   // Data transfer objects
-  import { SignOutDto, SignUpDto, SignInDto, AccountDto } from '../../dtos';
+  import { SignOutDto, SignUpDto, SignInDto } from '../../dtos';
 
   // Models
-  import { AccountModel, CustomerModel } from '../../../data/models';
   
   // Repositories
-  import { CustomerRepository } from '../../../data/persistence/repositories';
+  import { AccountTypeRepository, CustomerRepository, DocumentTypeRepository } from '../../../data/persistence/repositories';
   
   // Services
-  import { AccountService,  CustomerService } from '../../services';
+  import { AccountService } from '../../services';
   
   // Entities
   import {
-    AccountTypeEntity,
     CustomerEntity,
-    DocumentTypeEntity,
   } from '../../../data/persistence/entities';
   
   @Injectable()
   export class SecurityService {
     constructor(
       private readonly customerRepository: CustomerRepository,
+      private readonly documentTypeRepository: DocumentTypeRepository,
+      private readonly accountTypeRepository: AccountTypeRepository,
       private readonly accountService: AccountService,
       private jwtService: JwtService
     ) {}
@@ -52,8 +51,7 @@ import { JwtService } from '@nestjs/jwt';
      */
     signUp(user: SignUpDto): string {
       
-      const documentType = new DocumentTypeEntity()
-      documentType.id = user.documentTypeId;
+      const documentType = this.documentTypeRepository.findOneById(user.documentTypeId)
 
       const newCustomer = new CustomerEntity();
       newCustomer.documentType = documentType;
@@ -66,12 +64,10 @@ import { JwtService } from '@nestjs/jwt';
       const customer = this.customerRepository.register(newCustomer);
   
       if (customer) {
-        const accountType = new AccountTypeEntity();
-        // accountType.id = ;
         
-        const newAccount = {
-          customer,
-          accountType,
+        const newAccount = { 
+          customer: customer.id,
+          accountType: user.accountTypeId,
         };
         
         const account = this.accountService.createAccount(newAccount);

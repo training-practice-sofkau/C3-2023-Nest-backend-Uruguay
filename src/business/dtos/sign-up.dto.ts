@@ -2,8 +2,11 @@ import { IsEmail,IsNumberString, IsUUID, IsString, IsNotEmpty, Length } from 'cl
 
 export class SignUpDto {
 
-    @IsUUID(4, { message: "this must to be uuid v4" })
+    @IsUUID(4, { message: "documentTypeId must to be uuid v4" })
     documentTypeId: string;
+
+    @IsUUID(4, { message: "accountTypeId must to be uuid v4" })
+    accountTypeId: string;
 
     @IsNumberString()
     document: string;

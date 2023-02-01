@@ -1,23 +1,20 @@
-import { IsUUID, IsBoolean, IsDate, IsEmail, IsNotEmpty, IsOptional, IsPhoneNumber, IsString } from 'class-validator';
+import { IsUUID, IsBoolean, IsDate, IsEmail, IsNotEmpty, IsOptional, IsPhoneNumber, IsString, IsNumberString } from 'class-validator';
 
-import { DocumentTypeModel } from '../../data/models';
-
-export class PatchCustomerDto {
-
-    @IsOptional()
-    @IsUUID(4,{message: 'uuid must to be a valid v4 UUID'})
-    id: string;
+export class UpdateCustomerDto {
 
     @IsOptional()
     @IsNotEmpty()
-    documentType: DocumentTypeModel;
+    @IsUUID(4, {message: 'documentType must to be a valid uuid'})
+    documentType: string;
 
     @IsOptional()
     @IsString()
+    @IsNotEmpty()
     document: string;
 
     @IsOptional()
     @IsString()
+    @IsNotEmpty()
     fullName: string;
 
     @IsOptional()
@@ -26,7 +23,8 @@ export class PatchCustomerDto {
 
     @IsOptional()
     @IsPhoneNumber('UY', {message: 'phoneNumber must to be a uruguayan valid phone number'})
-    @IsString()
+    @IsNumberString()
+    @IsNotEmpty()
     phone: string;
 
     @IsOptional()
@@ -36,14 +34,17 @@ export class PatchCustomerDto {
     
     @IsOptional()
     @IsString()
-    avatarUrl?: string | undefined;
+    @IsNotEmpty()
+    avatarUrl: string;
 
     @IsOptional()
     @IsBoolean()
+    @IsNotEmpty()
     state: boolean;
 
     @IsOptional()
     @IsDate()
-    daletedAt?: number | Date | undefined;
+    @IsNotEmpty()
+    daletedAt: number | Date;
 
 }

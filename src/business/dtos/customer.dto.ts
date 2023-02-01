@@ -4,24 +4,24 @@ import { DocumentTypeEntity } from '../../data/persistence/entities';
 
 export class CustomerDto {
 
-    @IsOptional()
-    @IsUUID(4,{message: 'uuid must to be a valid v4 UUID'})
-    id: string;
-
-    @IsNotEmpty({message: 'documentType must have a name'})
-    documentType: DocumentTypeEntity;
+    @IsNotEmpty()
+    @IsString({message: 'documentType must to be a valid id'})
+    documentType: string;
 
     @IsString()
     document: string;
 
     @IsString()
+    @IsNotEmpty()
     fullName: string;
 
     @IsEmail()
+    @IsNotEmpty()
     email: string;
 
     @IsPhoneNumber('UY', {message: 'phone must to be a uruguayan valid phone number'})
     @IsString()
+    @IsNotEmpty()
     phone: string;
 
     @IsNotEmpty({ message: 'the password is required.' })
@@ -31,14 +31,8 @@ export class CustomerDto {
     
     @IsOptional()
     @IsString()
-    avatarUrl?: string | undefined;
+    @IsNotEmpty()
+    avatarUrl: string | undefined;
 
-    @IsOptional()
-    @IsBoolean()
-    state: boolean;
-
-    @IsOptional()
-    @IsDate()
-    daletedAt?: number | Date | undefined;
 
 }

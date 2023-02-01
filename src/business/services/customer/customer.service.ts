@@ -1,28 +1,34 @@
 import { HttpException, Injectable } from '@nestjs/common';
 
-import { CustomerModel, PaginationModel } from '../../../data/models';
+import { PaginationModel } from '../../../data/models';
 import { CustomerEntity, DocumentTypeEntity } from '../../../data/persistence/entities';
 import { CustomerRepository } from '../../../data/persistence/repositories';
-import { CustomerDto } from '../../dtos';
+import { CustomerDto, DocumentTypeDto, UpdateCustomerDto } from '../../dtos';
+import { DocumentTypeRepository } from '../../../data/persistence/repositories/document-type.repository';
 
 @Injectable()
 export class CustomerService {
 
-  constructor(private readonly customerRepository: CustomerRepository) {}
+  constructor(
+    private readonly customerRepository: CustomerRepository,
+    private readonly documentTypeRepository: DocumentTypeRepository) {}
 
   /**
    * Crear una cliente
    */
   createCustomer(customer: CustomerDto): CustomerEntity {
+
+    const documentTypeExisting = this.documentTypeRepository.findOneById(customer.documentType);
+
     const newACustomer = new CustomerEntity();
     newACustomer.fullName = customer.fullName;
     newACustomer.document = customer.document;
-    newACustomer.documentType = new DocumentTypeEntity();
-    newACustomer.documentType.name = customer.documentType.name;
+    newACustomer.documentType = documentTypeExisting;
     newACustomer.email = customer.email;
     newACustomer.password = customer.password;
     newACustomer.phone = customer.phone;
-    newACustomer.avatarUrl = customer.avatarUrl;
+    
+    if(customer.avatarUrl) newACustomer.avatarUrl = customer.avatarUrl;
 
     return this.customerRepository.register(newACustomer);
   }
@@ -30,7 +36,7 @@ export class CustomerService {
   /**
    * Obtener información de un cliente
    */
-  getCustomerInfo(customerId: string): CustomerDto {
+  getCustomerInfo(customerId: string): CustomerEntity {
     const customer = this.customerRepository.findOneById(customerId);
     return customer;
   }
@@ -38,8 +44,23 @@ export class CustomerService {
   /**
    * Actualizar información de un cliente
    */
-  updatedCustomer(id: string, customer: CustomerModel): CustomerDto {
-    return this.customerRepository.update(id, customer);
+  updatedCustomer(id: string, customer: UpdateCustomerDto): CustomerEntity {
+    let customerUpdated = this.customerRepository.findOneById(id);
+
+    if(customer.avatarUrl) customerUpdated.avatarUrl = customer.avatarUrl;
+    if(customer.daletedAt) customerUpdated.deletedAt = customer.daletedAt;
+    if(customer.document) customerUpdated.document = customer.document;
+    if(customer.documentType) {
+      let documentTypeExisting = this.documentTypeRepository.findOneById(customer.documentType);
+      customerUpdated.documentType = documentTypeExisting;
+    }
+    if(customer.email) customerUpdated.email = customer.email;
+    if(customer.fullName) customerUpdated.fullName = customer.fullName;
+    if(customer.password) customerUpdated.password = customer.password;
+    if(customer.phone) customerUpdated.phone = customer.phone;
+    if(customer.state) customerUpdated.state = customer.state;
+    
+    return this.customerRepository.update(id, customerUpdated);
   }
 
   /**
@@ -72,9 +93,9 @@ export class CustomerService {
   /**
    * Obtener la lista de clientes
    */
-  findAllCustomers(pagination?: PaginationModel): CustomerDto[] {
+  findAllCustomers(pagination?: PaginationModel): CustomerEntity[] {
     const customers = this.customerRepository.findAll();
-    let customersPaginated: CustomerDto[] =[];
+    let customersPaginated: CustomerEntity[] =[];
 
     if(pagination) {
       return customersPaginated = customers.slice(pagination.offset, pagination.limit);
@@ -94,6 +115,18 @@ export class CustomerService {
     } catch (error) {
       throw new HttpException(error.message, error.status);
     }
+  }
+
+  createDocumentType(dto: DocumentTypeDto): DocumentTypeEntity {
+    let newDocumentType = new DocumentTypeEntity();
+
+    newDocumentType = {
+      ...newDocumentType,
+      ...dto
+    }
+
+    this.documentTypeRepository.register(newDocumentType);
+    return newDocumentType;
   }
 
 }
