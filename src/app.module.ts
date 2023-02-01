@@ -7,7 +7,7 @@ import {
   CustomerController,
   DepositController,
   TransferController   
-} from './controllers';
+} from './presentation/controllers';
 
 // Repositories
 import {
@@ -17,7 +17,7 @@ import {
   DepositRepository,
   DocumentTypeRepository,
   TransferRepository
-} from './persistence';
+} from './data/persistence';
 
 // Services
 import { 
@@ -26,7 +26,7 @@ import {
   DepositService, 
   SecurityService, 
   TransferService 
-} from './services';
+} from './business/services';
 
 
 @Module({
