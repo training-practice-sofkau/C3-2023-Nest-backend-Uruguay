@@ -1,10 +1,10 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 
 import { DepositEntity } from '../../../data/persistence/entities';
-import { DataRangeModel, DepositModel, PaginationModel } from '../../models';
+import { DataRangeModel, PaginationModel } from '../../models';
 import { DepositRepository } from '../../../data/persistence/repositories';
-import { CreateDepositDto } from '../../dtos/create-deposit.dto';
-import { AccountService } from '../account/account.service';
+import { CreateDepositDto } from '../../dtos';
+import { AccountService } from '../account';
 
 @Injectable()
 export class DepositService {

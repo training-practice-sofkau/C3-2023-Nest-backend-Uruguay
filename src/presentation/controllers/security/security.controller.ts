@@ -4,11 +4,8 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 //DTOs
 import { SignUpDto, SignInDto, AccountTypeDto, DocumentTypeDto } from 'src/business/dtos';
 import { SecurityService } from 'src/business/services';
-import { DocumentTypeEntity } from '../../../data/persistence/entities';
+import { DocumentTypeEntity, AccountTypeEntity } from '../../../data/persistence/entities';
 import { DocumentTypeRepository, AccountTypeRepository } from '../../../data/persistence/repositories';
-import { AccountTypeEntity } from '../../../data/persistence/entities/account-type.entity';
-
-
 
 
 @Controller('security')

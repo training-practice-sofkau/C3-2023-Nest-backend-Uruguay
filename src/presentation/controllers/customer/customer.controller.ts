@@ -21,6 +21,7 @@ export class CustomerController {
         return await this.customerService.updatedCustomer(customerId, newDetails);
     }    
 
+    // Get list of customers
     @Get()
     async getCustomers() : Promise<CustomerEntity[]>{
         return await this.customerService.getAll();

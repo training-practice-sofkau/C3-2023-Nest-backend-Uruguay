@@ -70,7 +70,7 @@ export class SecurityService {
 
     if (documentType) {
       const newCustomer = new CustomerEntity();
-
+            
       newCustomer.documentType = documentType;
       newCustomer.document = user.document;
       newCustomer.fullname = user.fullname;
