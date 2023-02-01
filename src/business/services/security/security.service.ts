@@ -20,16 +20,20 @@ import { AccountTypeEntity, CustomerEntity } from '../../../data/persistence/ent
 import { SignInDto, SignUpDto, CreateAccountDto } from '../../dtos';
 import { DocumentTypeEntity } from '../../../data/persistence/entities';
 import { response } from 'express';
+import { DocumentTypeRepository } from '../../../data/persistence/repositories/document-type.repository';
+import { AccountTypeRepository } from '../../../data/persistence/repositories/account-type.repository';
 
 
 
 
 
 @Injectable()
-export class SecurityService {  
+export class SecurityService {
 
   constructor(
     private readonly customerRepository: CustomerRepository,
+    private readonly documentTypeRepository: DocumentTypeRepository,
+    private readonly accountTypeRepository: AccountTypeRepository,
     private readonly accountService: AccountService,
     private jwtService: JwtService
   ) { }
@@ -60,51 +64,56 @@ export class SecurityService {
    * @param {SignUpDto} user
    * @return {*}  {string}   
    */
-   signUp(user: SignUpDto): string {
+  signUp(user: SignUpDto): string {
 
-    const documentType = new DocumentTypeEntity();
-    documentType.id = user.documentTypeId;
+    const documentType = this.documentTypeRepository.findOneById(user.documentTypeId);
 
-    const newCustomer = new CustomerEntity();
+    if (documentType) {
+      const newCustomer = new CustomerEntity();
 
-    newCustomer.documentType = documentType;
-    newCustomer.document = user.document;
-    newCustomer.fullname = user.fullname;
-    newCustomer.email = user.email;
-    newCustomer.phone = user.phone;
-    newCustomer.password = user.password;
+      newCustomer.documentType = documentType;
+      newCustomer.document = user.document;
+      newCustomer.fullname = user.fullname;
+      newCustomer.email = user.email;
+      newCustomer.phone = user.phone;
+      newCustomer.password = user.password;
 
-    const customer = this.customerRepository.register(newCustomer);
+      const customer = this.customerRepository.register(newCustomer);
 
-    if (customer) {
-      
-      const accountType = new AccountTypeEntity();      
+      if (customer) {
 
-      const newAccount = new CreateAccountDto();
+        const accountType = this.accountTypeRepository.findOneById(user.accountTypeId);
+        if (accountType) {
+          const newAccount = new CreateAccountDto();
 
-      newAccount.customerId = customer.id;
-      newAccount.accountTypeId = accountType.id;
+          newAccount.customerId = customer.id;
+          newAccount.accountTypeId = accountType.id;
 
-      const account = this.accountService.createAccount(newAccount);      
+          const account = this.accountService.createAccount(newAccount);
 
-      if (account) {
+          if (account) {
 
-        //TODO: jwt throw errors, is disable now but needs to be checked
-        return this.jwtService.sign({ id: customer.id });
+            //TODO: jwt throw errors, is disable now but needs to be checked
+            return this.jwtService.sign({ id: customer.id });
+            
+          } else{
 
-        //return 'Here goes JWT (jsonwebtoken gives error right now, is disabled now) -> But SignUp is working '
-        // jwt.sign({ id: customer.email }, process.env.SECRET_KEY || 'secretToken');
-        
-      }else{
-        
-        throw new Error('Error creating Account');
+            throw new Error('Error creating Account');  
+          }
+        } else {
+
+          throw new Error('Account Type Not valid!');
+        }
+
+      } else {
+
+        throw new Error("New Customer cannot be created!");
       }
-    
-    } else {     
-      
-      throw new InternalServerErrorException("Something went wrong!");
-    }    
-    
+    } else {
+
+      throw new Error('Document Type not found!');
+    }
+
   }
 
   /**
@@ -115,22 +124,22 @@ export class SecurityService {
    */
   signOut(JWToken: string): void {
 
-    try{
+    try {
 
-    const tokenValidation = this.jwtService.verify(JWToken);    
+      const tokenValidation = this.jwtService.verify(JWToken);
 
-    if(this.customerRepository.findOneByEmailAndPassword(tokenValidation.id, tokenValidation.pass)){
+      if (this.customerRepository.findOneByEmailAndPassword(tokenValidation.id, tokenValidation.pass)) {
 
-      console.log(`User: ${tokenValidation.id} - Pass: ${tokenValidation.pass}`);    
-      console.log("Logging Out!")  
-    } 
+        console.log(`User: ${tokenValidation.id} - Pass: ${tokenValidation.pass}`);
+        console.log("Logging Out!")
+      }
 
-    } catch(err){
+    } catch (err) {
       throw new InternalServerErrorException("Token expired or something went wrong! Not logging Out!");
     }
-    
+
 
     //TODO: save token in a blocklist to check from unauthorized possible future access until expires
 
-    }
   }
+}

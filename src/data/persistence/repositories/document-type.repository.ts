@@ -121,7 +121,7 @@ export class DocumentTypeRepository extends BankInternalControl <DocumentTypeEnt
 
         }catch(err){ // something wrong happened
 
-            throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
+            throw new InternalServerErrorException() // throws an internal Error
         }
     }
     

@@ -26,4 +26,7 @@ export class SignUpDto{
     @IsNotEmpty({message:'This value cannot be empty!'})       
     password: string;
     
+    @IsUUID(4, {message:'The value provided is not a UUID valid!' })
+    @IsNotEmpty({message:'This value cannot be empty!'})
+    accountTypeId: string;
 }
