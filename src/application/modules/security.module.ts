@@ -1,12 +1,12 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { SecurityController } from '../../presentation/controllers';
-import { AccountService, CustomerService, SecurityService } from '../../business/services';
+import { SecurityService } from '../../business/services';
 import { JwtService } from '@nestjs/jwt';
-import { AccountRepository, AccountTypeRepository, CustomerRepository, DocumentTypeRepository } from '../../data/persistence';
+import { AccountModule, CustomerModule } from '.';
 
 @Module({
-    imports: [],
-    controllers: [SecurityController],
-    providers: [SecurityService, CustomerService, AccountService, JwtService, CustomerRepository, DocumentTypeRepository, AccountRepository, AccountTypeRepository],
+  imports: [forwardRef( () => AccountModule), forwardRef( () => CustomerModule)],
+  controllers: [SecurityController],
+  providers: [SecurityService, JwtService],
 })
 export class SecurityModule {}

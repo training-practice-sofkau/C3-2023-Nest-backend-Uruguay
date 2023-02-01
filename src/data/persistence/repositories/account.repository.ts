@@ -15,7 +15,8 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
 
   update(id: string, entity: AccountEntity): AccountEntity {
     const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.deletedAt === undefined
+      (item) => item.id == id && 
+      item.deletedAt == undefined
     );
     if (indexCurrentEntity >= 0)
       this.database[indexCurrentEntity] = {
@@ -30,9 +31,9 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
   delete(id: string, soft?: boolean): void {
     let finded = this.database.findIndex(
         (item) => 
-          item.id === id
+          item.id == id
     );
-    if (finded === undefined) throw new NotFoundException();
+    if (finded == undefined) throw new NotFoundException();
     soft ? this.softDelete(finded) : this.hardDelete(finded);
   }
 
@@ -57,61 +58,62 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
   }
 
   findAll(paginator: PaginationModel): AccountEntity[] {
-    
     let finded = this.database.filter(
-        (item) => typeof item.deletedAt === undefined
+        (item) => item.deletedAt == undefined
     );
-    if (finded === undefined) throw new NotFoundException();
+    if (finded == undefined) throw new NotFoundException();
     return finded.slice(paginator?.offset, paginator?.limit);
   }
 
   findOneById(id: string): AccountEntity {
     let finded = this.database.find(
         (item) => 
-          item.id === id &&
-          typeof item.deletedAt === undefined
+          item.id == id &&
+          item.deletedAt == undefined
     );
-    if (finded === undefined) throw new NotFoundException();
+    if (finded == undefined) throw new NotFoundException();
     return finded;
   }
 
   findByState(state: boolean): AccountEntity[] {
     let finded = this.database.filter(
         (item) => 
-          item.state === state &&
-          typeof item.deletedAt === undefined
+          item.state == state &&
+          item.deletedAt == undefined
     );
-    if (finded === undefined) throw new NotFoundException();
+    if (finded == undefined) throw new NotFoundException();
     return finded;
   }
 
   findByCustomer(customerId: string): AccountEntity[] {
     let finded = this.database.filter(
         (item) => 
-          item.customer.id === customerId &&
-          typeof item.deletedAt === undefined
+          item.customer.id == customerId &&
+          item.deletedAt == undefined &&
+          item.customer.deletedAt == undefined
     );
-    if (finded === undefined) throw new NotFoundException();
+    console.log(finded);
+    if (finded == undefined) throw new NotFoundException();
     return finded;
   }
 
   findByAccountType(accountTypeId: string): AccountEntity {
     let finded = this.database.find(
         (item) => 
-          item.accountType.id === accountTypeId &&
-          typeof item.deletedAt === undefined
+          item.accountType.id == accountTypeId &&
+          item.deletedAt == undefined
     );
-    if (finded === undefined) throw new NotFoundException();
+    if (finded == undefined) throw new NotFoundException();
     return finded;
   }
 
   findByName(name: string): AccountEntity[] {
     let finded = this.database.filter(
         (item) => 
-          item.customer.fullName === name &&
-          typeof item.deletedAt === undefined
+          item.customer.fullName == name &&
+          item.deletedAt == undefined
     );
-    if (finded === undefined) throw new NotFoundException();
+    if (finded == undefined) throw new NotFoundException();
     return finded;
   }
 }

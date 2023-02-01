@@ -1,69 +1,85 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { AccountService } from '../../business/services';
+import { Body, Controller, Post, Get, Query } from '@nestjs/common';
+import { AccountService, CustomerService } from '../../business/services';
 import { BalanceDto, ChangeAccountDto, ChangeStateDto, CreateAccountDto } from '../../business/dtos';
 import { ApiTags } from '@nestjs/swagger';
+import { AccountEntity, AccountTypeEntity } from '../../data/persistence';
 
 @ApiTags('account')
 @Controller('api/account')
 export class AccountController {
 
-    constructor(private readonly accountService: AccountService) {}
+    constructor(private readonly accountService: AccountService, private readonly customerService: CustomerService) {}
 
     @Post('/create-account')
-    createAccount(@Body() account: CreateAccountDto): string {
-        return this.accountService.createAccount(account).toString();
+    createAccount(@Body() account: CreateAccountDto) {
+        const newAccount = new AccountEntity();
+        const newAccountType = new AccountTypeEntity();
+        newAccountType.name = account.accountTypeName;
+
+        newAccount.accountType = newAccountType;
+        newAccount.balance = account.balance;
+        newAccount.customer = this.customerService.getCustomerInfo(account.customerId);
+        const newAccountFinal = this.accountService.createAccount(newAccount);
+        return newAccountFinal;
     }
 
-    @Post('/get-balance')
-    getBalance(@Body() account: string): string {
+    @Get('/get-balance')
+    getBalance(@Query('account') account: string): string {
         return this.accountService.getBalance(account).toString();
-      }
+    }
     
     @Post('/add-balance')
-    addBalance(@Body() balance: BalanceDto): string {
-        this.accountService.addBalance(balance);
-        return 'ready';
+    addBalance(@Body() balance: BalanceDto): boolean {
+        return this.accountService.addBalance(balance);
     }
 
     @Post('/remove-balance')
-    removeBalance(@Body() balance: BalanceDto): string {
-        this.accountService.removeBalance(balance);
-        return 'ready';
+    removeBalance(@Body() balance: BalanceDto): boolean {
+        return this.accountService.removeBalance(balance);
     }
 
     @Post('/verify-amount-into-balance')
-    verifyAmountIntoBalance(@Body() balance: BalanceDto): string {
-        return this.accountService.verifyAmountIntoBalance(balance).toString();
+    verifyAmountIntoBalance(@Body() balance: BalanceDto): boolean {
+        return this.accountService.verifyAmountIntoBalance(balance);
     }
 
-    @Post('/get-state')
-    getState(@Body() account: string): string {
-        return this.accountService.getState(account).toString();
+    @Get('/get-state')
+    getState(@Query('account') account: string): boolean {
+        return this.accountService.getState(account);
     }
 
     @Post('/change-state')
     changeState(@Body() account: ChangeStateDto): string {
-        this.accountService.changeState(account);
-        return 'ready';
+        return this.accountService.changeState(account).toString();
     }
 
-    @Post('/get-account-by-id')
-    getAccountById(@Body() account: string): string {
-        return this.accountService.getAccountById(account).toString();
+    @Get('/get-account-by-id')
+    getAccountById(@Query('account') account: string): AccountEntity {
+        return this.accountService.getAccountById(account);
     }
 
-    @Post()
-    getAccountType(@Body() account: string): string {
-        return this.accountService.getAccountType(account).toString();
+    @Get('/get-account-by-customer-id')
+    getAccountByCostumerId(@Query('customer') customer: string): AccountEntity[] {
+        return this.accountService.getAccountByCustomerId(customer);
     }
 
-    @Post()
-    changeAccountType(@Body() account: ChangeAccountDto): string {
-        return this.accountService.changeAccountType(account).toString();
+    @Get('/get-account-type-by-id')
+    getAccountTypeById(@Query('account') account: string): AccountTypeEntity {
+        return this.accountService.getAccountTypeById(account);
     }
 
-    @Post()
-    deleteAccount(@Body() account: string): string {
-        return 'Not implemented';
+    @Get('/get-account-type-with-id')
+    getAccountTypeWithId(@Query('accountType') accountType: string): AccountTypeEntity {
+        return this.accountService.getAccountTypeWithId(accountType);
+    }
+
+    @Post('/change-account-type')
+    changeAccountType(@Body() accountType: ChangeAccountDto): AccountTypeEntity {
+        return this.accountService.changeAccountType(accountType);
+    }
+
+    @Get('/delete-account')
+    deleteAccount(@Query('account') account: string): boolean {
+        return this.accountService.deleteAccount(account);
     }
 }

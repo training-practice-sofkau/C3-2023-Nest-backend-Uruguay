@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { DepositEntity, DepositRepository } from '../../data/persistence';
-import { CreateDepositDto, HistoryDto, PaginationDto } from '../../business/dtos';
+import { BalanceDto, DateRangeDto, PaginationDto } from '../../business/dtos';
 import { AccountService } from '.';
 
 @Injectable()
@@ -9,25 +9,35 @@ export class DepositService {
 
   constructor(private readonly depositRepository: DepositRepository, private readonly accountService: AccountService) {}
 
-  createDeposit(deposit: CreateDepositDto): DepositEntity {
-    const newDeposit = new DepositEntity();
-    newDeposit.account = this.accountService.getAccountById(deposit.accountId);
-    newDeposit.amount = +deposit.balance;
-    newDeposit.dateTime = newDeposit.dateTime || Date.now();
-    return this.depositRepository.register(newDeposit);
+  createDeposit(deposit: DepositEntity): DepositEntity {
+    const newBalance = new BalanceDto();
+    newBalance.accountId = deposit.account.id;
+    newBalance.amount = deposit.amount;
+    this.accountService.addBalance(newBalance);
+    return this.depositRepository.register(deposit);
   }
 
-  deleteDeposit(depositId: string): void {
-    this.depositRepository.delete(depositId);
+  deleteDeposit(depositId: string): boolean {
+    const current = this.depositRepository.findOneById(depositId);
+    if (current){
+      try{
+        this.depositRepository.delete(depositId);
+        return true;
+      } catch {
+        return false;
+      }
+    } else {
+      return false;
+    }
   }
 
   getHistory(
     accountId: string,
     pagination?: PaginationDto,
-    dataRange?: HistoryDto,
+    dataRange?: DateRangeDto,
   ): DepositEntity[] {
     if (dataRange){
-      return this.depositRepository.findByDataRange(accountId, dataRange.dateInit, dataRange.dateEnd, pagination);
+      return this.depositRepository.findByDataRange(accountId, dataRange?.dateInit, dataRange?.dateEnd, pagination);
     } else return this.depositRepository.findByAccountId(accountId, pagination);
   }
 }

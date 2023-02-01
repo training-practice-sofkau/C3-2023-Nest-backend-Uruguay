@@ -1,11 +1,13 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { DepositController } from '../../presentation/controllers';
-import { AccountRepository, AccountTypeRepository, CustomerRepository, DepositRepository, DocumentTypeRepository } from '../../data/persistence';
-import { DepositService, AccountService, CustomerService } from '../../business/services';
+import { DepositRepository } from '../../data/persistence';
+import { DepositService } from '../../business/services';
+import { CustomerModule } from '.';
+import { AccountModule } from './account.module';
 
 @Module({
-    imports: [],
-    controllers: [DepositController],
-    providers: [DepositService, DepositRepository, AccountService, AccountRepository, AccountTypeRepository, CustomerService, CustomerRepository, DocumentTypeRepository],
+  imports: [forwardRef( () => AccountModule), forwardRef( () => CustomerModule)],
+  controllers: [DepositController],
+  providers: [DepositService, DepositRepository],
 })
 export class DepositModule {}
