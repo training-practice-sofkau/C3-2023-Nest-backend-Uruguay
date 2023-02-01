@@ -6,8 +6,8 @@ import { CustomerRepo } from 'src/data-access/repositories/CustomerRepo';
 import { AccountService } from '../account';
 import { Response } from 'express';
 import * as jwt from "jsonwebtoken"
-import { SignInDto } from 'src/data-access/dtos/sign-in-dto';
-import { SignUpDto } from 'src/data-access/dtos/sign-up-dto';
+import { SignInDto } from 'src/business-logic/dtos/sign-in-dto';
+import { SignUpDto } from 'src/business-logic/dtos/sign-up-dto';
 import { DocumentTypeEntity } from 'src/data-access/entities/document-type-entity';
 import { DocumentTypeRepository } from 'src/data-access/repositories/DocumentTypeRepo';
 import { JwtService } from '@nestjs/jwt/dist';

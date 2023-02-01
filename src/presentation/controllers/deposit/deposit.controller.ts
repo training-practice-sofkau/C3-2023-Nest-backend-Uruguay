@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-import { CreateDepositDTO } from 'src/data-access/dtos/create-deposit-dto';
+import { CreateDepositDTO } from 'src/business-logic/dtos/create-deposit-dto';
 import { PaginationModel } from 'src/data-access/models/i-pagination-model';
 import { DepositEntity } from 'src/data-access/entities/deposit-entity';
 import { DepositService } from 'src/business-logic/services/deposit/deposit.service';

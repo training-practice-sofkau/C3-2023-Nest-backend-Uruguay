@@ -1,6 +1,6 @@
 import { Body, Controller, Param, Post, Put, Get, Delete,Patch } from '@nestjs/common';
-import { AccountDTO } from 'src/data-access/dtos/account-dto';
-import { CreateAccountDto } from 'src/data-access/dtos/create-account-dto';
+import { AccountDTO } from 'src/business-logic/dtos/account-dto';
+import { CreateAccountDto } from 'src/business-logic/dtos/create-account-dto';
 import { PaginationModel } from 'src/data-access/models/i-pagination-model';
 import { AccountEntity } from 'src/data-access/entities/account-entity';
 import { AccountTypeEntity } from 'src/data-access/entities/account-type-entity';

@@ -3,9 +3,9 @@ import { CustomerRepo } from 'src/data-access/repositories/CustomerRepo';
 import { AccountService } from '../account/account.service';
 import { CustomerEntity } from 'src/data-access/entities/customer-entity';
 import { PaginationModel } from 'src/data-access/models/i-pagination-model';
-import { CreateCustomerDto } from 'src/data-access/dtos/create-customer-dto';
+import { CreateCustomerDto } from 'src/business-logic/dtos/create-customer-dto';
 import { DocumentTypeEntity } from 'src/data-access/entities/document-type-entity';
-import { UpdateCustomerDTO } from 'src/data-access/dtos/update-customer-dto';
+import { UpdateCustomerDTO } from 'src/business-logic/dtos/update-customer-dto';
 
 @Injectable()
 export class CustomerService {

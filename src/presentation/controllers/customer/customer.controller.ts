@@ -1,6 +1,6 @@
 import { Body, Controller, Param, Post, Put, Delete, Get, Patch } from '@nestjs/common';
-import { CreateCustomerDto } from 'src/data-access/dtos/create-customer-dto';
-import { UpdateCustomerDTO } from 'src/data-access/dtos/update-customer-dto';
+import { CreateCustomerDto } from 'src/business-logic/dtos/create-customer-dto';
+import { UpdateCustomerDTO } from 'src/business-logic/dtos/update-customer-dto';
 import { PaginationModel } from 'src/data-access/models/i-pagination-model';
 import { CustomerEntity } from 'src/data-access/entities/customer-entity';
 import { CustomerService } from 'src/business-logic/services/customer/customer.service';
