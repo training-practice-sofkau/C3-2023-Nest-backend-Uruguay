@@ -1,17 +1,12 @@
   import { Injectable, InternalServerErrorException, UnauthorizedException} from '@nestjs/common';
-  
   // Data transfer objects
   import { SignInDto, SignUpDto } from '../../business/dtos';
-  
   // Services
-  import { AccountService } from '.';
-  
+  import { AccountService, CustomerService } from '.';
   // Entities
-  import { AccountTypeEntity, CustomerEntity, DocumentTypeEntity } from '../../data/persistence/entities';
-  import { CustomerService } from './customer.service';
+  import { AccountEntity, AccountTypeEntity, CustomerEntity, DocumentTypeEntity } from '../../data/persistence/entities';
   // Jwt
   import { JwtService } from '@nestjs/jwt';
-  import { AccountEntity } from '../../data/persistence/entities/account.entity';
   
   @Injectable()
   export class SecurityService {
@@ -21,12 +16,12 @@
       private readonly jwtService: JwtService
     ) {}
   
-    signIn(user: SignInDto): string {
-      const answer = this.customerService.findOneByEmailAndPassword(
-        user.email,
-        user.password,
-      );
-      if (answer) return this.jwtService.sign({ answer }, { secret: "Sofka", expiresIn: "30d" });
+    signIn(user: SignInDto): Array<Object> {
+      const answer = this.customerService.findOneByEmailAndPassword( user.email, user.password );
+      if (answer) {
+        const token = this.jwtService.sign({ username: answer.email, sub: answer.id }, { secret: "Sofka", expiresIn: "30d" });
+        return [answer, token];
+      }
       else throw new UnauthorizedException();
     }
 
@@ -56,17 +51,20 @@
         newAccount.customer = customer;
   
         const account = this.accountService.createAccount(newAccount);
-  
-        //if (account) return this.jwtService.sign({id: account.id});
+
         if (account) {
-          const token = this.jwtService.sign({ account }, { secret: "Sofka", expiresIn: "30d" })
+          const token = this.jwtService.sign({ username: newCustomer.email, sub: newCustomer.id }, { secret: "Sofka", expiresIn: "30d" });
           return [account, token];
-        }
-        else throw new InternalServerErrorException();
+        } else throw new InternalServerErrorException();
       } else throw new InternalServerErrorException();
     }
   
-    signOut(JWToken: string): void {
-      throw new Error('Method not implemented.');
+    signOut(JWToken: string): string {
+      try {
+        const token = this.jwtService.verify(JWToken, { secret: "Sofka" });
+        return token;
+      } catch {
+        return 'false';
+      }
     }
   }
