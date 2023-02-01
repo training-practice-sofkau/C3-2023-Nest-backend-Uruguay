@@ -8,6 +8,6 @@ export class AccountEntity implements AccountModel{
     customer: CustomerEntity;
     accountType: AccountTypeEntity;
     balance: number;
-    state: boolean;
+    state = true;
     deletedAt?: number | Date;  
 }

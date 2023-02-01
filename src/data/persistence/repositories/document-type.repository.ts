@@ -15,7 +15,7 @@ export class DocumentTypeRepository extends GeneralCRUD<DocumentTypeEntity> impl
 
   update(id: string, entity: DocumentTypeEntity): DocumentTypeEntity {
     const indexCurrentEntity = this.database.findIndex(
-        (item) => item.id === id,
+        (item) => item.id == id,
     );
     if (indexCurrentEntity >= 0)
       this.database[indexCurrentEntity] = {
@@ -30,33 +30,33 @@ export class DocumentTypeRepository extends GeneralCRUD<DocumentTypeEntity> impl
   delete(id: string, soft?: boolean | undefined): void {
     let finded = this.database.findIndex(
       (item) => 
-        item.id === id
+        item.id == id
     );
-    if (finded === undefined) throw new NotFoundException();
+    if (finded == undefined) throw new NotFoundException();
     this.database.splice(finded, 1);
   }
 
   findAll(paginator: PaginationModel): DocumentTypeEntity[] {
     let finded = this.database;
-    if (finded === undefined) throw new NotFoundException();
+    if (finded == undefined) throw new NotFoundException();
     return finded;
   }
 
   findOneById(id: string): DocumentTypeEntity {
-    let finded = this.database.find( (item) => item.id === id );
-    if (finded === undefined) throw new NotFoundException();
+    let finded = this.database.find( (item) => item.id == id );
+    if (finded == undefined) throw new NotFoundException();
     return finded;
   }
 
   findByState(state: boolean): DocumentTypeEntity[] {
-    let finded = this.database.filter( (item) => item.state === state );
-    if (finded === undefined) throw new NotFoundException();
+    let finded = this.database.filter( (item) => item.state == state );
+    if (finded == undefined) throw new NotFoundException();
     return finded;
   }
 
   findByName(name: string): DocumentTypeEntity[] {
-    let finded = this.database.filter( (item) => item.name === name );
-    if (finded === undefined) throw new NotFoundException();
+    let finded = this.database.filter( (item) => item.name == name );
+    if (finded == undefined) throw new NotFoundException();
     return finded;
   }
 }

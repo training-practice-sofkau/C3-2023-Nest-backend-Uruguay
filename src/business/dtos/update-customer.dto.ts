@@ -8,8 +8,8 @@ export class UpdateCustomerDto {
     customerId: string;
 
     @ApiProperty()
-    @IsUUID(4, { message: "document type id must to be uuid." })
-    documentTypeId: string;
+    @IsString({ message: "document type name must to be a string." })
+    documentTypeName: string;
 
     @ApiProperty()
     @IsNumberString(undefined, { message: 'the document must to be a number.' })

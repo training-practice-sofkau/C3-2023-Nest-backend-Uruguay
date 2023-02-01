@@ -18,7 +18,7 @@ export class AccountController {
 
         newAccount.accountType = newAccountType;
         newAccount.balance = account.balance;
-        newAccount.customer = this.customerService.getCustomerInfo(newAccount.id);
+        newAccount.customer = this.customerService.getCustomerInfo(account.customerId);
         const newAccountFinal = this.accountService.createAccount(newAccount);
         return newAccountFinal;
     }
@@ -29,23 +29,23 @@ export class AccountController {
     }
     
     @Post('/add-balance')
-    addBalance(@Body() balance: BalanceDto): string {
-        return this.accountService.addBalance(balance).toString();
+    addBalance(@Body() balance: BalanceDto): boolean {
+        return this.accountService.addBalance(balance);
     }
 
     @Post('/remove-balance')
-    removeBalance(@Body() balance: BalanceDto): string {
-        return this.accountService.removeBalance(balance).toString();
+    removeBalance(@Body() balance: BalanceDto): boolean {
+        return this.accountService.removeBalance(balance);
     }
 
     @Post('/verify-amount-into-balance')
-    verifyAmountIntoBalance(@Body() balance: BalanceDto): string {
-        return this.accountService.verifyAmountIntoBalance(balance).toString();
+    verifyAmountIntoBalance(@Body() balance: BalanceDto): boolean {
+        return this.accountService.verifyAmountIntoBalance(balance);
     }
 
     @Get('/get-state')
-    getState(@Query('account') account: string): string {
-        return this.accountService.getState(account).toString();
+    getState(@Query('account') account: string): boolean {
+        return this.accountService.getState(account);
     }
 
     @Post('/change-state')
@@ -54,27 +54,32 @@ export class AccountController {
     }
 
     @Get('/get-account-by-id')
-    getAccountById(@Query('account') account: string): string {
-        return this.accountService.getAccountById(account).toString();
+    getAccountById(@Query('account') account: string): AccountEntity {
+        return this.accountService.getAccountById(account);
     }
 
-    @Get()
-    getAccountTypeById(@Query('account') account: string): string {
-        return this.accountService.getAccountTypeById(account).toString();
+    @Get('/get-account-by-customer-id')
+    getAccountByCostumerId(@Query('customer') customer: string): AccountEntity[] {
+        return this.accountService.getAccountByCustomerId(customer);
     }
 
-    @Get()
-    getAccountTypeWithId(@Query('accountType') accountType: string): string {
-        return this.accountService.getAccountTypeWithId(accountType).toString();
+    @Get('/get-account-type-by-id')
+    getAccountTypeById(@Query('account') account: string): AccountTypeEntity {
+        return this.accountService.getAccountTypeById(account);
     }
 
-    @Post()
-    changeAccountType(@Body() accountType: ChangeAccountDto): string {
-        return this.accountService.changeAccountType(accountType).toString();
+    @Get('/get-account-type-with-id')
+    getAccountTypeWithId(@Query('accountType') accountType: string): AccountTypeEntity {
+        return this.accountService.getAccountTypeWithId(accountType);
     }
 
-    @Get()
-    deleteAccount(@Query('account') account: string): string {
-        return this.accountService.deleteAccount(account).toString();
+    @Post('/change-account-type')
+    changeAccountType(@Body() accountType: ChangeAccountDto): AccountTypeEntity {
+        return this.accountService.changeAccountType(accountType);
+    }
+
+    @Get('/delete-account')
+    deleteAccount(@Query('account') account: string): boolean {
+        return this.accountService.deleteAccount(account);
     }
 }

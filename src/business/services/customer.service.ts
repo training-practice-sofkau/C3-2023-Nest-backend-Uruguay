@@ -25,22 +25,28 @@ export class CustomerService {
   }
 
   updatedCustomer(customer: UpdateCustomerDto): CustomerEntity {
-    const newCustomer = new CustomerEntity()
-    newCustomer.documentType = this.documentTypeRepository.findOneById(customer.documentTypeId);
-    newCustomer.document = customer.document;
-    newCustomer.email = customer.email;
-    newCustomer.fullName = customer.fullName;
-    newCustomer.password = customer.password;
-    newCustomer.phone = customer.phone;
-    newCustomer.avatarUrl = customer.avatarUrl;
-    return this.customerRepository.update(customer.customerId, newCustomer);
+    const oldCostumer = this.customerRepository.findOneById(customer.customerId);
+    oldCostumer.document = customer.document;
+    oldCostumer.email = customer.email;
+    oldCostumer.fullName = customer.fullName;
+    oldCostumer.password = customer.password;
+    oldCostumer.phone = customer.phone;
+    oldCostumer.avatarUrl = customer.avatarUrl;
+    oldCostumer.documentType.name = customer.documentTypeName;
+    this.documentTypeRepository.update(oldCostumer.documentType.id, oldCostumer.documentType);
+    return this.customerRepository.update(customer.customerId, oldCostumer);
   }
 
   unsubscribe(customerId: string, soft?: boolean): boolean {
     if (this.getCustomerInfo(customerId)) {
-      this.customerRepository.delete(customerId, soft)
-      return true;
-    } else 
+      try{
+        this.customerRepository.delete(customerId, soft)
+        return true;
+      } catch {
+        return false;
+      }
+    } else {
       return false;
+    }
   }
 }

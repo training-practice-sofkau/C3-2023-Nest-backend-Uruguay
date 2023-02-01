@@ -9,7 +9,7 @@ export class SignUpDto {
 
     @ApiProperty()
     @IsString({ message: 'the account type name is not a string.' })
-    AccountTypeName: string;
+    accountTypeName: string;
 
     @ApiProperty()
     @IsOptional()

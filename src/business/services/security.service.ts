@@ -47,7 +47,7 @@
   
       if (customer) {
         const accountType = new AccountTypeEntity();
-        accountType.name = user.AccountTypeName;
+        accountType.name = user.accountTypeName;
         this.accountService.getAccountTypeRepo().register(accountType);
         
         const newAccount = new AccountEntity();

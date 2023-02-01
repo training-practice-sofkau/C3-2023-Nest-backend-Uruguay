@@ -15,7 +15,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
 
   update(id: string, entity: CustomerEntity): CustomerEntity {
     const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && item.deletedAt === undefined
+      (item) => item.id == id && item.deletedAt == undefined
     );
     if (indexCurrentEntity >= 0)
       this.database[indexCurrentEntity] = {
@@ -30,9 +30,9 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
   delete(id: string, soft?: boolean | undefined): void {
     let finded = this.database.findIndex(
       (item) => 
-        item.id === id
+        item.id == id
     );
-    if (finded === undefined) throw new NotFoundException();
+    if (finded == undefined) throw new NotFoundException();
     soft ? this.softDelete(finded) : this.hardDelete(finded);
   }
 
@@ -58,84 +58,84 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
 
   findAll(paginator: PaginationModel): CustomerEntity[] {
     let finded = this.database.filter(
-      (item) => item.deletedAt === undefined
+      (item) => item.deletedAt == undefined
     );
-    if (finded === undefined) throw new NotFoundException()
+    if (finded == undefined) throw new NotFoundException()
     return finded.slice(paginator?.offset, paginator?.limit);
   }
 
   findOneById(id: string): CustomerEntity {
     let finded = this.database.find(
       (item) => 
-        item.id === id &&
-        item.deletedAt === undefined
+        item.id == id &&
+        item.deletedAt == undefined
     );
-    if (finded === undefined) throw new NotFoundException()
+    if (finded == undefined) throw new NotFoundException()
     return finded
   }
 
   findOneByEmailAndPassword(email: string, password: string): CustomerEntity {
     const finded = this.database.find(
       (item) =>
-        item.email === email &&
-        item.password === password &&
-        item.deletedAt === undefined
+        item.email == email &&
+        item.password == password &&
+        item.deletedAt == undefined
     );
-    if (finded === undefined) throw new NotFoundException();
+    if (finded == undefined) throw new NotFoundException();
     return finded;
   }
 
   findOneByDocumentTypeAndDocument( documentTypeId: string, document: string ): CustomerEntity {
     let finded = this.database.find(
       (item) => 
-        item.documentType.id === documentTypeId &&
-        item.document === document &&
-        item.deletedAt === undefined
+        item.documentType.id == documentTypeId &&
+        item.document == document &&
+        item.deletedAt == undefined
     );
-    if (finded === undefined) throw new NotFoundException();
+    if (finded == undefined) throw new NotFoundException();
     return finded;
   }
 
   findOneByEmail(email: string): CustomerEntity {
     let finded = this.database.find(
       (item) => 
-        item.email === email &&
-        item.deletedAt === undefined
+        item.email == email &&
+        item.deletedAt == undefined
     );
-    if (finded === undefined) throw new NotFoundException();
+    if (finded == undefined) throw new NotFoundException();
     return finded;
   }
 
   findOneByPhone(phone: string): CustomerEntity {
     let finded = this.database.find(
       (item) => 
-        item.phone === phone &&
-        item.deletedAt === undefined
+        item.phone == phone &&
+        item.deletedAt == undefined
     );
-    if (finded === undefined) throw new NotFoundException();
+    if (finded == undefined) throw new NotFoundException();
     return finded;
   }
 
   findByState(state: boolean): CustomerEntity[] {
     let finded: CustomerEntity[]
     finded = this.database.map((value) => {
-      if (value.state === state){
+      if (value.state == state){
         return value
       }
     }) as CustomerEntity[]
-    if (finded === undefined) throw new NotFoundException();
+    if (finded == undefined) throw new NotFoundException();
     return finded;
   }
 
   findByName(name: string): CustomerEntity[] {
     let finded: CustomerEntity[] | undefined
     this.database.forEach((item) => {
-        if (item.fullName === name && item.deletedAt === undefined){
+        if (item.fullName == name && item.deletedAt == undefined){
           finded = finded?.concat([item]);
         }
       }
     );
-    if (finded === undefined) throw new NotFoundException();
+    if (finded == undefined) throw new NotFoundException();
     return finded;
   }
 }

@@ -1,15 +1,16 @@
-import { Body, Controller, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { CustomerService } from '../../business/services/customer.service';
 import { UpdateCustomerDto } from '../../business/dtos';
 import { ApiTags } from '@nestjs/swagger';
+import { CustomerEntity } from '../../data/persistence';
 
 @ApiTags('customer')
 @Controller('api/customer')
 export class CustomerController {
     constructor(private readonly customerService: CustomerService) {}
 
-    @Post('/get-customer')
-    getCustomerInfo(@Query('customer') customer: string) {
+    @Get('/get-customer')
+    getCustomerInfo(@Query('customer') customer: string): CustomerEntity {
         return this.customerService.getCustomerInfo(customer)
     }
 
@@ -18,8 +19,8 @@ export class CustomerController {
         return this.customerService.updatedCustomer(customer)
     }
 
-    @Post('/unsuscribe')
-    unsubscribe(@Query('customer') customer: string): string {
-        return this.customerService.unsubscribe(customer).toString();
+    @Get('/unsuscribe')
+    unsubscribe(@Query('customer') customer: string): boolean {
+        return this.customerService.unsubscribe(customer);
     }
 }

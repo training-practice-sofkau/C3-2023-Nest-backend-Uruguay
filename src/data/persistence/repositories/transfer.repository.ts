@@ -15,7 +15,7 @@ export class TransferRepository extends GeneralCRUD<TransferEntity> implements I
 
   update(id: string, entity: TransferEntity): TransferEntity {
     const indexCurrentEntity = this.database.findIndex(
-        (item) => item.id === id && item.deletedAt === undefined
+        (item) => item.id == id && item.deletedAt == undefined
     );
     if (indexCurrentEntity >= 0)
       this.database[indexCurrentEntity] = {
@@ -30,9 +30,9 @@ export class TransferRepository extends GeneralCRUD<TransferEntity> implements I
   delete(id: string, soft?: boolean): void {
     let finded = this.database.findIndex(
         (item) => 
-          item.id === id
+          item.id == id
     );
-    if (finded === undefined) throw new NotFoundException();
+    if (finded == undefined) throw new NotFoundException();
     soft ? this.softDelete(finded) : this.hardDelete(finded);
   }
 
@@ -46,63 +46,63 @@ export class TransferRepository extends GeneralCRUD<TransferEntity> implements I
 
   findAll(paginator?: PaginationModel): TransferEntity[] {
     let finded = this.database.filter(
-        (item) => item.deletedAt === undefined
+        (item) => item.deletedAt == undefined
     );
-    if (finded === undefined) throw new NotFoundException();
+    if (finded == undefined) throw new NotFoundException();
     return finded.slice(paginator?.offset, paginator?.limit);
   }
 
   findOneById(id: string): TransferEntity {
     let finded = this.database.find(
       (item) => 
-        item.id === id &&
-        item.deletedAt === undefined
+        item.id == id &&
+        item.deletedAt == undefined
     );
-    if (finded === undefined) throw new NotFoundException();
+    if (finded == undefined) throw new NotFoundException();
     return finded;
   }
 
   findByIncomeId(incomeId: string, paginator?: PaginationModel): TransferEntity[] {
     let finded = this.database.filter(
         (item) => 
-          item.income.id === incomeId &&
-          item.deletedAt === undefined
+          item.income.id == incomeId &&
+          item.deletedAt == undefined
     );
-    if (finded === undefined) throw new NotFoundException();
+    if (finded == undefined) throw new NotFoundException();
     return finded.slice(paginator?.offset, paginator?.limit);
   }
 
   findByOutcomeId(outcomeId: string, paginator?: PaginationModel): TransferEntity[] {
     let finded = this.database.filter(
         (item) => 
-          item.outcome.id === outcomeId &&
-          item.deletedAt === undefined
+          item.outcome.id == outcomeId &&
+          item.deletedAt == undefined
     );
-    if (finded === undefined) throw new NotFoundException();
+    if (finded == undefined) throw new NotFoundException();
     return finded.slice(paginator?.offset, paginator?.limit);
   }
 
   findOutcomeByDataRange(accountId: string, dateInit: Date | number, dateEnd: Date | number, paginator?: PaginationModel): TransferEntity[] {
     let finded = this.database.filter(
       (item) => 
-        item.outcome.id === accountId &&
-        item.deletedAt === undefined &&
+        item.outcome.id == accountId &&
+        item.deletedAt == undefined &&
         item.dateTime >= dateInit &&
         item.dateTime <= dateEnd
     );
-    if (finded === undefined) throw new NotFoundException();
+    if (finded == undefined) throw new NotFoundException();
     return finded.slice(paginator?.offset, paginator?.limit);
   }
 
   findIncomeByDataRange(accountId: string, dateInit: Date | number, dateEnd: Date | number, paginator?: PaginationModel): TransferEntity[] {
     let finded = this.database.filter(
         (item) => 
-          item.income.id === accountId &&
-          item.deletedAt === undefined &&
+          item.income.id == accountId &&
+          item.deletedAt == undefined &&
           item.dateTime >= dateInit &&
           item.dateTime <= dateEnd
       );
-      if (finded === undefined) throw new NotFoundException();
+      if (finded == undefined) throw new NotFoundException();
       return finded.slice(paginator?.offset, paginator?.limit);
   }
 }

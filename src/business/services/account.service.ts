@@ -27,21 +27,30 @@ export class AccountService {
   addBalance(balance: BalanceDto): boolean {
     const current = this.accountRepository.findOneById(balance.accountId);
     current.balance += Math.abs(balance.amount);
-    try{
-      this.accountRepository.update(balance.accountId, current);
-      return true;
-    } catch {
+    if (current){
+      try{
+        this.accountRepository.update(balance.accountId, current);
+        return true;
+      } catch {
+        return false;
+      }
+    } else {
       return false;
     }
+
   }
 
   removeBalance(balance: BalanceDto): boolean {
     const current = this.accountRepository.findOneById(balance.accountId);
     current.balance -= Math.abs(balance.amount);
-    try{
-      this.accountRepository.update(balance.accountId, current);
-      return true;
-    } catch {
+    if (current){
+      try{
+        this.accountRepository.update(balance.accountId, current);
+        return true;
+      } catch {
+        return false;
+      }
+    } else {
       return false;
     }
   }
@@ -70,6 +79,10 @@ export class AccountService {
     return this.accountRepository.findOneById(accountId);
   }
 
+  getAccountByCustomerId(customerId: string): AccountEntity[] {
+    return this.accountRepository.findByCustomer(customerId);
+  }
+
   getAccountTypeById(accountId: string): AccountTypeEntity {
     return this.accountRepository.findOneById(accountId).accountType;
   }
@@ -80,17 +93,24 @@ export class AccountService {
 
   changeAccountType(account: ChangeAccountDto): AccountTypeEntity {
     const current = this.accountRepository.findOneById(account.accountId);
-    current.accountType = this.accountTypeRepository.findOneById(account.accountTypeId);
+    const accountType = this.accountTypeRepository.findOneById(account.accountId);
+    accountType.name = account.accountTypeName;
+    this.accountTypeRepository.update(accountType.id, accountType)
+
     return this.accountRepository.update(account.accountId, current).accountType;
   }
 
   deleteAccount(accountId: string, soft?: boolean): boolean {
-    try{
-      this.accountRepository.delete(accountId, soft);
-      return true;
-    } catch {
+    const current = this.accountRepository.findOneById(accountId);
+    if (current){
+      try{
+        this.accountRepository.delete(accountId, soft);
+        return true;
+      } catch {
+        return false;
+      }
+    } else {
       return false;
     }
-    
   }
 }

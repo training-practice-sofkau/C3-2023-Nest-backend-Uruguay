@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsUUID } from "class-validator";
+import { IsUUID, IsString } from 'class-validator';
 
 export class ChangeAccountDto {
 
@@ -8,7 +8,7 @@ export class ChangeAccountDto {
     accountId: string;
 
     @ApiProperty()
-    @IsUUID(4, { message: "account type id must to be uuid" })
-    accountTypeId: string;
+    @IsString({ message: "account type name must to be a string" })
+    accountTypeName: string;
 
 }

@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { DateRangeDto, PaginationDto } from './business/dtos';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,7 +16,7 @@ async function bootstrap() {
     .addTag('deposit')
     .addTag('transfer')
     .build();
-  const document = SwaggerModule.createDocument(app, config, );
+  const document = SwaggerModule.createDocument(app, config, { extraModels: [PaginationDto, DateRangeDto] });
   SwaggerModule.setup('api', app, document);
 
   //app.useGlobalPipes(new ParseUUIDPipe());

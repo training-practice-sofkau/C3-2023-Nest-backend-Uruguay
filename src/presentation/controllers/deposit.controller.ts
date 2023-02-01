@@ -1,7 +1,7 @@
-import { Body, Controller, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AccountService, DepositService } from '../../business/services';
-import { CreateDepositDto, HistoryDto, PaginationDto } from '../../business/dtos';
+import { CreateDepositDto, HistoryDto } from '../../business/dtos';
 import { DepositEntity } from '../../data/persistence';
 
 @ApiTags('deposit')
@@ -19,14 +19,14 @@ export class DepositController {
         return this.depositService.createDeposit(newDeposit);
     }
     
-    @Post('/delete-deposit')
-    deleteDeposit(@Query('deposit') deposit: string): string {
-        return this.depositService.deleteDeposit(deposit).toString();
+    @Get('/delete-deposit')
+    deleteDeposit(@Query('deposit') deposit: string): boolean {
+        return this.depositService.deleteDeposit(deposit);
     }
     
     @Post('/get-history')
-    getHistory(@Body() account: string, pagination?: PaginationDto, dataRange?: HistoryDto): string {
-        return this.depositService.getHistory(account, pagination, dataRange).toString();
+    getHistory(@Body() history: HistoryDto): DepositEntity[] {
+        return this.depositService.getHistory(history.id, history.pagination, history.datarange);
     }
 
 }
