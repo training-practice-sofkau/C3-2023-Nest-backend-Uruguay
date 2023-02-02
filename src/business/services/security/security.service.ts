@@ -12,7 +12,7 @@ import { JwtService } from '@nestjs/jwt';
   // Models
   
   // Repositories
-  import { AccountTypeRepository, CustomerRepository, DocumentTypeRepository } from '../../../data/persistence/repositories';
+  import { CustomerRepository, DocumentTypeRepository } from '../../../data/persistence/repositories';
   
   // Services
   import { AccountService } from '../../services';
@@ -27,7 +27,6 @@ import { JwtService } from '@nestjs/jwt';
     constructor(
       private readonly customerRepository: CustomerRepository,
       private readonly documentTypeRepository: DocumentTypeRepository,
-      private readonly accountTypeRepository: AccountTypeRepository,
       private readonly accountService: AccountService,
       private jwtService: JwtService
     ) {}

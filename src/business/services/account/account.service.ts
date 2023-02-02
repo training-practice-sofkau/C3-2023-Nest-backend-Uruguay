@@ -139,9 +139,7 @@ export class AccountService {
    * Borrar una cuenta de forma lógica
    */
   softDeleteAccount(accountId: string): void {
-    const accountUpdated = this.accountRepository.findOneById(accountId);
-    accountUpdated.deletedAt = Date.now();
-    this.accountRepository.update(accountId, accountUpdated);
+    this.accountRepository.delete(accountId, true);
   }
 
   /**

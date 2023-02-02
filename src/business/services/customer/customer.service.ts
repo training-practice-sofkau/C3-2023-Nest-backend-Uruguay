@@ -57,8 +57,8 @@ export class CustomerService {
     if(customer.email) customerUpdated.email = customer.email;
     if(customer.fullName) customerUpdated.fullName = customer.fullName;
     if(customer.password) customerUpdated.password = customer.password;
-    if(customer.phone) customerUpdated.phone = customer.phone;
     if(customer.state) customerUpdated.state = customer.state;
+    if(customer.phone) customerUpdated.phone = customer.phone;
     
     return this.customerRepository.update(id, customerUpdated);
   }
@@ -129,4 +129,27 @@ export class CustomerService {
     return newDocumentType;
   }
 
+  findOneByEmailAndPassword(email: string, password: string): boolean {
+    return this.customerRepository.findOneByEmailAndPassword(email, password);
+  }
+
+  findOneByDocumentTypeAndDocument(documentTypeId: string, document: string): CustomerEntity {
+    return this.customerRepository.findOneByDocumentTypeAndDocument(documentTypeId, document);
+  }
+
+  findOneByEmail(email: string): CustomerEntity {
+    return this.customerRepository.findOneByEmail(email);
+  }
+
+  findOneByPhone(phone: string): CustomerEntity {
+    return this.customerRepository.findOneByPhone(phone);
+  }
+
+  findByState(state: boolean): CustomerEntity[] {
+    return this.customerRepository.findByState(state);
+  }
+
+  findByFullName(fullName: string): CustomerEntity[] {
+    return this.customerRepository.findByFullName(fullName);
+  }
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UsePipes, ValidationPipe, ParseUUIDPipe, Post, Body, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Param, UsePipes, ValidationPipe, ParseUUIDPipe, Post, Body, Delete, Put, Patch } from '@nestjs/common';
 
 import { DepositEntity } from '../../../data/persistence/entities';
 import { DepositService } from '../../../business/services';
@@ -26,8 +26,13 @@ export class DepositController {
         return this.depositService.updateDeposit(id, newdDeposit);
     }
 
+    @Patch(':id/soft')
+    softDeleteDeposit(@Param('id', ParseUUIDPipe) id: string): void {
+        this.depositService.softDeleteDeposit(id);
+    }
+
     @Delete(':id')
-    deleteDepositById(@Param('id', ParseUUIDPipe) id: string): void {
+    hardDeleteDeposit(@Param('id', ParseUUIDPipe) id: string): void {
         this.depositService.deleteDeposit(id);
     }
 }

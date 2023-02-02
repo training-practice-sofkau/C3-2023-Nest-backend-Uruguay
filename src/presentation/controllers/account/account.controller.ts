@@ -39,7 +39,7 @@ export class AccountController {
         this.accountService.addBalance(id, amount);
     }
 
-    @Delete(':id/balance/:amount')
+    @Patch(':id/balance/:amount')
     @UsePipes(new ValidationPipe())
     removeBalance(
         @Param('id',ParseUUIDPipe) id: string,
@@ -104,6 +104,11 @@ export class AccountController {
         return this.accountService.updatedAccount(id, account);
     }
 
+    @Patch(':id/soft')
+    @UsePipes(new ValidationPipe())
+    softDeleteAccount(@Param('id', ParseUUIDPipe) id: string): void {
+        this.accountService.softDeleteAccount(id);
+    }
 
     @Delete(':id')
     @UsePipes(new ValidationPipe())

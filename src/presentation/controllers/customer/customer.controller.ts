@@ -1,15 +1,12 @@
-import { Body, UsePipes, Controller, Get, Post, Param, ParseUUIDPipe, ValidationPipe, Put, Patch, Delete } from '@nestjs/common';
+import { ParseBoolPipe, Body, UsePipes, Controller, Get, Post, Param, ParseUUIDPipe, ValidationPipe, Put, Patch, Delete } from '@nestjs/common';
 
 import { CustomerService } from '../../../business/services';
-import { UpdateCustomerDto, CustomerDto, DocumentTypeDto } from '../../../business/dtos';
+import { UpdateCustomerDto, DocumentTypeDto } from '../../../business/dtos';
 import { DocumentTypeEntity, CustomerEntity } from '../../../data/persistence/entities/';
-import { DocumentTypeRepository } from '../../../data/persistence/repositories';
 
 @Controller('customer')
 export class CustomerController {
-    constructor(
-        private readonly customerService: CustomerService,
-        private readonly documentTypeRepository: DocumentTypeRepository) {}
+    constructor(private readonly customerService: CustomerService) {}
 
     @Get()
     findAll(): CustomerEntity[] {
@@ -36,11 +33,13 @@ export class CustomerController {
     }
 
     @Patch(':id/soft')
+    @UsePipes(new ValidationPipe())
     softDeleteCustomer(@Param('id', ParseUUIDPipe) id: string): void {
         return this.customerService.softDeleteCustomer(id);
     }
 
     @Delete(':id')
+    @UsePipes(new ValidationPipe())
     hardDeleteCustomer(@Param('id', ParseUUIDPipe) id: string): void {
         this.customerService.deleteCustomer(id);
     }
@@ -51,7 +50,51 @@ export class CustomerController {
     }
 
     @Patch(':id/unsuscribe')
+    @UsePipes(new ValidationPipe())
     unsubscribeCustomer(@Param('id', ParseUUIDPipe) id: string): boolean {
         return this.customerService.unsubscribe(id);
+    }
+
+    @Patch(':id/state/bool')
+    @UsePipes(new ValidationPipe())
+    changeStateCustomer(
+        @Param('id', ParseUUIDPipe) id: string,
+        @Param('bool', ParseBoolPipe) bool: boolean): void {
+        this.customerService.changeState(id, bool);
+    }
+
+    @Get(':email/:password')
+    findCustomerByEmailAndPassword(
+        @Param('email') email: string,
+        @Param('password') password: string): boolean {
+        return this.customerService.findOneByEmailAndPassword(email, password);
+    }
+
+    @Get(':type/:document')
+    findCustomerByDocumentTypeAndDocument(
+        @Param('type') type: string,
+        @Param('document') document: string): CustomerEntity {
+        return this.customerService.findOneByDocumentTypeAndDocument(type, document);
+    }
+
+    @Get(':email')
+    findCustomerByEmail(@Param('email') email: string): CustomerEntity {
+        return this.customerService.findOneByEmail(email);
+    }
+
+    @Get(':phone')
+    findCustomerByPhone(@Param('phone') phone: string): CustomerEntity {
+        return this.customerService.findOneByPhone(phone);
+    }
+
+    @Get(':state')
+    @UsePipes(new ValidationPipe())
+    findCustomerByState(@Param('state', ParseBoolPipe) state: boolean): CustomerEntity[] {
+        return this.customerService.findByState(state);
+    }
+
+    @Get(':fullname')
+    findCustomerByFullName(@Param('fullname') fullname: string): CustomerEntity[] {
+        return this.customerService.findByFullName(fullname);
     }
 }
