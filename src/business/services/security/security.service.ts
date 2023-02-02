@@ -10,7 +10,7 @@ import { JwtService } from '@nestjs/jwt';
 // Models
 
 // Repositories
-import { CustomerRepository } from '../../../data/persistence/repositories';
+import { CustomerRepository, DocumentTypeRepository, AccountTypeRepository} from '../../../data/persistence/repositories';
 
 // Services
 import { AccountService } from '../account';
@@ -18,9 +18,6 @@ import { AccountService } from '../account';
 // Entities
 import { CustomerEntity } from '../../../data/persistence/entities';
 import { SignInDto, SignUpDto, CreateAccountDto } from '../../dtos';
-import { DocumentTypeRepository } from '../../../data/persistence/repositories/document-type.repository';
-import { AccountTypeRepository } from '../../../data/persistence/repositories/account-type.repository';
-
 
 
 @Injectable()
