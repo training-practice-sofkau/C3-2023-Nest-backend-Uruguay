@@ -22,9 +22,9 @@ export class AccountService {
     return this.accountRepository.register(account);
   }
 
-  getAccountTypeRepo(): AccountTypeRepository {
-    return this.accountTypeRepository;
-  }
+  //getAccountTypeRepo(): AccountTypeRepository {
+  //  return this.accountTypeRepository;
+  //}
 
   getBalance(accountId: string): number {
     return this.accountRepository.findOneById(accountId).balance;
