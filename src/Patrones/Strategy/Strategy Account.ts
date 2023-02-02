@@ -1,9 +1,9 @@
-// 1. Definir la interfaz AccountStrategy
+
 interface AccountStrategy {
   calculateInterest(balance: number): number;
 }
 
-// 2. Crear las clases concretas para cada estrategia
+//Crear las clases concretas para cada estrategia
 class CurrentAccount implements AccountStrategy {
   calculateInterest(balance: number): number {
     return balance * 0.01;
@@ -16,7 +16,7 @@ class SavingsAccount implements AccountStrategy {
   }
 }
 
-// 3. Usar la estrategia en la clase BankAccount
+//Usar la estrategia en la clase BankAccount
 class BankAccount {
   private balance: number;
   private strategy: AccountStrategy;
@@ -38,7 +38,7 @@ class BankAccount {
   }
 }
 
-// 4. Usar la clase BankAccount
+//Usar la clase BankAccount
 const currentAccount = new BankAccount(new CurrentAccount());
 currentAccount.deposit(1000);
 console.log(currentAccount.getInterest()); // 10
