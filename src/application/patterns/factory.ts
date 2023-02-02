@@ -25,6 +25,12 @@ class SSDCreator extends PCMaker {
     }
 }
 
+class CPUCreator extends PCMaker {
+    public corsairFactory(): PCPart {
+        return new CPU();
+    }
+}
+
 class RAM implements PCPart {
     public encender(): string {
         return 'RAM encendida';
@@ -37,6 +43,12 @@ class SSD implements PCPart {
     }
 }
 
+class CPU implements PCPart {
+    public encender(): string {
+        return 'CPU encendida';
+    }
+}
+
 
 function clientCode(pcmaker: PCMaker): PCPart{
     return (pcmaker.create());
@@ -44,3 +56,4 @@ function clientCode(pcmaker: PCMaker): PCPart{
 
 console.log(clientCode(new RAMCreator()).encender());
 console.log(clientCode(new SSDCreator()).encender());
+console.log(clientCode(new CPUCreator()).encender());
