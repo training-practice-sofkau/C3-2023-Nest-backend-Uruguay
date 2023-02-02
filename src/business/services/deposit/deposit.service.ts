@@ -1,13 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { DepositDto } from 'src/business/dtos';
 import { DepositEntity, PaginationModel, DataRangeModel } from 'src/Data';
-import { DepositRepository } from 'src/Data/persistence';
+import { AccountEntity, DepositRepository } from 'src/Data/persistence';
+import { AccountService } from '../account/account.service';
+import { AccountRepository } from '../../../Data/persistence/repositories/account.repository';
 
 
 
 @Injectable()
 export class DepositService {
-  constructor(private readonly DepositRepository: DepositRepository) {}
+  constructor(private readonly DepositRepository: DepositRepository,private readonly AccountService: AccountService,private readonly AccountRepository: AccountRepository ) {}
   /**
    * Crear un deposito
    *
@@ -17,9 +19,15 @@ export class DepositService {
    */
   createDeposit(deposit: DepositDto): DepositEntity {
     const newDeposit = new DepositEntity();
+    const account = this.AccountRepository.searchByAttributesforOne('id', deposit.accountId)
+    newDeposit.accountid = new AccountEntity()
+    newDeposit.accountid.accountType  = account.accountType      
     newDeposit.amount = deposit.amount;
     newDeposit.date_time = new Date();
     newDeposit.state = true;
+    newDeposit.id = deposit.accountId
+    console.log(newDeposit);
+    this.AccountService.addBalance(deposit.accountId, deposit.amount)
     return this.DepositRepository.register(newDeposit);
   }
 
@@ -47,8 +55,8 @@ export class DepositService {
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): DepositEntity[] {
-    let deposit = this.DepositRepository.searchByAttributes('id', depositId);
-
+    let deposit = this.DepositRepository.findByAccountId(depositId); 
+    console.log(deposit); 
     if (dataRange) {
       let { dateInit, dateEnd = Date.now() } = dataRange;
       deposit = deposit.filter(
@@ -64,4 +72,9 @@ export class DepositService {
     }
     return deposit;
   }
+   getAll()
+   { 
+    return this.DepositRepository.findAll()
+   }
+  
 }

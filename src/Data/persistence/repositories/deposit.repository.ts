@@ -75,6 +75,7 @@ export class DepositRepository
   }
 
   findByAccountId(accountId: string): DepositEntity[] {
+    console.log(accountId)
     const currentEntity = this.database.filter(
       (item) => item.accountid.id === accountId,
     );
@@ -104,4 +105,6 @@ export class DepositRepository
     if (currentEntity) return currentEntity;
     else throw new NotFoundException();
   }
+
+ 
 }

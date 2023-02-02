@@ -24,4 +24,6 @@ export class CustomerController {
   unsubscribe(@Param('id', ParseUUIDPipe) id: string): boolean {
     return this.customerService.unsubscribe(id);
   }
+
+
 }

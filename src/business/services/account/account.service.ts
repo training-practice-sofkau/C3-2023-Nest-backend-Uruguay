@@ -3,6 +3,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { AccountDtos } from 'src/business/dtos/accountDtos';
 import { AccountEntity,  AccountTypeEntity, AccountTypeRepository } from 'src/Data/persistence';
 import { CustomerRepository } from '../../../Data/persistence/repositories/customer.repository';
+import { v4 as uuid } from 'uuid';
 
 
 
@@ -10,19 +11,16 @@ import { CustomerRepository } from '../../../Data/persistence/repositories/custo
 @Injectable()
 export class AccountService {
   constructor(
-    private readonly accountRepository: AccountRepository,
-    private readonly AccountTypeRepository: AccountTypeRepository,private readonly CustomerRepository: CustomerRepository
+    private readonly accountRepository: AccountRepository
   ) {}
 
   /**
    *
    */
-  createAccount(account: AccountDtos): AccountEntity {
+  createAccount(account: AccountDtos ): AccountEntity {
     const newAccount = new AccountEntity();
-    newAccount.customer = account.customer;
     newAccount.accountType = account.accountType;
     newAccount.acc_Balance = account.acc_Balance;
-    this.CustomerRepository.register(newAccount.customer)
     return this.accountRepository.register(newAccount);
   }
 
@@ -49,23 +47,16 @@ export class AccountService {
    * @param {number} amount
    * @memberof AccountService
    */
-  addBalance(accountId: string, amount: number): void {
-    console.log(accountId)
-    if (typeof amount !== 'number') {
-       amount =parseInt(amount)
-    }
-    console.log(amount)
-    if (amount <= 0) {
-      throw new NotFoundException("afas");
-    }
+  addBalance(accountId: string, amount: number): AccountEntity {
+   
+ 
     let account = this.accountRepository.searchByAttributesforOne(
       'id',
       accountId,
     );
-    console.log(account)
-    console.log(amount)
+ 
     account.acc_Balance = account.acc_Balance + amount;
-    this.accountRepository.update(accountId, account);
+  return  this.accountRepository.update(accountId, account);
   }
 
   /**
@@ -75,16 +66,24 @@ export class AccountService {
    * @param {number} amount
    * @memberof AccountService
    */
-  removeBalance(accountId: string, amount: number): void {
-    if (amount <= 0) {
-      throw new NotFoundException();
-    }
+  removeBalance(accountId: string, amount: number): AccountEntity {
+   
+    console.log(amount)
     let account = this.accountRepository.searchByAttributesforOne(
       'id',
       accountId,
     );
+    if (account.acc_Balance >= amount) {
     account.acc_Balance -= amount;
-    this.accountRepository.update(accountId, account);
+    
+   return  this.accountRepository.update(accountId, account)
+  }
+  else
+  {
+    throw new NotFoundException ("Account not balance in account")
+  }
+  
+    
   }
   /**
    * Verificar la disponibilidad de un monto a retirar en una cuenta
@@ -129,7 +128,7 @@ export class AccountService {
       accountId,
     );
     account.state = state;
-    this.AccountTypeRepository.update(accountId, account);
+    this.accountRepository.update(accountId, account);
   }
 
   /**
@@ -140,7 +139,7 @@ export class AccountService {
    * @memberof AccountService
    */
   getAccountType(accountId: string): AccountTypeEntity {
-    return this.AccountTypeRepository.searchByAttributesforOne("id", accountId);
+    return this.accountRepository.searchByAttributesforOne("id", accountId).accountType;
   }
 
   /**
@@ -151,10 +150,10 @@ export class AccountService {
    * @return {*}  {AccountTypeEntity}
    * @memberof AccountService
    */
-  changeAccntType(accountId: string, accountTypeId: string): AccountTypeEntity {
-    let account = this.getAccountType(accountId);
-    account.id = accountTypeId;
-    this.AccountTypeRepository.update(accountId, account);
+  changeAccntType(accountId: string): AccountTypeEntity {
+    let account = this.accountRepository.searchByAttributesforOne("id", accountId);
+    account.accountType.id = uuid()
+    this.accountRepository.update(accountId, account);
     return account;
   }
 
@@ -166,5 +165,9 @@ export class AccountService {
    */
   deleteAccount(accountId: string, soft?: boolean): void {
     this.accountRepository.delete(accountId, soft);
+  }
+
+  findALl(): AccountEntity[] {
+    return this.accountRepository.findAll()
   }
 }

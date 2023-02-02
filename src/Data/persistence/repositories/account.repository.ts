@@ -89,4 +89,12 @@ export class AccountRepository
     else throw new NotFoundException();
   }  
 
+  findByCustomerr(customerId: string): AccountEntity {
+    const currentEntity = this.database.find(
+      (item) => item.customer.id === customerId,
+    );
+    if (currentEntity) return currentEntity;
+    else throw new NotFoundException();
+  } 
+
 }

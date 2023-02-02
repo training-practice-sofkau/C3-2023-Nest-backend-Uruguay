@@ -8,14 +8,14 @@ export class SecurityController {
   constructor(private readonly securityService: SecurityService) {}
 
   @Post('sign-in')
-   signIn(@Body() signInDto: SignInDto) {
+   signIn(@Body() signInDto: SignInDto): string {
    
       return  this.securityService.signIn(signInDto);
     
   }
 
   @Post('sign-up')
-   signUp(@Body() signUpDto: SignUpDto) {    
+   signUp(@Body() signUpDto: SignUpDto): string {    
       return  this.securityService.signUp(signUpDto);
      
   }

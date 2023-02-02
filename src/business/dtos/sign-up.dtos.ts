@@ -19,4 +19,9 @@ export class SignUpDto {
 
   @IsString({ message: 'This must be a string' })
   password: string;
+ 
+  accountTypeName: string;
+
+  state = true;
+
 }

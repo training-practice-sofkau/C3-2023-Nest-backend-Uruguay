@@ -2,6 +2,7 @@ import {
   Injectable,
   UnauthorizedException,
   InternalServerErrorException,
+  
 } from '@nestjs/common';
 import { SignInDto, SignUpDto } from 'src/business/dtos';
 import {
@@ -12,12 +13,16 @@ import {
   AccountEntity,
 } from 'src/Data';
 import { AccountService } from '../account';
+import * as jwt from "jsonwebtoken"
+import { DocumentTypeRepository } from '../../../Data/persistence/repositories/document-type.repository';
 
 @Injectable()
 export class SecurityService {
   constructor(
     private readonly customerRepository: CustomerRepository,
     private readonly accountService: AccountService,
+    private readonly DocumentTypeRepository: DocumentTypeRepository,
+
   ) {}
 
   /**
@@ -28,13 +33,11 @@ export class SecurityService {
    * @memberof SecurityService
    */
   signIn(user: SignInDto): string {
-    const jwt = require('jsonwebtoken');
-
     const answer = this.customerRepository.findOneByEmailAndPassword(
       user.username,
       user.password,
     );
-    if (answer) return 'any';
+    if (answer) return jwt.sign(user, process.env.TOKEN_SECRET || "tokentest");
     else throw new UnauthorizedException();
   }
 
@@ -47,31 +50,34 @@ export class SecurityService {
    */
   signUp(user: SignUpDto): string {
     const documentType = new DocumentTypeEntity();
-    documentType.id = user.documentTypeId;
-
     const newCustomer = new CustomerEntity();
+    newCustomer.state  = true;
     newCustomer.documentType = documentType;
     newCustomer.document = user.document;
     newCustomer.fullName = user.fullName;
     newCustomer.email = user.email;
     newCustomer.phone = user.phone;
-    newCustomer.password = user.password;
+    newCustomer.password = user.password;  
 
     const customer = this.customerRepository.register(newCustomer);
-
+    console.log(customer);
+    this.DocumentTypeRepository.register(documentType)
     if (customer) {
       const jwt = require('jsonwebtoken');
 
       const accountType = new AccountTypeEntity();
       accountType.id = customer.id;
+      accountType.name = user.accountTypeName;
       const newAccount = new AccountEntity();
       newAccount.customer = customer;
       newAccount.accountType = accountType;
-
+      newAccount.acc_Balance = 0
+      newAccount.state = true;
       const account = this.accountService.createAccount(newAccount);
+      console.log(account)
 
       if (account)
-        return jwt.sign({id: user.id}, process.env.TOKEN_SECRET || 'tokentest');
+        return jwt.sign(user, process.env.TOKEN_SECRET || "tokentest")
       else throw new InternalServerErrorException();
     } else throw new InternalServerErrorException();
   }

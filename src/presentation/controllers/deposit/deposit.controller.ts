@@ -24,6 +24,11 @@ export class DepositController {
   deleteDeposit(@Param('id', ParseUUIDPipe) @Body()depositId: string): void {
     return this.DepositService.deleteDeposit(depositId);
   }
+
+ @Get()
+getAll(){
+ return this.DepositService.getAll()
+}
 }
 
 
