@@ -1,17 +1,17 @@
 
 interface AccountStrategy {
-  calculateInterest(balance: number): number;
+  calcularIntereses(balance: number): number;
 }
 
 //Crear las clases concretas para cada estrategia
 class CurrentAccount implements AccountStrategy {
-  calculateInterest(balance: number): number {
+  calcularIntereses(balance: number): number {
     return balance * 0.01;
   }
 }
 
 class SavingsAccount implements AccountStrategy {
-  calculateInterest(balance: number): number {
+  calcularIntereses(balance: number): number {
     return balance * 0.05;
   }
 }
@@ -34,7 +34,7 @@ class BankAccount {
   }
 
   getInterest(): number {
-    return this.strategy.calculateInterest(this.balance);
+    return this.strategy.calcularIntereses(this.balance);
   }
 }
 
