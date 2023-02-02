@@ -45,10 +45,10 @@ export class AccountTypeRepository extends GeneralCRUD<AccountTypeEntity> implem
     this.database.splice(finded, 1);
   }
 
-  findAll(paginator: PaginationModel): AccountTypeEntity[] {
-    let finded = this.database
+  findAll(paginator?: PaginationModel): AccountTypeEntity[] {
+    let finded = this.database;
     if (finded == undefined) throw new NotFoundException();
-    return finded;
+    return finded.slice(paginator?.offset, paginator?.limit);
   }
 
   findOneById(id: string): AccountTypeEntity {

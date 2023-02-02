@@ -45,10 +45,10 @@ export class DocumentTypeRepository extends GeneralCRUD<DocumentTypeEntity> impl
     this.database.splice(finded, 1);
   }
 
-  findAll(paginator: PaginationModel): DocumentTypeEntity[] {
+  findAll(paginator?: PaginationModel): DocumentTypeEntity[] {
     let finded = this.database;
     if (finded == undefined) throw new NotFoundException();
-    return finded;
+    return finded.slice(paginator?.offset, paginator?.limit);
   }
 
   findOneById(id: string): DocumentTypeEntity {

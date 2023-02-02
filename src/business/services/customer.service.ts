@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CustomerEntity } from '../../data/persistence/entities';
+import { CustomerEntity, DocumentTypeEntity } from '../../data/persistence/entities';
 import { CustomerRepository, DocumentTypeRepository } from '../../data/persistence';
-import { UpdateCustomerDto } from '../../business/dtos';;
+import { PaginationDto, UpdateCustomerDto } from '../../business/dtos';
+;
 
 @Injectable()
 export class CustomerService {
@@ -26,8 +27,16 @@ export class CustomerService {
     return this.customerRepository.findOneByEmailAndPassword(email, password);
   }
 
+  findSoftDeletedCustomers() : CustomerEntity[] {
+    return this.customerRepository.findSoftDeletedCustomers();
+  }
+
   register(entity: CustomerEntity) : CustomerEntity {
     return this.customerRepository.register(entity);
+  }
+
+  findByState(state: boolean) : CustomerEntity[] {
+      return this.customerRepository.findByState(state.valueOf());
   }
 
   updatedCustomer(customer: UpdateCustomerDto): CustomerEntity {
@@ -46,7 +55,7 @@ export class CustomerService {
   unsubscribe(customerId: string, soft?: boolean): boolean {
     if (this.getCustomerInfo(customerId)) {
       try{
-        this.customerRepository.delete(customerId, soft)
+        this.customerRepository.delete(customerId, soft?.valueOf())
         return true;
       } catch {
         return false;
@@ -54,5 +63,13 @@ export class CustomerService {
     } else {
       return false;
     }
+  }
+
+  findAllCustomers(pagination?: PaginationDto) : CustomerEntity[] {
+    return this.customerRepository.findAll(pagination);
+  }
+
+  findAllDocumentTypes(pagination?: PaginationDto) : DocumentTypeEntity[] {
+    return this.documentTypeRepository.findAll(pagination);
   }
 }

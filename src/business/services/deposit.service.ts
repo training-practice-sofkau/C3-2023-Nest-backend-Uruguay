@@ -34,7 +34,7 @@ export class DepositService {
     const current = this.depositRepository.findOneById(depositId);
     if (current){
       try{
-        this.depositRepository.delete(depositId, soft);
+        this.depositRepository.delete(depositId, soft?.valueOf());
         return true;
       } catch {
         return false;
@@ -52,5 +52,13 @@ export class DepositService {
     if (dataRange){
       return this.depositRepository.findByDataRange(accountId, dataRange?.dateInit, dataRange?.dateEnd, pagination);
     } else return this.depositRepository.findByAccountId(accountId, pagination);
+  }
+
+  findSoftDeletedDeposits() : DepositEntity[] {
+    return this.depositRepository.findSoftDeletedDeposits();
+  }
+
+  findAllDeposits(pagination?: PaginationDto) : DepositEntity[] {
+    return this.depositRepository.findAll(pagination);
   }
 }

@@ -66,7 +66,7 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
     // });
   }
 
-  findAll(paginator: PaginationModel): AccountEntity[] {
+  findAll(paginator?: PaginationModel): AccountEntity[] {
     let finded = this.database.filter(
         (item) => item.deletedAt == undefined
     );
@@ -120,6 +120,14 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
         (item) => 
           item.customer.fullName == name &&
           item.deletedAt == undefined
+    );
+    if (finded == undefined) throw new NotFoundException();
+    return finded;
+  }
+
+  findSoftDeletedAccounts(): AccountEntity[] {
+    let finded = this.database.filter(
+      (item) => item.deletedAt !== undefined
     );
     if (finded == undefined) throw new NotFoundException();
     return finded;

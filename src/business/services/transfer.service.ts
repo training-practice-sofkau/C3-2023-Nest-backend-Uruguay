@@ -64,7 +64,7 @@ export class TransferService {
     const current = this.transferRepository.findOneById(transferId);
     if (current){
       try{
-        this.transferRepository.delete(transferId, soft);
+        this.transferRepository.delete(transferId, soft?.valueOf());
         return true;
       } catch {
         return false;
@@ -72,5 +72,13 @@ export class TransferService {
     } else {
       return false;
     }
+  }
+
+  findSoftDeletedTransfers() : TransferEntity[] {
+    return this.transferRepository.findSoftDeletedTransfers();
+  }
+
+  findAllTransfers(pagination?: PaginationDto) : TransferEntity[] {
+    return this.transferRepository.findAll(pagination);
   }
 }

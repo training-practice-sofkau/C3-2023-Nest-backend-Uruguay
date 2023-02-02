@@ -3,6 +3,7 @@ import { AccountService } from '../../business/services';
 import { BalanceDto, ChangeAccountDto, ChangeStateDto, CreateAccountDto } from '../../business/dtos';
 import { ApiTags } from '@nestjs/swagger';
 import { AccountEntity, AccountTypeEntity } from '../../data/persistence';
+import { PaginationDto } from '../../business/dtos/pagination.dto';
 
 @ApiTags('account')
 @Controller('api/account')
@@ -73,5 +74,20 @@ export class AccountController {
     @Get('/delete-account')
     deleteAccount(@Query('account') account: string, @Query('soft') soft?: boolean): boolean {
         return this.accountService.deleteAccount(account, soft);
+    }
+
+    @Get('/get-soft-deleteds')
+    findSoftDeletedAccounts(): AccountEntity[] {
+        return this.accountService.findSoftDeletedAccounts();
+    }
+
+    @Get('/get-all')
+    findAllAccounts(pagination?: PaginationDto): AccountEntity[] {
+        return this.accountService.findAllAccounts(pagination);
+    }
+
+    @Get('/get-all-account-types')
+    findAllAccountTypes(pagination?: PaginationDto): AccountTypeEntity[] {
+        return this.accountService.findAllAccountTypes(pagination);
     }
 }

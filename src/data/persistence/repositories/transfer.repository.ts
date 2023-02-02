@@ -114,4 +114,12 @@ export class TransferRepository extends GeneralCRUD<TransferEntity> implements I
       if (finded == undefined) throw new NotFoundException();
       return finded.slice(paginator?.offset, paginator?.limit);
   }
+
+  findSoftDeletedTransfers(): TransferEntity[] {
+    let finded = this.database.filter(
+      (item) => item.deletedAt !== undefined
+    );
+    if (finded == undefined) throw new NotFoundException();
+    return finded;
+  }
 }

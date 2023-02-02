@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { DepositService } from '../../business/services';
-import { CreateDepositDto, HistoryDto } from '../../business/dtos';
+import { CreateDepositDto, HistoryDto, PaginationDto } from '../../business/dtos';
 import { DepositEntity } from '../../data/persistence';
 
 @ApiTags('deposit')
@@ -25,4 +25,13 @@ export class DepositController {
         return this.depositService.getHistory(history.id, history.pagination, history.datarange);
     }
 
+    @Get('/get-soft-deleteds')
+    findSoftDeletedDeposits(): DepositEntity[] {
+        return this.depositService.findSoftDeletedDeposits();
+    }
+
+    @Get('/get-all')
+    findAllDeposits(pagination?: PaginationDto): DepositEntity[] {
+        return this.depositService.findAllDeposits(pagination);
+    }
 }

@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
-import { AccountRepository, AccountTypeRepository } from '../../data/persistence';
+import { AccountRepository, AccountTypeRepository, CustomerRepository } from '../../data/persistence';
 import { AccountEntity, AccountTypeEntity } from '../../data/persistence/entities';
 
 // Data Transfer Object
-import { BalanceDto, ChangeAccountDto, ChangeStateDto, CreateAccountDto } from '../../business/dtos';
-import { CustomerRepository } from '../../data/persistence/repositories/customer.repository';
+import { BalanceDto, ChangeAccountDto, ChangeStateDto, CreateAccountDto, PaginationDto } from '../../business/dtos';
 
 
 @Injectable()
@@ -119,7 +118,7 @@ export class AccountService {
     const current = this.accountRepository.findOneById(accountId);
     if (current){
       try{
-        this.accountRepository.delete(accountId, soft);
+        this.accountRepository.delete(accountId, soft?.valueOf());
         return true;
       } catch {
         return false;
@@ -127,5 +126,17 @@ export class AccountService {
     } else {
       return false;
     }
+  }
+
+  findSoftDeletedAccounts() : AccountEntity[] {
+    return this.accountRepository.findSoftDeletedAccounts();
+  }
+
+  findAllAccounts(pagination?: PaginationDto) : AccountEntity[] {
+    return this.accountRepository.findAll(pagination);
+  }
+
+  findAllAccountTypes(pagination?: PaginationDto) : AccountTypeEntity[] {
+    return this.accountTypeRepository.findAll(pagination);
   }
 }

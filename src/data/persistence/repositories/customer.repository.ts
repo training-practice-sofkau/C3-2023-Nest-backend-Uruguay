@@ -42,7 +42,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
         item.id == id
     );
     if (finded == undefined) throw new NotFoundException();
-    soft ? this.softDelete(finded) : this.hardDelete(finded);
+    soft?.valueOf() ? this.softDelete(finded) : this.hardDelete(finded);
   }
 
   private hardDelete(index: number): void {
@@ -65,7 +65,7 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
     // });
   }
 
-  findAll(paginator: PaginationModel): CustomerEntity[] {
+  findAll(paginator?: PaginationModel): CustomerEntity[] {
     let finded = this.database.filter(
       (item) => item.deletedAt == undefined
     );
@@ -105,13 +105,12 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
     return finded;
   }
 
-  findOneByEmail(email: string): CustomerEntity {
+  findOneByEmail(email: string): CustomerEntity | undefined {
     let finded = this.database.find(
       (item) => 
         item.email == email &&
         item.deletedAt == undefined
     );
-    if (finded == undefined) throw new NotFoundException();
     return finded;
   }
 
@@ -126,12 +125,18 @@ export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements I
   }
 
   findByState(state: boolean): CustomerEntity[] {
-    let finded: CustomerEntity[]
-    finded = this.database.map((value) => {
-      if (value.state == state){
-        return value
-      }
-    }) as CustomerEntity[]
+    let finded = this.database.filter(
+      (item) => item.state == state &&
+      item.deletedAt == undefined
+    );
+    if (finded == undefined) throw new NotFoundException();
+    return finded;
+  }
+
+  findSoftDeletedCustomers(): CustomerEntity[] {
+    let finded = this.database.filter(
+      (item) => item.deletedAt !== undefined
+    );
     if (finded == undefined) throw new NotFoundException();
     return finded;
   }

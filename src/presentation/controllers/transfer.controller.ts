@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { TransferService } from '../../business/services';
-import { CreateTransferDto, HistoryDto } from '../../business/dtos';
+import { CreateTransferDto, HistoryDto, PaginationDto } from '../../business/dtos';
 import { TransferEntity } from '../../data/persistence';
 
 @ApiTags('transfer')
@@ -33,5 +33,15 @@ export class TransferController {
     @Post('/get-history-in')
     getHistoryIn(@Body() history: HistoryDto): TransferEntity[] {
         return this.transferService.getHistoryIn(history.id, history.pagination, history.datarange);
+    }
+
+    @Get('/get-soft-deleteds')
+    findSoftDeletedTransfers(): TransferEntity[] {
+        return this.transferService.findSoftDeletedTransfers();
+    }
+
+    @Get('/get-all')
+    findAllTransfers(pagination?: PaginationDto): TransferEntity[] {
+        return this.transferService.findAllTransfers();
     }
 }

@@ -92,4 +92,12 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> implements IDe
     if (finded == undefined) throw new NotFoundException();
     return finded.slice(paginator?.offset, paginator?.limit);
   }
+
+  findSoftDeletedDeposits(): DepositEntity[] {
+    let finded = this.database.filter(
+      (item) => item.deletedAt !== undefined
+    );
+    if (finded == undefined) throw new NotFoundException();
+    return finded;
+  }
 }
