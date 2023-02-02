@@ -1,20 +1,22 @@
 import { Injectable } from '@nestjs/common';
 
 import { DataRangeModel, PaginationModel } from '../../../data/models/';
-import { DepositRepository } from '../../../data//persistence/repositories';
+import { AccountRepository, DepositRepository } from '../../../data//persistence/repositories';
 import { DepositEntity } from '../../../data/persistence/entities';
 import { DepositDto } from '../../dtos';
 
 @Injectable()
 export class DepositService {
-  constructor(private readonly depositRepository: DepositRepository) {}
+  constructor(
+    private readonly depositRepository: DepositRepository,
+    private readonly accountRepository: AccountRepository) {}
 
   /**
    * Crear un deposito
    */
   createDeposit(deposit: DepositDto): DepositEntity {
     const newDeposit = new DepositEntity();
-    newDeposit.account = deposit.account;
+    newDeposit.account = this.accountRepository.findOneById(deposit.account);
     newDeposit.amount = deposit.amount;
 
     return this.depositRepository.register(newDeposit);
@@ -24,7 +26,11 @@ export class DepositService {
    * Actualizar un deposito
    */
   updateDeposit(id: string, newDeposit: DepositDto): DepositEntity {
-    return this.depositRepository.update(id, newDeposit);
+    let depositUpdated = this.depositRepository.findOneById(id);
+    if(newDeposit.account) depositUpdated.account = this.accountRepository.findOneById(newDeposit.account);
+    if(newDeposit.amount) depositUpdated.amount = newDeposit.amount;
+    
+    return this.depositRepository.update(id, depositUpdated);
   }
 
   /**

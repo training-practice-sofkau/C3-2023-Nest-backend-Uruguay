@@ -15,7 +15,7 @@ export class DepositRepository
         return this.database.at(-1) ?? entity;
     }
 
-    update(id: string, entity: DepositDto): DepositEntity {
+    update(id: string, entity: DepositEntity): DepositEntity {
         const indexCurrentEntity = this.database.findIndex(
             (item) => item.id === id && typeof item.deletedAt === 'undefined'
         );

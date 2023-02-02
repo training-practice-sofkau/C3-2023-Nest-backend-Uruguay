@@ -22,7 +22,13 @@ export class DepositController {
 
     @Put(':id')
     @UsePipes(new ValidationPipe())
-    putDeposit(@Param('id', ParseUUIDPipe) id: string, @Body() newdDeposit: DepositDto): DepositEntity {
+    updateDeposit(@Param('id', ParseUUIDPipe) id: string, @Body() newdDeposit: DepositDto): DepositEntity {
+        return this.depositService.updateDeposit(id, newdDeposit);
+    }
+
+    @Patch(':id')
+    @UsePipes(new ValidationPipe())
+    updateDepositSomeProperties(@Param('id', ParseUUIDPipe) id: string, @Body() newdDeposit: DepositDto): DepositEntity {
         return this.depositService.updateDeposit(id, newdDeposit);
     }
 
