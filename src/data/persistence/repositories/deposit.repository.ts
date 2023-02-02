@@ -95,6 +95,8 @@ export class DepositRepository
   ): DepositEntity[]  {
     const paginations = this.paginationMethod(pagination);
 
+    console.log(paginations);
+
     return this.database.filter(
       (item) => item.account.id === accountId && item.dateTime >= dateInit && item.dateTime <= dateEnd && typeof item.deletedAt === 'undefined',
     ).slice(paginations.offset, paginations.offset + (paginations.limit || 0));
@@ -107,9 +109,9 @@ export class DepositRepository
   }
 
   private paginationMethod(pagination: PaginationModel): PaginationModel {
-    return pagination = {
-      ... {offset: 0, limit: 10},
-      ... pagination
-    }
+    if(typeof pagination.offset === 'undefined') pagination.offset = 0;
+    if(typeof pagination.limit === 'undefined') pagination.limit = 10;
+
+    return pagination;
   }
 }

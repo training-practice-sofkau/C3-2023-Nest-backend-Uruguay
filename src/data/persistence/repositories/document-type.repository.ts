@@ -11,10 +11,8 @@ export class DocumentTypeRepository
 {
   register(entity: DocumentTypeEntity): DocumentTypeEntity {
     const indexCurrentEntity = this.findIndex(entity.id);
-    if (indexCurrentEntity != -1)
-      throw new Error('The Document Type already exists');
-
-    this.database.push(entity);
+    if (indexCurrentEntity === -1) this.database.push(entity);
+    
     return this.database.at(-1) ?? entity;
   }
 
@@ -52,7 +50,6 @@ export class DocumentTypeRepository
 
   findOneById(id: string): DocumentTypeEntity {
     const currentEntity = this.database.find((item) => item.id === id);
-    console.log(currentEntity);
     if (!currentEntity) throw new NotFoundException();
 
     return currentEntity;
