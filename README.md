@@ -49,10 +49,11 @@ $ npm run start:prod
 
 ```bash
 # Title of the delivery
-[Workshop Week 2 - Day 2] - Layer Design - Edinson Acosta Gancharov
+[Workshop Week 2 - Day 3] - Pattern Designs - Edinson Acosta Gancharov
 
 # Body of the delivery
 [Any short description]
+
 What is being delivered?
 
 What am I missing to deliver?
@@ -64,10 +65,9 @@ What difficulty did you have?
 
 The following are the guidelines that should be taken into account for the development of the workshop to be submitted:
 
-1. Organize the project structure in at least 3 layers: business, data and presentation.
-2. Add the layers you consider necessary and justify why and for what you did it.
+1. Create and implemente pattern designs in the project.
+2. It must be implemented: singleton, observer, factory and strategy patterns.
 
-Do not forget to consult the Nest documentation if you consider it necessary: [Nest Documentation](https://docs.nestjs.com/).
 
 ### Important note
 Do not forget that for this workshop, you should make at least 3 commits properly documented (title and message body).
