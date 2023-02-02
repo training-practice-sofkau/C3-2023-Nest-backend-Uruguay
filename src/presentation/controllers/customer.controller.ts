@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { CustomerService } from '../../business/services/customer.service';
-import { PaginationDto, UpdateCustomerDto } from '../../business/dtos';
+import { ChangeStateDto, PaginationDto, UpdateCustomerDto } from '../../business/dtos';
 import { ApiTags } from '@nestjs/swagger';
 import { CustomerEntity, DocumentTypeEntity } from '../../data/persistence';
 
@@ -24,7 +24,17 @@ export class CustomerController {
         return this.customerService.unsubscribe(customer, soft);
     }
 
-    @Get('/get-customers-by-state')
+    @Get('/get-state')
+    getState(@Query('account') customer: string): boolean {
+        return this.customerService.getState(customer);
+    }
+
+    @Post('/change-state')
+    changeState(@Body() customer: ChangeStateDto): CustomerEntity {
+        return this.customerService.changeState(customer);
+    }
+
+    @Get('/get-by-state')
     findByState(@Query('state') state: boolean): CustomerEntity[] {
         return this.customerService.findByState(state);
     }

@@ -48,8 +48,8 @@ export class AccountController {
     }
 
     @Post('/change-state')
-    changeState(@Body() account: ChangeStateDto): string {
-        return this.accountService.changeState(account).toString();
+    changeState(@Body() account: ChangeStateDto): AccountEntity {
+        return this.accountService.changeState(account);
     }
 
     @Get('/get-by-id')

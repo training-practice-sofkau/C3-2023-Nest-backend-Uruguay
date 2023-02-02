@@ -10,7 +10,7 @@ export class DepositController {
 
     constructor(private readonly depositService: DepositService) {}
 
-    @Post('/create-deposit')
+    @Post('/create')
     createDeposit(@Body() deposit: CreateDepositDto) {
         return this.depositService.createDeposit(deposit);
     }

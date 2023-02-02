@@ -14,7 +14,6 @@ export class DepositService {
     this.accountRepository = AccountRepository.getInstance();
   }
 
-
   createDeposit(deposit: CreateDepositDto): DepositEntity {
     const newDeposit = new DepositEntity();
     newDeposit.account = this.accountRepository.findOneById(deposit.accountId);

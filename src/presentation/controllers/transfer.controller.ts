@@ -10,7 +10,7 @@ export class TransferController {
 
     constructor(private readonly transferService: TransferService) {}
 
-    @Post('/create-transfer')
+    @Post('/create')
     createTransfer(@Body() transfer: CreateTransferDto): TransferEntity {
         return this.transferService.createTransfer(transfer);
     }

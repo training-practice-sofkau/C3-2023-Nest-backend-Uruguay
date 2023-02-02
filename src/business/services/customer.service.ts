@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CustomerEntity, DocumentTypeEntity } from '../../data/persistence/entities';
 import { CustomerRepository, DocumentTypeRepository } from '../../data/persistence';
-import { PaginationDto, UpdateCustomerDto } from '../../business/dtos';
+import { ChangeStateDto, PaginationDto, UpdateCustomerDto } from '../../business/dtos';
 ;
 
 @Injectable()
@@ -73,5 +73,17 @@ export class CustomerService {
 
   findAllDocumentTypes(pagination?: PaginationDto) : DocumentTypeEntity[] {
     return this.documentTypeRepository.findAll(pagination);
+  }
+
+  getState(customerId: string): boolean {
+    return this.customerRepository.findOneById(customerId).state;
+  }
+
+  changeState(customer: ChangeStateDto): CustomerEntity {
+    const current = this.customerRepository.findOneById(customer.id);
+    if (current){
+      current.state = customer.state;
+      return this.customerRepository.update(customer.id, current);
+    } else throw new NotFoundException();
   }
 }

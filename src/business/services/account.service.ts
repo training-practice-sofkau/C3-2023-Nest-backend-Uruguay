@@ -92,15 +92,12 @@ export class AccountService {
     return this.accountRepository.findOneById(accountId).state;
   }
 
-  changeState(account: ChangeStateDto): boolean {
-    const current = this.accountRepository.findOneById(account.accountId);
-    current.state = account.state;
-    try{
-      this.accountRepository.update(account.accountId, current);
-      return true;
-    } catch {
-      return false;
-    } 
+  changeState(account: ChangeStateDto): AccountEntity {
+    const current = this.accountRepository.findOneById(account.id);
+    if (current){
+      current.state = account.state;
+      return this.accountRepository.update(account.id, current);
+    } else throw new NotFoundException();
   }
 
   getAccountById(accountId: string): AccountEntity {
