@@ -23,7 +23,7 @@ class UseObjeto implements SuperHeroeStrategy {
 
 class SuperHeroe {
   private strategy: SuperHeroeStrategy;
-  
+
   constructor(strategy: SuperHeroeStrategy) {
     this.strategy = strategy;
   }

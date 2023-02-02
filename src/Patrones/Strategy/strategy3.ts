@@ -3,19 +3,19 @@ interface Comida {
 }
 
 class Vegetariana implements Comida {
-    tipo(platoName: string): string {
+  tipo(platoName: string): string {
     return `${platoName} Comida Vegetariana`;
   }
 }
 
 class Vegana implements Comida {
-    tipo(platoName: string): string {
+  tipo(platoName: string): string {
     return `${platoName} Comida Vegana`;
   }
 }
 
 class Carnivora implements Comida {
-    tipo(platoName: string): string {
+  tipo(platoName: string): string {
     return `${platoName} Comida Carnivora`;
   }
 }
@@ -23,7 +23,7 @@ class Carnivora implements Comida {
 
 class Comidas {
   private strategy: Comida;
-  
+
   constructor(strategy: Comida) {
     this.strategy = strategy;
   }
@@ -47,5 +47,5 @@ EnsaladaConHuevo.setAttackStrategy(new Vegetariana());
 console.log(EnsaladaConHuevo.tipo()); // Comida Vegetariana
 
 const EnsaladaConPollo = new Comidas(new Carnivora());
-EnsaladaConPollo .setAttackStrategy(new Carnivora());
-console.log(EnsaladaConPollo .tipo()); // Comida Carnivora 
+EnsaladaConPollo.setAttackStrategy(new Carnivora());
+console.log(EnsaladaConPollo.tipo()); // Comida Carnivora 
