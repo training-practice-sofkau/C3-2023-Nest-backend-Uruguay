@@ -11,9 +11,8 @@ export class AccountTypeRepository
 {
   register(entity: AccountTypeEntity): AccountTypeEntity {
     const indexCurrentEntity = this.findIndex(entity.id)
-    if (indexCurrentEntity != -1) throw new Error('The Account Type already exists');
+    if (indexCurrentEntity === -1) this.database.push(entity);
 
-    this.database.push(entity);
     return this.database.at(-1) ?? entity;
   }
 

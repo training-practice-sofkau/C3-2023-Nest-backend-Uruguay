@@ -1,13 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { NotAcceptableException } from '@nestjs/common/exceptions';
 import { PaginationModel } from 'src/data/models';
-import { AccountEntity, AccountRepository, AccountTypeEntity, AccountTypeRepository, CustomerEntity, CustomerRepository } from 'src/data/persistence';
+import {
+  AccountEntity,
+  AccountRepository,
+  AccountTypeEntity,
+  AccountTypeRepository,
+  CustomerEntity,
+  CustomerRepository,
+} from 'src/data/persistence';
 import { AccountDTO, CreateAccountDTO } from 'src/business/dtos';
 import { TypeDTO } from '../../dtos/type.dto';
-import { DocumentTypeEntity } from '../../../data/persistence/entities/document-type.entity';
+import { Subject } from 'rxjs';
+import {
+  AccountTypeContext,
+  CheckingAccountStrategy,
+  SavingAccountStrategy,
+} from '../../../data/StrategyPattern/AccountType/account-type-strategy';
 
 @Injectable()
 export class AccountService {
+  private accountSubject = new Subject<AccountEntity>();
+
+  get accountObservable() {
+    return this.accountSubject.asObservable();
+  }
+
   constructor(
     private readonly accountRepository: AccountRepository,
     private readonly accountTypeRepository: AccountTypeRepository,
@@ -21,13 +39,35 @@ export class AccountService {
    * @return {*}  {AccountEntity}
    * @memberof AccountService
    */
-  createAccount(account: CreateAccountDTO): AccountEntity {
+  createSavingAccount(account: CreateAccountDTO): AccountEntity {
     const customer = this.customerRepository.findOneById(account.customerId);
-    const accountType = this.accountTypeRepository.findOneById(account.accountTypeId);
+    const saving = new SavingAccountStrategy();
+    const accountTypeContext = new AccountTypeContext(saving);
+
+    const accountType = accountTypeContext.assignAccountTypeStrategy();
 
     const newAccount = new AccountEntity();
     newAccount.customer = customer;
     newAccount.accountType = accountType;
+
+    this.accountSubject.next(newAccount);
+    this.accountTypeRepository.register(accountType);
+    return this.accountRepository.register(newAccount);
+  }
+
+  createChekingAccount(account: CreateAccountDTO): AccountEntity {
+    const customer = this.customerRepository.findOneById(account.customerId);
+    const checking = new CheckingAccountStrategy();
+    const accountTypeContext = new AccountTypeContext(checking);
+
+    const accountType = accountTypeContext.assignAccountTypeStrategy();
+
+    const newAccount = new AccountEntity();
+    newAccount.customer = customer;
+    newAccount.accountType = accountType;
+
+    this.accountSubject.next(newAccount);
+    this.accountTypeRepository.register(accountType);
     return this.accountRepository.register(newAccount);
   }
 
@@ -39,7 +79,7 @@ export class AccountService {
   }
 
   findAllAccountTypes(pagination: PaginationModel): AccountTypeEntity[] {
-    return this.accountTypeRepository.findAll(pagination)
+    return this.accountTypeRepository.findAll(pagination);
   }
 
   findAccountType(id: string): AccountTypeEntity {
@@ -54,9 +94,7 @@ export class AccountService {
     return this.getAccount(accountId);
   }
 
-  findByCustomer(
-    customerId: string,
-  ): AccountEntity[] {
+  findByCustomer(customerId: string): AccountEntity[] {
     return this.accountRepository.findByCustomer(customerId);
   }
 
@@ -97,16 +135,27 @@ export class AccountService {
     return this.getAccount(accountId).state;
   }
 
-  updateAccount(accountId: string , newAccount: AccountDTO) {
+  updateAccount(accountId: string, newAccount: AccountDTO) {
     let account = this.getAccount(accountId);
     let accountType: AccountTypeEntity;
-    if(typeof newAccount.accountType != 'undefined') {
-      accountType = this.accountTypeRepository.findOneById(newAccount.accountType);
-      account.accountType = accountType;
+    if (typeof newAccount.accountType != 'undefined') {
+      if (newAccount.accountType === 'Saving Account') {
+        const saving = new SavingAccountStrategy();
+        const accountTypeContext = new AccountTypeContext(saving);
+        account.accountType = accountTypeContext.assignAccountTypeStrategy();
+      }
+
+      if (newAccount.accountType === 'Checking Account') {
+        const checking = new CheckingAccountStrategy();
+        const accountTypeContext = new AccountTypeContext(checking);
+        account.accountType = accountTypeContext.assignAccountTypeStrategy();
+      }
     }
-    
-    if(typeof newAccount.balance != 'undefined') account.balance = newAccount.balance;
-    if(typeof newAccount.state != 'undefined') account.state = newAccount.state;
+
+    if (typeof newAccount.balance != 'undefined')
+      account.balance = newAccount.balance;
+    if (typeof newAccount.state != 'undefined')
+      account.state = newAccount.state;
 
     return this.accountRepository.update(accountId, account);
   }
@@ -121,7 +170,8 @@ export class AccountService {
   addBalance(accountId: string, addBalance: AccountDTO): void {
     const account = this.getAccount(accountId);
 
-    if(typeof addBalance.balance != 'undefined') account.balance += addBalance.balance;
+    if (typeof addBalance.balance != 'undefined')
+      account.balance += addBalance.balance;
 
     this.accountRepository.update(accountId, account);
   }
@@ -134,16 +184,20 @@ export class AccountService {
    * @return {*}  {AccountTypeEntity}
    * @memberof AccountService
    */
-  changeAccountType(
-    accountId: string,
-    accountTypeDTO: AccountDTO,
-  ): AccountTypeEntity {
-    const account = this.getAccount(accountId);
+  changeAccountType(accountId: string): AccountTypeEntity {
+    let account = this.getAccount(accountId);
+    
+    if (account.accountType.name === 'Saving Account') {
+      const checking = new CheckingAccountStrategy();
+      const accountTypeContext = new AccountTypeContext(checking);
+      account.accountType = accountTypeContext.assignAccountTypeStrategy();
+    } 
+    else if (account.accountType.name === 'Checking Account') {
+      const saving = new SavingAccountStrategy();
+      const accountTypeContext = new AccountTypeContext(saving);
 
-    console.log(typeof accountTypeDTO.accountType)
-    if(typeof accountTypeDTO.accountType === 'undefined') throw new NotAcceptableException();
-
-    account.accountType = this.accountTypeRepository.findOneById(accountTypeDTO.accountType);
+      account.accountType = accountTypeContext.assignAccountTypeStrategy();
+    }
 
     this.accountRepository.update(accountId, account);
 
@@ -157,11 +211,13 @@ export class AccountService {
    * @param {boolean} state
    * @memberof AccountService
    */
-  changeState(accountId: string, newState: AccountDTO): void {
-    if(typeof newState.state === 'undefined') throw new NotAcceptableException();
-
+  changeState(accountId: string): void {
     const account = this.getAccount(accountId);
-    account.state = newState.state;
+    if(account.state) {
+      account.state = false;
+    } else {
+      account.state = true;
+    }
 
     this.accountRepository.update(accountId, account);
   }
@@ -180,7 +236,7 @@ export class AccountService {
 
     if (soft) this.accountRepository.delete(accountId, soft);
 
-    if(!soft) this.accountRepository.delete(accountId);
+    if (!soft) this.accountRepository.delete(accountId);
   }
 
   /**
@@ -191,7 +247,8 @@ export class AccountService {
    * @memberof AccountService
    */
   removeBalance(accountId: string, newBalance: AccountDTO): void {
-    if(typeof newBalance.balance === 'undefined') throw new NotAcceptableException();
+    if (typeof newBalance.balance === 'undefined')
+      throw new NotAcceptableException();
 
     if (this.verifyAmountIntoBalance(accountId, newBalance.balance))
       throw new Error('Not enough funds');

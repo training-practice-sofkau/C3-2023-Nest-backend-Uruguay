@@ -1,10 +1,7 @@
 // Libraries
-import { Controller, Post, Body, Param, Get } from '@nestjs/common';
-import { Response } from 'express';
+import { Controller, Post, Body, Param } from '@nestjs/common';
 import { SecurityService } from 'src/business/services/security/security.service';
-import { SingInDTO, SingUpDTO } from 'src/business/dtos';
-import { SingOutDTO } from 'src/business/dtos/sing-out.dto';
-import { get } from 'http';
+import { SignInDTO, SignUpDTO } from 'src/business/dtos';
 
 
 @Controller('security')
@@ -12,18 +9,18 @@ export class SecurityController {
 
     constructor(private readonly securityService: SecurityService) {}
 
-    @Post('/singIn')
-    singIn(@Body() user: SingInDTO): string {
+    @Post('/signIn')
+    signIn(@Body() user: SignInDTO): string {
         return this.securityService.signIn(user);
     }
 
-    @Post('/singUp')
-    singUp(@Body() user: SingUpDTO) {
+    @Post('/signUp')
+    signUp(@Body() user: SignUpDTO) {
         return this.securityService.signUp(user);
     }
 
-    @Post('/singOut/:token')
-    singOut(@Param('token') token: string): void {
+    @Post('/signOut/:token')
+    signOut(@Param('token') token: string): void {
         this.securityService.signOut(token);
     }
 }

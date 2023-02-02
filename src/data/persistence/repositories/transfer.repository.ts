@@ -109,9 +109,9 @@ export class TransferRepository
   }
 
   private paginationMethod(pagination: PaginationModel): PaginationModel {
-    return pagination = {
-      ... {offset: 0, limit: 10},
-      ... pagination
-    }
+    if(typeof pagination.offset === 'undefined') pagination.offset = 0;
+    if(typeof pagination.limit === 'undefined') pagination.limit = 10;
+
+    return pagination;
   }
 }

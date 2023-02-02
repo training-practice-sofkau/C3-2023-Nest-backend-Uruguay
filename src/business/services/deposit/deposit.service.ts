@@ -4,10 +4,17 @@ import { DepositEntity, DepositRepository } from 'src/data/persistence';
 import { CreateDepositDTO } from 'src/business/dtos/create-deposit.dto';
 import { AccountService } from '../account';
 import { AccountDTO } from '../../dtos/account.dto';
+import { Subject } from 'rxjs';
 
 
 @Injectable()
 export class DepositService {
+
+  private depositSubject = new Subject<DepositEntity>();
+
+  get depositObservable() {
+    return this.depositSubject.asObservable();
+  }
 
     constructor(private readonly depositRepository: DepositRepository,
       private readonly accountService: AccountService) {}
@@ -31,6 +38,7 @@ export class DepositService {
     newDeposit.amount = deposit.amount;
     newDeposit.dateTime = Date.now();
 
+    this.depositSubject.next(newDeposit);
     this.accountService.addBalance(account.id, accountDTO);
 
     return this.depositRepository.register(newDeposit);
@@ -89,9 +97,13 @@ export class DepositService {
 
   getAccountHistory(
     accountId: string,
-    pagination: PaginationModel,
+    offset: number,
+    limit?: number,
     dataRange?: DataRangeModel,
   ): DepositEntity[] {    
+
+    const pagination: PaginationModel = {offset: offset, limit: limit}
+
     dataRange = {
       ... {dateStart: 0, dateEnd: Date.now()},
       ... dataRange

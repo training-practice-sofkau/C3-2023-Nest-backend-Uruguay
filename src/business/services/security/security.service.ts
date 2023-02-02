@@ -2,22 +2,21 @@ import {
   Injectable,
   InternalServerErrorException,
   UnauthorizedException,
-  NotFoundException,
 } from '@nestjs/common';
 import {
-  AccountTypeEntity,
   AccountTypeRepository,
   CustomerEntity,
   CustomerRepository,
-  DocumentTypeEntity,
 } from 'src/data/persistence';
-import { CreateAccountDTO, SingInDTO, SingUpDTO } from 'src/business/dtos';
+import { CreateAccountDTO, SignInDTO, SignUpDTO } from 'src/business/dtos';
 import { AccountService } from '../account';
 import * as jwt from 'jsonwebtoken';
-import { SingOutDTO } from 'src/business/dtos/sing-out.dto';
 import { DocumentTypeRepository } from '../../../data/persistence/repositories/document-type.repository';
 import { NotAcceptableException } from '@nestjs/common/exceptions';
 import { CustomerService } from '../customer/customer.service';
+import { AccountTypeFactory } from '../../../data/FactoryPattern/AccountType/account-type-factory';
+import { DocumentTypeContext, NationalIdStrategy, PassportStrategy } from '../../../data/StrategyPattern/DocumentType/document-type-strategy';
+import { NationalID } from '../../../data/FactoryPattern/DocumentType/document-type-factory';
 
 @Injectable()
 export class SecurityService {
@@ -36,7 +35,7 @@ export class SecurityService {
    * @return {*}  {string}
    * @memberof SecurityService
    */
-  signIn(user: SingInDTO): string {
+  signIn(user: SignInDTO): string {
     const answer = this.customerRepository.findOneByEmailAndPassword(
       user.username,
       user.password,
@@ -57,30 +56,40 @@ export class SecurityService {
    * @return {*}  {string}
    * @memberof SecurityService
    */
-  signUp(user: SingUpDTO): string {
-    console.log(user.documentTypeId)
-    const documentType = this.documentTypeRepository.findOneById(user.documentTypeId);
-
+  signUp(user: SignUpDTO): string {
     const newCustomer = new CustomerEntity();
-    newCustomer.documentType = documentType;
+
+    if(user.documentType != 'National ID' && user.documentType != 'Passport ID') throw new NotAcceptableException();
+
+    if(user.documentType === 'National ID') {
+      const strategy = new NationalIdStrategy();
+      const context = new DocumentTypeContext(strategy);
+      newCustomer.documentType = context.assignAccountTypeStrategy();
+
+    }
+
+    if(user.documentType === 'Passport ID') {
+      const strategy = new PassportStrategy();
+      const context = new DocumentTypeContext(strategy);
+      newCustomer.documentType = context.assignAccountTypeStrategy();
+
+    }
+
+
     newCustomer.document = user.document;
     newCustomer.fullName = user.fullName;
     newCustomer.email = user.email;
     newCustomer.phone = user.phone;
     newCustomer.password = user.password;
 
+    this.documentTypeRepository.register(newCustomer.documentType);
     const customer = this.customerRepository.register(newCustomer);
 
-    if (customer) {
-      const accountTypeData = this.accountTypeRepository.findAll({offset:0}).at(0);
-      if(typeof accountTypeData === 'undefined') throw new NotAcceptableException();
-
+    if (customer) {      
       const newAccount = new CreateAccountDTO();
       newAccount.customerId = customer.id;
-
-      newAccount.accountTypeId = accountTypeData.id;
-
-      const account = this.accountService.createAccount(newAccount);
+            
+      const account = this.accountService.createSavingAccount(newAccount);
 
       if (!account) throw new InternalServerErrorException();
 
@@ -100,6 +109,6 @@ export class SecurityService {
   signOut(JWToken: string): void {
     if(!jwt.verify(JWToken, process.env.TOKEN_SECRET || 'tokentest')) throw new Error('JWT Not Valid')
   
-    console.log('SingOut Completed')
+    console.log('SignOut Completed')
   }
 }

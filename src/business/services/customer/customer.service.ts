@@ -5,6 +5,7 @@ import { CreateCustomerDTO, UpdateCustomerDTO, TypeDTO } from 'src/business/dtos
 import { AccountService } from '../account';
 import { DocumentTypeEntity } from '../../../data/persistence/entities/document-type.entity';
 import { CustomerStateDTO } from 'src/business/dtos/customer-state.dto';
+import { NationalIdStrategy, DocumentTypeContext, PassportStrategy } from '../../../data/StrategyPattern/DocumentType/document-type-strategy';
 
 
 @Injectable()
@@ -71,11 +72,20 @@ export class CustomerService {
 
   updatedCustomer(id: string, newCustomer: UpdateCustomerDTO): CustomerEntity {
     let customer = this.getCustomer(id);
-    const documentType = this.documentTypeRepository.findOneById(
-      newCustomer.documentType,
-    );
 
-    customer.documentType = documentType;
+    if (newCustomer.documentType === 'National ID') {
+      const national = new NationalIdStrategy();
+      const accountTypeContext = new DocumentTypeContext(national);
+      customer.documentType = accountTypeContext.assignAccountTypeStrategy();
+    } 
+    else if (newCustomer.documentType === 'Passport ID') {
+      const passport = new PassportStrategy();
+      const accountTypeContext = new DocumentTypeContext(passport);
+
+      customer.documentType = accountTypeContext.assignAccountTypeStrategy();
+    }
+
+
     customer.document = newCustomer.document;
     customer.email = newCustomer.email;
     customer.fullName = newCustomer.fullName;
@@ -86,9 +96,14 @@ export class CustomerService {
     return this.customerRepository.update(id, customer);
   }
 
-  changeState(customerId: string, state: CustomerStateDTO): void {
+  changeState(customerId: string): void {
     const customer = this.getCustomer(customerId);
-    customer.state = state.state;
+
+    if(customer.state) {
+      customer.state = false;
+    } else {
+      customer.state = true;
+    }
 
     this.customerRepository.update(customerId, customer);
   }
