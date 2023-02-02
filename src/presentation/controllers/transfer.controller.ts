@@ -12,7 +12,7 @@ export class TransferController {
     constructor(private readonly transferService: TransferService, private readonly accountService: AccountService) {}
 
     @Post('/create-transfer')
-    createTransfer(@Body() transfer: CreateTransferDto) {
+    createTransfer(@Body() transfer: CreateTransferDto): TransferEntity {
         const balance = new BalanceDto();
         balance.accountId = transfer.incomeId;
         balance.amount = transfer.balance;
@@ -28,6 +28,7 @@ export class TransferController {
             this.accountService.addBalance(balance);
             return this.transferService.createTransfer(newTransfer);
         }
+        throw new Error('The outcome account dont have the money');
     }
     
     @Get('/delete-transfer')
