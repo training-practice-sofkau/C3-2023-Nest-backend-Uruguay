@@ -7,13 +7,12 @@ import { AccountTypeRepositoryInterface } from "./interfaces";
 import { PaginationModel } from '../../../business/models';
 import { AccountTypeDto } from "../../../business/dtos";
 
-
-
 @Injectable()
 export class AccountTypeRepository 
        extends BankInternalControl<AccountTypeEntity>
        implements AccountTypeRepositoryInterface {
-
+   
+          
     /**
      * Adds a new AccountType Entity to the Array of Accounts
      * @param accountType new object to be inserted in the array

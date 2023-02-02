@@ -4,9 +4,12 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 //DTOs
 import { SignUpDto, SignInDto, AccountTypeDto, DocumentTypeDto } from 'src/business/dtos';
 import { SecurityService } from 'src/business/services';
+import { showStrategy } from 'src/common/patterns/strategy/strategy';
+import { showFactory } from '../../../common/patterns/factory';
+
+
 import { DocumentTypeEntity, AccountTypeEntity } from '../../../data/persistence/entities';
 import { DocumentTypeRepository, AccountTypeRepository } from '../../../data/persistence/repositories';
-
 
 @Controller('security')
 export class SecurityController {
@@ -41,6 +44,7 @@ export class SecurityController {
     //Create an Account-Type
     @Post('createAccountType')
     createAccountType(@Body() accountType: AccountTypeDto): AccountTypeEntity {
+
         return this.accountTypeRepository.register(accountType);
     }
 
@@ -64,6 +68,15 @@ export class SecurityController {
     }
 
     
-
+    @Get("factory")
+    getFactory(): void{
+        
+        showFactory();
+    }
     
+    @Get("strategy")
+    getStrategy(): void{
+        
+        showStrategy();
+    }
 }
