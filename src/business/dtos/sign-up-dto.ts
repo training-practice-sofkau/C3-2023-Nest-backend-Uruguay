@@ -1,7 +1,7 @@
 import { IsEmail, IsNumberString, IsUUID, IsString } from 'class-validator';
 export class SignUpDTO {
     @IsString()
-    documentTypeId: string;
+    documentType: string;
 
     @IsNumberString()
     document: string;
