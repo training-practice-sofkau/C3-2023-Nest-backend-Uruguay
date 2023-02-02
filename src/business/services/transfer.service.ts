@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { TransferEntity, TransferRepository } from '../../data/persistence';
 import { DateRangeDto, PaginationDto } from '../../business/dtos';
-import { AccountService } from '.';
 
 @Injectable()
 export class TransferService {
 
-  constructor(private readonly transferRepository: TransferRepository, private readonly accountService: AccountService) {}
+  constructor(private readonly transferRepository: TransferRepository) {}
 
   createTransfer(transfer: TransferEntity): TransferEntity {
     return this.transferRepository.register(transfer);
