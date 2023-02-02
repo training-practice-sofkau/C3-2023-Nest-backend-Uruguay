@@ -1,4 +1,4 @@
-export * from './repositories-global.interface';
+export * from './capaDeDato/repository/repositories-global.interface';
 export * from './segurity.module';
 
-export * from './segurity.service';
+export * from './capaLogicaDeNegocio/service/segurity.service';

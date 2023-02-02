@@ -1,11 +1,14 @@
 import { Module } from '@nestjs/common';
-import { CustomerService } from './service/customer.service';
+import { CustomerService } from './capaLogicaDeNegocio/service/customer.service';
 
-import { CustomerController } from './controller/customer.controller';
+import { CustomerController } from './capaPresentacion/controller/customer.controller';
+import { CustomerRepository, DocumentTypeRepository } from './capaDeDato/repository';
+import { AccountService } from '../account/capaLogicaDeNegocio/service';
+import { AccountRepository, AccountTypeRepository } from '../account/capaDeDato/repositories';
 
 @Module({
     imports: [],
-    controllers: [CustomerController],
-    providers: [CustomerService]
+    controllers: [],
+    providers: []
 })
 export class CusotmerModule {}
