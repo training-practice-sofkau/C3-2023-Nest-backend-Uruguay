@@ -20,7 +20,7 @@ export class TransferService {
         newTransfer.income = this.accountRepository.findOneById(transfer.incomeId);
         newTransfer.outcome = this.accountRepository.findOneById(transfer.outcomeId);
         newTransfer.reason = transfer.reason;
-        newTransfer.dateTime = transfer.dateTime || Date.now();
+        newTransfer.dateTime = transfer.dateTime || new Date();
         newTransfer.outcome.balance -= Math.abs(transfer.balance);
         this.accountRepository.update(newTransfer.outcome.id, newTransfer.outcome);
         newTransfer.income.balance += Math.abs(transfer.balance);

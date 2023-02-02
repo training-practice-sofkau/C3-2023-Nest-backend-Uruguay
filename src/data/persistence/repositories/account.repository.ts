@@ -57,7 +57,7 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
   }
 
   private softDelete(index: number): void {
-    this.database[index].deletedAt = Date.now();
+    this.database[index].deletedAt = new Date();
     // This will be work but the main Repository instance its not exist
     // MainAccountTypeRepository().delete(this.database[index].accountType.id, true);
     // And optional deposits remove sentence

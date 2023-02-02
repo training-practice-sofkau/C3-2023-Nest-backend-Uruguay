@@ -50,7 +50,7 @@ export class TransferRepository extends GeneralCRUD<TransferEntity> implements I
   }
 
   private softDelete(index: number): void {
-    this.database[index].deletedAt = Date.now();
+    this.database[index].deletedAt = new Date();
   }
 
   findAll(paginator?: PaginationModel): TransferEntity[] {

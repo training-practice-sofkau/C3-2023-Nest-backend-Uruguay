@@ -18,7 +18,7 @@ export class DepositService {
     const newDeposit = new DepositEntity();
     newDeposit.account = this.accountRepository.findOneById(deposit.accountId);
     newDeposit.amount = deposit.balance;
-    newDeposit.dateTime = deposit.dateTime || Date.now();
+    newDeposit.dateTime = deposit.dateTime || new Date();
 
     if (newDeposit.account){
       newDeposit.account.balance += Math.abs(deposit.balance);
