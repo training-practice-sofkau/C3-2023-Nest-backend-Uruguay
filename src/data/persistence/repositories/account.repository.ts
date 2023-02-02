@@ -8,6 +8,15 @@ import { PaginationModel } from '../../models';
 @Injectable()
 export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAccountRepository, IDisableable<AccountEntity>, INameable<AccountEntity> {
 
+  public static instance: AccountRepository;
+
+  public static getInstance(): AccountRepository {
+    if (!AccountRepository.instance) {
+      AccountRepository.instance = new AccountRepository();
+    }
+    return AccountRepository.instance;
+  }
+
   register(entity: AccountEntity): AccountEntity {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;

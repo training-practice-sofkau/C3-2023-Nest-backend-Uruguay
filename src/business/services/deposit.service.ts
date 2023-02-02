@@ -7,7 +7,12 @@ import { AccountService } from '.';
 @Injectable()
 export class DepositService {
 
-  constructor(private readonly depositRepository: DepositRepository, private readonly accountService: AccountService) {}
+  private readonly depositRepository: DepositRepository;
+
+  constructor(private readonly accountService: AccountService) {
+    this.depositRepository = DepositRepository.getInstance();
+  }
+
 
   createDeposit(deposit: DepositEntity): DepositEntity {
     const newBalance = new BalanceDto();

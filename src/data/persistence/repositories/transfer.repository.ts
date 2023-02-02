@@ -8,6 +8,15 @@ import { PaginationModel } from '../../models';
 @Injectable()
 export class TransferRepository extends GeneralCRUD<TransferEntity> implements ITransferRepositoryInterface {
 
+  public static instance: TransferRepository;
+
+  public static getInstance(): TransferRepository {
+    if (!TransferRepository.instance) {
+      TransferRepository.instance = new TransferRepository();
+    }
+    return TransferRepository.instance;
+  }
+
   register(entity: TransferEntity): TransferEntity {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;

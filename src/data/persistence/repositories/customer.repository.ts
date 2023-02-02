@@ -8,6 +8,15 @@ import { PaginationModel } from '../../models';
 @Injectable()
 export class CustomerRepository extends GeneralCRUD<CustomerEntity> implements ICustomerRepository, IDisableable<CustomerEntity>, INameable<CustomerEntity> {
 
+  public static instance: CustomerRepository;
+
+  public static getInstance(): CustomerRepository {
+    if (!CustomerRepository.instance) {
+      CustomerRepository.instance = new CustomerRepository();
+    }
+    return CustomerRepository.instance;
+  }
+
   register(entity: CustomerEntity): CustomerEntity {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;

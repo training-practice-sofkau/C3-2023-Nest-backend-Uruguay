@@ -8,6 +8,15 @@ import { PaginationModel } from '../../models';
 @Injectable()
 export class DocumentTypeRepository extends GeneralCRUD<DocumentTypeEntity> implements IDocumentTypeRepositoryInterface, IDisableable<DocumentTypeEntity>, INameable<DocumentTypeEntity> {
 
+  public static instance: DocumentTypeRepository;
+
+  public static getInstance(): DocumentTypeRepository {
+    if (!DocumentTypeRepository.instance) {
+      DocumentTypeRepository.instance = new DocumentTypeRepository();
+    }
+    return DocumentTypeRepository.instance;
+  }
+
   register(entity: DocumentTypeEntity): DocumentTypeEntity {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;

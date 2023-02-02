@@ -5,8 +5,12 @@ import { DateRangeDto, PaginationDto } from '../../business/dtos';
 @Injectable()
 export class TransferService {
 
-  constructor(private readonly transferRepository: TransferRepository) {}
+  private readonly transferRepository: TransferRepository;
 
+  constructor() {
+    this.transferRepository = TransferRepository.getInstance();
+  }
+  
   createTransfer(transfer: TransferEntity): TransferEntity {
     return this.transferRepository.register(transfer);
   }

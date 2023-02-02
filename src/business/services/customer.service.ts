@@ -6,7 +6,13 @@ import { UpdateCustomerDto } from '../../business/dtos';;
 @Injectable()
 export class CustomerService {
 
-  constructor(private readonly customerRepository: CustomerRepository, private readonly documentTypeRepository: DocumentTypeRepository) {}
+  private readonly customerRepository: CustomerRepository;
+  private readonly documentTypeRepository: DocumentTypeRepository;
+
+  constructor() {
+    this.customerRepository = CustomerRepository.getInstance();
+    this.documentTypeRepository = DocumentTypeRepository.getInstance();
+  }
 
   getCustomerInfo(customerId: string): CustomerEntity {
     return this.customerRepository.findOneById(customerId);

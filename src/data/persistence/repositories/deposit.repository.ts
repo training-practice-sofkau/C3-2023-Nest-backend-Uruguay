@@ -8,6 +8,15 @@ import { PaginationModel } from '../../models';
 @Injectable()
 export class DepositRepository extends GeneralCRUD<DepositEntity> implements IDepositRepository {
 
+  public static instance: DepositRepository;
+
+  public static getInstance(): DepositRepository {
+    if (!DepositRepository.instance) {
+      DepositRepository.instance = new DepositRepository();
+    }
+    return DepositRepository.instance;
+  }
+
   register(entity: DepositEntity): DepositEntity {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;
