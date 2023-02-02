@@ -4,7 +4,8 @@ import { AccountRepository, AccountTypeRepository } from '../../data/persistence
 import { AccountEntity, AccountTypeEntity } from '../../data/persistence/entities';
 
 // Data Transfer Object
-import { BalanceDto, ChangeAccountDto, ChangeStateDto } from '../../business/dtos';
+import { BalanceDto, ChangeAccountDto, ChangeStateDto, CreateAccountDto } from '../../business/dtos';
+import { CustomerRepository } from '../../data/persistence/repositories/customer.repository';
 
 
 @Injectable()
@@ -12,14 +13,23 @@ export class AccountService {
   
   private readonly accountTypeRepository: AccountTypeRepository;
   private readonly accountRepository: AccountRepository;
+  private readonly customerRepository: CustomerRepository;
 
   constructor() {
     this.accountRepository = AccountRepository.getInstance();
     this.accountTypeRepository = AccountTypeRepository.getInstance();
+    this.customerRepository = CustomerRepository.getInstance();
   }
 
-  createAccount(account: AccountEntity): AccountEntity {
-    return this.accountRepository.register(account);
+  createAccount(account: CreateAccountDto): AccountEntity {
+    const newAccount = new AccountEntity();
+    const newAccountType = new AccountTypeEntity();
+    newAccountType.name = account.accountTypeName;
+
+    newAccount.accountType = newAccountType;
+    newAccount.balance = account.balance;
+    newAccount.customer = this.customerRepository.findOneById(account.customerId);
+    return this.accountRepository.register(newAccount);
   }
 
   //getAccountTypeRepo(): AccountTypeRepository {
@@ -32,9 +42,9 @@ export class AccountService {
 
   addBalance(balance: BalanceDto): boolean {
     const current = this.accountRepository.findOneById(balance.accountId);
-    current.balance += Math.abs(balance.amount);
     if (current){
       try{
+        current.balance += Math.abs(balance.amount);
         this.accountRepository.update(balance.accountId, current);
         return true;
       } catch {
@@ -43,17 +53,16 @@ export class AccountService {
     } else {
       return false;
     }
-
   }
 
   removeBalance(balance: BalanceDto): boolean {
     const current = this.accountRepository.findOneById(balance.accountId);
     current.balance -= Math.abs(balance.amount);
     if (current){
-      try{
+      if (current.balance >= 0) {
         this.accountRepository.update(balance.accountId, current);
         return true;
-      } catch {
+      } else {
         return false;
       }
     } else {

@@ -101,7 +101,6 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
           item.deletedAt == undefined &&
           item.customer.deletedAt == undefined
     );
-    console.log(finded);
     if (finded == undefined) throw new NotFoundException();
     return finded;
   }

@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { AccountService, DepositService } from '../../business/services';
+import { DepositService } from '../../business/services';
 import { CreateDepositDto, HistoryDto } from '../../business/dtos';
 import { DepositEntity } from '../../data/persistence';
 
@@ -8,15 +8,11 @@ import { DepositEntity } from '../../data/persistence';
 @Controller('api/deposit')
 export class DepositController {
 
-    constructor(private readonly depositService: DepositService, private readonly accountService: AccountService) {}
+    constructor(private readonly depositService: DepositService) {}
 
     @Post('/create-deposit')
     createDeposit(@Body() deposit: CreateDepositDto) {
-        const newDeposit = new DepositEntity();
-        newDeposit.account = this.accountService.getAccountById(deposit.accountId);
-        newDeposit.amount = deposit.balance;
-        newDeposit.dateTime = deposit.dateTime || Date.now(); 
-        return this.depositService.createDeposit(newDeposit);
+        return this.depositService.createDeposit(deposit);
     }
     
     @Get('/delete-deposit')

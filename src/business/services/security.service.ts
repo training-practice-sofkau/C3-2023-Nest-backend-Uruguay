@@ -1,14 +1,11 @@
   import { Injectable, InternalServerErrorException, UnauthorizedException} from '@nestjs/common';
   // Data transfer objects
   import { SignInDto, SignUpDto } from '../../business/dtos';
-  // Services
-  import { AccountService, CustomerService } from '.';
   // Entities
   import { AccountEntity, AccountTypeEntity, CustomerEntity, DocumentTypeEntity } from '../../data/persistence/entities';
   // Jwt
   import { JwtService } from '@nestjs/jwt';
 import { AccountRepository, AccountTypeRepository, CustomerRepository, DocumentTypeRepository } from '../../data';
-import { AccountController } from '../../presentation/controllers/account.controller';
   
   @Injectable()
   export class SecurityService {

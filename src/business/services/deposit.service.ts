@@ -1,25 +1,33 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
-import { DepositEntity, DepositRepository } from '../../data/persistence';
-import { BalanceDto, DateRangeDto, PaginationDto } from '../../business/dtos';
-import { AccountService } from '.';
+import { AccountRepository, DepositEntity, DepositRepository } from '../../data/persistence';
+import { CreateDepositDto, DateRangeDto, PaginationDto } from '../../business/dtos';
 
 @Injectable()
 export class DepositService {
 
   private readonly depositRepository: DepositRepository;
+  private readonly accountRepository: AccountRepository;
 
-  constructor(private readonly accountService: AccountService) {
+  constructor() {
     this.depositRepository = DepositRepository.getInstance();
+    this.accountRepository = AccountRepository.getInstance();
   }
 
 
-  createDeposit(deposit: DepositEntity): DepositEntity {
-    const newBalance = new BalanceDto();
-    newBalance.accountId = deposit.account.id;
-    newBalance.amount = deposit.amount;
-    this.accountService.addBalance(newBalance);
-    return this.depositRepository.register(deposit);
+  createDeposit(deposit: CreateDepositDto): DepositEntity {
+    const newDeposit = new DepositEntity();
+    newDeposit.account = this.accountRepository.findOneById(deposit.accountId);
+    newDeposit.amount = deposit.balance;
+    newDeposit.dateTime = deposit.dateTime || Date.now();
+
+    if (newDeposit.account){
+      newDeposit.account.balance += Math.abs(deposit.balance);
+      this.accountRepository.update(newDeposit.account.id, newDeposit.account);
+      return this.depositRepository.register(newDeposit);
+    } else {
+      throw new NotFoundException();
+    }
   }
 
   deleteDeposit(depositId: string): boolean {

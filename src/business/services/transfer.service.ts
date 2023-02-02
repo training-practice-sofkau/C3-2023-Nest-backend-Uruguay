@@ -1,18 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { TransferEntity, TransferRepository } from '../../data/persistence';
-import { DateRangeDto, PaginationDto } from '../../business/dtos';
+import { AccountRepository, TransferEntity, TransferRepository } from '../../data/persistence';
+import { CreateTransferDto, DateRangeDto, PaginationDto } from '../../business/dtos';
 
 @Injectable()
 export class TransferService {
 
   private readonly transferRepository: TransferRepository;
+  private readonly accountRepository: AccountRepository;
 
   constructor() {
     this.transferRepository = TransferRepository.getInstance();
+    this.accountRepository = AccountRepository.getInstance();
   }
   
-  createTransfer(transfer: TransferEntity): TransferEntity {
-    return this.transferRepository.register(transfer);
+  createTransfer(transfer: CreateTransferDto): TransferEntity {
+    if (this.accountRepository.findOneById(transfer.outcomeId).balance >= transfer.balance) {
+        const newTransfer = new TransferEntity();
+        newTransfer.balance = transfer.balance;
+        newTransfer.income = this.accountRepository.findOneById(transfer.incomeId);
+        newTransfer.outcome = this.accountRepository.findOneById(transfer.outcomeId);
+        newTransfer.reason = transfer.reason;
+        newTransfer.dateTime = transfer.dateTime || Date.now();
+        newTransfer.outcome.balance -= Math.abs(transfer.balance);
+        this.accountRepository.update(newTransfer.outcome.id, newTransfer.outcome);
+        newTransfer.income.balance += Math.abs(transfer.balance);
+        this.accountRepository.update(newTransfer.income.id, newTransfer.income);
+        return this.transferRepository.register(newTransfer);
+    }
+    throw new Error('The outcome account dont have the money');
   }
 
   getHistoryOut(

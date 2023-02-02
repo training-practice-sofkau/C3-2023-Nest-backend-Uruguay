@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Get, Query } from '@nestjs/common';
-import { AccountService, CustomerService } from '../../business/services';
+import { AccountService } from '../../business/services';
 import { BalanceDto, ChangeAccountDto, ChangeStateDto, CreateAccountDto } from '../../business/dtos';
 import { ApiTags } from '@nestjs/swagger';
 import { AccountEntity, AccountTypeEntity } from '../../data/persistence';
@@ -8,19 +8,11 @@ import { AccountEntity, AccountTypeEntity } from '../../data/persistence';
 @Controller('api/account')
 export class AccountController {
 
-    constructor(private readonly accountService: AccountService, private readonly customerService: CustomerService) {}
+    constructor(private readonly accountService: AccountService) {}
 
     @Post('/create-account')
-    createAccount(@Body() account: CreateAccountDto) {
-        const newAccount = new AccountEntity();
-        const newAccountType = new AccountTypeEntity();
-        newAccountType.name = account.accountTypeName;
-
-        newAccount.accountType = newAccountType;
-        newAccount.balance = account.balance;
-        newAccount.customer = this.customerService.getCustomerInfo(account.customerId);
-        const newAccountFinal = this.accountService.createAccount(newAccount);
-        return newAccountFinal;
+    createAccount(@Body() account: CreateAccountDto): AccountEntity {
+        return this.accountService.createAccount(account);
     }
 
     @Get('/get-balance')

@@ -3,32 +3,16 @@ import { ApiTags } from '@nestjs/swagger';
 import { AccountService, TransferService } from '../../business/services';
 import { CreateTransferDto, HistoryDto } from '../../business/dtos';
 import { TransferEntity } from '../../data/persistence';
-import { BalanceDto } from '../../business/dtos/balance.dto';
 
 @ApiTags('transfer')
 @Controller('api/transfer')
 export class TransferController {
 
-    constructor(private readonly transferService: TransferService, private readonly accountService: AccountService) {}
+    constructor(private readonly transferService: TransferService) {}
 
     @Post('/create-transfer')
     createTransfer(@Body() transfer: CreateTransferDto): TransferEntity {
-        const balance = new BalanceDto();
-        balance.accountId = transfer.incomeId;
-        balance.amount = transfer.balance;
-        if (this.accountService.verifyAmountIntoBalance(balance)) {
-            const newTransfer = new TransferEntity();
-            newTransfer.balance = transfer.balance;
-            newTransfer.income = this.accountService.getAccountById(transfer.incomeId);
-            newTransfer.outcome = this.accountService.getAccountById(transfer.outcomeId);
-            newTransfer.reason = transfer.reason;
-            newTransfer.dateTime = transfer.dateTime || Date.now();
-            this.accountService.removeBalance(balance);
-            balance.accountId = transfer.outcomeId;
-            this.accountService.addBalance(balance);
-            return this.transferService.createTransfer(newTransfer);
-        }
-        throw new Error('The outcome account dont have the money');
+        return this.transferService.createTransfer(transfer);
     }
     
     @Get('/delete-transfer')
