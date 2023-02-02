@@ -55,13 +55,30 @@ export class DepositService {
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): DepositEntity[] {
+
     let deposits = this.depositRepository.findAll();
     let depositsOfAccount = deposits.filter(deposit => deposit.account.id === accountId)
-    let depositsPaginated: DepositEntity[] = [];
+    let depositsFiltered = depositsOfAccount;
 
     if(pagination) {
-      return depositsPaginated = depositsOfAccount.slice(pagination.offset, pagination.limit);
+      depositsFiltered = depositsFiltered.slice(pagination.offset, pagination.limit);
+    }
+
+    if(dataRange) {
+      if(typeof dataRange.offset === 'number') dataRange.offset = new Date(dataRange.offset);
+      if(typeof dataRange.limit === 'number') dataRange.limit = new Date(dataRange.limit);
+      
+      depositsFiltered = depositsFiltered.filter(
+        (deposit) => deposit.dateTime >= dataRange.offset && deposit.dateTime <= dataRange.limit);
     }
     return depositsOfAccount;
+  }
+
+  getHistoryByAccountId(accountId: string): DepositEntity[] {
+    return this.depositRepository.findByAccountId(accountId);
+  }
+
+  getHistoryByDataRange(dateInit: Date | number, dateEnd: Date | number): DepositEntity[] {
+    return this.depositRepository.findByDataRange(dateInit, dateEnd);
   }
 }

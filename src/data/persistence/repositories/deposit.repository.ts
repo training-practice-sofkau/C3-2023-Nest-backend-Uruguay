@@ -68,6 +68,10 @@ export class DepositRepository
         dateInit: Date | number,
         dateEnd: Date | number,
     ): DepositEntity[] {
+        
+        if(typeof dateInit === 'number') dateInit = new Date(dateInit);
+        if(typeof dateEnd === 'number') dateEnd = new Date(dateEnd);
+
         const deposits = this.database.filter(
             (deposit) => deposit.dateTime <= dateInit
             && deposit.dateTime >= dateEnd
