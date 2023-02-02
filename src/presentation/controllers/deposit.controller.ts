@@ -16,8 +16,8 @@ export class DepositController {
     }
     
     @Get('/delete-deposit')
-    deleteDeposit(@Query('deposit') deposit: string): boolean {
-        return this.depositService.deleteDeposit(deposit);
+    deleteDeposit(@Query('deposit') deposit: string, @Query('soft') soft?: boolean): boolean {
+        return this.depositService.deleteDeposit(deposit, soft);
     }
     
     @Post('/get-history')

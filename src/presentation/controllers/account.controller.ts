@@ -71,7 +71,7 @@ export class AccountController {
     }
 
     @Get('/delete-account')
-    deleteAccount(@Query('account') account: string): boolean {
-        return this.accountService.deleteAccount(account);
+    deleteAccount(@Query('account') account: string, @Query('soft') soft?: boolean): boolean {
+        return this.accountService.deleteAccount(account, soft);
     }
 }

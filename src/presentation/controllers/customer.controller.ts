@@ -20,7 +20,7 @@ export class CustomerController {
     }
 
     @Get('/unsuscribe')
-    unsubscribe(@Query('customer') customer: string): boolean {
-        return this.customerService.unsubscribe(customer);
+    unsubscribe(@Query('customer') customer: string, @Query('soft') soft?: boolean): boolean {
+        return this.customerService.unsubscribe(customer, soft);
     }
 }

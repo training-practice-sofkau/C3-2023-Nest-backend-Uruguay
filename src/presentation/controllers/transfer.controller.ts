@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { AccountService, TransferService } from '../../business/services';
+import { TransferService } from '../../business/services';
 import { CreateTransferDto, HistoryDto } from '../../business/dtos';
 import { TransferEntity } from '../../data/persistence';
 
@@ -16,8 +16,8 @@ export class TransferController {
     }
     
     @Get('/delete-transfer')
-    deleteTransfer(@Query('transfer') transfer: string): boolean {
-        return this.transferService.deleteTransfer(transfer);
+    deleteTransfer(@Query('transfer') transfer: string, @Query('soft') soft?: boolean): boolean {
+        return this.transferService.deleteTransfer(transfer, soft);
     }
     
     @Post('/get-history')

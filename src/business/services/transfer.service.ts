@@ -60,11 +60,11 @@ export class TransferService {
     } else return this.transferRepository.findByIncomeId(accountId, pagination).concat(this.transferRepository.findByOutcomeId(accountId, pagination));
   }
 
-  deleteTransfer(transferId: string): boolean {
+  deleteTransfer(transferId: string, soft?: boolean): boolean {
     const current = this.transferRepository.findOneById(transferId);
     if (current){
       try{
-        this.transferRepository.delete(transferId);
+        this.transferRepository.delete(transferId, soft);
         return true;
       } catch {
         return false;

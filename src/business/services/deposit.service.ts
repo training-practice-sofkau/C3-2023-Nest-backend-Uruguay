@@ -30,11 +30,11 @@ export class DepositService {
     }
   }
 
-  deleteDeposit(depositId: string): boolean {
+  deleteDeposit(depositId: string, soft?: boolean): boolean {
     const current = this.depositRepository.findOneById(depositId);
     if (current){
       try{
-        this.depositRepository.delete(depositId);
+        this.depositRepository.delete(depositId, soft);
         return true;
       } catch {
         return false;
