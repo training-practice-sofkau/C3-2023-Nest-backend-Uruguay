@@ -7,12 +7,12 @@ import { CreateAccountDto } from 'src/business/dtos/createAccount.dto';
 import { ObservableHandel } from 'src/Patrones/Observable/ObservableHandle';
 
 @Controller('account')
-export class AccountController extends ObservableHandel{
+export class AccountController extends ObservableHandel {
 
     constructor(private readonly accountService: AccountService) {
 
         super();
-     }
+    }
 
     //Un solo delete  ya que luego en 
     //repositorio en base al valor booleno
@@ -51,7 +51,7 @@ export class AccountController extends ObservableHandel{
         return this.accountService.updateAccount(account);
     }
 
-    private logger = new Logger ('AccountType')
+    private logger = new Logger('AccountType')
     @Post('createAccountType')
     createAccountType(@Body() accountType: CreateAccountTypeDto): AccountTypeEntity {
         //return
@@ -60,7 +60,7 @@ export class AccountController extends ObservableHandel{
             this.logger.log(`Account Type create:${type}`)
         })
         return NewAccountType
-    
+
     }
     //Devolver un objeto busqueda(balance) por id corroborar que haga eso
     @Get('getBalance/:id')
@@ -95,7 +95,6 @@ export class AccountController extends ObservableHandel{
 
         return acct
     }
-
 
     @Get('getAccounts')
     getAccounts(): AccountEntity[] {
