@@ -15,7 +15,6 @@ export class ConcreteProductB implements AbstractProduct {
 }
 
 
-
 export function createProduct(type: string) : AbstractProduct | any {
     if (type === "A") {
         return new ConcreteProductA();

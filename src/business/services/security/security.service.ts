@@ -5,7 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 
 
 // Data transfer objects
-
+import { SignInDto, SignUpDto, CreateAccountDto } from '../../dtos';
 
 // Models
 
@@ -17,7 +17,7 @@ import { AccountService } from '../account';
 
 // Entities
 import { CustomerEntity } from '../../../data/persistence/entities';
-import { SignInDto, SignUpDto, CreateAccountDto } from '../../dtos';
+
 
 
 @Injectable()

@@ -18,7 +18,9 @@ export class Context {
 
 export class ConcreteStrategy1 implements Strategy {
     public execute(): void {
+        
         console.log("Create Basic Account Types");
+        
     }
 } 
 
@@ -30,7 +32,7 @@ export class ConcreteStrategy2 implements Strategy {
 
 export class ConcreteStrategy3 implements Strategy {
     public execute(): void {
-        console.log("`execute` method of ConcreteStrategy3 is being called");
+        console.log("Do some other stuff!");
     }
 } 
 

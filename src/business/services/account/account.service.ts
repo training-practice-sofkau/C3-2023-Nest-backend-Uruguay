@@ -1,10 +1,8 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 
 import { AccountEntity, AccountTypeEntity, CustomerEntity } from '../../../data/persistence/entities';
-import { AccountRepository, AccountTypeRepository } from '../../../data/persistence/repositories';
+import { AccountRepository, AccountTypeRepository, CustomerRepository } from '../../../data/persistence/repositories';
 import { CreateAccountDto, UpdateAccountDto, AccountDto } from '../../dtos';
-import { CustomerRepository } from '../../../data/persistence/repositories/customer.repository';
-
 
 
 @Injectable()

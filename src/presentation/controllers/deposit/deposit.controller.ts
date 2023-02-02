@@ -1,9 +1,8 @@
 import { Body, Controller, Delete, Get, Param, ParseBoolPipe, ParseIntPipe, ParseUUIDPipe, Post, Put, Query } from '@nestjs/common';
 
-import { DepositEntity } from 'src/data/persistence/entities';
 import { DepositService } from 'src/business/services';
 import { CreateDepositDto } from 'src/business/dtos';
-import { PaginationEntity } from '../../../data/persistence/entities/pagination.entity';
+import { PaginationEntity, DepositEntity } from '../../../data/persistence/entities';
 
 @Controller('deposit')
 export class DepositController {
