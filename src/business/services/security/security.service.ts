@@ -6,6 +6,8 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
+import { ObservableHandler } from '../../observable';
+
   // Data transfer objects
   import { SignOutDto, SignUpDto, SignInDto } from '../../dtos';
 
@@ -23,13 +25,15 @@ import { JwtService } from '@nestjs/jwt';
   } from '../../../data/persistence/entities';
   
   @Injectable()
-  export class SecurityService {
+  export class SecurityService extends ObservableHandler{
     constructor(
       private readonly customerRepository: CustomerRepository,
       private readonly documentTypeRepository: DocumentTypeRepository,
       private readonly accountService: AccountService,
       private jwtService: JwtService
-    ) {}
+    ) {
+      super();
+    }
   
     /**
      * Identificarse en el sistema
@@ -70,6 +74,8 @@ import { JwtService } from '@nestjs/jwt';
         };
         
         const account = this.accountService.createAccount(newAccount);
+
+        this.handle(account).subscribe(account => console.log(account));
         
         const token: string = this.jwtService.sign({id: account.id});
         

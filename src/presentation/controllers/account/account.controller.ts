@@ -10,8 +10,7 @@ import { AccountTypeRepository } from '../../../data/persistence/repositories/';
 @Controller('account')
 export class AccountController {
     constructor(
-        private readonly accountService: AccountService,
-        private readonly accountTypeRepository: AccountTypeRepository) {}
+        private readonly accountService: AccountService) {}
 
     @Get()
     findAll(): AccountEntity[] {

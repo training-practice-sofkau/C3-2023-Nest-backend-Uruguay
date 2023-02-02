@@ -42,7 +42,7 @@ export class TransferRepository
     }
 
     private softDelete(index: number): void {
-        this.database[index].deletedAt = Date.now();
+        this.database[index].deletedAt = new Date();
     }
 
     findAll(): TransferEntity[] {

@@ -35,7 +35,7 @@ export class CustomerRepository
     if(indexCurrentEntity === -1) throw new NotFoundException();
 
     if(soft) {
-      this.database[indexCurrentEntity].deletedAt = Date.now();
+      this.database[indexCurrentEntity].deletedAt = new Date();
     }
     else {
       this.database.splice(indexCurrentEntity, 1);

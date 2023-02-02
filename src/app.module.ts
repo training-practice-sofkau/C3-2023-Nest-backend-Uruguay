@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { AccountService, CustomerService, DepositService, SecurityService, TransferService } from './business/services';
 import { CustomerRepository, AccountRepository, AccountTypeRepository, TransferRepository, DepositRepository, DocumentTypeRepository, } from './data/persistence/repositories';
 import { SecurityController, DepositController,AccountController, CustomerController, TransferController } from './presentation/controllers/';
+import { ObservableHandler } from './business/observable';
 
 @Module({
   imports: [JwtModule.register({
@@ -22,6 +23,8 @@ import { SecurityController, DepositController,AccountController, CustomerContro
     DepositRepository,
     TransferRepository,
     AccountTypeRepository,
-    DocumentTypeRepository],
+    DocumentTypeRepository,
+    ObservableHandler
+  ],
 })
 export class AppModule {}

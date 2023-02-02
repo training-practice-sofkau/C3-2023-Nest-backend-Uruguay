@@ -4,12 +4,16 @@ import { AccountEntity } from '../entities';
 import { BaseRepository } from './base';
 import { AccountRepositoryInterface } from './interfaces';
 import { AccountDto } from '../../../business/dtos';
+import { ObservableHandler } from '../../../business/observable/observable-handler';
 
 
 @Injectable()
 export class AccountRepository
     extends BaseRepository<AccountEntity>
     implements AccountRepositoryInterface {
+        constructor(private readonly observableHandler: ObservableHandler) {
+            super();
+        }
 
     register(entity: AccountEntity): AccountEntity {
         this.database.push(entity);
@@ -43,7 +47,8 @@ export class AccountRepository
     }
 
     private softDelete(index: number): void {
-        this.database[index].deletedAt = Date.now();
+        this.database[index].deletedAt = new Date();
+        this.observableHandler.handle(this.database[index]).subscribe(account => console.log(account));
     }
 
     findAll(): AccountEntity[] {
