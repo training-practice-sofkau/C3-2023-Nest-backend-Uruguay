@@ -62,11 +62,11 @@ class GPU implements PCPart {
 }
 
 
-function clientCode(pcmaker: PCMaker): PCPart{
+function crear(pcmaker: PCMaker): PCPart{
     return (pcmaker.create());
 }
 
-console.log(clientCode(new RAMCreator()).encender());
-console.log(clientCode(new SSDCreator()).encender());
-console.log(clientCode(new CPUCreator()).encender());
-console.log(clientCode(new GPUCreator()).encender());
+console.log(crear(new RAMCreator()).encender());
+console.log(crear(new SSDCreator()).encender());
+console.log(crear(new CPUCreator()).encender());
+console.log(crear(new GPUCreator()).encender());
