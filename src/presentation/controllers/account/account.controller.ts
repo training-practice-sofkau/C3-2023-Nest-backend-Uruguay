@@ -4,6 +4,7 @@ import { AccountEntity, AccountTypeEntity } from 'src/Data';
 import { AccountService } from 'src/business';
 import { baseDto } from 'src/business/dtos/amountDtos';
 import { ObservableHandler } from 'src/business/ob/observableHandler';
+import { NewaccountDto } from '../../../business/dtos/newAccountDto';
 
 @Controller('account')
 export class AccountController extends ObservableHandler {
@@ -13,8 +14,8 @@ export class AccountController extends ObservableHandler {
 
 
   @Post('newAccount')
-  createAccount(@Body() account: AccountDtos): AccountEntity {
-const newAccount = this.AccountService.createAccount(account)
+  createAccount(@Body() account: NewaccountDto): AccountEntity {
+const newAccount = this.AccountService.registerNewAccountType(account)
 
     this.handle(account).subscribe(value => {
       console.log(`Nueva cuenta creada: ${ JSON.stringify (account)}`)

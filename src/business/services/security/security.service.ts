@@ -32,13 +32,14 @@ export class SecurityService {
    * @return {*}  {string}
    * @memberof SecurityService
    */
-  signIn(user: SignInDto): string {
+  signIn(user: SignInDto): boolean {
     const answer = this.customerRepository.findOneByEmailAndPassword(
       user.username,
       user.password,
     );
-    if (answer) return jwt.sign(user, process.env.TOKEN_SECRET || "tokentest");
-    else throw new UnauthorizedException();
+    return answer
+    // return jwt.sign(user, process.env.TOKEN_SECRET || "tokentest");
+    // else throw new UnauthorizedException();
   }
 
   /**
@@ -51,6 +52,8 @@ export class SecurityService {
   signUp(user: SignUpDto): string {
     const documentType = new DocumentTypeEntity();
     const newCustomer = new CustomerEntity();
+    documentType.name = user.document
+
     newCustomer.state  = true;
     newCustomer.documentType = documentType;
     newCustomer.document = user.document;
@@ -60,7 +63,6 @@ export class SecurityService {
     newCustomer.password = user.password;  
 
     const customer = this.customerRepository.register(newCustomer);
-    console.log(customer);
     this.DocumentTypeRepository.register(documentType)
     if (customer) {
       const jwt = require('jsonwebtoken');
@@ -73,6 +75,7 @@ export class SecurityService {
       newAccount.accountType = accountType;
       newAccount.acc_Balance = 0
       newAccount.state = true;
+      
       const account = this.accountService.createAccount(newAccount);
       console.log(account)
 
@@ -92,4 +95,6 @@ export class SecurityService {
     const jwt = require('jsonwebtoken');
     jwt.invalidate(JWToken, process.env.TOKEN_SECRET);
   }
+
+  
 }

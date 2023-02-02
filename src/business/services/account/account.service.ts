@@ -1,9 +1,10 @@
 import { AccountRepository } from './../../../Data/persistence/repositories/account.repository';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { AccountDtos } from 'src/business/dtos/accountDtos';
-import { AccountEntity,  AccountTypeEntity, AccountTypeRepository } from 'src/Data/persistence';
+import { AccountEntity,  AccountTypeEntity, AccountTypeRepository, CustomerEntity } from 'src/Data/persistence';
 import { CustomerRepository } from '../../../Data/persistence/repositories/customer.repository';
 import { v4 as uuid } from 'uuid';
+import { NewaccountDto } from 'src/business/dtos/newAccountDto';
 
 
 
@@ -17,11 +18,33 @@ export class AccountService {
   /**
    *
    */
-  createAccount(account: AccountDtos ): AccountEntity {
+  createAccount(account: AccountDtos ): AccountEntity {     
+          return this.accountRepository.register(account);
+  }
+
+  registerNewAccountType(account: NewaccountDto): AccountEntity {
     const newAccount = new AccountEntity();
-    newAccount.accountType = account.accountType;
-    newAccount.acc_Balance = account.acc_Balance;
-    return this.accountRepository.register(newAccount);
+    const accountType = new AccountTypeEntity();
+    accountType.id = account.accountTypeId;
+    newAccount.accountType = accountType;
+    newAccount.accountType.name = account.name    
+  
+    const oldaccount = this.accountRepository.searchByAttributesforOne('id', account.accountID)
+
+      if(oldaccount.accountTypes?.length === undefined) {
+        oldaccount.accountTypes =  [newAccount.accountType, oldaccount.accountType]
+         oldaccount.accountType = new AccountTypeEntity()
+         oldaccount.accountType.id = ""
+         this.accountRepository.update(account.accountID, oldaccount)
+        return  this.accountRepository.register(oldaccount)
+      }
+
+      oldaccount.accountTypes.push(newAccount.accountType)
+
+      this.accountRepository.update(account.accountID, oldaccount)
+
+      return  this.accountRepository.register(oldaccount)
+    
   }
 
   /**

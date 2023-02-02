@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { AccountEntity } from '../entities';
+import { NewaccountDto } from 'src/business/dtos/newAccountDto';
+import { AccountEntity, AccountTypeEntity, CustomerEntity } from '../entities';
 
 import { BaseRepository } from './base';
 import { AccountRepositoryInterface } from './interfaces';
@@ -35,7 +36,7 @@ export class AccountRepository
     this.database.push(entity);
     return this.database.at(-1) ?? entity;
   }
-
+ 
   update(id: string, entity: AccountEntity): AccountEntity {
     const indexCurrentEntity = this.database.findIndex(
       (item) => item.id === id && typeof item.deletedAt === 'undefined',

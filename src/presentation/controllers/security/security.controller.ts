@@ -8,7 +8,7 @@ export class SecurityController {
   constructor(private readonly securityService: SecurityService) {}
 
   @Post('sign-in')
-   signIn(@Body() signInDto: SignInDto): string {
+   signIn(@Body() signInDto: SignInDto): boolean {
    
       return  this.securityService.signIn(signInDto);
     

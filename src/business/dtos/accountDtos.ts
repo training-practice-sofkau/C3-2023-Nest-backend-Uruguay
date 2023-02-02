@@ -11,6 +11,10 @@ export class AccountDtos {
   @IsNotEmpty({message: 'Please enter a balance.'})
   @IsNumber(undefined,{message: 'Enter account balance.'})
   acc_Balance: number;
+
+  id: string
+  state: boolean
+  name: string 
  
 
 }

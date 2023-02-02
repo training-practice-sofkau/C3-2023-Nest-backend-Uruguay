@@ -13,5 +13,7 @@ export class AccountEntity implements AccountModel {
   name: string ;
   state: boolean ;
 
+  accountTypes?: AccountTypeEntity[];
+
  
 }
