@@ -40,12 +40,12 @@ class Comidas {
 }
 
 const Ensalada = new Comidas(new Vegana());
-console.log(Ensalada.tipo()); // spiderman ataca usando super poder
+console.log(Ensalada.tipo()); // Comida Vegana
 
 const EnsaladaConHuevo = new Comidas(new Vegetariana());
 EnsaladaConHuevo.setAttackStrategy(new Vegetariana());
-console.log(EnsaladaConHuevo.tipo()); // 
+console.log(EnsaladaConHuevo.tipo()); // Comida Vegetariana
 
 const EnsaladaConPollo = new Comidas(new Carnivora());
 EnsaladaConPollo .setAttackStrategy(new Carnivora());
-console.log(EnsaladaConPollo .tipo()); // spiderman ataca usando un objeto 
+console.log(EnsaladaConPollo .tipo()); // Comida Carnivora 
