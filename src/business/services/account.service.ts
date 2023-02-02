@@ -10,7 +10,13 @@ import { BalanceDto, ChangeAccountDto, ChangeStateDto } from '../../business/dto
 @Injectable()
 export class AccountService {
   
-  constructor(private readonly accountRepository: AccountRepository, private readonly accountTypeRepository: AccountTypeRepository) {}
+  private readonly accountTypeRepository: AccountTypeRepository;
+  private readonly accountRepository: AccountRepository;
+
+  constructor() {
+    this.accountRepository = AccountRepository.getInstance();
+    this.accountTypeRepository = AccountTypeRepository.getInstance();
+  }
 
   createAccount(account: AccountEntity): AccountEntity {
     return this.accountRepository.register(account);

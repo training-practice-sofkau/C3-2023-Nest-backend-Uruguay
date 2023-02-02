@@ -10,6 +10,7 @@
   
   @Injectable()
   export class SecurityService {
+
     constructor(
       private readonly customerService: CustomerService,
       private readonly accountService: AccountService,
