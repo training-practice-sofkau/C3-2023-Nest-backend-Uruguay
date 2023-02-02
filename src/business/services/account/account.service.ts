@@ -4,7 +4,6 @@ import { PaginationModel } from 'src/data/models';
 import { AccountEntity, AccountRepository, AccountTypeEntity, AccountTypeRepository, CustomerEntity, CustomerRepository } from 'src/data/persistence';
 import { AccountDTO, CreateAccountDTO } from 'src/business/dtos';
 import { TypeDTO } from '../../dtos/type.dto';
-import { DocumentTypeEntity } from '../../../data/persistence/entities/document-type.entity';
 
 @Injectable()
 export class AccountService {

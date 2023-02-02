@@ -1,5 +1,5 @@
 import { IsEmail, IsString, IsNotEmpty, Min } from 'class-validator';
-export class SingInDTO {
+export class SignInDTO {
 
     @IsEmail(undefined, { message: 'the data provider is not a valid email.' })
     @IsString()

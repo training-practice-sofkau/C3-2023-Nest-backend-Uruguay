@@ -2,13 +2,18 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Put } from '@nestjs/
 import { AccountService } from 'src/business/services';
 import { PaginationModel } from 'src/data/models';
 import { AccountEntity, AccountTypeEntity, CustomerEntity } from 'src/data/persistence';
-import { AccountDTO } from 'src/business/dtos';
+import { AccountDTO, CreateAccountDTO } from 'src/business/dtos';
 import { TypeDTO } from '../../../business/dtos/type.dto';
 
 
 @Controller('account')
 export class AccountController {
     constructor(private readonly accountService: AccountService) {}
+
+    @Post('/create-additional-account')
+    createAdditionalAccount(@Body() accountDTO: CreateAccountDTO): AccountEntity {
+        return this.accountService.createAccount(accountDTO);
+    }
 
     @Post('/account-type/create')
     createAccountType(@Body() accountTypeDTO: TypeDTO): AccountTypeEntity {
@@ -60,11 +65,11 @@ export class AccountController {
         return this.accountService.getBalance(accountId);
     }
 
-    @Get('/account-type/:accountId')
+    @Get('/type/:accountId')
     getAccountType(@Param('accountId') accountId: string): AccountTypeEntity {
         return this.accountService.getAccountType(accountId);
     }
-
+    
     @Get('/customer/:accountId')
     getCustomer(@Param('accountId') accountId: string): CustomerEntity {
         return this.accountService.getCustomer(accountId);

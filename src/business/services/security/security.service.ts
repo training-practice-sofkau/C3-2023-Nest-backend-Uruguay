@@ -2,19 +2,15 @@ import {
   Injectable,
   InternalServerErrorException,
   UnauthorizedException,
-  NotFoundException,
 } from '@nestjs/common';
 import {
-  AccountTypeEntity,
   AccountTypeRepository,
   CustomerEntity,
   CustomerRepository,
-  DocumentTypeEntity,
 } from 'src/data/persistence';
-import { CreateAccountDTO, SingInDTO, SingUpDTO } from 'src/business/dtos';
+import { CreateAccountDTO, SignInDTO, SignUpDTO } from 'src/business/dtos';
 import { AccountService } from '../account';
 import * as jwt from 'jsonwebtoken';
-import { SingOutDTO } from 'src/business/dtos/sing-out.dto';
 import { DocumentTypeRepository } from '../../../data/persistence/repositories/document-type.repository';
 import { NotAcceptableException } from '@nestjs/common/exceptions';
 import { CustomerService } from '../customer/customer.service';
@@ -36,7 +32,7 @@ export class SecurityService {
    * @return {*}  {string}
    * @memberof SecurityService
    */
-  signIn(user: SingInDTO): string {
+  signIn(user: SignInDTO): string {
     const answer = this.customerRepository.findOneByEmailAndPassword(
       user.username,
       user.password,
@@ -57,7 +53,7 @@ export class SecurityService {
    * @return {*}  {string}
    * @memberof SecurityService
    */
-  signUp(user: SingUpDTO): string {
+  signUp(user: SignUpDTO): string {
     console.log(user.documentTypeId)
     const documentType = this.documentTypeRepository.findOneById(user.documentTypeId);
 
@@ -100,6 +96,6 @@ export class SecurityService {
   signOut(JWToken: string): void {
     if(!jwt.verify(JWToken, process.env.TOKEN_SECRET || 'tokentest')) throw new Error('JWT Not Valid')
   
-    console.log('SingOut Completed')
+    console.log('SignOut Completed')
   }
 }

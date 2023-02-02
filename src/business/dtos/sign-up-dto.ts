@@ -1,5 +1,5 @@
 import { IsEmail, IsNumberString, IsUUID, IsString } from 'class-validator';
-export class SingUpDTO {
+export class SignUpDTO {
     @IsString()
     documentTypeId: string;
 
