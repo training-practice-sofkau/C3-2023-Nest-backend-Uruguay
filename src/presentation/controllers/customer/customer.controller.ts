@@ -35,9 +35,9 @@ export class CustomerController {
         return this.customerService.updatedCustomer(id, customer);
     }
 
-    @Delete(':id/soft')
+    @Patch(':id/soft')
     softDeleteCustomer(@Param('id', ParseUUIDPipe) id: string): void {
-        this.customerService.softDeleteCustomer(id);
+        return this.customerService.softDeleteCustomer(id);
     }
 
     @Delete(':id')
@@ -48,5 +48,10 @@ export class CustomerController {
     @Post('document/type')
     createDocumentType(@Body() documentType: DocumentTypeDto): DocumentTypeEntity {
         return this.customerService.createDocumentType(documentType);
+    }
+
+    @Patch(':id/unsuscribe')
+    unsubscribeCustomer(@Param('id', ParseUUIDPipe) id: string): boolean {
+        return this.customerService.unsubscribe(id);
     }
 }
