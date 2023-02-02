@@ -12,8 +12,8 @@ export class depositDto {
     @IsNumber({})
     date_time: Date|number;
 
-    @IsDate({ message: "this must to be deleted_at" })
+    /*@IsDate({ message: "this must to be deleted_at" })
     @IsNumber({})
     deleted_at: Date|number;
-
+*/
 }

@@ -14,8 +14,9 @@ export class SecurityController {
         return this.securityService.signUp(signUp);
     }
 
-    @Post()
+    @Post('SignIn')
     signIn(@Body() signIn: SignInDto): string{
+       
         return this.securityService.signIn(signIn)
     }
 

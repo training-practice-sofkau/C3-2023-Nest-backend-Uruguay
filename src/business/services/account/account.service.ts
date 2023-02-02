@@ -1,15 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { AccountEntity, AccountTypeEntity } from 'src/data/persistence';
+import {  CreateAccountDto } from 'src/business/dtos/createAccount.dto';
+import { AccountEntity, AccountTypeEntity, CustomerRepository } from 'src/data/persistence';
 import { AccountRepository } from '../../../data/persistence/repositories/account.repository';
-import { AccountTypeDto } from '../../dtos/accountType.dto';
+import { ChangeAccountTypeDto } from '../../dtos/changeAccountType.dto';
+import { AccountTypeRepository } from '../../../data/persistence/repositories/account-type.repository';
+import { CreateAccountTypeDto } from 'src/business/dtos/createAccountType.dto';
+
 
 @Injectable()
 export class AccountService {
 
     constructor(
-        private readonly accountRepository: AccountRepository
+        private readonly accountRepository: AccountRepository,
+        private readonly accountTypeRepocitory: AccountTypeRepository,
+        private readonly customerRepocitory: CustomerRepository
+    ) {
 
-    ) { }
+        const newAccTypeEntity = new AccountTypeEntity
+        newAccTypeEntity.id = "ef7e8c74-99a7-4c11-a806-db1dd3575851"
+        newAccTypeEntity.name = "Cuenta Corriente Pesos"
+        this.accountTypeRepocitory.register(newAccTypeEntity)
+
+        newAccTypeEntity.id = "64e40ae6-5374-4ac5-8498-1beac191d535"
+        newAccTypeEntity.name = "Caja de Ahorro Dolares"
+        this.accountTypeRepocitory.register(newAccTypeEntity)
+    }
     /**
      * Crear una cuenta
      *
@@ -17,10 +32,31 @@ export class AccountService {
      * @return {*}  {AccountEntity}
      * @memberof AccountService
      */
-    createAccount(account: AccountEntity): AccountEntity {
-        return this.accountRepository.register(account);
+    createAccountType(accountType: CreateAccountTypeDto): AccountTypeEntity {
+        try {
+            const accType = new AccountTypeEntity()
+            accType.id= accountType.id
+            accType.name= accountType.name
+            accType.state = true
+            return this.accountTypeRepocitory.register(accType);
+        } catch (error) {
+            throw new Error('This method is not implemented createAccountType');
+        }
     }
 
+    createAccount(account: CreateAccountDto): AccountEntity {
+        try {
+            const newAccount = new AccountEntity()
+            const newAccountType = this.accountTypeRepocitory.findOneById(account.account_type_id)
+            newAccount.account_type_id = newAccountType
+            newAccount.balance = account.balance
+            return this.accountRepository.register(newAccount);
+        } catch (error) {
+            throw new Error('This method is not implemented createAccount');
+        }
+    }
+
+    
     /**
      * Obtener el balance de una cuenta
      *
@@ -109,13 +145,19 @@ export class AccountService {
      * @return {*}  {AccountTypeEntity}
      * @memberof AccountService
      */
-    getAccountType(accountId: string): AccountTypeEntity {
+    getAccountTypeByAccount(accountId: string): AccountTypeEntity {
         let acc = new AccountTypeEntity;
         acc = this.accountRepository.findOneById(accountId).account_type_id
         // acc = this.accountRepository.findOneById(accountId)
         return acc
     }
 
+
+    getAccountTypeOneById(accountTypeId: string): AccountTypeEntity {
+        let acc = new AccountTypeEntity;
+        acc = this.accountTypeRepocitory.findOneById(accountTypeId)
+        return acc
+    }
     /**
      * Cambiar el tipo de cuenta a una cuenta
      *
@@ -125,11 +167,25 @@ export class AccountService {
      * @memberof AccountService
      */
     changeAccountType(
-        chAccountType: AccountTypeDto
+        chAccountType: ChangeAccountTypeDto
     ): AccountTypeEntity {
         let acc = this.accountRepository.findOneById(chAccountType.accountId)
         acc.account_type_id.id = chAccountType.accountTypeId
         return this.accountRepository.update(chAccountType.accountId, acc).account_type_id
+    }
+
+    //actualizo todos los atributos de account
+    updateAccount(
+        account: CreateAccountDto
+    ): AccountEntity {
+        let acc = this.accountRepository.findOneById(account.id)
+        acc.account_type_id.id = account.account_type_id
+        acc.balance = account.balance
+        acc.customer_id = this.customerRepocitory.findOneById(account.Customerid)
+        acc.state = account.state
+        
+        
+        return this.accountRepository.update(account.id, acc)
     }
 
 
@@ -144,10 +200,19 @@ export class AccountService {
      * @memberof AccountService
      */
     deleteAccount(accountId: string, sof?: boolean): void {
-
         this.accountRepository.delete(accountId, sof)
-
     }
 
-
+    getAccountTypeAll(): AccountTypeEntity[] {
+        let acc:AccountTypeEntity[] = []
+        acc = this.accountTypeRepocitory.findAll();
+        return acc
+    }
+    
+    getAccountAll(): AccountEntity[] {
+        let acc:AccountEntity[] = []
+        acc = this.accountRepository.findAll();
+        return acc
+    }
+    
 }

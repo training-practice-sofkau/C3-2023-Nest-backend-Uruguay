@@ -21,7 +21,7 @@ export class SignUpDto {
     password: string;
     
     @IsString()
-    accountTypeName: string;
+    accountTypeId: string;
 
     @IsString()
     documentTypeName: string;

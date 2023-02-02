@@ -9,22 +9,32 @@ import { AccountEntity } from '../entities/account.entity';
 export class AccountRepository extends Base<AccountEntity> implements CRUD<AccountEntity>{
 
   register(entity: AccountEntity): AccountEntity {
-    this.database.push(entity);
-    return this.database.at(-1) ?? entity;
+    try {
+      this.database.push(entity);
+      return this.database.at(-1) ?? entity;
+    } catch (error) {
+      throw new Error('This method is not implemented updateAccount');
+    
+    }
   }
 
   update(id: string, entity: AccountEntity): AccountEntity {
-    const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.deleted_at === 'undefined',
-    );
-    if (indexCurrentEntity >= 0)
-      this.database[indexCurrentEntity] = {
-        ...this.database[indexCurrentEntity],
-        ...entity,
-        id,
-      } as AccountEntity;
-    else throw new AccountEntity();
-    return this.database[indexCurrentEntity];
+   try {
+     const indexCurrentEntity = this.database.findIndex(
+       (item) => item.id === id && typeof item.deleted_at === 'undefined',
+     );
+     if (indexCurrentEntity >= 0)
+       this.database[indexCurrentEntity] = {
+         ...this.database[indexCurrentEntity],
+         ...entity,
+         id,
+       } as AccountEntity;
+     else throw new AccountEntity();
+     return this.database[indexCurrentEntity];
+   } catch (error) {
+    throw new Error('This method is not implemented updateAccount');
+    
+   }
   }
 
   delete(id: string, soft?: boolean): void {

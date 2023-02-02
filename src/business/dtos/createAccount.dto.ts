@@ -1,6 +1,10 @@
 import { IsUUID, IsNumber, IsBoolean } from "class-validator";
 
-export class accountDto {
+export class CreateAccountDto {
+
+
+    @IsUUID(4, { message: "this must to be uuid" })
+    id= String();
 
     @IsUUID(4, { message: "this must to be uuid" })
     Customerid: string;
@@ -9,7 +13,7 @@ export class accountDto {
     account_type_id: string;
 
     @IsNumber(undefined, { message: 'the value is not a valid balance.' })
-    balance: string;
+    balance: number;
 
     @IsBoolean({ message: "this must to be state" })
     state: boolean;

@@ -55,7 +55,7 @@ export class CustomerRepository extends Base<CustomerEntity> implements CRUD<Cus
       (item) => item.id === id && typeof item.daletedAt === 'undefined',
     );
     if (currentEntity) return currentEntity;
-    else throw new NotFoundException("Elemento no encontrado");
+    else throw new NotFoundException("Customer: Elemento no encontrado");
 
   }
 
@@ -65,8 +65,12 @@ export class CustomerRepository extends Base<CustomerEntity> implements CRUD<Cus
         item.email === email &&
         item.password === password &&
         typeof item.daletedAt === 'undefined',
-    );
-    return indexCurrentEntity >= -1 ? true : false;
+    
+        );
+    return indexCurrentEntity >= 0 ? true : false;
+    ;
+    
+
   }
 
   findOneByDocumentTypeAndDocument(
