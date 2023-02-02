@@ -35,12 +35,12 @@ class SuperheroFactory {
 
 const superhero1 = SuperheroFactory.createSuperhero('Superman');
 console.log(superhero1.name); // Superman
-console.log(superhero1.powers); // [ 'flight', 'heat vision', 'super strength' ]
+console.log(superhero1.powers); //['Volar', 'Vision laser', 'super fuerza']
 
 const superhero2 = SuperheroFactory.createSuperhero('Batman');
 console.log(superhero2.name); // Batman
-console.log(superhero2.powers); // [ 'intelligence', 'wealth', 'combat skills' ]
+console.log(superhero2.powers); // ['Inteligencia', 'Armas', 'Combate'];
 
 const superhero3 = SuperheroFactory.createSuperhero('WonderWoman');
 console.log(superhero3.name); // Wonder Woman
-console.log(superhero3.powers); // [ 'super strength', 'flight', 'combat skills'
+console.log(superhero3.powers); //['Super fuerza', 'Volar', 'Combate'];

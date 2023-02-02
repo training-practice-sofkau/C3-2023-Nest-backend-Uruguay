@@ -21,9 +21,9 @@ class Valencia implements ICiudad {
 }
 
 class FactoryCiudad {
-    static readonly MADRID: string = "MADRID";
-    static readonly BARCELONA: string = "BARCELONA";
-    static readonly VALENCIA: string = "VALENCIA";
+    static readonly MADRID: string = "Madrid";
+    static readonly BARCELONA: string = "Barcelona";
+    static readonly VALENCIA: string = "Valencia";
 
     static create(entity: string): ICiudad {
         switch (entity) {
