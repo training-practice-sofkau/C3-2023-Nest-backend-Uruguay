@@ -71,7 +71,7 @@ export class AccountController {
         return this.accountService.changeAccountType(accountType);
     }
 
-    @Get('/delete-account')
+    @Get('/delete')
     deleteAccount(@Query('account') account: string, @Query('soft') soft?: boolean): boolean {
         return this.accountService.deleteAccount(account, soft);
     }

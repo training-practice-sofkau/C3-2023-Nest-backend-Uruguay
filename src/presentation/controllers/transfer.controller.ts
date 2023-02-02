@@ -15,7 +15,7 @@ export class TransferController {
         return this.transferService.createTransfer(transfer);
     }
     
-    @Get('/delete-transfer')
+    @Get('/delete')
     deleteTransfer(@Query('transfer') transfer: string, @Query('soft') soft?: boolean): boolean {
         return this.transferService.deleteTransfer(transfer, soft);
     }
