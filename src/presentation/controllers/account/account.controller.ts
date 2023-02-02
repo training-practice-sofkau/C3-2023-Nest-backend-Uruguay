@@ -3,16 +3,23 @@ import { AccountDtos } from 'src/business';
 import { AccountEntity, AccountTypeEntity } from 'src/Data';
 import { AccountService } from 'src/business';
 import { baseDto } from 'src/business/dtos/amountDtos';
+import { ObservableHandler } from 'src/business/ob/observableHandler';
 
 @Controller('account')
-export class AccountController {
-  constructor(private readonly AccountService: AccountService) {}
+export class AccountController extends ObservableHandler {
+  constructor(private readonly AccountService: AccountService) {
+    super();
+  }
 
 
   @Post('newAccount')
   createAccount(@Body() account: AccountDtos): AccountEntity {
-    
-    return this.AccountService.createAccount(account)
+const newAccount = this.AccountService.createAccount(account)
+
+    this.handle(account).subscribe(value => {
+      console.log(`Nueva cuenta creada: ${ JSON.stringify (account)}`)
+    })
+    return newAccount
   }
   @Get('getBalance/:id')
   getBalance(@Param('id' , ParseUUIDPipe )accountId: string): number {
@@ -25,7 +32,7 @@ export class AccountController {
     @Body() addBalanceDto: baseDto
   ): void{
     
-    return this.AccountService.addBalance(accountId, addBalanceDto.amount )
+     this.AccountService.addBalance(accountId, addBalanceDto.amount )
   }
 
   @Post('removeBalance/:id')
@@ -34,7 +41,7 @@ export class AccountController {
     @Body() addBalanceDto: baseDto
   ): void{
     
-    return this.AccountService.removeBalance(accountId,addBalanceDto.amount )
+     this.AccountService.removeBalance(accountId,addBalanceDto.amount )
   }
 
   @Get('verification/:id')
@@ -46,6 +53,9 @@ export class AccountController {
     return this.AccountService.verifyAmountIntoBalance(accountId, baseDto.amount)
   }
 
+
+
+  
   @Put('changeState/:id')
   changeState(@Param('id', ParseUUIDPipe) accountId: string,
   @Body() baseDto: baseDto
@@ -58,9 +68,8 @@ export class AccountController {
   return this.AccountService.getAccountType(accountId)
 }
 @Put ('changeAccntType/:id') 
-changeAccntType(@Param('id', ParseUUIDPipe) accountId: string,
-  @Body() baseDto: baseDto): AccountTypeEntity { 
-    return this.AccountService.changeAccntType(accountId, baseDto.accountTypeId);
+changeAccntType(@Param('id', ParseUUIDPipe) accountId: string): AccountTypeEntity { 
+    return this.AccountService.changeAccntType(accountId);
 }
 
 @Put('delete/:id')
@@ -72,4 +81,10 @@ hardelete(@Param('id', ParseUUIDPipe) accountId: string,
 @Body() baseDto: baseDto
 ): void{
   return this.AccountService.deleteAccount(accountId, baseDto.soft);
-}}
+}
+
+@Get()
+getAll(){
+ return this.AccountService.findALl()
+}
+}
