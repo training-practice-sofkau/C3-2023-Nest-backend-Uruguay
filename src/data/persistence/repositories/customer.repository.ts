@@ -3,11 +3,15 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CustomerEntity } from '../entities';
 import { BaseRepository } from './base';
 import { CustomerRepositoryInterface } from './interfaces';
+import { ObservableHandler } from '../../../business/observable/observable-handler';
 
 @Injectable()
 export class CustomerRepository
   extends BaseRepository<CustomerEntity>
   implements CustomerRepositoryInterface {
+    constructor(private readonly observableHandler: ObservableHandler) {
+      super();
+    }
 
   register(entity: CustomerEntity): CustomerEntity {
     this.database.push(entity);
@@ -36,6 +40,7 @@ export class CustomerRepository
 
     if(soft) {
       this.database[indexCurrentEntity].deletedAt = new Date();
+      this.observableHandler.handle(this.database[indexCurrentEntity]).subscribe(customer => console.log(customer));
     }
     else {
       this.database.splice(indexCurrentEntity, 1);
