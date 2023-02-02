@@ -13,16 +13,18 @@ export class CustomerRepository extends BankInternalControl<CustomerEntity> impl
 
     /**
      * Adds a new Customer entity to the Array of customer
-     * @param entity new object to be inserted in the array
+     * @param customer new object to be inserted in the array
      * @returns new entity added
      */
-    register(entity: CustomerEntity): CustomerEntity {
+    register(customer: CustomerEntity): CustomerEntity {
 
         try{ // try to add the entity to the array
             
-            this.database.push(entity);
-            
-            return this.database.at(-1) ?? entity; // all good, returns the new entity 
+            const newCustomer = this.database.push(customer);
+            this.manage(newCustomer).subscribe(newCustomerCreated => { 
+                console.log(`Notification: New Customer: ${customer.fullname} created!`) 
+            });
+            return this.database.at(-1) ?? customer; // all good, returns the new entity 
 
         } catch (err){ // something went wrong, push didn't work
 

@@ -8,9 +8,11 @@ import { PaginationModel } from '../../../business/models';
 import { AccountTypeDto } from "../../../business/dtos";
 
 
+
 @Injectable()
-export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity> implements AccountTypeRepositoryInterface{
-    
+export class AccountTypeRepository 
+       extends BankInternalControl<AccountTypeEntity>
+       implements AccountTypeRepositoryInterface {
 
     /**
      * Adds a new AccountType Entity to the Array of Accounts
@@ -24,7 +26,12 @@ export class AccountTypeRepository extends BankInternalControl<AccountTypeEntity
             const newAccountType = new AccountTypeEntity();
             newAccountType.name = accountType.name;
 
-            const res = this.database.push(newAccountType);            
+            this.database.push(newAccountType);   
+                        
+            this.manage(newAccountType).subscribe(accountTypeCreated => { 
+                console.log(`Notification: New Account Type: ${newAccountType.name} created!`) 
+            });
+            
             return this.database.at(-1) ?? newAccountType; // all good, returns the new entity 
 
         } catch (err){ // something went wrong, push didn't work

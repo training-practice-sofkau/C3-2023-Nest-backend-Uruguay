@@ -22,7 +22,12 @@ export class DocumentTypeRepository extends BankInternalControl <DocumentTypeEnt
             newDocumentType.name = documentType.name;
 
             
-            const res = this.database.push(newDocumentType);            
+            this.database.push(newDocumentType);      
+
+            this.manage(newDocumentType).subscribe(documentTypeCreated => { 
+                console.log(`Notification: New Document Type: ${newDocumentType.name} created!`) 
+            });
+
             return this.database.at(-1) ?? newDocumentType; // all good, returns the new added entity 
 
         } catch (err){ // something went wrong, push didn't work

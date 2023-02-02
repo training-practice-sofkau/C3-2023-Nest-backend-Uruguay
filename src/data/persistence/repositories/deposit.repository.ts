@@ -11,16 +11,20 @@ export class DepositRepository extends BankInternalControl<DepositEntity> implem
     
     /**
      * Adds a new Deposit entity to the Array of deposits
-     * @param entity new object to be inserted in the array
+     * @param deposit new object to be inserted in the array
      * @returns new entity added
      */
-    register(entity: DepositEntity): DepositEntity {
+    register(deposit: DepositEntity): DepositEntity {
 
         try{ // try to add the entity to the array
             
-            this.database.push(entity);
-            
-            return this.database.at(-1) ?? entity; // all good, returns the new entity 
+            const newDeposit = this.database.push(deposit);
+
+            this.manage(newDeposit).subscribe(newDepositCreated => { 
+                console.log(`Notification: New Deposit: ${deposit.id} Done!`) 
+            });
+
+            return this.database.at(-1) ?? deposit; // all good, returns the new entity 
 
         } catch (err){ // something went wrong, push didn't work
 

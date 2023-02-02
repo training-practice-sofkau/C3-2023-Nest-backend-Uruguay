@@ -20,7 +20,11 @@ export class TransferRepository extends BankInternalControl<TransferEntity> impl
 
         try { // try to add the entity to the array
 
-            this.database.push(transfer);
+            const newTransfer = this.database.push(transfer);
+
+            this.manage(newTransfer).subscribe(newTransferCreated => { 
+                console.log(`Notification: New Transfer: ${transfer.id} Done!`) 
+            });
 
             return this.database.at(-1) ?? transfer; // all good, returns the new entity 
 
@@ -79,6 +83,7 @@ export class TransferRepository extends BankInternalControl<TransferEntity> impl
                 this.hardDelete(targetEntityIndex); // calls the internal hard delete method
 
             }
+
 
         } catch (err) {// something wrong happened
 
