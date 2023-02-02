@@ -16,14 +16,10 @@ import { CustomerRepository } from '../../../data/persistence/repositories';
 import { AccountService } from '../account';
 
 // Entities
-import { AccountTypeEntity, CustomerEntity } from '../../../data/persistence/entities';
+import { CustomerEntity } from '../../../data/persistence/entities';
 import { SignInDto, SignUpDto, CreateAccountDto } from '../../dtos';
-import { DocumentTypeEntity } from '../../../data/persistence/entities';
-import { response } from 'express';
 import { DocumentTypeRepository } from '../../../data/persistence/repositories/document-type.repository';
 import { AccountTypeRepository } from '../../../data/persistence/repositories/account-type.repository';
-
-
 
 
 
@@ -70,7 +66,7 @@ export class SecurityService {
 
     if (documentType) {
       const newCustomer = new CustomerEntity();
-            
+
       newCustomer.documentType = documentType;
       newCustomer.document = user.document;
       newCustomer.fullname = user.fullname;

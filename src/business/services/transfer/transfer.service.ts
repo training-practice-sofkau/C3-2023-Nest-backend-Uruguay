@@ -94,13 +94,9 @@ export class TransferService {
    */
   getHistory(accountId: string,
     pagination?: PaginationModel<TransferEntity>,
-    dataRange?: DataRangeModel): TransferEntity[] {
+    dataRange?: DataRangeModel): TransferEntity[] {    
 
-    console.log(accountId)
-
-    let history = this.transferRepository.getAllTransfersById(accountId, pagination, dataRange);
-
-    console.log(history);
+    let history = this.transferRepository.getAllTransfersById(accountId, pagination, dataRange);    
 
     return history;
   }
