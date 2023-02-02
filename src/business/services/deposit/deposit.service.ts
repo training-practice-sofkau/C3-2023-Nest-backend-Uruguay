@@ -89,9 +89,13 @@ export class DepositService {
 
   getAccountHistory(
     accountId: string,
-    pagination: PaginationModel,
+    offset: number,
+    limit?: number,
     dataRange?: DataRangeModel,
   ): DepositEntity[] {    
+
+    const pagination: PaginationModel = {offset: offset, limit: limit}
+
     dataRange = {
       ... {dateStart: 0, dateEnd: Date.now()},
       ... dataRange

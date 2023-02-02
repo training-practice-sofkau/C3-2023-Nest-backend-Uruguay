@@ -53,9 +53,12 @@ export class TransferService {
    */
   getHistoryOut(
     accountId: string,
-    pagination: PaginationModel,
+    offset: number,
+    limit?: number,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
+
+    const pagination: PaginationModel = {offset: offset, limit: limit};
 
     dataRange = {
       ... {dateStart: 0, dateEnd: Date.now()},
@@ -76,9 +79,12 @@ export class TransferService {
    */
   getHistoryIn(
     accountId: string,
-    pagination: PaginationModel,
+    offset: number,
+    limit?: number,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
+
+    const pagination: PaginationModel = {offset: offset, limit: limit};
 
     dataRange = {
       ... {dateStart: 0, dateEnd: Date.now()},
@@ -99,9 +105,12 @@ export class TransferService {
    */
   getHistory(
     accountId: string,
-    pagination: PaginationModel,
+    offset: number,
+    limit?: number,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
+    const pagination: PaginationModel = {offset: offset, limit: limit};
+
     dataRange = {
       ... {dateStart: 0, dateEnd: Date.now()},
       ... dataRange

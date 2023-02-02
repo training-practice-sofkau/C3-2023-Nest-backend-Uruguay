@@ -14,6 +14,9 @@ import * as jwt from 'jsonwebtoken';
 import { DocumentTypeRepository } from '../../../data/persistence/repositories/document-type.repository';
 import { NotAcceptableException } from '@nestjs/common/exceptions';
 import { CustomerService } from '../customer/customer.service';
+import { AccountTypeFactory } from '../../../data/FactoryPattern/AccountType/account-type-factory';
+import { DocumentTypeContext, NationalIdStrategy, PassportStrategy } from '../../../data/StrategyPattern/DocumentType/document-type-strategy';
+import { NationalID } from '../../../data/FactoryPattern/DocumentType/document-type-factory';
 
 @Injectable()
 export class SecurityService {
@@ -54,29 +57,39 @@ export class SecurityService {
    * @memberof SecurityService
    */
   signUp(user: SignUpDTO): string {
-    console.log(user.documentTypeId)
-    const documentType = this.documentTypeRepository.findOneById(user.documentTypeId);
-
     const newCustomer = new CustomerEntity();
-    newCustomer.documentType = documentType;
+
+    if(user.documentType != 'National ID' && user.documentType != 'Passport ID') throw new NotAcceptableException();
+
+    if(user.documentType === 'National ID') {
+      const strategy = new NationalIdStrategy();
+      const context = new DocumentTypeContext(strategy);
+      newCustomer.documentType = context.assignAccountTypeStrategy();
+
+    }
+
+    if(user.documentType === 'Passport ID') {
+      const strategy = new PassportStrategy();
+      const context = new DocumentTypeContext(strategy);
+      newCustomer.documentType = context.assignAccountTypeStrategy();
+
+    }
+
+
     newCustomer.document = user.document;
     newCustomer.fullName = user.fullName;
     newCustomer.email = user.email;
     newCustomer.phone = user.phone;
     newCustomer.password = user.password;
 
+    this.documentTypeRepository.register(newCustomer.documentType);
     const customer = this.customerRepository.register(newCustomer);
 
-    if (customer) {
-      const accountTypeData = this.accountTypeRepository.findAll({offset:0}).at(0);
-      if(typeof accountTypeData === 'undefined') throw new NotAcceptableException();
-
+    if (customer) {      
       const newAccount = new CreateAccountDTO();
       newAccount.customerId = customer.id;
-
-      newAccount.accountTypeId = accountTypeData.id;
-
-      const account = this.accountService.createAccount(newAccount);
+            
+      const account = this.accountService.createSavingAccount(newAccount);
 
       if (!account) throw new InternalServerErrorException();
 
