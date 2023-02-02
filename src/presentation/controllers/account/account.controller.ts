@@ -1,9 +1,10 @@
 import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put, Query } from '@nestjs/common';
 
 import { AccountEntity } from 'src/data/persistence/entities';
-import { CreateAccountDto, UpdateAccountDto, AccountTransactionDto } from 'src/business/dtos';
+import { CreateAccountDto, UpdateAccountDto, AccountTransactionDto, AccountDto } from 'src/business/dtos';
 import { AccountService } from 'src/business/services';
 import { ParseBoolPipe } from '@nestjs/common/pipes';
+
 
 
 @Controller('account')
@@ -46,8 +47,15 @@ export class AccountController {
         return await this.accountService.getAllAccounts();
     }
 
-    // get account balance
+    // get account information
     @Get('/:id')
+     getAccountData(@Param('id', ParseUUIDPipe) accountId: string): AccountDto{
+        
+        return  this.accountService.getAccountData(accountId);        
+    }
+
+    // get account balance
+    @Get('balance/:id')
      getBalance(@Param('id', ParseUUIDPipe) accountId: string): number{
         
         return  this.accountService.getBalance(accountId);        

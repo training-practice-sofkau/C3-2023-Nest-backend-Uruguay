@@ -2,16 +2,19 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 
 import { AccountEntity, AccountTypeEntity, CustomerEntity } from '../../../data/persistence/entities';
 import { AccountRepository, AccountTypeRepository } from '../../../data/persistence/repositories';
-import { CreateAccountDto, UpdateAccountDto } from '../../dtos';
+import { CreateAccountDto, UpdateAccountDto, AccountDto } from '../../dtos';
+import { CustomerRepository } from '../../../data/persistence/repositories/customer.repository';
+
 
 
 @Injectable()
 export class AccountService {
-  
+   
 
   constructor(
     private readonly accountRepository: AccountRepository,
     private readonly accountTypeRepository: AccountTypeRepository,
+    private readonly customerRepository: CustomerRepository,
   ) { }
 
   /**
@@ -54,10 +57,33 @@ export class AccountService {
     
     newAccount.balance = newAccountDetails.balance; 
 
-    newAccount.state = newAccountDetails.state; 
-    console.log("aca paso")
+    newAccount.state = newAccountDetails.state;     
 
     return this.accountRepository.update(accountId, newAccount);
+  }
+
+ 
+  /**
+  * Return the information of the account 
+  * @param accountId account id to search
+  * @returns account data or an exception
+  */
+  getAccountData(accountId: string): AccountDto {
+
+    let account =  this.accountRepository.findOneById(accountId);
+
+    let accountData = new AccountDto();
+
+    accountData.accountId = account.id;
+    accountData.accountTypeId = account.accountTypeId.id;
+    accountData.accountTypeName = this.accountTypeRepository.findOneById(account.accountTypeId.id).name;
+    accountData.customerId = account.customerId.id;
+    accountData.customerName = this.customerRepository.findOneById(account.customerId.id).fullname;  //account.customerId.fullname;
+    accountData.balance = account.balance;
+    accountData.state = account.state;
+    accountData.deletedAt = account.deletedAt;
+
+    return accountData;
   }
 
   /**
