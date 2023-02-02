@@ -4,6 +4,7 @@ import { BalanceDto, ChangeAccountDto, ChangeStateDto, CreateAccountDto } from '
 import { ApiTags } from '@nestjs/swagger';
 import { AccountEntity, AccountTypeEntity } from '../../data/persistence';
 import { PaginationDto } from '../../business/dtos/pagination.dto';
+import { UpdateAccountDto } from '../../business/dtos/update-account.dto';
 
 @ApiTags('account')
 @Controller('api/account')
@@ -11,9 +12,14 @@ export class AccountController {
 
     constructor(private readonly accountService: AccountService) {}
 
-    @Post('/create-account')
+    @Post('/create')
     createAccount(@Body() account: CreateAccountDto): AccountEntity {
         return this.accountService.createAccount(account);
+    }
+
+    @Post('/update')
+    updateAccount(@Body() account: UpdateAccountDto) {
+        return this.accountService.updateAccount(account)
     }
 
     @Get('/get-balance')
@@ -46,22 +52,22 @@ export class AccountController {
         return this.accountService.changeState(account).toString();
     }
 
-    @Get('/get-account-by-id')
+    @Get('/get-by-id')
     getAccountById(@Query('account') account: string): AccountEntity {
         return this.accountService.getAccountById(account);
     }
 
-    @Get('/get-account-by-customer-id')
+    @Get('/get-by-customer-id')
     getAccountByCostumerId(@Query('customer') customer: string): AccountEntity[] {
         return this.accountService.getAccountByCustomerId(customer);
     }
 
-    @Get('/get-account-type-by-id')
+    @Get('/get-account-type-by-account-id')
     getAccountTypeById(@Query('account') account: string): AccountTypeEntity {
         return this.accountService.getAccountTypeById(account);
     }
 
-    @Get('/get-account-type-with-id')
+    @Get('/get-account-type-by-id')
     getAccountTypeWithId(@Query('accountType') accountType: string): AccountTypeEntity {
         return this.accountService.getAccountTypeWithId(accountType);
     }

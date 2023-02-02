@@ -25,9 +25,7 @@ export class DepositService {
       newDeposit.account.balance += Math.abs(deposit.balance);
       this.accountRepository.update(newDeposit.account.id, newDeposit.account);
       return this.depositRepository.register(newDeposit);
-    } else {
-      throw new NotFoundException();
-    }
+    } else throw new NotFoundException();
   }
 
   deleteDeposit(depositId: string, soft?: boolean): boolean {

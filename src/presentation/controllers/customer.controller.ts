@@ -9,14 +9,14 @@ import { CustomerEntity, DocumentTypeEntity } from '../../data/persistence';
 export class CustomerController {
     constructor(private readonly customerService: CustomerService) {}
 
-    @Get('/get-customer')
+    @Get('/get-by-id')
     getCustomerInfo(@Query('customer') customer: string): CustomerEntity {
         return this.customerService.getCustomerInfo(customer)
     }
 
-    @Post('/update-customer')
-    updatedCustomer(@Body() customer: UpdateCustomerDto) {
-        return this.customerService.updatedCustomer(customer)
+    @Post('/update')
+    updateCustomer(@Body() customer: UpdateCustomerDto) {
+        return this.customerService.updateCustomer(customer)
     }
 
     @Get('/unsuscribe')

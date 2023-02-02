@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CustomerEntity, DocumentTypeEntity } from '../../data/persistence/entities';
 import { CustomerRepository, DocumentTypeRepository } from '../../data/persistence';
 import { PaginationDto, UpdateCustomerDto } from '../../business/dtos';
@@ -39,17 +39,19 @@ export class CustomerService {
       return this.customerRepository.findByState(state.valueOf());
   }
 
-  updatedCustomer(customer: UpdateCustomerDto): CustomerEntity {
+  updateCustomer(customer: UpdateCustomerDto): CustomerEntity {
     const oldCostumer = this.customerRepository.findOneById(customer.customerId);
-    oldCostumer.document = customer.document;
-    oldCostumer.email = customer.email;
-    oldCostumer.fullName = customer.fullName;
-    oldCostumer.password = customer.password;
-    oldCostumer.phone = customer.phone;
-    oldCostumer.avatarUrl = customer.avatarUrl;
-    oldCostumer.documentType.name = customer.documentTypeName;
-    this.documentTypeRepository.update(oldCostumer.documentType.id, oldCostumer.documentType);
-    return this.customerRepository.update(customer.customerId, oldCostumer);
+    if (oldCostumer) {
+      oldCostumer.document = customer.document;
+      oldCostumer.email = customer.email;
+      oldCostumer.fullName = customer.fullName;
+      oldCostumer.password = customer.password;
+      oldCostumer.phone = customer.phone;
+      oldCostumer.avatarUrl = customer.avatarUrl;
+      oldCostumer.documentType.name = customer.documentTypeName;
+      this.documentTypeRepository.update(oldCostumer.documentType.id, oldCostumer.documentType);
+      return this.customerRepository.update(customer.customerId, oldCostumer);
+    } else throw new NotFoundException();
   }
 
   unsubscribe(customerId: string, soft?: boolean): boolean {

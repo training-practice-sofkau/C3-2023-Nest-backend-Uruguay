@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNumberString, IsUUID} from 'class-validator';
+import { IsNumber, IsPositive, IsUUID} from 'class-validator';
 
 export class UpdateAccountDto {
 
@@ -12,11 +12,11 @@ export class UpdateAccountDto {
     customerId: string;
 
     @ApiProperty()
-    @IsUUID(4, { message: "account type id must to be uuid." })
-    accountTypeId: string;
+    accountTypeName: string;
 
     @ApiProperty()
-    @IsNumberString({ message: "balance is not a number." })
-    balance: string;
+    @IsNumber(undefined, { message: "balance is not a number." })
+    @IsPositive()
+    balance: number;
     
 }

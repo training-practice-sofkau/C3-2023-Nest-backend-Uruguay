@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { AccountRepository, AccountTypeRepository, CustomerRepository } from '../../data/persistence';
 import { AccountEntity, AccountTypeEntity } from '../../data/persistence/entities';
 
 // Data Transfer Object
 import { BalanceDto, ChangeAccountDto, ChangeStateDto, CreateAccountDto, PaginationDto } from '../../business/dtos';
+import { UpdateAccountDto } from '../dtos/update-account.dto';
 
 
 @Injectable()
@@ -67,6 +68,19 @@ export class AccountService {
     } else {
       return false;
     }
+  }
+
+  updateAccount(account: UpdateAccountDto): AccountEntity {
+    const oldAccount = this.accountRepository.findOneById(account.AccountId);
+    if (oldAccount) {
+      oldAccount.balance = account.balance;
+      oldAccount.accountType.name = account.accountTypeName
+      oldAccount.customer = this.customerRepository.findOneById(account.customerId);
+      if (oldAccount.customer){
+        this.accountTypeRepository.update(oldAccount.accountType.id, oldAccount.accountType);
+        return this.accountRepository.update(account.AccountId, oldAccount);
+      } else throw new NotFoundException();
+    } else throw new NotFoundException();
   }
 
   verifyAmountIntoBalance(balance: BalanceDto): boolean {

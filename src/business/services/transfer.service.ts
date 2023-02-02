@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { AccountRepository, TransferEntity, TransferRepository } from '../../data/persistence';
 import { CreateTransferDto, DateRangeDto, PaginationDto } from '../../business/dtos';
 
@@ -69,9 +69,7 @@ export class TransferService {
       } catch {
         return false;
       }
-    } else {
-      return false;
-    }
+    } else throw new NotFoundException();
   }
 
   findSoftDeletedTransfers() : TransferEntity[] {
