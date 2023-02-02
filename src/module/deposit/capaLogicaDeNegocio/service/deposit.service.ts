@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common';
+import { Injectable, NotFoundException, forwardRef } from '@nestjs/common';
 import { AccountService } from 'src/module/account/capaLogicaDeNegocio/service';
 import { DepositEntity } from '../../capaDeDato/entity';
 import { depositDto } from '../dto';
@@ -11,10 +11,9 @@ import { DepositRepository } from '../../capaDeDato/repository';
 @Injectable()
 export class DepositService {
 
-  @Inject(forwardRef(() => AccountService))
-  private readonly accountService: AccountService;
   constructor(
-    private readonly depositRepository : DepositRepository){}
+    private readonly depositRepository : DepositRepository,
+    private readonly accountService: AccountService){}
 
 
   createDeposit(deposit: depositDto): DepositEntity {

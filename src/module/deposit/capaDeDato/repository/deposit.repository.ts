@@ -15,8 +15,8 @@ export class DepositRepository
             (item) => item.id === entity.id && typeof item.delete_at === 'undefined',
         );
 
-        if(!indexCurrentEntity){
-            throw new NotFoundException(`No se pudo actualizar porque no se encontro el id : ${entity.id}`)
+        if(indexCurrentEntity != -1){
+            throw new NotFoundException(`Se encontro un id : ${entity.id}(deposito ) ya existente`)
         }
         this.database.push(entity);
         return this.database.at(-1) ?? entity;
@@ -27,8 +27,8 @@ export class DepositRepository
             (item) => item.id === id && typeof item.delete_at === 'undefined',
         );
 
-        if(!indexCurrentEntity){
-            throw new NotFoundException(`No se pudo actualizar porque no se encontro el id : ${id}`)
+        if(indexCurrentEntity === -1){
+            throw new NotFoundException(`No se pudo actualizar porque no se encontro el id : ${id}(deposito)`)
         }
           
         this.database[indexCurrentEntity] = {
@@ -49,14 +49,14 @@ export class DepositRepository
     }
 
     findOneById(id: string): DepositEntity {
-        const currentEntity = this.database.find(
+        const currentEntity = this.database.findIndex(
             (item) => item.id === id && typeof item.delete_at === 'undefined',
           );
 
-          if (!currentEntity){
-            throw new NotFoundException();
+          if (currentEntity === -1){
+            throw new NotFoundException(`No se encontro deposito con id : ${id}`);
           }
-          return currentEntity; 
+          return this.database[currentEntity]; 
     }
 
     findByAccountId(accountId: string): DepositEntity[] {

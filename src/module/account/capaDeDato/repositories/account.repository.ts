@@ -12,11 +12,12 @@ export class AccountRepository
     implements AccountRepositoryInterface {
 
 register(entity: AccountEntity ): AccountEntity {
+
     const indexCurrentEntity = this.database.findIndex(
       (item) => item.id === entity.id && typeof item.delete_at === 'undefined',
     );
-    if(!indexCurrentEntity){
-      throw new NotFoundException(`Id : ${entity.id} no found .`)
+    if(indexCurrentEntity != -1 ){
+      throw new NotFoundException(`Id : ${entity.id} ya existe.`)
     }
     this.database.push(entity);
     return  this.database.at(-1) ?? entity;
@@ -27,8 +28,8 @@ update(id: string, entity: AccountEntity  ):AccountEntity{
         (item) => item.id === id && typeof item.delete_at === 'undefined',
       );
 
-      if(!indexCurrentEntity){
-        throw new NotFoundException(`Id : ${id} no found .`)
+      if(indexCurrentEntity === -1 ){
+        throw new NotFoundException(`Id : ${id} no existe .`)
       }
         this.database[indexCurrentEntity] = {
           ...this.database[indexCurrentEntity],
@@ -45,14 +46,14 @@ findAll(): AccountEntity[] {
 }
 
 findOneById(id: string):AccountEntity {
-    const currentEntity = this.database.find(
+    const currentEntity = this.database.findIndex(
         (item) => item.id === id && typeof item.delete_at === 'undefined',
       );
 
-      if(!currentEntity){
-        throw new NotFoundException(`Id : ${id} no found`);
+      if(currentEntity === -1){
+        throw new NotFoundException(`Id : ${id} de cuenta no existe`);
       }
-      return currentEntity;
+      return this.database[currentEntity];
       
 }
 
@@ -64,7 +65,7 @@ findByState(state: boolean): AccountEntity[] {
     typeof item.delete_at === 'undefined',
   );
   //Si no hay cliente con este estado entonces mando un exepcion
-  if(!indexCurrentEntity){
+  if(!indexCurrentEntity ){
     throw new NotFoundException(`State : ${state} not found`);
   }
 

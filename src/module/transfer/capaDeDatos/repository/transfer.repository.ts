@@ -13,13 +13,11 @@ export class TransferRepository
 
 
     register(entity: TransferEntity): TransferEntity {
-        const indexCurrentEntity = this.database.findIndex(
+        const indexCurrentEntity = this.database.find(
             (item) => item.id === entity.id && typeof item.delete_at === 'undefined',
             );
 
-        if (indexCurrentEntity <= 0){
-            throw new NotFoundException(`Id : ${entity.id} not found`);
-        }
+        if (indexCurrentEntity)throw new NotFoundException(`Id : ${entity.id} not found`);
 
         this.database.push(entity);
         return this.database.at(-1) ?? entity;
@@ -31,7 +29,7 @@ export class TransferRepository
             (item) => item.id === id && typeof item.delete_at === 'undefined',
             );
 
-        if (indexCurrentEntity <= 0){
+        if (indexCurrentEntity === -1){
             throw new NotFoundException(`Id : ${id} not found`);
         }
         
@@ -73,12 +71,12 @@ export class TransferRepository
 
 
     findOneById(id: string): TransferEntity {
-        const currentEntity = this.database.find(
+        const currentEntity = this.database.findIndex(
         (item) => item.id === id && typeof item.delete_at === 'undefined',
         );
-        if(!currentEntity)throw new NotFoundException(`id : ${id} not found `);
+        if(currentEntity === -1)throw new NotFoundException(`id : ${id} not found `);
 
-        return currentEntity;
+        return this.database[currentEntity];
     }
 
 

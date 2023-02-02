@@ -8,7 +8,7 @@ import { AccountRepository, AccountTypeRepository } from '../account/capaDeDato/
 
 @Module({
     imports: [],
-    controllers: [CustomerController],
-    providers: [CustomerService,CustomerRepository,DocumentTypeRepository,AccountService,AccountRepository,AccountTypeRepository]
+    controllers: [],
+    providers: []
 })
 export class CusotmerModule {}

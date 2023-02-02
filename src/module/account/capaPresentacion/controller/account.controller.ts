@@ -1,23 +1,34 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { AccountService } from '../../capaLogicaDeNegocio/service/account.service';
-import { CreateAccountdto } from '../../capaLogicaDeNegocio/dto/create-account.dto';
+import { Body, Controller, Delete, Get, Logger, Param, Post, Put } from '@nestjs/common';
+import { AccountService } from '../../capaLogicaDeNegocio/service/account.service'; 
 import { AccountEntity } from '../../capaDeDato/entity/account.entities';
 import { AccountDto } from '../../capaLogicaDeNegocio/dto/account.dto';
 import { AccountTypeEntity } from '../../capaDeDato/entity';
+import { AccountTypeDto } from '../../capaLogicaDeNegocio/dto/accountType.dto';
+import { ObservableHandel } from 'src/obs/observableHandler';
 
 @Controller('account')
-export class AccountController {
-    constructor(private readonly accountService : AccountService ){}
+export class AccountController extends ObservableHandel{
+    constructor(private readonly accountService : AccountService ){
+        super();
+    }
+    
+    private logger = new Logger(`AccountController`);
 
-    @Post(`/create`)
-    createAccount(@Body() newAccount : CreateAccountdto):AccountEntity{
-        return this.accountService.createAccount(newAccount);
+    @Post(`/account-type/create`)
+    createAccount(@Body() newAccount : AccountTypeDto):AccountTypeEntity{
+        const newAccountType = this.accountService.createAccountType(newAccount);
+        this.handle(newAccountType).subscribe(type => {
+            this.logger.log(`Tipo de cuenta creada : ${type}`)
+        });
+        return newAccountType;
     }
     
     @Put('/update/:accountId')
     updateAccount(@Param() accountId: string, @Body() newAccount: AccountDto): AccountEntity {
         return this.accountService.updateAccount(accountId, newAccount);
     }
+
+    
     //Esto funciona? hay que usar 
     @Delete(`/deleteSof/:id/:sof`)
     deleteAccountSof(@Param(`id`)accountId: string ,

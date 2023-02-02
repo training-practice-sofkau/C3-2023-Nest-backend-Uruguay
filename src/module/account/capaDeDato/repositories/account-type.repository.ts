@@ -15,9 +15,9 @@ export class AccountTypeRepository
     const indexCurrentEntity = this.database.findIndex(
       (item) => item.id === entity.id );
 
-    if (!indexCurrentEntity){
-      throw new NotFoundException(`Id : ${entity.id} no found`)
-    }
+    if (indexCurrentEntity != -1) throw new NotFoundException(`Id : ${entity.id} (accountType) ya existe`);
+
+    
     this.database.push(entity);
     return this.database.at(-1) ?? entity;
   }
@@ -26,9 +26,7 @@ export class AccountTypeRepository
     const indexCurrentEntity = this.database.findIndex(
         (item) => item.id === id );
 
-    if (indexCurrentEntity <= 0){
-        throw new NotFoundException(`Id : ${id} no found`)
-    }
+    if (indexCurrentEntity === -1) throw new NotFoundException(`Id : ${id} no found`);
 
     this.database[indexCurrentEntity] = {
       ...this.database[indexCurrentEntity],
@@ -42,7 +40,7 @@ export class AccountTypeRepository
   delete(id: string): void {
     const indexCurrentEntity = this.database.findIndex((item) => item.id === id);
 
-    if (!indexCurrentEntity) throw new NotFoundException();
+    if (indexCurrentEntity === -1) throw new NotFoundException(`Id : ${id} no found`);
 
     this.database.splice(indexCurrentEntity); 
   }
@@ -54,12 +52,10 @@ export class AccountTypeRepository
   }
 
   findOneById(id: string):AccountTypeEntity{
-      let currentEntity = this.database.find(
+      let currentEntity = this.database.findIndex(
           (Entity) => Entity.id === id);
-      if (!currentEntity){       
-        throw new NotFoundException(`id :${id} no found`);
-      }
-      return currentEntity;
+      if (currentEntity === -1) throw new NotFoundException(`id :${id} no found`);
+      return this.database[currentEntity];
   }
 
   findByState(state: boolean): AccountTypeEntity[] {

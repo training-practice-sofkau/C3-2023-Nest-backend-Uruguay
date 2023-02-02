@@ -8,9 +8,9 @@ import { AccountService } from '../../../account/capaLogicaDeNegocio/service';
 
 @Injectable()
 export class TransferService {
-  @Inject(forwardRef(() => AccountService))
-  private readonly accountServer: AccountService;
-  constructor(private readonly TransferRepo : TransferRepository){}
+  constructor(
+    private readonly TransferRepo : TransferRepository,
+    private readonly accountServer: AccountService){}
   /**
    * Crear una transferencia entre cuentas del banco
    */

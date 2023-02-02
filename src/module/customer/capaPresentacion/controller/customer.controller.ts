@@ -2,6 +2,8 @@ import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
 import { CustomerService } from '../../capaLogicaDeNegocio/service/customer.service';
 import { CustomerEntity } from '../../capaDeDato/entity/customer.entity';
 import { CustomerDto } from '../../capaLogicaDeNegocio/dto';
+import { DocumentTypeEntity } from '../../capaDeDato/entity';
+import { DocumentTypeDto } from '../../capaLogicaDeNegocio/dto/documentType.dto';
 
 @Controller('customer')
 export class CustomerController {
@@ -25,11 +27,25 @@ export class CustomerController {
         return this.customerService.getCustomerInfo(customerId);
     }
 
+    @Post(`/document-type/create`)
+    createDocumentType(@Body()documentType : DocumentTypeDto):DocumentTypeEntity{
+        return this.customerService.createDocumentType(documentType);
+    }
 
     @Get(`/all`)//Hay que pasarle por parametro con pagination ,HECHO SIN EL PAGINATION
     findAll(): CustomerEntity[] {
         return this.customerService.findAll();
     }
+    @Get(`/document-type/find-all`)//Hay que pasarle por parametro con pagination ,HECHO SIN EL PAGINATION
+    findAllDocumentType(): DocumentTypeEntity[] {
+        return this.customerService.findAllDocumentType();
+    }
+
+    @Get(`/document-type/find-id/:id`)//Hay que pasarle por parametro con pagination ,HECHO SIN EL PAGINATION
+    findDocumentType(@Param(`id`) id : string): DocumentTypeEntity {
+        return this.customerService.findByIdDocumentType(id);
+    }
+
     @Get(`/credeciales/:email/:password`)
     findOneByEmailAndPassword(@Param("email")email: string,@Param("password")password: string):CustomerEntity{
         return this.customerService.findOneByEmailAndPassword(email,password);   

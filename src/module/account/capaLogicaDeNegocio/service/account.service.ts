@@ -1,44 +1,52 @@
-import { Inject, Injectable, NotAcceptableException, forwardRef } from '@nestjs/common';
+import {  Injectable, NotAcceptableException } from '@nestjs/common';
 import { AccountRepository, AccountTypeRepository } from '../../capaDeDato/repositories';
 import { AccountEntity } from '../../capaDeDato/entity/account.entities';
 import { CreateAccountdto } from '../dto/create-account.dto';
-import { CustomerService } from 'src/module/customer';
+import { CustomerEntity, CustomerService } from 'src/module/customer';
 import { AccountDto } from '../dto/account.dto';
 import { AccountTypeEntity } from '../../capaDeDato/entity';
+import { AccountTypeDto } from '../dto/accountType.dto';
 
 @Injectable()
 export class AccountService {
 
-  @Inject(forwardRef(() => CustomerService))
-  private readonly customerServer: CustomerService;
-
-  constructor(private readonly accountRepository: AccountRepository, private readonly accountTypeRepository: AccountTypeRepository) {}
+  constructor(
+    private readonly accountRepository: AccountRepository, 
+    private readonly accountTypeRepository: AccountTypeRepository,
+    private readonly customerServer: CustomerService,) {}
 
   createAccount(account: CreateAccountdto): AccountEntity {
     const customer = this.customerServer.getCustomerInfo(account.customer);
+    //estoy buscando un accountType que no existe en la base de datos porque nunca lo creo
+    const accountType = this.accountTypeRepository.findOneById(account.accountTypeId);
     
-    const accountType = new AccountTypeEntity();
-    accountType.id = account.accountTypeId;
-
-
     const newAccount = new AccountEntity();
-    newAccount.account_type_id = accountType;
     newAccount.coustomer_id = customer;
+    newAccount.account_type_id = accountType;
     
     return this.accountRepository.register(newAccount);
   }
 
-  updateAccount(accountId: string, newAccount: AccountDto) {
-    let account = this.accountRepository.findOneById(accountId);
-    const customer = this.customerServer.getCustomerInfo(newAccount.id);
-    const accountType = this.accountTypeRepository.findOneById(newAccount.accountType);
+  createAccountType(accountTypeDTO: AccountTypeDto): AccountTypeEntity {
+    const newAccountType = new AccountTypeEntity();
+    newAccountType.name = accountTypeDTO.name;
 
-    account.account_type_id = accountType;
-    account.coustomer_id = customer;
-    account.balance = newAccount.balance;
-    account.state = newAccount.state;
+    return this.accountTypeRepository.register(newAccountType);
+  }
+
+  updateAccount(accountId: string, newAccount: AccountDto) {
+    let account = this.getById(accountId);
+    let accountType: AccountTypeEntity;
+    if(typeof newAccount.accountType != 'undefined') {
+      accountType = this.accountTypeRepository.findOneById(newAccount.accountType);
+      account.account_type_id = accountType;
+    }
+    
+    if(typeof newAccount.balance != 'undefined') account.balance = newAccount.balance;
+    if(typeof newAccount.state != 'undefined') account.state = newAccount.state;
 
     return this.accountRepository.update(accountId, account);
+
   }
 
   findByCustomer(
@@ -129,5 +137,18 @@ export class AccountService {
     this.accountRepository.delete(accountId);
   }
 
+  findAllAccountTypes(): AccountTypeEntity[] {
+    return this.accountTypeRepository.findAll()
+  }
+
+  findAccountType(id: string): AccountTypeEntity {
+    return this.accountTypeRepository.findOneById(id);
+  }
+
+  getCustomer(accountId: string): CustomerEntity {
+    return this.accountRepository.findOneById(accountId).coustomer_id; 
+  }
+
+  
 
 }

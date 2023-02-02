@@ -20,7 +20,7 @@ export class CustomerRepository
       (item) => item.id === entity.id && typeof item.daletedAt === 'undefined',
     );
 
-    if (!indexCurrentEntity) throw new NotFoundException();
+    if (indexCurrentEntity != -1) throw new NotFoundException(`El cliente ya existe`);
 
     this.database.push(entity);
     return this.database.at(-1) ?? entity;
@@ -32,7 +32,7 @@ export class CustomerRepository
       (item) => item.id === id && typeof item.daletedAt === 'undefined',
     );
 
-    if (indexCurrentEntity >= 0)
+    if (indexCurrentEntity != -1)
       this.database[indexCurrentEntity] = {
         ...this.database[indexCurrentEntity],
         ...entity,
@@ -47,7 +47,7 @@ export class CustomerRepository
     const indexCurrentEntity = this.database.findIndex(
       (item => item.id === id && typeof item.daletedAt === `undefined`));
 
-    if (!indexCurrentEntity) throw new NotFoundException();
+    if (indexCurrentEntity === -1) throw new NotFoundException(`No se encontro cliente para eliminar`);
 
     soft
       ? this.softDelete(indexCurrentEntity)
@@ -67,7 +67,7 @@ export class CustomerRepository
 
   findAll(): CustomerEntity[] {
     let allCustomer = this.database.filter(
-      (item) => typeof item.daletedAt === 'undefined',
+      (item) => typeof item.daletedAt === 'undefined'
     );
     if(allCustomer === undefined) throw new NotFoundException(`Customer Not found`);
     return allCustomer;
@@ -76,25 +76,25 @@ export class CustomerRepository
 //-----------------------------------------------------------------------------------------------------
 
   findOneById(id: string): CustomerEntity {
-    const currentEntity = this.database.find(
+    const currentEntity = this.database.findIndex(
       (item) => item.id === id && typeof item.daletedAt === 'undefined',
     );
-    if (!currentEntity) throw new NotFoundException();
+    if (currentEntity === -1) throw new NotFoundException();
 
-    return currentEntity;
+    return this.database[currentEntity];
   }
 
  //-----------------------------------------------------------------------------------------------------
 
   findOneByEmailAndPassword(email: string, password: string): CustomerEntity {
-    const indexCurrentEntity = this.database.find(
+    const indexCurrentEntity = this.database.findIndex(
       (item) =>
         item.email === email &&
         item.password === password &&
         typeof item.daletedAt === 'undefined',
     );
-    if(indexCurrentEntity === undefined) throw new NotFoundException(`Email : ${email} and password: ${password} Not found`);
-    return indexCurrentEntity;
+    if(indexCurrentEntity === -1) throw new NotFoundException(`Email : ${email} and password: ${password} Not found`);
+    return this.database[indexCurrentEntity];
   }
 
 //-----------------------------------------------------------------------------------------------------
@@ -111,7 +111,7 @@ export class CustomerRepository
       item.document === document &&
       typeof item.daletedAt === 'undefined',
     );
-    if(!indexCurrentEntity){
+    if(indexCurrentEntity === -1){
       throw new NotFoundException(`No se encontraron los datos`);
     }
     
@@ -128,7 +128,7 @@ export class CustomerRepository
         typeof item.daletedAt === 'undefined',
     );
 
-    if(!indexCurrentEntity){
+    if(indexCurrentEntity === -1){
         throw new NotFoundException(`email : ${email} not found`);
     }
 
@@ -144,7 +144,7 @@ export class CustomerRepository
         typeof item.daletedAt === 'undefined',
     );
 
-    if(!indexCurrentEntity){
+    if(indexCurrentEntity === -1){
         throw new NotFoundException(`Phone : ${phone} not found`);
     }
 

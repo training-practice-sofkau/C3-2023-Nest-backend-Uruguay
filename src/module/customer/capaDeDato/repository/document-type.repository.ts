@@ -10,7 +10,7 @@ export class DocumentTypeRepository extends BaseRepository<DocumentTypeEntity> i
 
     register(entity: DocumentTypeEntity): DocumentTypeEntity {
         const indexCurrentEntity = this.database.findIndex((item) => item.id === entity.id);
-        if (!indexCurrentEntity) throw new NotFoundException(`The Document:${entity.id} not found`);
+        if (indexCurrentEntity != -1) throw new NotFoundException(`The Document:${entity.id} ya existe`);
 
         this.database.push(entity);
         return this.database.at(-1) ?? entity; // si no existe ningun entity entonces te devulve un anterior
@@ -18,7 +18,7 @@ export class DocumentTypeRepository extends BaseRepository<DocumentTypeEntity> i
 
     update(id: string, entity: DocumentTypeEntity): DocumentTypeEntity {
         const indexCurrentEntity = this.database.findIndex(item => item.id === id);
-        if (!indexCurrentEntity) throw new NotFoundException(`The Document:${entity.id} not found`);
+        if (indexCurrentEntity === -1) throw new NotFoundException(`The Document:${entity.id} not found`);
 
         this.database[indexCurrentEntity] = {
             ...this.database[indexCurrentEntity],
@@ -32,25 +32,25 @@ export class DocumentTypeRepository extends BaseRepository<DocumentTypeEntity> i
     delete(id: string): void {
         const indexCurrentEntity = this.database.findIndex(item => item.id === id);
 
-        if (!indexCurrentEntity) throw new NotFoundException(`The Document:${id} not found`);
+        if (indexCurrentEntity === -1) throw new NotFoundException(`The Document:${id} not found`);
 
         this.database.splice(indexCurrentEntity);
     }
 
     findAll(): DocumentTypeEntity[] {
-        const docTypeEntitis = this.database.filter(item => item);
+        let docTypeEntitis = this.database.filter(item => item);
+        if(!docTypeEntitis) throw new NotFoundException(`no hay tipos de documentos`);
         //Tengo que usar el metodo slice para pasarle por parametros un rango
         return docTypeEntitis;
     }
 
     findOneById(id: string): DocumentTypeEntity {
-        const currentEntity = this.database.find(
-        (item) => item.id === id);
+        const currentEntity = this.database.findIndex((item) => item.id === id);
+        if (currentEntity === -1) throw new NotFoundException(`No se encontro el id : ${id}`);
 
-        if (!currentEntity) throw new NotFoundException();
-
-        return currentEntity;
+        return this.database[currentEntity];
     }
+
 
     findByState(state: boolean): DocumentTypeEntity[] {
         

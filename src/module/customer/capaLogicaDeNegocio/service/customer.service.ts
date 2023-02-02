@@ -1,30 +1,24 @@
-import { Inject, Injectable, forwardRef, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CustomerRepository } from "../../capaDeDato/repository/customer.repository";
 import { CustomerEntity } from 'src/module/customer/capaDeDato/entity/customer.entity';
 import { CustomerDto } from '../dto/customer.dto';
 import { AccountService } from 'src/module/account/capaLogicaDeNegocio/service';
 import { DocumentTypeEntity } from '../../capaDeDato/entity';
 import { DocumentTypeRepository } from '../../capaDeDato/repository';
-
-
-
-
+import { DocumentTypeDto } from '../dto/documentType.dto';
 
 @Injectable()
 export class CustomerService {
 
-  @Inject(forwardRef(() => AccountService))
-  private readonly accountService: AccountService;
-
   constructor(
-    private readonly customerRepository: CustomerRepository) {}
+    private readonly customerRepository: CustomerRepository,
+    private readonly documentTypeRepository: DocumentTypeRepository,
+    private readonly accountService: AccountService) {}
 
-
-    
   /**
    * Obtener información de un cliente
    */
-  createCustomer(customer: CustomerDto) {
+  createCustomer(customer: CustomerDto):CustomerEntity {
     const documentType = new DocumentTypeEntity();
     documentType.id = customer.documentType;
 
@@ -39,6 +33,11 @@ export class CustomerService {
     return this.customerRepository.register(newCustomer);
   }
 
+  createDocumentType(documentType : DocumentTypeDto):DocumentTypeEntity{
+    const newDocumentType = new DocumentTypeEntity();
+    newDocumentType.name = documentType.name;
+    return this.documentTypeRepository.register(newDocumentType);
+  }
 
   getCustomerInfo(customerId: string): CustomerEntity {
     let customer = this.customerRepository.findOneById(customerId);  
@@ -53,7 +52,13 @@ export class CustomerService {
   findAll(): CustomerEntity[] {
     return this.customerRepository.findAll();
   }
+  findAllDocumentType(): DocumentTypeEntity[] {
+    return this.documentTypeRepository.findAll();
+  }
 
+  findByIdDocumentType(id : string):DocumentTypeEntity{
+    return this.documentTypeRepository.findOneById(id);
+  }
   /**
    * Actualizar información de un cliente
    */
@@ -61,7 +66,7 @@ export class CustomerService {
     let customer = this.customerRepository.findOneById(id);
     
     
-    const documentType = new DocumentTypeEntity();
+    let documentType = new DocumentTypeEntity();
     documentType.id = newCustomer.documentType;
 
     
@@ -108,5 +113,6 @@ export class CustomerService {
 
     this.customerRepository.delete(customerId);
   }
+
 
 }

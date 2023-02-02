@@ -1,13 +1,13 @@
-import { IsEmail,IsNumberString, IsUUID, IsString } from 'class-validator';
+import { IsEmail,IsNumberString, IsString } from 'class-validator';
 
 export class CustomerDto{
 
-    @IsUUID(4, { message: "this must to be uuid" })
+    @IsString()
     documentType: string ;//DocumentTypeModel , es un tipo de dato que nosotros creamos
    
     @IsNumberString()
     document: string;
-   
+
     @IsString()
     fullName: string;
     

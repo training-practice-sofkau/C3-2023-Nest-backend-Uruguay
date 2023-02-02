@@ -1,22 +1,35 @@
-import { Controller,Post,Body } from '@nestjs/common';
+import { Controller, Post, Body, Param } from '@nestjs/common';
 
 import { SignInDto } from '../../capaLogicaDeNegocio/dto/sign-in.dto';
 import { SignUpDto } from '../../capaLogicaDeNegocio/dto/sign-up.dto';
 import { SegurityService } from '../../capaLogicaDeNegocio/service/segurity.service';
+import { DocumentTypeEntity } from 'src/module/customer';
 
-@Controller('segurity')
+@Controller('security')
 export class SegurityController {
 
     constructor(private readonly securityService:SegurityService) { }
 
-    @Post()
-    signUp(@Body() signUp: SignUpDto): string{
-        return this.securityService.signUp(signUp);
+    @Post(`/singIn`) //Hecho falta token
+    signIn(@Body() user: SignInDto): string{
+        return this.securityService.signIn(user)
     }
 
-    @Post()
-    signIn(@Body() signIn: SignInDto): string{
-        return this.securityService.signIn(signIn)
+    @Post( `/singUp`)//HECHO pero falta el token
+    signUp(@Body() user: SignUpDto): string{
+        return this.securityService.signUp(user);
     }
+
+   
+
+    // @Post('/singOut/:token')
+    // singOut(@Param('token') token: string): void {
+    //     this.securityService.signOut(token);
+    // }
+
+    
+    
+
+   
     
 }
