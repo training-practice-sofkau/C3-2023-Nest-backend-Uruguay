@@ -1,4 +1,4 @@
-import { Controller, Param, Post, Get, Delete } from '@nestjs/common';
+import { Controller, Param, Post, Get, Delete, Query } from '@nestjs/common';
 import { Body } from '@nestjs/common/decorators';
 import { TransferService } from 'src/business/services';
 import { DataRangeModel, PaginationModel } from 'src/data/models';
@@ -23,18 +23,18 @@ export class TransferController {
     }
 
     @Get('/get-history-out/:id')
-    getHistoryOut(@Param('id') id: string,@Body() pagination: PaginationModel,@Body() dataRange?: DataRangeModel): TransferEntity[] {
-        return this.transferService.getHistoryOut(id, pagination, dataRange);
+    getHistoryOut(@Param('id') id: string,@Query('offset') offset: number, @Query('limit') limit?: number,@Body() dataRange?: DataRangeModel): TransferEntity[] {
+        return this.transferService.getHistoryOut(id, offset, limit, dataRange);
     }
 
     @Get('/get-history-in/:id')
-    getHistoryIn(@Param('id') id: string,@Body() pagination: PaginationModel,@Body() dataRange?: DataRangeModel): TransferEntity[] {
-        return this.transferService.getHistoryIn(id, pagination, dataRange);
+    getHistoryIn(@Param('id') id: string,@Query('offset') offset: number, @Query('limit') limit?: number,@Body() dataRange?: DataRangeModel): TransferEntity[] {
+        return this.transferService.getHistoryIn(id, offset, limit, dataRange);
     }
     
     @Get('/get-history/:id')
-    getHistory(@Param('id') id: string, pagination: PaginationModel, dataRange?: DataRangeModel): TransferEntity[] {
-        return this.transferService.getHistory(id, pagination, dataRange);
+    getHistory(@Param('id') id: string, @Query('offset') offset: number, @Query('limit') limit?: number, @Body() dataRange?: DataRangeModel): TransferEntity[] {
+        return this.transferService.getHistory(id, offset, limit, dataRange);
     }
 
     @Delete('/soft-delete/:id')

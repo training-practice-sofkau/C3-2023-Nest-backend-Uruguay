@@ -3,21 +3,31 @@ import { AccountService } from 'src/business/services';
 import { PaginationModel } from 'src/data/models';
 import { AccountEntity, AccountTypeEntity, CustomerEntity } from 'src/data/persistence';
 import { AccountDTO, CreateAccountDTO } from 'src/business/dtos';
-import { TypeDTO } from '../../../business/dtos/type.dto';
+import { Logger } from '@nestjs/common/services';
 
 
 @Controller('account')
 export class AccountController {
+    private logger = new Logger('AccountController');
+
     constructor(private readonly accountService: AccountService) {}
 
-    @Post('/create-additional-account')
-    createAdditionalAccount(@Body() accountDTO: CreateAccountDTO): AccountEntity {
-        return this.accountService.createAccount(accountDTO);
+    @Post('/create-additional-checking-account')
+    createAdditionalCheckingAccount(@Body() accountDTO: CreateAccountDTO): AccountEntity {
+
+        this.accountService.accountObservable.subscribe(account => 
+            this.logger.log(`New Saving Account added to Customer: ${account.customer.fullName}`))
+        
+            return this.accountService.createChekingAccount(accountDTO);
     }
 
-    @Post('/account-type/create')
-    createAccountType(@Body() accountTypeDTO: TypeDTO): AccountTypeEntity {
-        return this.accountService.createAccountType(accountTypeDTO);
+    @Post('/create-additional-saving-account')
+    createAdditionalSavingAccount(@Body() accountDTO: CreateAccountDTO): AccountEntity {
+
+        this.accountService.accountObservable.subscribe(account => 
+            this.logger.log(`New Checking Account added to Customer: ${account.customer.fullName}`))
+        
+            return this.accountService.createSavingAccount(accountDTO);
     }
 
     @Put('/update/:accountId')
@@ -86,13 +96,13 @@ export class AccountController {
     }
 
     @Patch('/change-account-type/:accountId')
-    changeAccountType(@Param('accountId') accountId: string,@Body() accountTypeDTO: AccountDTO): AccountTypeEntity {
-        return this.accountService.changeAccountType(accountId, accountTypeDTO);
+    changeAccountType(@Param('accountId') accountId: string): AccountTypeEntity {
+        return this.accountService.changeAccountType(accountId);
     }
 
     @Patch('/change-state/:accountId')
-    changeState(@Param('accountId') accountId: string,@Body() state: AccountDTO) {
-        this.accountService.changeState(accountId, state);
+    changeState(@Param('accountId') accountId: string) {
+        this.accountService.changeState(accountId);
     }
 
     @Post('/remove-all-balance/:accountId')

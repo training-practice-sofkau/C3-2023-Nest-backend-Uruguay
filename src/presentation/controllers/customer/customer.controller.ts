@@ -12,11 +12,6 @@ export class CustomerController {
 
     constructor(private readonly customerService: CustomerService) {}
 
-    @Post('/document-type/create')
-    createDocumentType(@Body() documentTypeDTO: TypeDTO): DocumentTypeEntity {
-        return this.customerService.createDocumentType(documentTypeDTO);
-    }
-
     @Put('/update/:id')
     updateCustomer(@Param('id') id: string ,@Body() newCustomer: UpdateCustomerDTO): CustomerEntity {
         return this.customerService.updatedCustomer(id, newCustomer);
@@ -52,7 +47,7 @@ export class CustomerController {
     }
 
     @Patch('/change-state/:id')
-    changeState(@Param('id') id: string, @Body() state: CustomerStateDTO): void {
-        this.customerService.changeState(id, state);
+    changeState(@Param('id') id: string): void {
+        this.customerService.changeState(id);
     }
 }
