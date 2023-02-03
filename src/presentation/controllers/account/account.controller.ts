@@ -5,7 +5,7 @@ import { AccountDto, UpdateAccountDto, AccountTypeDto } from '../../../business/
 import { AccountEntity } from '../../../data/persistence/entities';
 import { ParseBoolPipe } from '@nestjs/common/pipes';
 import { AccountTypeEntity } from '../../../data/persistence/entities/account-type.entity';
-import { AccountTypeRepository } from '../../../data/persistence/repositories/';
+import { PaginationDto } from '../../../business/dtos';
 
 @Controller('account')
 export class AccountController {
@@ -13,8 +13,9 @@ export class AccountController {
         private readonly accountService: AccountService) {}
 
     @Get()
-    findAll(): AccountEntity[] {
-        return this.accountService.findAllAccounts();
+    @UsePipes(new ValidationPipe())
+    findAll(@Body() pagination?: PaginationDto | undefined): AccountEntity[] {
+        return this.accountService.findAllAccounts(pagination);
     }
 
     @Get(':id')
@@ -118,5 +119,29 @@ export class AccountController {
     @Post('type')
     createAccountType(@Body() accountType: AccountTypeDto): AccountTypeEntity {
         return this.accountService.createAccountType(accountType);
+    }
+
+    @Put('type/:id')
+    @UsePipes(new ValidationPipe())
+    updateAccountType(
+        @Param('id', ParseUUIDPipe) id: string,
+        @Body() edit: AccountTypeDto): AccountTypeEntity {
+            return this.accountService.updateAccountType(id, edit);
+    }
+    
+    @Delete('type/:id')
+    @UsePipes(new ValidationPipe())
+    deleteAccountType(@Param('id', ParseUUIDPipe) id: string): void {
+        this.accountService.deleteAccountType(id);
+    }
+
+    @Get('type')
+    getAllAccountType(): AccountTypeEntity[] {
+        return this.accountService.findAllAccountType();
+    }
+    @Get('type/:id')
+    @UsePipes(new ValidationPipe())
+    getOneAccountType(id: string): AccountTypeEntity {
+        return this.accountService.findOneAccountType(id);
     }
 }

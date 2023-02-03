@@ -9,12 +9,12 @@ import { PaginationDto } from '../../../business/dtos';
 export class DepositController {
     constructor(private readonly depositService: DepositService) {}
 
-    @Get('account/:id/:pagination/:datarange')
+    @Get('account/:id')
     @UsePipes(new ValidationPipe())
     getDeposits(
         @Param('id', ParseUUIDPipe) id: string,
-        @Param('pagination') pagination: PaginationDto,
-        @Param('datarange') datarange: DataRangeDto): DepositEntity[] {
+        @Body() pagination?: PaginationDto | undefined,
+        @Body() datarange?: DataRangeDto | undefined): DepositEntity[] {
         return this.depositService.getHistory(id, pagination, datarange);
     }
 

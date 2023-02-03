@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 
 import { AccountTypeEntity } from '../entities';
 import { BaseRepository } from './base';
@@ -10,6 +10,10 @@ export class AccountTypeRepository
     implements AccountTypeRepositoryInterface {
 
     register(entity: AccountTypeEntity): AccountTypeEntity {
+        const nameExisting = this.database.findIndex(accountType => accountType.name === entity.name);
+
+        if(nameExisting != -1) throw new ForbiddenException();
+
         this.database.push(entity);
         return this.database.at(-1) ?? entity;
     }

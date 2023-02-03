@@ -1,9 +1,8 @@
 import { BadRequestException, ForbiddenException, HttpException, Injectable } from '@nestjs/common';
 
-import { PaginationModel } from '../../../data/models';
 import { AccountEntity, AccountTypeEntity } from '../../../data/persistence/entities';
 import { AccountRepository, AccountTypeRepository, CustomerRepository } from '../../../data/persistence/repositories';
-import { AccountDto, AccountTypeDto, UpdateAccountDto } from '../../dtos';
+import { AccountDto, AccountTypeDto, UpdateAccountDto, PaginationDto } from '../../dtos';
 
 @Injectable()
 export class AccountService {
@@ -145,7 +144,7 @@ export class AccountService {
   /**
    * Obtener todas las cuentas
    */
-  findAllAccounts(pagination?: PaginationModel): AccountEntity[] {
+  findAllAccounts(pagination?: PaginationDto): AccountEntity[] {
     const accounts = this.accountRepository.findAll();
     let accountsPaginated: AccountEntity[] =[];
 
@@ -197,5 +196,26 @@ export class AccountService {
     }
     this.accountTypeRepository.register(newAccountType)
     return newAccountType;
-}
+  }
+
+  updateAccountType(id: string, dto: AccountTypeDto): AccountTypeEntity {
+    let accountTypeUpdated = this.accountTypeRepository.findOneById(id);
+    
+    accountTypeUpdated.name = dto.name;
+    accountTypeUpdated.state = dto.state;
+
+    return this.accountTypeRepository.update(id, accountTypeUpdated);
+  }
+
+  deleteAccountType(id: string): void {
+    this.accountTypeRepository.delete(id);
+  }
+
+  findAllAccountType(): AccountTypeEntity[] {
+    return this.accountTypeRepository.findAll();
+  }
+
+  findOneAccountType(id: string): AccountTypeEntity {
+    return this.accountTypeRepository.findOneById(id);
+  }
 }

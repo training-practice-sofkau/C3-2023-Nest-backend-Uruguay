@@ -1,9 +1,8 @@
 import { HttpException, Injectable } from '@nestjs/common';
 
-import { PaginationModel } from '../../../data/models';
 import { CustomerEntity, DocumentTypeEntity } from '../../../data/persistence/entities';
 import { CustomerRepository } from '../../../data/persistence/repositories';
-import { CustomerDto, DocumentTypeDto, UpdateCustomerDto } from '../../dtos';
+import { PaginationDto, CustomerDto, DocumentTypeDto, UpdateCustomerDto } from '../../dtos';
 import { DocumentTypeRepository } from '../../../data/persistence/repositories/document-type.repository';
 
 @Injectable()
@@ -93,7 +92,7 @@ export class CustomerService {
   /**
    * Obtener la lista de clientes
    */
-  findAllCustomers(pagination?: PaginationModel): CustomerEntity[] {
+  findAllCustomers(pagination?: PaginationDto): CustomerEntity[] {
     const customers = this.customerRepository.findAll();
     let customersPaginated: CustomerEntity[] =[];
 
@@ -117,17 +116,6 @@ export class CustomerService {
     }
   }
 
-  createDocumentType(dto: DocumentTypeDto): DocumentTypeEntity {
-    let newDocumentType = new DocumentTypeEntity();
-
-    newDocumentType = {
-      ...newDocumentType,
-      ...dto
-    }
-
-    this.documentTypeRepository.register(newDocumentType);
-    return newDocumentType;
-  }
 
   findOneByEmailAndPassword(email: string, password: string): boolean {
     return this.customerRepository.findOneByEmailAndPassword(email, password);
@@ -151,5 +139,39 @@ export class CustomerService {
 
   findByFullName(fullName: string): CustomerEntity[] {
     return this.customerRepository.findByFullName(fullName);
+  }
+
+
+  
+  createDocumentType(dto: DocumentTypeDto): DocumentTypeEntity {
+    let newDocumentType = new DocumentTypeEntity();
+
+    newDocumentType = {
+      ...newDocumentType,
+      ...dto
+    }
+    this.documentTypeRepository.register(newDocumentType);
+    return newDocumentType;
+  }
+
+  updateDocumentType(id: string, dto: DocumentTypeDto): DocumentTypeEntity {
+    let documentTypeUpdated = this.documentTypeRepository.findOneById(id);
+    
+    documentTypeUpdated.name = dto.name;
+    documentTypeUpdated.state = dto.state;
+
+    return this.documentTypeRepository.update(id, documentTypeUpdated);
+  }
+
+  deleteDocumentType(id: string): void {
+    this.documentTypeRepository.delete(id);
+  }
+
+  findAllDocumentType(): DocumentTypeEntity[] {
+    return this.documentTypeRepository.findAll();
+  }
+
+  findOneDocumentType(id: string): DocumentTypeEntity {
+    return this.documentTypeRepository.findOneById(id);
   }
 }
