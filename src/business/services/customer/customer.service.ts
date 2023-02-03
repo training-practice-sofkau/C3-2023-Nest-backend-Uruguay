@@ -4,6 +4,7 @@ import { CustomerEntity, DocumentTypeEntity } from '../../../data/persistence/en
 import { CustomerRepository } from '../../../data/persistence/repositories';
 import { PaginationDto, CustomerDto, DocumentTypeDto, UpdateCustomerDto } from '../../dtos';
 import { DocumentTypeRepository } from '../../../data/persistence/repositories/document-type.repository';
+import { PAtchDocumentTypeDto } from '../../dtos/patch-document-type.dto';
 
 @Injectable()
 export class CustomerService {
@@ -175,17 +176,18 @@ export class CustomerService {
     return newDocumentType;
   }
 
-  updateDocumentType(id: string, dto: DocumentTypeDto): DocumentTypeEntity {
+  updateDocumentType(id: string, dto: DocumentTypeDto | PAtchDocumentTypeDto): DocumentTypeEntity {
     let documentTypeUpdated = this.documentTypeRepository.findOneById(id);
     
-    documentTypeUpdated.name = dto.name;
-    documentTypeUpdated.state = dto.state;
+    if(dto.name) documentTypeUpdated.name = dto.name;
+    if(dto.state) documentTypeUpdated.state = dto.state;
 
     return this.documentTypeRepository.update(id, documentTypeUpdated);
   }
 
-  deleteDocumentType(id: string): void {
+  deleteDocumentType(id: string): string {
     this.documentTypeRepository.delete(id);
+    return 'Document type was successfully deleted';
   }
 
   findAllDocumentType(): DocumentTypeEntity[] {
@@ -194,5 +196,13 @@ export class CustomerService {
 
   findOneDocumentType(id: string): DocumentTypeEntity {
     return this.documentTypeRepository.findOneById(id);
+  }
+
+  findDocumentTypesByState(state: boolean): DocumentTypeEntity[] {
+    return this.documentTypeRepository.findByState(state);
+  }
+  
+  findDocumentTypesByName(name: string): DocumentTypeEntity[] {
+    return this.documentTypeRepository.findByName(name);
   }
 }

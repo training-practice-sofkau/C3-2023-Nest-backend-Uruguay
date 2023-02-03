@@ -70,13 +70,11 @@ export class DepositService {
     }
 
     if(dataRange) {
-      if(typeof dataRange.offset === 'number') dataRange.offset = new Date(dataRange.offset);
-      if(typeof dataRange.limit === 'number') dataRange.limit = new Date(dataRange.limit);
-      
       depositsFiltered = depositsFiltered.filter(
-        (deposit) => deposit.dateTime >= dataRange.offset && deposit.dateTime <= dataRange.limit);
+        deposit => deposit.dateTime >= dataRange.start && deposit.dateTime <= dataRange.end
+        );
     }
-    return depositsOfAccount;
+    return depositsFiltered;
   }
 
   getHistoryByAccountId(accountId: string): DepositEntity[] {

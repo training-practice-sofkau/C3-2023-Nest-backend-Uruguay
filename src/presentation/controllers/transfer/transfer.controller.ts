@@ -1,8 +1,8 @@
-import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, Put, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, Put, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 
 import { TransferService } from '../../../business/services';
 import { TransferEntity } from '../../../data/persistence/entities';
-import { TransferDto, UpdateTransferDto } from '../../../business/dtos';
+import { DataRangeDto, PaginationDto, TransferDto, UpdateTransferDto } from '../../../business/dtos';
 
 @Controller('transfer')
 export class TransferController {
@@ -10,8 +10,10 @@ export class TransferController {
 
     @Get('account/:id')
     @UsePipes(new ValidationPipe())
-    getTransfersAccount(@Param('id', ParseUUIDPipe) id: string): TransferEntity[] {
-        return this.transferService.getHistory(id);
+    getTransfersAccount(
+        @Param('id', ParseUUIDPipe) id: string,
+        @Query() pagination?: PaginationDto|undefined): TransferEntity[] {
+            return this.transferService.getHistory(id, pagination);
     }
     
     @Post()

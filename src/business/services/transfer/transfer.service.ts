@@ -4,7 +4,7 @@ import { DataRangeModel, PaginationModel } from '../../../data/models';
 import { TransferEntity } from '../../../data/persistence/entities';
 import { AccountRepository } from '../../../data/persistence/repositories/account.repository';
 import { TransferRepository,  } from '../../../data/persistence/repositories';
-import { TransferDto, UpdateTransferDto } from '../../../business/dtos';
+import { PaginationDto, DataRangeDto, TransferDto, UpdateTransferDto } from '../../../business/dtos';
 import { AccountService } from '../../services';
 
 @Injectable()
@@ -91,8 +91,8 @@ export class TransferService {
    */
   getHistory(
     accountId: string,
-    pagination?: PaginationModel,
-    dataRange?: DataRangeModel,
+    pagination?: PaginationDto,
+    dataRange?: DataRangeDto,
   ): TransferEntity[] {
     let transfersAccount: TransferEntity[] = [];
     const transterIn = this.getHistoryIn(accountId);
@@ -110,12 +110,9 @@ export class TransferService {
     }
     
     if(dataRange) {
-      if(typeof dataRange.offset === 'number') dataRange.offset = new Date(dataRange.offset);
-      if(typeof dataRange.limit === 'number') dataRange.limit = new Date(dataRange.limit);
-
       transfersFiltered = transfersFiltered.filter(
-        (transfer) => transfer.dateTime >= dataRange.offset && transfer.dateTime <= dataRange.limit
-      )
+        (transfer) => transfer.dateTime >= dataRange.start && transfer.dateTime <= dataRange.end
+      );
     }
     return transfersFiltered;
   }

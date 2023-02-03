@@ -1,4 +1,4 @@
-import { ParseBoolPipe, Body, UsePipes, Controller, Get, Post, Param, ParseUUIDPipe, ValidationPipe, Put, Patch, Delete } from '@nestjs/common';
+import { Query, ParseBoolPipe, Body, UsePipes, Controller, Get, Post, Param, ParseUUIDPipe, ValidationPipe, Put, Patch, Delete } from '@nestjs/common';
 
 import { CustomerService } from '../../../business/services';
 import { UpdateCustomerDto, DocumentTypeDto, PaginationDto } from '../../../business/dtos';
@@ -10,11 +10,12 @@ export class CustomerController {
 
     @Get()
     @UsePipes(new ValidationPipe())
-    findAll(@Body() pagination?: PaginationDto | undefined): CustomerEntity[] {
-        return this.customerService.findAllCustomers(pagination);
+    findAll(@Query() paginaton?: PaginationDto|undefined): CustomerEntity[] {
+        return this.customerService.findAllCustomers(paginaton);
     }
 
     @Get(':id')
+    @UsePipes(new ValidationPipe())
     findOneCustomerById(@Param('id',ParseUUIDPipe) id: string ): CustomerEntity {
         return this.customerService.getCustomerInfo(id);
     }
@@ -96,6 +97,7 @@ export class CustomerController {
     }
 
     @Post('document/type')
+    @UsePipes(new ValidationPipe())
     createDocumentType(@Body() documentType: DocumentTypeDto): DocumentTypeEntity {
         return this.customerService.createDocumentType(documentType);
     }
@@ -108,10 +110,18 @@ export class CustomerController {
             return this.customerService.updateDocumentType(id, edit);
     }
     
+    @Patch('document/type/:id')
+    @UsePipes(new ValidationPipe())
+    updateSomePropertiesDocumentType(
+        @Param('id', ParseUUIDPipe) id: string,
+        @Body() edit: DocumentTypeDto): DocumentTypeEntity {
+            return this.customerService.updateDocumentType(id, edit);
+    }
+
     @Delete('document/type/:id')
     @UsePipes(new ValidationPipe())
-    deleteDocumentType(@Param('id', ParseUUIDPipe) id: string): void {
-        this.customerService.deleteDocumentType(id);
+    deleteDocumentType(@Param('id', ParseUUIDPipe) id: string): string {
+        return this.customerService.deleteDocumentType(id);
     }
 
     @Get('document/type')
@@ -120,7 +130,19 @@ export class CustomerController {
     }
     @Get('document/type/:id')
     @UsePipes(new ValidationPipe())
-    getOneDocumentType(id: string): DocumentTypeEntity {
+    getOneDocumentType(@Param('id', ParseUUIDPipe) id: string): DocumentTypeEntity {
         return this.customerService.findOneDocumentType(id);
+    }
+
+    @Get('document/type/state/:state')
+    @UsePipes(new ValidationPipe())
+    getDocumentTypesByState(@Param('state', ParseBoolPipe) state: boolean): DocumentTypeEntity[] {
+        return this.customerService.findDocumentTypesByState(state);
+    }
+
+    @Get('document/type/name/:name')
+    @UsePipes(new ValidationPipe())
+    getDocumentTypesByName(@Param('name') name: string): DocumentTypeEntity[] {
+        return this.customerService.findDocumentTypesByName(name);
     }
 }

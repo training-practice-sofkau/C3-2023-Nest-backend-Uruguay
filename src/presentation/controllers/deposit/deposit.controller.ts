@@ -1,9 +1,8 @@
-import { Controller, Get, Param, UsePipes, ValidationPipe, ParseUUIDPipe, Post, Body, Delete, Put, Patch } from '@nestjs/common';
+import { Controller, Get, Param, UsePipes, ValidationPipe, ParseUUIDPipe, Post, Body, Delete, Put, Patch, Query } from '@nestjs/common';
 
 import { DepositEntity } from '../../../data/persistence/entities';
 import { DepositService } from '../../../business/services';
-import { DataRangeDto, DepositDto } from '../../../business/dtos';
-import { PaginationDto } from '../../../business/dtos';
+import { PaginationDto, DataRangeDto, DepositDto } from '../../../business/dtos';
 
 @Controller('deposit')
 export class DepositController {
@@ -11,11 +10,10 @@ export class DepositController {
 
     @Get('account/:id')
     @UsePipes(new ValidationPipe())
-    getDeposits(
+    getDepositsAccount(
         @Param('id', ParseUUIDPipe) id: string,
-        @Body() pagination?: PaginationDto | undefined,
-        @Body() datarange?: DataRangeDto | undefined): DepositEntity[] {
-        return this.depositService.getHistory(id, pagination, datarange);
+        @Query() pagination?: PaginationDto|undefined): DepositEntity[] {
+            return this.depositService.getHistory(id, pagination);
     }
 
     @Post()

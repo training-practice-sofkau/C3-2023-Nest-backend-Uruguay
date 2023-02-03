@@ -1,4 +1,4 @@
-import { Body, UsePipes, Controller, Get, Post, Param, ParseUUIDPipe, ValidationPipe, Put, Patch, Delete, ParseIntPipe } from '@nestjs/common';
+import { Body, UsePipes, Controller, Get, Post, Param, ParseUUIDPipe, ValidationPipe, Put, Patch, Delete, ParseIntPipe, Query } from '@nestjs/common';
 
 import { AccountService } from '../../../business/services';
 import { AccountDto, UpdateAccountDto, AccountTypeDto, PatchAccountTypeDto } from '../../../business/dtos';
@@ -14,7 +14,7 @@ export class AccountController {
 
     @Get()
     @UsePipes(new ValidationPipe())
-    findAll(@Body() pagination?: PaginationDto | undefined): AccountEntity[] {
+    findAll(@Query() pagination?: PaginationDto|undefined): AccountEntity[] {
         return this.accountService.findAllAccounts(pagination);
     }
 
