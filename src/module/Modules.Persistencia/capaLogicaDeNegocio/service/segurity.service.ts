@@ -12,10 +12,11 @@ import { CustomerEntity } from 'src/module/customer/capaDeDato/entity/customer.e
 import { AccountService } from 'src/module/account/capaLogicaDeNegocio/service';
 import { SignInDto } from '../dto/sign-in.dto';
 import { SignUpDto } from '../dto/sign-up.dto';
-import { CustomerRepository, DocumentTypeRepository } from '../../../customer';
 import { CreateAccountdto } from '../../../account/capaLogicaDeNegocio/dto/create-account.dto';
 import { AccountTypeRepository } from 'src/module/account/capaDeDato/repositories';
 import { CustomerService } from '../../../customer/capaLogicaDeNegocio/service/customer.service';
+import { CustomerRepository, DocumentTypeRepository } from 'src/module/customer/capaDeDato/repository';
+import { DocumentTypeEntity } from 'src/module/customer/capaDeDato/entity';
 
 
 
@@ -25,7 +26,6 @@ export class SegurityService {
   constructor(
     private readonly documentTypeRepository : DocumentTypeRepository,
     private readonly customerRepository : CustomerRepository,
-    private readonly CustomerService : CustomerService,
     private readonly accountypeRepository : AccountTypeRepository,
     private readonly accountService : AccountService){}
 
@@ -39,13 +39,15 @@ export class SegurityService {
     );
     if (!answer)  throw new UnauthorizedException(`No found user : ${user.username} and ${user.password}`);
     
-    //return jwt.sign({id: user.username},process.env.TOKEN_SECRET || `tokentest`);
-    return "token entrada";
+    return jwt.sign({id: user.username},process.env.TOKEN_SECRET || `tokentest`);
+    //return "token entrada";
   }
 
   signUp(user: SignUpDto): string {
 
-    const documentType = this.documentTypeRepository.findOneById(user.documentTypeId);
+    //const documentType = this.documentTypeRepository.findOneById(user.documentTypeId);
+    const documentType = new DocumentTypeEntity();
+    documentType.id = user.documentTypeId;
 
     const newCustomer = new CustomerEntity();
     newCustomer.documentType = documentType;
@@ -69,12 +71,12 @@ export class SegurityService {
 
       if (!account) throw new InternalServerErrorException();
 
-      // return jwt.sign(
-      //   { email: user.email, password: user.password },
-      //   process.env.TOKEN_SECRET || 'tokentest',
-      // );
-      return 'token'
-    } else throw new InternalServerErrorException();
+      return jwt.sign(
+        { email: user.email, password: user.password },
+        process.env.TOKEN_SECRET || 'tokentest',
+        );
+    // return 'token'
+    } return 'token';//else throw new InternalServerErrorException();
   }
 
   signOut(JWToken: string , res:Response): void {

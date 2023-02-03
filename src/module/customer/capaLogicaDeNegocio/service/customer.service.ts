@@ -6,6 +6,7 @@ import { AccountService } from 'src/module/account/capaLogicaDeNegocio/service';
 import { DocumentTypeEntity } from '../../capaDeDato/entity';
 import { DocumentTypeRepository } from '../../capaDeDato/repository';
 import { DocumentTypeDto } from '../dto/documentType.dto';
+import { CustomerStateDTO } from '../dto/customerStateDto';
 
 @Injectable()
 export class CustomerService {
@@ -90,10 +91,7 @@ export class CustomerService {
 
     const index = accounts.findIndex((account) => account.balance != 0);
 
-    if (index != -1)
-      throw new Error(
-        'Cannot Delete this Customer. Your accounts need a balance of 0',
-      );
+    if (index != -1)throw new Error( 'La cuenta tiene balance 0 ', );
       
     this.customerRepository.delete(id, true);
 
@@ -101,9 +99,9 @@ export class CustomerService {
 
   }
 
-  changeState(customerId: string ,state: boolean): void {
+  changeState(customerId: string ,state: CustomerStateDTO): void {
     const customer = this.customerRepository.findOneById(customerId);
-    customer.state = state;
+    customer.state = state.state;
 
     this.customerRepository.update(customerId, customer);
   }

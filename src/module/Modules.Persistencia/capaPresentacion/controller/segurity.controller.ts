@@ -3,7 +3,6 @@ import { Controller, Post, Body, Param } from '@nestjs/common';
 import { SignInDto } from '../../capaLogicaDeNegocio/dto/sign-in.dto';
 import { SignUpDto } from '../../capaLogicaDeNegocio/dto/sign-up.dto';
 import { SegurityService } from '../../capaLogicaDeNegocio/service/segurity.service';
-import { DocumentTypeEntity } from 'src/module/customer';
 
 @Controller('security')
 export class SegurityController {

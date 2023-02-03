@@ -46,7 +46,7 @@ export class DocumentTypeRepository extends BaseRepository<DocumentTypeEntity> i
 
     findOneById(id: string): DocumentTypeEntity {
         const currentEntity = this.database.findIndex((item) => item.id === id);
-        if (currentEntity === -1) throw new NotFoundException(`No se encontro el id : ${id}`);
+        if (currentEntity == -1) throw new NotFoundException(`No se encontro el id : ${id}`);
 
         return this.database[currentEntity];
     }

@@ -12,6 +12,9 @@ import { BaseRepository } from 'src/module/base/repositories';
 export class CustomerRepository
   extends BaseRepository<CustomerEntity>
   implements CustomerRepositoryInterface {
+  static getInstance(): CustomerRepository {
+    throw new Error('Method not implemented.');
+  }
  //-----------------------------------------------------------------------------------------------------
 //HECHA
   register(entity: CustomerEntity): CustomerEntity {
@@ -69,7 +72,7 @@ export class CustomerRepository
     let allCustomer = this.database.filter(
       (item) => typeof item.daletedAt === 'undefined'
     );
-    if(allCustomer === undefined) throw new NotFoundException(`Customer Not found`);
+    if(!allCustomer) throw new NotFoundException(`Customer Not found`);
     return allCustomer;
   }
 

@@ -2,10 +2,12 @@ import {  Injectable, NotAcceptableException } from '@nestjs/common';
 import { AccountRepository, AccountTypeRepository } from '../../capaDeDato/repositories';
 import { AccountEntity } from '../../capaDeDato/entity/account.entities';
 import { CreateAccountdto } from '../dto/create-account.dto';
-import { CustomerEntity, CustomerService } from 'src/module/customer';
-import { AccountDto } from '../dto/account.dto';
+import { AccountDTO } from '../dto/account.dto';
 import { AccountTypeEntity } from '../../capaDeDato/entity';
 import { AccountTypeDto } from '../dto/accountType.dto';
+import { CustomerEntity } from 'src/module/customer/capaDeDato/entity';
+import { CustomerRepository } from '../../../customer/capaDeDato/repository/customer.repository';
+import { PaginationModel } from 'src/module/base/models';
 
 @Injectable()
 export class AccountService {
@@ -13,10 +15,10 @@ export class AccountService {
   constructor(
     private readonly accountRepository: AccountRepository, 
     private readonly accountTypeRepository: AccountTypeRepository,
-    private readonly customerServer: CustomerService,) {}
+    private readonly customerRepository: CustomerRepository,) {}
 
   createAccount(account: CreateAccountdto): AccountEntity {
-    const customer = this.customerServer.getCustomerInfo(account.customer);
+    const customer = this.customerRepository.findOneById(account.customer);
     //estoy buscando un accountType que no existe en la base de datos porque nunca lo creo
     const accountType = this.accountTypeRepository.findOneById(account.accountTypeId);
     
@@ -34,9 +36,9 @@ export class AccountService {
     return this.accountTypeRepository.register(newAccountType);
   }
 
-  updateAccount(accountId: string, newAccount: AccountDto) {
-    let account = this.getById(accountId);
-    let accountType: AccountTypeEntity;
+  updateAccount(accountId: string, newAccount: AccountDTO) {
+    let account = this.accountRepository.findOneById(accountId);
+    let accountType = new AccountTypeEntity();
     if(typeof newAccount.accountType != 'undefined') {
       accountType = this.accountTypeRepository.findOneById(newAccount.accountType);
       account.account_type_id = accountType;
@@ -62,7 +64,9 @@ export class AccountService {
     return accountEntity;
   }
 
-
+  findAll(pagination: PaginationModel): AccountEntity[] {
+    return this.accountRepository.findAll(pagination);
+  }
 
   getBalance(accountId: string):number{
     
@@ -71,21 +75,24 @@ export class AccountService {
     return accountEntity.balance;
   }
 
-  addBalance(accountId: string, amount: number): void {
+  addBalance(accountId: string, amount: AccountDTO): void {
     const account = this.accountRepository.findOneById(accountId);
-    account.balance += amount;
+    if(typeof amount.balance != 'undefined')
+    account.balance += amount.balance;
+
     this.accountRepository.update(accountId,account);
   }
 
-  removeBalance(accountId: string, amount: number): void {
-    const account = this.accountRepository.findOneById(accountId);
+  removeBalance(accountId: string, amount: AccountDTO): void {
+    if(typeof amount.balance === 'undefined') throw new NotAcceptableException();
 
-    if(this.verifyAmountIntoBalance(accountId,amount) === false) 
+    if(this.verifyAmountIntoBalance(accountId,amount.balance) === false) 
     throw new NotAcceptableException(`El monto : ${amount}
     es incorrecto , verifique que el monto ingresado no sea inferior a 0, o superior al  
-    balance : ${account.balance}`); 
+    balance de la cuenta`); 
+    const account = this.accountRepository.findOneById(accountId);
 
-    account.balance -= amount;
+    account.balance -= amount.balance;
 
     this.accountRepository.update(accountId,account);
   }
@@ -114,8 +121,8 @@ export class AccountService {
   }
 
 
-  getAccountType(accountId: string): AccountEntity {
-    const account = this.accountRepository.findOneById(accountId);
+  getAccountType(accountId: string): AccountTypeEntity {
+    const account = this.accountTypeRepository.findOneById(accountId);
     return account;
   }
 
@@ -131,10 +138,10 @@ export class AccountService {
   deleteAccount(accountId: string , sof? : boolean): void {
     const entity = this.accountRepository.findOneById(accountId);
     if(entity.balance != 0) throw new Error(`No se puede borrar
-    la cuenta porque el balance no es 0 , por favor transfiera a otra cuenta `);
+    la cuenta porque el balance no es 0 `);
 
     if(sof) this.accountRepository.delete(accountId,sof);
-    this.accountRepository.delete(accountId);
+    if(!sof)this.accountRepository.delete(accountId);
   }
 
   findAllAccountTypes(): AccountTypeEntity[] {
