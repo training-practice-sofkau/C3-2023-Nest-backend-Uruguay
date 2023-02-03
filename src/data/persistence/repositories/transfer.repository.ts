@@ -78,6 +78,10 @@ export class TransferRepository
         dateInit: Date | number,
         dateEnd: Date | number,
     ): TransferEntity[] {
+
+        if(typeof dateInit === 'number') dateInit = new Date(dateInit);
+        if(typeof dateEnd === 'number') dateEnd = new Date(dateEnd);
+        
         const transfers = this.database.filter(
             (transfer) => transfer.income.id === accountId
                 && transfer.dateTime >= dateInit

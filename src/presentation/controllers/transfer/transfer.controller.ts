@@ -1,8 +1,8 @@
-import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, Put, UsePipes, ValidationPipe } from '@nestjs/common';
 
 import { TransferService } from '../../../business/services';
 import { TransferEntity } from '../../../data/persistence/entities';
-import { TransferDto } from '../../../business/dtos';
+import { TransferDto, UpdateTransferDto } from '../../../business/dtos';
 
 @Controller('transfer')
 export class TransferController {
@@ -41,4 +41,12 @@ export class TransferController {
     softDeleteTransfer(@Param('id', ParseUUIDPipe) id: string): void {
         this.transferService.softDeleteTransfer(id);
     }
+
+    @Put(':id')
+    @UsePipes(new ValidationPipe())
+    updateTransfer(
+        @Param('id', ParseUUIDPipe)id: string,
+        @Body() transfer: UpdateTransferDto): TransferEntity {
+            return this.transferService.updateTransfer(id, transfer);
+        }
 }

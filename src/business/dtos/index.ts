@@ -11,3 +11,4 @@ export * from './sign-up.dto';
 export * from './transfer.dto';
 export * from './update-account.dto';
 export * from './update-customer.dto';
+export * from './update-transfer.dto';
