@@ -47,7 +47,7 @@ export class CustomerService {
    */
   unsubscribe(id: string): boolean {
     this.CustomerRepository.delete(id)
-    return this.CustomerRepository.searchByAttributesforOne("id", id).state 
+    return true
 
   }
 }

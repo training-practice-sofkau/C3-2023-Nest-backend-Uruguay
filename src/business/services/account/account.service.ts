@@ -1,5 +1,5 @@
 import { AccountRepository } from './../../../Data/persistence/repositories/account.repository';
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { AccountDtos } from 'src/business/dtos/accountDtos';
 import { AccountEntity,  AccountTypeEntity, AccountTypeRepository, CustomerEntity } from 'src/Data/persistence';
 import { CustomerRepository } from '../../../Data/persistence/repositories/customer.repository';
@@ -23,28 +23,21 @@ export class AccountService {
   }
 
   registerNewAccountType(account: NewaccountDto): AccountEntity {
+
     const newAccount = new AccountEntity();
     const accountType = new AccountTypeEntity();
+
     accountType.id = account.accountTypeId;
+    accountType.name = account.name
     newAccount.accountType = accountType;
-    newAccount.accountType.name = account.name    
-  
-    const originalAccount = this.accountRepository.searchByAttributesforOne('id', account.accountID)
 
-      if(originalAccount.accountTypes?.length === undefined) {
-        originalAccount.accountTypes =  [newAccount.accountType, originalAccount.accountType]
-         originalAccount.accountType = new AccountTypeEntity()
-         originalAccount.accountType.id = ""
-         this.accountRepository.update(account.accountID, originalAccount)
-        return  this.accountRepository.register(originalAccount)
-      }
+    const customer = this.accountRepository.searchByAttributesforOne('id', account.accountID)
+    newAccount.customer = customer.customer;
+    newAccount.acc_Balance = 0;
+    newAccount.state = true;
 
-      originalAccount.accountTypes.push(newAccount.accountType)
-
-      this.accountRepository.update(account.accountID, originalAccount)
-
-      return  this.accountRepository.register(originalAccount)
     
+    return this.accountRepository.register(newAccount);
   }
 
   /**
@@ -151,6 +144,7 @@ export class AccountService {
       accountId,
     );
     account.state = state;
+    console.log(account.state);
     this.accountRepository.update(accountId, account);
   }
 
@@ -187,9 +181,15 @@ export class AccountService {
    * @memberof AccountService
    */
   deleteAccount(accountId: string, soft?: boolean): void {
-    this.accountRepository.delete(accountId, soft);
-  }
+    if(this.getBalance(accountId) === 0){
+      
+      this.accountRepository.delete(accountId, soft); 
 
+    }else{
+      
+      throw new InternalServerErrorException("Account is not Empty!");
+  }
+  }
   findALl(): AccountEntity[] {
     return this.accountRepository.findAll()
   }

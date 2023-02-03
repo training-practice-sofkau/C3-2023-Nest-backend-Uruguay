@@ -38,8 +38,8 @@ export class DepositService {
    * @param {string} depositId
    * @memberof DepositService
    */
-  deleteDeposit(depositId: string): void {
-    this.DepositRepository.delete(depositId);
+  deleteDeposit(depositId: string, soft?: boolean): void {
+    this.DepositRepository.delete(depositId, soft);
   }
 
   /**
@@ -56,8 +56,8 @@ export class DepositService {
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): DepositEntity[] {
-    let deposit = this.DepositRepository.findByAccountId(depositId)
-    console.log(deposit); 
+    let deposit = this.DepositRepository.findByAccountId(depositId);
+
     if (dataRange) {
       let { dateInit, dateEnd = Date.now() } = dataRange;
       deposit = deposit.filter(

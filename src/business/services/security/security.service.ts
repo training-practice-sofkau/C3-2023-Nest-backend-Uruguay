@@ -92,9 +92,7 @@ export class SecurityService {
    */
   signOut(JWToken: string): void {
     if (!jwt.verify(JWToken, process.env.TOKEN_SECRET || "tokentest"))throw new Error('Method not implemented.'); 
-
       console.log("Sign Out Complete")
-
   }
 
   

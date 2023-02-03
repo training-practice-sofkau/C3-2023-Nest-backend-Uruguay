@@ -18,7 +18,7 @@ export class DepositRepository
       (entity) => entity[attributes] === dataToSearch,
     );
     if (currentEntity) return currentEntity;
-    else throw new NotFoundException();
+    else throw new NotFoundException('The data is not in our database');
   }
   searchByAttributes(
     attributes: keyof DepositEntity,
@@ -28,7 +28,7 @@ export class DepositRepository
       (entity) => entity[attributes] === dataToSearch,
     );
     if (currentEntity) return currentEntity;
-    else throw new NotFoundException();
+    else throw new NotFoundException('The data is not in our database');
   }
   register(entity: DepositEntity): DepositEntity {
     this.database.push(entity);
@@ -45,7 +45,7 @@ export class DepositRepository
         ...entity,
         id,
       } as DepositEntity;
-    else throw new NotFoundException();
+    else throw new NotFoundException('The data is not in our database');
     return this.database[indexCurrentEntity];
   }
 
@@ -80,7 +80,7 @@ export class DepositRepository
       (item) => item.accountid.id === accountId,
     );
     if (currentEntity) return currentEntity;
-    else throw new NotFoundException();
+    else throw new NotFoundException('The data is not in our database');
   }
 
   findByDataRange(accountId: string, dateInit: Date | number, dateEnd: Date | number, paginator?: PaginationModel): DepositEntity[] {
@@ -91,7 +91,7 @@ export class DepositRepository
           item.date_time <= dateEnd && 
           item.accountid.id == accountId
     );
-    if (finded == undefined) throw new NotFoundException();
+    if (finded == undefined) throw new NotFoundException('The data is not in our database');
     return finded.slice(paginator?.offset, paginator?.limit);
   }
 

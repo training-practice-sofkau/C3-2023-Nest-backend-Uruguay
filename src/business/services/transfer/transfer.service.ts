@@ -79,25 +79,22 @@ export class TransferService {
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
     let transfers;
-    if (dataRange) {
-      let { dateInit, dateEnd = Date.now() } = dataRange;
-      transfers = this.TransferRepository.findIncomeByDataRange(accountId, dateInit, dateEnd);
-    } else {
-      transfers = this.TransferRepository.findOneById(accountId);
-    }
-
-    if (dataRange) {
-      transfers = transfers.filter(
-        (transfer) =>
-          transfer.dateTime >= dataRange.dateInit &&
-          transfer.dateTime <= dataRange.dateEnd,
-      );
-    }
-
+    transfers = this.TransferRepository.findOneById(accountId);
+        
     if (pagination) {
       let { offset = 0, limit = 0 } = pagination;
       transfers = transfers.slice(offset, offset + limit);
     }
+
+    if (dataRange) {
+      let { dateInit, dateEnd = Date.now() } = dataRange;
+      transfers = transfers.filter(
+        (transfer) =>
+          transfer.dateTime >= dateInit &&
+          transfer.dateTime <= dateEnd,
+      );
+    }
+
     return transfers;
   }
 
@@ -118,7 +115,7 @@ export class TransferService {
     let transfers;
     if (dataRange) {
       let { dateInit, dateEnd = Date.now() } = dataRange;
-      transfers = this.TransferRepository.findIncomeByDataRange(accountId, dateInit, dateEnd);
+      transfers = this.TransferRepository.findOutcomeByDataRange(accountId, dateInit, dateEnd);
     } else {
       transfers = this.TransferRepository.findOneById(accountId);
     }

@@ -12,8 +12,5 @@ export class AccountEntity implements AccountModel {
   id = uuid();
   name: string ;
   state: boolean ;
-
-  accountTypes?: AccountTypeEntity[];
-
  
 }
