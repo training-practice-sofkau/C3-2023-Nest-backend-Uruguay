@@ -5,8 +5,8 @@ import {
     UnauthorizedException,
   } from '@nestjs/common';
   
-import jwt  from 'jsonwebtoken';
 
+import * as jwt from 'jsonwebtoken';
 
 import { CustomerEntity } from 'src/module/customer/capaDeDato/entity/customer.entity';
 import { AccountService } from 'src/module/account/capaLogicaDeNegocio/service';
@@ -39,8 +39,7 @@ export class SegurityService {
     );
     if (!answer)  throw new UnauthorizedException(`No found user : ${user.username} and ${user.password}`);
     
-    return jwt.sign({id: user.username},process.env.TOKEN_SECRET || `tokentest`);
-    //return "token entrada";
+    return jwt.sign({id: user.username},process.env.TOKEN || `tokenEntrada`);
   }
 
   signUp(user: SignUpDto): string {
@@ -69,16 +68,16 @@ export class SegurityService {
       const account = this.accountService.createAccount(newAccount);
 
       if (!account) throw new InternalServerErrorException();
+      return jwt.sign(
+        { email: user.email, password: user.password }
+        ,process.env.TOKEN || 'tokenRegistro');
 
-      
-    //return 'token'
-    }return jwt.sign(
-      { email: user.email, password: user.password },
-      process.env.TOKEN_SECRET || 'tokentest',
-      );
+    }else throw new InternalServerErrorException(`Error al registrase`);
   }
 
-  signOut(JWToken: string , res:Response): void {
-   //\\res.clearCookie(JWToken);
+  signOut(JWToken: string): void {
+    if(!jwt.verify(
+      JWToken, process.env.TOKEN || 'tokenSalida')
+      ) throw new Error('JWT No Valido');
   }
 }

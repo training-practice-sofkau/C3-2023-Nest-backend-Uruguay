@@ -21,10 +21,10 @@ export class SegurityController {
 
    
 
-    // @Post('/singOut/:token')
-    // singOut(@Param('token') token: string): void {
-    //     this.securityService.signOut(token);
-    // }
+    @Post('/singOut/:token')
+    singOut(@Param('token') token: string): void {
+        this.securityService.signOut(token);
+    }
 
     
     
