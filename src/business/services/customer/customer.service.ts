@@ -1,4 +1,4 @@
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 
 import { CustomerEntity, DocumentTypeEntity } from '../../../data/persistence/entities';
 import { CustomerRepository } from '../../../data/persistence/repositories';
@@ -23,6 +23,12 @@ export class CustomerService {
 
     const newACustomer = new CustomerEntity();
     newACustomer.fullName = customer.fullName;
+
+    let documentExisting = this.customerRepository.findAll()
+      .findIndex(customerExisting => customerExisting.document === customer.document);
+
+    if(documentExisting != -1) throw new ForbiddenException('This document is already used by another costumer');
+
     newACustomer.document = customer.document;
     newACustomer.documentType = documentTypeExisting;
     newACustomer.email = customer.email;
@@ -50,7 +56,16 @@ export class CustomerService {
 
     if(customer.avatarUrl) customerUpdated.avatarUrl = customer.avatarUrl;
     if(customer.daletedAt) customerUpdated.deletedAt = customer.daletedAt;
-    if(customer.document) customerUpdated.document = customer.document;
+
+    if(customer.document){
+      let documentExisting = this.customerRepository.findAll()
+      .findIndex(customerExisting => customerExisting.document === customer.document);
+      
+      if(documentExisting != -1) throw new ForbiddenException('This document is already used by another costumer');
+      
+      customerUpdated.document = customer.document;
+    }
+
     if(customer.documentType) {
       let documentTypeExisting = this.documentTypeRepository.findOneById(customer.documentType);
 
@@ -58,6 +73,7 @@ export class CustomerService {
 
       customerUpdated.documentType = documentTypeExisting;
     }
+    
     if(customer.email) customerUpdated.email = customer.email;
     if(customer.fullName) customerUpdated.fullName = customer.fullName;
     if(customer.password) customerUpdated.password = customer.password;
