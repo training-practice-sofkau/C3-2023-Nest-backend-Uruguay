@@ -51,10 +51,10 @@ export class CustomerRepository extends Base<CustomerEntity> implements CRUD<Cus
 
   findOneById(id: string): CustomerEntity {
 
-    const currentEntity = this.database.find(
+    const currentEntity = this.database.findIndex(
       (item) => item.id === id && typeof item.daletedAt === 'undefined',
     );
-    if (currentEntity) return currentEntity;
+    if (currentEntity) return this.database[currentEntity];
     else throw new NotFoundException("Customer: Elemento no encontrado");
 
   }

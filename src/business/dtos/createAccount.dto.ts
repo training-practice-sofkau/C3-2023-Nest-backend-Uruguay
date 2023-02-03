@@ -4,10 +4,10 @@ export class CreateAccountDto {
 
 
     @IsUUID(4, { message: "this must to be uuid" })
-    id= String();
+    id:string;
 
     @IsUUID(4, { message: "this must to be uuid" })
-    Customerid: string;
+    CustomerId: string;
 
     @IsUUID(4, { message: "this must to be uuid" })
     account_type_id: string;

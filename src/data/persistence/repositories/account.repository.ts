@@ -75,8 +75,10 @@ if (soft){
     const currentEntity = this.database.find(
       (item) => item.id === id && typeof item.deleted_at === 'undefined',
     );
-    if (currentEntity) return currentEntity;
-    else throw new NotFoundException("Elemento no encontrado");
+    if (!currentEntity)throw new NotFoundException("Elemento no encontrado"); 
+    return currentEntity;
+    
+    
   }
 
   findByState(state: boolean): AccountEntity[] {

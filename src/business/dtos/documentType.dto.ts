@@ -1,7 +1,6 @@
 import { IsUUID, IsNumber, IsBoolean, IsString, IsNotEmpty } from 'class-validator';
 
-export class CreateAccountTypeDto {
-
+export class DocumentTypeDto {
 
     @IsUUID(4, { message: "this must to be uuid" })
     id:string;

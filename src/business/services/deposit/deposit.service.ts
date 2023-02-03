@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DepositEntity } from 'src/data/persistence';
+import { AccountRepository, DepositEntity } from 'src/data/persistence';
 import { DepositRepository } from '../../../data/persistence/repositories/deposit.repository';
 import { depositDto } from '../../dtos/deposit.dto';
 import { AccountEntity } from '../../../data/persistence/entities/account.entity';
@@ -10,7 +10,8 @@ import { DataRangeDto } from 'src/business/dtos/datarange.dto';
 export class DepositService {
 
     constructor(
-        private readonly depositRepocitory: DepositRepository
+        private readonly depositRepocitory: DepositRepository,
+        private readonly accountRepocitory: AccountRepository
     ) { }
 
     /**
@@ -24,11 +25,13 @@ export class DepositService {
    */
     createDeposit(deposit: depositDto): DepositEntity {
         const newDeposit = new DepositEntity()
-        const newAccount = new AccountEntity
-        newAccount.id = deposit.account_id
+        const newAccount = this.accountRepocitory.findOneById(deposit.account_id)
+        newAccount.balance += deposit.amount
         newDeposit.account_id = newAccount
         newDeposit.amount = deposit.amount
         newDeposit.date_time = Date.now()
+        
+        
         return this.depositRepocitory.register(newDeposit);
     }
 
@@ -52,17 +55,14 @@ export class DepositService {
      * @memberof DepositService
      */
     getHistory(
-        depositId: string,
+        accountId: string,
         pagination?: PaginationDto,
         dataRange?: DataRangeDto,
     ): DepositEntity[] {
-        /*let deposit = this.depositRepocitory.findAll
-
-        if (pagination)
-            let { offset = 0, limit = 0 } = pagination;
-        deposit = deposit.slice(offset, offset + limit);
-*/
-        return []
+        if (dataRange){
+            return this.depositRepocitory.findByDataRangeById(accountId, dataRange?.Min, dataRange?.Max, pagination);
+          } else return this.depositRepocitory.findByAccountId(accountId);
+        //return  this.depositRepocitory.findByDataRangeById(depositId, dataRange, pagination?)
     }
 
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {  CreateAccountDto } from 'src/business/dtos/createAccount.dto';
+import { CreateAccountDto } from 'src/business/dtos/createAccount.dto';
 import { AccountEntity, AccountTypeEntity, CustomerRepository } from 'src/data/persistence';
 import { AccountRepository } from '../../../data/persistence/repositories/account.repository';
 import { ChangeAccountTypeDto } from '../../dtos/changeAccountType.dto';
@@ -35,8 +35,8 @@ export class AccountService {
     createAccountType(accountType: CreateAccountTypeDto): AccountTypeEntity {
         try {
             const accType = new AccountTypeEntity()
-            accType.id= accountType.id
-            accType.name= accountType.name
+            
+            accType.name = accountType.name
             accType.state = true
             return this.accountTypeRepocitory.register(accType);
         } catch (error) {
@@ -50,13 +50,16 @@ export class AccountService {
             const newAccountType = this.accountTypeRepocitory.findOneById(account.account_type_id)
             newAccount.account_type_id = newAccountType
             newAccount.balance = account.balance
+            //aca deberiamos traer el objeto Customer por id
+            //pero como estamos haciendo pruebas es mas factible asi
+            newAccount.customer_id = this.customerRepocitory.findOneById(account.CustomerId)
             return this.accountRepository.register(newAccount);
         } catch (error) {
             throw new Error('This method is not implemented createAccount');
         }
     }
 
-    
+
     /**
      * Obtener el balance de una cuenta
      *
@@ -181,10 +184,10 @@ export class AccountService {
         let acc = this.accountRepository.findOneById(account.id)
         acc.account_type_id.id = account.account_type_id
         acc.balance = account.balance
-        acc.customer_id = this.customerRepocitory.findOneById(account.Customerid)
+
+        acc.customer_id = this.customerRepocitory.findOneById(account.CustomerId)
         acc.state = account.state
-        
-        
+
         return this.accountRepository.update(account.id, acc)
     }
 
@@ -204,15 +207,15 @@ export class AccountService {
     }
 
     getAccountTypeAll(): AccountTypeEntity[] {
-        let acc:AccountTypeEntity[] = []
+        let acc: AccountTypeEntity[] = []
         acc = this.accountTypeRepocitory.findAll();
         return acc
     }
-    
+
     getAccountAll(): AccountEntity[] {
-        let acc:AccountEntity[] = []
+        let acc: AccountEntity[] = []
         acc = this.accountRepository.findAll();
         return acc
     }
-    
+
 }

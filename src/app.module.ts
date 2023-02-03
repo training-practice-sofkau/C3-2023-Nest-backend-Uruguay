@@ -10,6 +10,9 @@ import { CustomerRepository } from './data/persistence/repositories/customer.rep
 import { AccountTypeRepository } from './data/persistence/repositories/account-type.repository';
 import { AccountRepository, DepositRepository, DocumentTypeRepository, TranferRepository } from './data/persistence';
 import { JwtModule } from '@nestjs/jwt';
+import { DepositController } from './presentation/controllers/deposit/deposit.controller';
+import { TransferController } from './presentation/controllers/transfer/transfer.controller';
+import { CustomerController } from './presentation/controllers/customer/customer.controller';
 
 
 @Module({
@@ -17,7 +20,8 @@ import { JwtModule } from '@nestjs/jwt';
     secret: 'process.env.JWT_SECRET',
     signOptions: { expiresIn: '2h'}}
   )],
-  controllers: [SecurityController, AccountController],
+  controllers: [SecurityController, AccountController, 
+    DepositController,TransferController, CustomerController],
   providers: [
 
 

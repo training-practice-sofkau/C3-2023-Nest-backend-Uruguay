@@ -1,11 +1,8 @@
 import { Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
-import { AccountTypeEntity, CustomerEntity, CustomerRepository, DocumentTypeEntity } from 'src/data/persistence';
+import { CustomerEntity, CustomerRepository, DocumentTypeEntity } from 'src/data/persistence';
 import { AccountService } from '../account';
-import { DocumentTypeRepository } from '../../../data/persistence/repositories/document-type.repository';
 import { SignUpDto } from 'src/business/dtos/sign-up.dto';
 import { SignInDto } from 'src/business/dtos/sign-in.dto';
-import { AccountEntity } from '../../../data/persistence/entities/account.entity';
-import { AccountTypeRepository } from '../../../data/persistence/repositories/account-type.repository';
 import { JwtService } from '@nestjs/jwt';
 import * as jwt from "jsonwebtoken"
 import { CreateAccountDto } from 'src/business/dtos/createAccount.dto';
@@ -17,9 +14,7 @@ export class SecurityService {
   constructor(
     private readonly customerRepository: CustomerRepository,
     private readonly accountService: AccountService,
-    private readonly documentTypeRepository: DocumentTypeRepository,
-    private readonly accountTypeRepository: AccountTypeRepository,
-    private jwtService: JwtService
+    //private jwtService: JwtService
 
 
   ) { }
@@ -65,7 +60,7 @@ export class SecurityService {
 
     if (customer) {
       const newAccount = new CreateAccountDto()
-      newAccount.Customerid = customer.id
+      newAccount.CustomerId = customer.id
       newAccount.account_type_id = user.accountTypeId
       newAccount.balance = user.balance || 0
 
@@ -73,7 +68,7 @@ export class SecurityService {
       const account = this.accountService.createAccount(newAccount);
       if (account) {
         //this.jwtService.verify(JWToken, { secret: "Sofka" });
-        return this.jwtService.sign({ id: customer.id }, { secret: "Sof" });
+        return jwt.sign({ id: customer.id },   process.env.TOKEN_SECRET || "tokentest");
 
       } else throw new InternalServerErrorException();
     } else throw new InternalServerErrorException();
@@ -86,20 +81,16 @@ export class SecurityService {
    * @memberof SecurityService
    */
 
-  /*
-    signOut(JWToken: string): void {
-         jwt.verify(JWToken, 'secret'){
-          if (err) {
-              console.log('Invalid token');
-          } else {
-              // Eliminar el token del almacenamiento local del cliente
-              localStorage.removeItem('token');
-              // Redirigir al usuario a la página de inicio de sesión
-              window.location.href = '/login';
-          }throw new Error('Method not implemented.');
-    }
-  
 
+  signOut(JWToken: string): void {
+    if (!jwt.verify(JWToken, process.env.TOKEN_SECRET || "tokentest"))throw new Error('Method not implemented.'); 
+     
+      //localStorage.removeItem('token');
+      console.log("Sign Out Complete. ")
+      //window.location.href = '/login';
+    
   }
-*/
+
+
 }
+

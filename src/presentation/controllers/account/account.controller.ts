@@ -17,7 +17,9 @@ export class AccountController extends ObservableHandel {
     //Un solo delete  ya que luego en 
     //repositorio en base al valor booleno
     //se sabe si es logico o fisico
-    deleteAccount(accountId: string, sof?: boolean): void {
+    
+    @Delete('delete/')
+    deleteAccount(@Body()accountId: string,  sof?: boolean): void {
         this.accountService.deleteAccount(accountId, sof)
     }
     /*
@@ -43,22 +45,26 @@ export class AccountController extends ObservableHandel {
     //Crear cuenta
     @Post('createAccount')
     createAccount(@Body() account: CreateAccountDto): AccountEntity {
+        console.log(account.id)
         return this.accountService.createAccount(account);
     }
 
-    @Post('updateAccount')
+    @Put('updateAccount')
     updateAccount(@Body() account: CreateAccountDto): AccountEntity {
+        console.log(account)
         return this.accountService.updateAccount(account);
     }
 
-    private logger = new Logger('AccountType')
+    //private logger = new Logger('AccountType')
     @Post('createAccountType')
     createAccountType(@Body() accountType: CreateAccountTypeDto): AccountTypeEntity {
         //return
         const NewAccountType = this.accountService.createAccountType(accountType);
+        /*
         this.handle(NewAccountType).subscribe(type => {
             this.logger.log(`Account Type create:${type}`)
         })
+*/
         return NewAccountType
 
     }

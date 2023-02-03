@@ -38,7 +38,7 @@ class BankAccount {
   }
 }
 
-//Usar la clase BankAccount
+//contexto
 const currentAccount = new BankAccount(new CurrentAccount());
 currentAccount.deposit(1000);
 console.log(currentAccount.getInterest()); // 10

@@ -8,7 +8,7 @@ import { transferDto } from '../../../business/dtos/transfer.dto';
 export class TransferController {
   constructor(private readonly transferService: TransferService) {}
 
-  @Post()
+  @Post('register')
   createTransfer(@Body() transfer: transferDto) {
     return this.transferService.createTransfer(transfer);
   }
@@ -40,7 +40,7 @@ export class TransferController {
     return this.transferService.getHistory(accountId, pagination, dataRange);
   }
 
-  @Delete(':transferId')
+  @Delete('delete/:transferId')
   deleteTransfer(@Param('transferId') transferId: string) {
     return this.transferService.deleteTransfer(transferId);
   }
