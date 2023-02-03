@@ -41,25 +41,27 @@ export class TransferService {
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    let transfer = this.TransferRepository.searchByAttributes(
-      'id',
-      accountId,
-    );    
-
+    let transfers;
     if (dataRange) {
       let { dateInit, dateEnd = Date.now() } = dataRange;
-      transfer = transfer.filter(
+      transfers = this.TransferRepository.findIncomeByDataRange(accountId, dateInit, dateEnd);
+    } else {
+      transfers = this.TransferRepository.findOneById(accountId);
+    }
+
+    if (dataRange) {
+      transfers = transfers.filter(
         (transfer) =>
-        transfer.dateTime >= dateInit &&
-        transfer.dateTime <= dateEnd,
+          transfer.dateTime >= dataRange.dateInit &&
+          transfer.dateTime <= dataRange.dateEnd,
       );
     }
+
     if (pagination) {
       let { offset = 0, limit = 0 } = pagination;
-      transfer = transfer.slice(offset, offset + limit);
+      transfers = transfers.slice(offset, offset + limit);
     }
-    
-    return transfer;
+    return transfers;
   }
 
   /**
@@ -76,20 +78,27 @@ export class TransferService {
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    let transfer = this.TransferRepository.searchByAttributes('id', accountId);
+    let transfers;
     if (dataRange) {
       let { dateInit, dateEnd = Date.now() } = dataRange;
-      transfer = transfer.filter(
+      transfers = this.TransferRepository.findIncomeByDataRange(accountId, dateInit, dateEnd);
+    } else {
+      transfers = this.TransferRepository.findOneById(accountId);
+    }
+
+    if (dataRange) {
+      transfers = transfers.filter(
         (transfer) =>
-          transfer.dateTime >= dateInit &&
-          transfer.dateTime <= dateEnd,
+          transfer.dateTime >= dataRange.dateInit &&
+          transfer.dateTime <= dataRange.dateEnd,
       );
     }
+
     if (pagination) {
       let { offset = 0, limit = 0 } = pagination;
-      transfer = transfer.slice(offset, offset + limit);
+      transfers = transfers.slice(offset, offset + limit);
     }
-    return transfer;
+    return transfers;
   }
 
   /**
@@ -106,22 +115,29 @@ export class TransferService {
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    let transfer = this.TransferRepository.searchByAttributes('id', accountId);
+    let transfers;
     if (dataRange) {
       let { dateInit, dateEnd = Date.now() } = dataRange;
-      transfer = transfer.filter(
+      transfers = this.TransferRepository.findIncomeByDataRange(accountId, dateInit, dateEnd);
+    } else {
+      transfers = this.TransferRepository.findOneById(accountId);
+    }
+
+    if (dataRange) {
+      transfers = transfers.filter(
         (transfer) =>
-          transfer.dateTime >= dateInit &&
-          transfer.dateTime <= dateEnd,
+          transfer.dateTime >= dataRange.dateInit &&
+          transfer.dateTime <= dataRange.dateEnd,
       );
     }
 
     if (pagination) {
       let { offset = 0, limit = 0 } = pagination;
-      transfer = transfer.slice(offset, offset + limit);
+      transfers = transfers.slice(offset, offset + limit);
     }
-    return transfer;
+    return transfers;
   }
+
 
   /**
    * Borrar una transacción

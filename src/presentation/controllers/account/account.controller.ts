@@ -22,6 +22,9 @@ const newAccount = this.AccountService.registerNewAccountType(account)
     })
     return newAccount
   }
+
+
+  
   @Get('getBalance/:id')
   getBalance(@Param('id' , ParseUUIDPipe )accountId: string): number {
     

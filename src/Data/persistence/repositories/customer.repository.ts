@@ -66,7 +66,7 @@ export class CustomerRepository
         item.email === email &&
         item.password === password ,
     );
-    return indexCurrentEntity >= -1 ? true : false;
+    return indexCurrentEntity >= 0 ? true : false;
   }
 
   findOneByDocumentTypeAndDocument(

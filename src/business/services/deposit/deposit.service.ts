@@ -25,7 +25,8 @@ export class DepositService {
     newDeposit.amount = deposit.amount;
     newDeposit.date_time = new Date();
     newDeposit.state = true;
-    newDeposit.id = deposit.accountId
+    newDeposit.accountid.id  = deposit.accountId      
+
     console.log(newDeposit);
     this.AccountService.addBalance(deposit.accountId, deposit.amount)
     return this.DepositRepository.register(newDeposit);
@@ -55,14 +56,14 @@ export class DepositService {
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): DepositEntity[] {
-    let deposit = this.DepositRepository.findByAccountId(depositId); 
+    let deposit = this.DepositRepository.findByAccountId(depositId)
     console.log(deposit); 
     if (dataRange) {
       let { dateInit, dateEnd = Date.now() } = dataRange;
       deposit = deposit.filter(
         (deposit) =>
-          deposit.date_time.getTime() >= dateInit &&
-          deposit.date_time.getTime() <= dateEnd,
+          deposit.date_time >= dateInit &&
+          deposit.date_time <= dateEnd,
       );
     }
 

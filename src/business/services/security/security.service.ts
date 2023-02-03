@@ -32,14 +32,14 @@ export class SecurityService {
    * @return {*}  {string}
    * @memberof SecurityService
    */
-  signIn(user: SignInDto): boolean {
+ signIn(user: SignInDto): string {
     const answer = this.customerRepository.findOneByEmailAndPassword(
       user.username,
       user.password,
     );
-    return answer
-    // return jwt.sign(user, process.env.TOKEN_SECRET || "tokentest");
-    // else throw new UnauthorizedException();
+    if (answer) return jwt.sign(user, process.env.TOKEN_SECRET || "tokentest")
+    //'Falta retornar un JWT';
+    else throw new UnauthorizedException("User Incorrect");
   }
 
   /**
@@ -65,7 +65,6 @@ export class SecurityService {
     const customer = this.customerRepository.register(newCustomer);
     this.DocumentTypeRepository.register(documentType)
     if (customer) {
-      const jwt = require('jsonwebtoken');
 
       const accountType = new AccountTypeEntity();
       accountType.id = customer.id;
@@ -80,7 +79,7 @@ export class SecurityService {
       console.log(account)
 
       if (account)
-        return jwt.sign(user, process.env.TOKEN_SECRET || "tokentest")
+      return jwt.sign({ id: customer.id },   process.env.TOKEN_SECRET || "tokentest");
       else throw new InternalServerErrorException();
     } else throw new InternalServerErrorException();
   }
@@ -92,8 +91,10 @@ export class SecurityService {
    * @memberof SecurityService
    */
   signOut(JWToken: string): void {
-    const jwt = require('jsonwebtoken');
-    jwt.invalidate(JWToken, process.env.TOKEN_SECRET);
+    if (!jwt.verify(JWToken, process.env.TOKEN_SECRET || "tokentest"))throw new Error('Method not implemented.'); 
+
+      console.log("Sign Out Complete")
+
   }
 
   

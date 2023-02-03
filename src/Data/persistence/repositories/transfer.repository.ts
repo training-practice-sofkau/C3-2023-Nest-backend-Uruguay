@@ -102,4 +102,12 @@ export class TransferRepository
     if (currentEntity) return currentEntity;
     else throw new NotFoundException();
   }
+
+  findOneById(id: string): TransferEntity[] {
+    const transfer = this.database.filter(
+      (item) => item.id === id,
+    );
+    if (transfer) return transfer;
+    else throw new NotFoundException('El id no existe en base de datos');
+  }
 }

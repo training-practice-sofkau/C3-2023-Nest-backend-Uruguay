@@ -29,21 +29,21 @@ export class AccountService {
     newAccount.accountType = accountType;
     newAccount.accountType.name = account.name    
   
-    const oldaccount = this.accountRepository.searchByAttributesforOne('id', account.accountID)
+    const originalAccount = this.accountRepository.searchByAttributesforOne('id', account.accountID)
 
-      if(oldaccount.accountTypes?.length === undefined) {
-        oldaccount.accountTypes =  [newAccount.accountType, oldaccount.accountType]
-         oldaccount.accountType = new AccountTypeEntity()
-         oldaccount.accountType.id = ""
-         this.accountRepository.update(account.accountID, oldaccount)
-        return  this.accountRepository.register(oldaccount)
+      if(originalAccount.accountTypes?.length === undefined) {
+        originalAccount.accountTypes =  [newAccount.accountType, originalAccount.accountType]
+         originalAccount.accountType = new AccountTypeEntity()
+         originalAccount.accountType.id = ""
+         this.accountRepository.update(account.accountID, originalAccount)
+        return  this.accountRepository.register(originalAccount)
       }
 
-      oldaccount.accountTypes.push(newAccount.accountType)
+      originalAccount.accountTypes.push(newAccount.accountType)
 
-      this.accountRepository.update(account.accountID, oldaccount)
+      this.accountRepository.update(account.accountID, originalAccount)
 
-      return  this.accountRepository.register(oldaccount)
+      return  this.accountRepository.register(originalAccount)
     
   }
 

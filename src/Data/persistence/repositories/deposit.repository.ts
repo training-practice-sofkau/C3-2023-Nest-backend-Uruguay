@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DepositModel } from 'src/Data';
+import { DepositModel, PaginationModel } from 'src/Data';
 
 import { DepositEntity } from '../entities';
 import { BaseRepository } from './base';
@@ -83,28 +83,19 @@ export class DepositRepository
     else throw new NotFoundException();
   }
 
-  findByDataRange(
-    dateInit: Date | number,
-    dateEnd: Date | number,
-  ): DepositEntity[] {
-    let currentEntity = this.database.filter(
-      (item) => item.date_time >= dateInit && item.date_time <= dateEnd,
+  findByDataRange(accountId: string, dateInit: Date | number, dateEnd: Date | number, paginator?: PaginationModel): DepositEntity[] {
+    let finded = this.database.filter(
+        (item) => 
+          item.deletedAt == undefined &&
+          item.date_time >= dateInit &&
+          item.date_time <= dateEnd && 
+          item.accountid.id == accountId
     );
-    if (currentEntity) return currentEntity;
-    else throw new NotFoundException();
+    if (finded == undefined) throw new NotFoundException();
+    return finded.slice(paginator?.offset, paginator?.limit);
   }
 
 
-  searchDeposit(
-    attributes: keyof DepositModel,
-    dataToSearch: string,
-  ): DepositEntity[] {
-    const currentEntity = this.database.filter(
-      (entity) => entity[attributes] === dataToSearch,
-    );
-    if (currentEntity) return currentEntity;
-    else throw new NotFoundException();
-  }
 
  
 }

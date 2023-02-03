@@ -1,4 +1,4 @@
-import { Controller, Post, Body, } from '@nestjs/common';
+import { Controller, Post, Body,  Param } from '@nestjs/common';
 import { SignInDto, SignUpDto } from 'src/business';
 import { SecurityService } from 'src/business/services/security/security.service';
 
@@ -8,9 +8,9 @@ export class SecurityController {
   constructor(private readonly securityService: SecurityService) {}
 
   @Post('sign-in')
-   signIn(@Body() signInDto: SignInDto): boolean {
+   signIn(@Body() signInDto: SignInDto): string {
    
-      return  this.securityService.signIn(signInDto);
+      return   this.securityService.signIn(signInDto);
     
   }
 
@@ -20,8 +20,8 @@ export class SecurityController {
      
   }
 
-  @Post('sign-out')
-   signOut(@Body() jwt: string) {
-          return  this.securityService.signOut(jwt);
-    } 
+  @Post('SignOut/:JWToken')
+  signOut(@Param('JWToken')JWToken: string): void{
+      this.securityService.signOut(JWToken)
+  }
 }

@@ -97,5 +97,5 @@ export class AccountRepository
     if (currentEntity) return currentEntity;
     else throw new NotFoundException();
   } 
-
+  
 }

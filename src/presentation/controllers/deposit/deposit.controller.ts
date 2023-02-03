@@ -14,7 +14,7 @@ export class DepositController {
     return this.DepositService.createDeposit(deposit);
   }
 
-  @Get(':id')
+  @Post(':id')
   getHistory(@Param('id' , ParseUUIDPipe) depositId: string):  DepositEntity[] {
     return this.DepositService.getHistory(depositId);
   }
