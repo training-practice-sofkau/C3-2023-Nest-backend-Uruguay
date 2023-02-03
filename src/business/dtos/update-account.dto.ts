@@ -9,6 +9,7 @@ export class UpdateAccountDto {
 
     @IsOptional()
     @IsNotEmpty()
+    @IsUUID()
     accountType?: string;
 
     @IsOptional()

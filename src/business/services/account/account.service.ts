@@ -54,14 +54,14 @@ export class AccountService {
    */
   removeBalance(accountId: string, amount: number): void {
     try {
+      if(amount <= 0) throw new BadRequestException('The amount must be greater than 0');
+
       if (this.verifyAmountIntoBalance(accountId, amount)) {
         let accountUpdated = this.accountRepository.findOneById(accountId);
         accountUpdated.balance -= amount;
         this.accountRepository.update(accountId, accountUpdated);
       }
-      else {
-        throw new ForbiddenException('The amount to remove cannot be greater than the balance');
-      }
+      throw new ForbiddenException('The amount to remove cannot be greater than the balance');
       
     } catch (error) {
       throw new HttpException(error.message, error.status);
@@ -182,7 +182,7 @@ export class AccountService {
     if(account.deletedAt) {
       accountUpdated.deletedAt = account.deletedAt;
     }
-    if(account.state) {
+    if(account.state != undefined) {
       accountUpdated.state = account.state;
     }
     return this.accountRepository.update(id, accountUpdated);

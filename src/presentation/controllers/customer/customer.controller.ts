@@ -52,7 +52,7 @@ export class CustomerController {
         return this.customerService.unsubscribe(id);
     }
     
-    @Patch(':id/state/bool')
+    @Patch(':id/state/:bool')
     @UsePipes(new ValidationPipe())
     changeStateCustomer(
         @Param('id', ParseUUIDPipe) id: string,
@@ -60,37 +60,37 @@ export class CustomerController {
         this.customerService.changeState(id, bool);
     }
     
-    @Get(':email/:password')
+    @Get('email/:email/password/:password')
     findCustomerByEmailAndPassword(
         @Param('email') email: string,
         @Param('password') password: string): boolean {
             return this.customerService.findOneByEmailAndPassword(email, password);
     }
         
-    @Get(':type/:document')
+    @Get('type/:type/document/:document')
     findCustomerByDocumentTypeAndDocument(
         @Param('type') type: string,
         @Param('document') document: string): CustomerEntity {
             return this.customerService.findOneByDocumentTypeAndDocument(type, document);
     }
     
-    @Get(':email')
+    @Get('email/:email')
     findCustomerByEmail(@Param('email') email: string): CustomerEntity {
         return this.customerService.findOneByEmail(email);
     }
     
-    @Get(':phone')
+    @Get('phone/:phone')
     findCustomerByPhone(@Param('phone') phone: string): CustomerEntity {
         return this.customerService.findOneByPhone(phone);
     }
         
-    @Get(':state')
+    @Get('state/:state')
     @UsePipes(new ValidationPipe())
     findCustomerByState(@Param('state', ParseBoolPipe) state: boolean): CustomerEntity[] {
         return this.customerService.findByState(state);
     }
     
-    @Get(':fullname')
+    @Get('fullname/:fullname')
     findCustomerByFullName(@Param('fullname') fullname: string): CustomerEntity[] {
         return this.customerService.findByFullName(fullname);
     }

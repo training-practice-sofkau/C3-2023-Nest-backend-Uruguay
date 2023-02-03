@@ -56,7 +56,7 @@ export class CustomerService {
     if(customer.email) customerUpdated.email = customer.email;
     if(customer.fullName) customerUpdated.fullName = customer.fullName;
     if(customer.password) customerUpdated.password = customer.password;
-    if(customer.state) customerUpdated.state = customer.state;
+    if(customer.state != undefined) customerUpdated.state = customer.state;
     if(customer.phone) customerUpdated.phone = customer.phone;
     
     return this.customerRepository.update(id, customerUpdated);

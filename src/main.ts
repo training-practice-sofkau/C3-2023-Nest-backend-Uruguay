@@ -9,11 +9,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   await app.listen(3000);
   
-  app.useGlobalPipes(new ValidationPipe(
-    {
-      whitelist: true,
-      forbidNonWhitelisted: true
-    })
-  );
+  app.useGlobalPipes(new ValidationPipe({
+    stopAtFirstError: true,
+    whitelist: true,
+    errorHttpStatusCode: 406,}
+    ));
 }
 bootstrap();

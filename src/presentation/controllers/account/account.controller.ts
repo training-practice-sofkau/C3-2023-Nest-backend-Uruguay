@@ -30,7 +30,7 @@ export class AccountController {
         return this.accountService.getBalance(id);
     }
 
-    @Patch(':id/balance/:amount')
+    @Patch(':id/balance/add/:amount')
     @UsePipes(new ValidationPipe())
     addBalance(
         @Param('id',ParseUUIDPipe) id: string,
@@ -39,7 +39,7 @@ export class AccountController {
         this.accountService.addBalance(id, amount);
     }
 
-    @Patch(':id/balance/:amount')
+    @Patch(':id/balance/remove/:amount')
     @UsePipes(new ValidationPipe())
     removeBalance(
         @Param('id',ParseUUIDPipe) id: string,
@@ -117,6 +117,7 @@ export class AccountController {
     }
 
     @Post('type')
+    @UsePipes(new ValidationPipe())
     createAccountType(@Body() accountType: AccountTypeDto): AccountTypeEntity {
         return this.accountService.createAccountType(accountType);
     }
