@@ -1,7 +1,7 @@
 import { Body, UsePipes, Controller, Get, Post, Param, ParseUUIDPipe, ValidationPipe, Put, Patch, Delete, ParseIntPipe } from '@nestjs/common';
 
 import { AccountService } from '../../../business/services';
-import { AccountDto, UpdateAccountDto, AccountTypeDto } from '../../../business/dtos';
+import { AccountDto, UpdateAccountDto, AccountTypeDto, PatchAccountTypeDto } from '../../../business/dtos';
 import { AccountEntity } from '../../../data/persistence/entities';
 import { ParseBoolPipe } from '@nestjs/common/pipes';
 import { AccountTypeEntity } from '../../../data/persistence/entities/account-type.entity';
@@ -129,11 +129,19 @@ export class AccountController {
         @Body() edit: AccountTypeDto): AccountTypeEntity {
             return this.accountService.updateAccountType(id, edit);
     }
+
+    @Patch('type/:id')
+    @UsePipes(new ValidationPipe())
+    updateSomePropertiesAccountType(
+        @Param('id', ParseUUIDPipe) id: string,
+        @Body() edit: PatchAccountTypeDto): AccountTypeEntity {
+            return this.accountService.updateAccountType(id, edit);
+    }
     
     @Delete('type/:id')
     @UsePipes(new ValidationPipe())
-    deleteAccountType(@Param('id', ParseUUIDPipe) id: string): void {
-        this.accountService.deleteAccountType(id);
+    deleteAccountType(@Param('id', ParseUUIDPipe) id: string): string {
+        return this.accountService.deleteAccountType(id);
     }
 
     @Get('type')
@@ -142,7 +150,19 @@ export class AccountController {
     }
     @Get('type/:id')
     @UsePipes(new ValidationPipe())
-    getOneAccountType(id: string): AccountTypeEntity {
+    getOneAccountType(@Param('id', ParseUUIDPipe) id: string): AccountTypeEntity {
         return this.accountService.findOneAccountType(id);
+    }
+
+    @Get('type/state/:state')
+    @UsePipes(new ValidationPipe())
+    getAccountTypeByState(@Param('state', ParseBoolPipe) state: boolean): AccountTypeEntity[] {
+        return this.accountService.findAccountTypeByState(state);
+    }
+
+    @Get('type/name/:name')
+    @UsePipes(new ValidationPipe())
+    getAccountTypeByName(@Param('name') name: string): AccountTypeEntity[] {
+        return this.accountService.findAccountTypeByName(name);
     }
 }

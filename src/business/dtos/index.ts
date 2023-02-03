@@ -5,6 +5,8 @@ export * from './data-range.dto';
 export * from './deposit.dto';
 export * from './document-type.dto';
 export * from './pagination.dto';
+export * from './patch-account-type.dto';
+export * from './patch-document-type.dto';
 export * from './sign-in.dto';
 export * from './sign-out.dto';
 export * from './sign-up.dto';

@@ -2,7 +2,7 @@ import { BadRequestException, ForbiddenException, HttpException, Injectable, Not
 
 import { AccountEntity, AccountTypeEntity } from '../../../data/persistence/entities';
 import { AccountRepository, AccountTypeRepository, CustomerRepository } from '../../../data/persistence/repositories';
-import { AccountDto, AccountTypeDto, UpdateAccountDto, PaginationDto } from '../../dtos';
+import { AccountDto, AccountTypeDto, UpdateAccountDto, PaginationDto, PatchAccountTypeDto } from '../../dtos';
 
 @Injectable()
 export class AccountService {
@@ -203,17 +203,18 @@ export class AccountService {
     return newAccountType;
   }
 
-  updateAccountType(id: string, dto: AccountTypeDto): AccountTypeEntity {
+  updateAccountType(id: string, dto: AccountTypeDto | PatchAccountTypeDto): AccountTypeEntity {
     let accountTypeUpdated = this.accountTypeRepository.findOneById(id);
     
-    accountTypeUpdated.name = dto.name;
-    accountTypeUpdated.state = dto.state;
+    if(dto.name) accountTypeUpdated.name = dto.name;
+    if(dto.state) accountTypeUpdated.state = dto.state;
 
     return this.accountTypeRepository.update(id, accountTypeUpdated);
   }
 
-  deleteAccountType(id: string): void {
+  deleteAccountType(id: string): string {
     this.accountTypeRepository.delete(id);
+    return 'Account type was successfully deleted';
   }
 
   findAllAccountType(): AccountTypeEntity[] {
@@ -224,15 +225,11 @@ export class AccountService {
     return this.accountTypeRepository.findOneById(id);
   }
 
-//   findByState(state: boolean): AccountTypeEntity[] {
-//     const currentEntities = this.database.filter((item) => item.state === state);
-//     if (currentEntities) return currentEntities;
-//     else throw new NotFoundException();
-// }
-
-// findByName(name: string): AccountTypeEntity[] {
-//     const currentEntities = this.database.filter((item) => item.name === name);
-//     if (currentEntities) return currentEntities;
-//     else throw new NotFoundException();
-// }
+  findAccountTypeByState(state: boolean): AccountTypeEntity[] {
+    return this.accountTypeRepository.findByState(state);
+  }
+  
+  findAccountTypeByName(name: string): AccountTypeEntity[] {
+    return this.accountTypeRepository.findByName(name);
+  }
 }
