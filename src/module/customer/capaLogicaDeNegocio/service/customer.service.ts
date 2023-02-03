@@ -9,16 +9,14 @@ import { DocumentTypeDto } from '../dto/documentType.dto';
 import { CustomerStateDTO } from '../dto/customerStateDto';
 
 @Injectable()
-export class CustomerService {
+export class CustomerService {31
+  
 
   constructor(
     private readonly customerRepository: CustomerRepository,
     private readonly documentTypeRepository: DocumentTypeRepository,
     private readonly accountService: AccountService) {}
 
-  /**
-   * Obtener información de un cliente
-   */
   createCustomer(customer: CustomerDto):CustomerEntity {
     const documentType = new DocumentTypeEntity();
     documentType.id = customer.documentType;
@@ -60,9 +58,8 @@ export class CustomerService {
   findByIdDocumentType(id : string):DocumentTypeEntity{
     return this.documentTypeRepository.findOneById(id);
   }
-  /**
-   * Actualizar información de un cliente
-   */
+  
+
   updatedCustomer(id: string, newCustomer: CustomerDto ): CustomerEntity{
     let customer = this.customerRepository.findOneById(id);
     
@@ -82,9 +79,7 @@ export class CustomerService {
     
   }
 
-  /**
-   * Dar de baja a un cliente en el sistema
-   */
+  
   unsubscribe(id: string): boolean {
 
     const accounts = this.accountService.findByCustomer(id);
