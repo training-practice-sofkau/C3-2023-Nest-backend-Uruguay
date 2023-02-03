@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsUUID } from 'class-validator';
+import { IsOptional, IsUUID } from 'class-validator';
 import { PaginationDto, DateRangeDto } from '.';
 
 export class HistoryDto {
@@ -9,9 +9,11 @@ export class HistoryDto {
     id: string;
 
     @ApiPropertyOptional()
+    @IsOptional()
     pagination?: PaginationDto;
 
     @ApiPropertyOptional()
+    @IsOptional()
     datarange?: DateRangeDto;
 
 }
