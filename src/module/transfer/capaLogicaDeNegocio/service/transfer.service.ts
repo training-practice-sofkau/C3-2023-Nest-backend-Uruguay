@@ -19,7 +19,7 @@ export class TransferService {
     //O tiene que ser al tipo de cuenta porque aca lo hago con la cuenta directamente
     newOucome.id = transfer.outcome;
 
-    const newIncome = this.accountServer.getById(transfer.outcome);
+    const newIncome = this.accountServer.getById(transfer.income);
     newIncome.id = transfer.income;
 
     const newTransfer = new TransferEntity();
@@ -31,7 +31,10 @@ export class TransferService {
 
     return this.TransferRepo.register(newTransfer);
   }
-  
+
+  findAll(): TransferEntity[] {
+    return this.TransferRepo.findAll();
+  }
 
   /**
    * Obtener historial de transacciones de salida de una cuenta

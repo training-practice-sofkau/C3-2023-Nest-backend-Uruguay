@@ -2,8 +2,6 @@ import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { TransferService } from '../../capaLogicaDeNegocio/service/transfer.service';
 import { CreateTransferDto } from '../../capaLogicaDeNegocio/dto/transfer.dto';
 import { TransferEntity } from '../../capaDeDatos/entity/transfer.entities';
-import { paginationDto } from '../../capaLogicaDeNegocio/dto/Pagination.dto';
-import { dataRangeDto } from '../../capaLogicaDeNegocio/dto/dataRange.dto';
 import { PaginationModel, DataRangeModel } from 'src/module/base/models';
 
 @Controller('transfer')
@@ -16,7 +14,7 @@ export class TransferController {
     }
 
     @Get('/find-all')
-    findAll(@Body() paginator: PaginationModel): TransferEntity[] {
+    findAll(): TransferEntity[] {
         return this.transferService.findAll();
     }
 
