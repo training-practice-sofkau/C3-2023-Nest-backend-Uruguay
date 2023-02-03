@@ -47,10 +47,10 @@ export class AccountTypeRepository extends Base<AccountTypeEntity> implements CR
   }
 
   findOneById(id: string): AccountTypeEntity {
-    const currentEntity = this.database.find(
+    const currentEntity = this.database.findIndex(
       (item) => item.id === id
     );
-    if (currentEntity) return currentEntity;
+    if (currentEntity) return this.database[currentEntity];
     else throw new NotFoundException("Elemento no encontrado");
   }
 

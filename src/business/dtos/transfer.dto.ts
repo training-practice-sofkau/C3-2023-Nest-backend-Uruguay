@@ -1,5 +1,4 @@
-import { IsEmail } from "class-validator";
-import { IsBoolean, IsDate, IsNotEmpty, IsNumber, IsNumberString, IsString, IsUUID, Min } from "class-validator/types/decorator/decorators";
+import { IsDate, IsNumber, IsString, IsUUID} from "class-validator";
 
 export class transferDto {
 

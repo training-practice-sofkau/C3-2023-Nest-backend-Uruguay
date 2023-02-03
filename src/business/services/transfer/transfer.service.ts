@@ -4,6 +4,8 @@ import { PaginationDto } from 'src/business/dtos/pagination.dto';
 import { TranferRepository, TransferEntity } from 'src/data/persistence';
 import { transferDto } from '../../dtos/transfer.dto';
 import { AccountService } from '../account';
+import { IsDate } from 'class-validator';
+import { IsNumber } from 'class-validator/types/decorator/decorators';
 
 @Injectable()
 export class TransferService {
@@ -70,8 +72,9 @@ export class TransferService {
     dataRange?: DataRangeDto,
   ): TransferEntity[] {
        if (!dataRange?.Min || !dataRange?.Max)
-    throw new Error('Invalid Value Range');
+      throw new Error('Invalid Value Range');
     
+
     return this.transferRepocitory.findIncomeByDataRange(accountId,dataRange.Min,dataRange.Max)
   }
 
@@ -89,7 +92,10 @@ export class TransferService {
     pagination?: PaginationDto,
     dataRange?: DataRangeDto,
   ): TransferEntity[] {
-    throw new Error('This method is not implemented');
+    if (!dataRange?.Min || !dataRange?.Max)
+    throw new Error('Invalid Value Range');
+    
+    return this.transferRepocitory.findIncomeByDataRange(accountId,dataRange.Max,dataRange.Min)
   }
 
   /**

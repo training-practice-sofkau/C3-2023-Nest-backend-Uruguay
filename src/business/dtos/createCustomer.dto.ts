@@ -3,7 +3,7 @@ import { IsUUID, IsNotEmpty, IsString, IsEmail, MinLength, MaxLength, IsAlphanum
 export class CustomerDto {
 
     @IsUUID(4, { message: "this must to be uuid" })
-    id = String();
+    id: string;
 
     @IsNotEmpty({ message: ' This field should not be empty' })
     documentType: string;

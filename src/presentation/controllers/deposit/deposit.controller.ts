@@ -4,8 +4,7 @@ import { PaginationModel } from 'src/data/models/pagination.model';
 import { DepositEntity } from 'src/data/persistence';
 import { DepositService } from 'src/business/services';
 import { depositDto } from 'src/business/dtos/deposit.dto';
-import { PaginationDto } from 'src/business/dtos/pagination.dto';
-import { DataRangeDto } from 'src/business/dtos/datarange.dto';
+import { HistoryDto } from '../../../business/dtos/history.dto';
 
 
 
@@ -13,7 +12,7 @@ import { DataRangeDto } from 'src/business/dtos/datarange.dto';
 export class DepositController {
   constructor(private readonly depositService: DepositService) {}
 
-  @Post()
+  @Post('register')
   createDeposit(@Body() deposit: depositDto): DepositEntity {
     return this.depositService.createDeposit(deposit);
   }
@@ -23,12 +22,14 @@ export class DepositController {
     this.depositService.deleteDeposit(depositId);
   }
 
-  @Get('history')
+  @Post('/history')
   getHistory(
-    @Query('depositId') depositId: string,
-    @Query('pagination') pagination?: PaginationDto,
-    @Query('dataRange') dataRange?: DataRangeDto,
+  @Body()
+  historyDto: HistoryDto
   ): DepositEntity[] {
-    return this.depositService.getHistory(depositId, pagination, dataRange);
+    return this.depositService.getHistory(historyDto.id, historyDto?.pagination, historyDto?.dataRange);
   }
+
+
+  
 }

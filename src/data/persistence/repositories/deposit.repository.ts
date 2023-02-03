@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { PaginationModel } from 'src/data/models/pagination.model';
 import { Base } from '../../base/base.abstract';
 import { DepositEntity } from '../entities/deposit.entity';
 import { CRUD } from '../interfaces/crud.interface';
@@ -75,6 +76,20 @@ export class DepositRepository extends Base<DepositEntity> implements CRUD<Depos
       else throw new Error('Datos de no encontrados');
         
   }
+
+  findByDataRangeById(accountId: string, dateInit: Date | number, dateEnd: Date | number, paginator?: PaginationModel): DepositEntity[] {
+    let finded = this.database.filter(
+        (item) => 
+          item.deleted_at == undefined &&
+          item.date_time >= dateInit &&
+          item.date_time <= dateEnd && 
+          item.account_id.id == accountId
+    );
+    if (finded == undefined) throw new NotFoundException();
+    return finded.slice(paginator?.offset, paginator?.limit);
+  }
+
+  
 
 
 }
