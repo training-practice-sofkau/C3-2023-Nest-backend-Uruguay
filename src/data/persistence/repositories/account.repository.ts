@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 
 import { AccountEntity } from '../entities';
 import { BaseRepository } from './base';
@@ -37,7 +37,11 @@ export class AccountRepository
             (item) => item.id === id && typeof item.deletedAt === 'undefined'
         );
         if(indexCurrentEntity === -1) throw new NotFoundException();
-        
+
+        if(this.database[indexCurrentEntity].balance > 0) {
+            throw new ForbiddenException('The account has balance, it cannot be deleted.');
+        }
+
         if(soft) {
             return this.softDelete(indexCurrentEntity);
         }
