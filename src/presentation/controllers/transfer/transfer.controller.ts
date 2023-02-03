@@ -47,6 +47,37 @@ export class TransferController {
     updateTransfer(
         @Param('id', ParseUUIDPipe)id: string,
         @Body() transfer: UpdateTransferDto): TransferEntity {
-            return this.transferService.updateTransfer(id, transfer);
-        }
+        return this.transferService.updateTransfer(id, transfer);
+    }
+
+    @Get()
+    getAllTransfers(): TransferEntity[] {
+        return this.transferService.getAllTransfers();
+    }
+    
+    @Get(':id')
+    @UsePipes(new ValidationPipe())
+    findOneTransferById(@Param('id', ParseUUIDPipe) id: string): TransferEntity {
+        return this.transferService.findOneTransferById(id);
+    }
+    
+    @Get(':idOutcome/:dateInit/:dateEnd')
+    @UsePipes(new ValidationPipe())
+    findTransfersOutcomeByDataRange(
+        @Param('idOutcome', ParseUUIDPipe) accountId: string,
+        @Param('dateInit') dateInit: Date,
+        @Param('dateEnd') dateEnd: Date
+    ): TransferEntity[] {
+        return this.transferService.findTransfersOutcomeByDataRange(accountId, dateInit, dateEnd);
+    }
+    
+    @Get(':idIncome/:dateInit/:dateEnd')
+    @UsePipes(new ValidationPipe())
+    findTransfersIncomeByDataRange(
+        @Param('idIncome', ParseUUIDPipe) accountId: string,
+        @Param('dateInit') dateInit: Date,
+        @Param('dateEnd') dateEnd: Date
+    ): TransferEntity[] {
+        return this.transferService.findTransfersIncomeByDataRange(accountId, dateInit, dateEnd);
+    }
 }
