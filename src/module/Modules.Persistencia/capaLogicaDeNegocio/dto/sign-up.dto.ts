@@ -4,6 +4,9 @@ export class SignUpDto {
 
     @IsString()
     documentTypeId: string;
+    
+    @IsString()
+    accountTypeId: string;
 
     @IsNumberString()
     document: string;

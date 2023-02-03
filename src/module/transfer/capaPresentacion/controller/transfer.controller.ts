@@ -3,6 +3,7 @@ import { TransferService } from '../../capaLogicaDeNegocio/service/transfer.serv
 import { CreateTransferDto } from '../../capaLogicaDeNegocio/dto/transfer.dto';
 import { TransferEntity } from '../../capaDeDatos/entity/transfer.entities';
 import { PaginationModel, DataRangeModel } from 'src/module/base/models';
+import { paginationDto } from '../../capaLogicaDeNegocio/dto';
 
 @Controller('transfer')
 export class TransferController {
@@ -20,17 +21,17 @@ export class TransferController {
 
     @Get('/get-history-out/:id')
     getHistoryOut(@Param('id') id: string,@Body() pagination: PaginationModel,@Body() dataRange?: DataRangeModel): TransferEntity[] {
-        return this.transferService.getHistoryOut(id, pagination, dataRange);
+        return this.transferService.getHistoryOut(id, dataRange,pagination);
     }
 
     @Get('/get-history-in/:id')
-    getHistoryIn(@Param('id') id: string,@Body() pagination: PaginationModel,@Body() dataRange?: DataRangeModel): TransferEntity[] {
-        return this.transferService.getHistoryIn(id, pagination, dataRange);
+    getHistoryIn(@Param('id') id: string,@Body() pagination: paginationDto,@Body() dataRange?: DataRangeModel): TransferEntity[] {
+        return this.transferService.getHistoryIn(id, dataRange, pagination);
     }
     
     @Get('/get-history/:id')
-    getHistory(@Param('id') id: string, pagination: PaginationModel, dataRange?: DataRangeModel): TransferEntity[] {
-        return this.transferService.getHistory(id, pagination, dataRange);
+    getHistory(@Param('id') id: string, pagination: paginationDto, dataRange?: DataRangeModel): TransferEntity[] {
+        return this.transferService.getHistory(id, dataRange, pagination);
     }
 
     @Delete('/soft-delete/:id')

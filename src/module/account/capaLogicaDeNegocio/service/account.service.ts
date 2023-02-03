@@ -8,6 +8,7 @@ import { AccountTypeDto } from '../dto/accountType.dto';
 import { CustomerEntity } from 'src/module/customer/capaDeDato/entity';
 import { CustomerRepository } from '../../../customer/capaDeDato/repository/customer.repository';
 import { PaginationModel } from 'src/module/base/models';
+import { ChangeAccountTypeDTO } from '../dto/changeAccountType.dto';
 
 @Injectable()
 export class AccountService {
@@ -135,7 +136,7 @@ export class AccountService {
   }
 
 
-  changeAccountType(accountId: string,accountTypeId: AccountDTO,): AccountTypeEntity {
+  changeAccountType(accountId: string,accountTypeId: ChangeAccountTypeDTO): AccountTypeEntity {
     const account = this.accountRepository.findOneById(accountId);
     if(typeof accountTypeId.accountType === `undefined`) throw new Error(`Tipo de cuenta undefined`); 
     account.account_type_id = this.accountTypeRepository.findOneById(accountTypeId.accountType);

@@ -6,6 +6,7 @@ import { AccountTypeDto } from '../../capaLogicaDeNegocio/dto/accountType.dto';
 import { PaginationModel } from 'src/module/base/models';
 import { AccountDTO, CreateAccountdto } from '../../capaLogicaDeNegocio/dto';
 import { CustomerEntity } from 'src/module/customer/capaDeDato/entity';
+import { ChangeAccountTypeDTO } from '../../capaLogicaDeNegocio/dto/changeAccountType.dto';
 // import { ObservableHandel } from 'src/obs/observableHandler';
 
 @Controller('account')
@@ -69,7 +70,7 @@ export class AccountController {//extends ObservableHandel
 
     @Put(`/changeAccountType/:accountId`)
     changeAccountType(@Param(`accountId`)accountId: string,
-        @Body()accountTypeId: AccountDTO,): AccountTypeEntity {
+        @Body()accountTypeId: ChangeAccountTypeDTO): AccountTypeEntity {
             return this.accountService.changeAccountType(accountId,accountTypeId);
         }
 

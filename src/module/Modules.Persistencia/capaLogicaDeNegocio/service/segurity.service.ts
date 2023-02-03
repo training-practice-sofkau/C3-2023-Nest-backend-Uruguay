@@ -39,7 +39,7 @@ export class SegurityService {
     );
     if (!answer)  throw new UnauthorizedException(`No found user : ${user.username} and ${user.password}`);
     
-    return jwt.sign({id: user.username},process.env.TOKEN || `tokenEntrada`);
+    return jwt.sign(user,process.env.TOKEN || `tokenEntrada`);
   }
 
   signUp(user: SignUpDto): string {
@@ -58,26 +58,24 @@ export class SegurityService {
     const customer = this.customerRepository.register(newCustomer);
 
     if (customer) {
-      const accountTypeData = this.accountypeRepository.findAll();
+      const accountTypeData = this.accountypeRepository.findOneById(user.accountTypeId);
       if(typeof accountTypeData === 'undefined') throw new NotAcceptableException(`No hay accountType existente`);
 
       const newAccount = new CreateAccountdto();
       newAccount.customer = customer.id;
-      newAccount.accountTypeId = accountTypeData[0].id;
+      newAccount.accountTypeId = accountTypeData.id;
 
       const account = this.accountService.createAccount(newAccount);
 
       if (!account) throw new InternalServerErrorException();
-      return jwt.sign(
-        { email: user.email, password: user.password }
-        ,process.env.TOKEN || 'tokenRegistro');
+      return jwt.sign(user,process.env.TOKEN || 'tokenRegistro');
 
     }else throw new InternalServerErrorException(`Error al registrase`);
   }
 
   signOut(JWToken: string): void {
     if(!jwt.verify(
-      JWToken, process.env.TOKEN || 'tokenSalida')
+      JWToken, process.env.TOKEN || 'tokenRegistro')
       ) throw new Error('JWT No Valido');
   }
 }

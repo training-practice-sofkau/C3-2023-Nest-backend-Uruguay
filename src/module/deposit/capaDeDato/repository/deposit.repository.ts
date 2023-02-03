@@ -73,20 +73,12 @@ export class DepositRepository
     }
 
     private hardDelete(index: number): void {
-    
-        if (index < 0 ){
-            throw new NotAcceptableException(`No se aceptan valores negativos`);
-        }
-        this.database.splice(index,1);
+
+        this.database.splice(index);
         
     }
 
     private softDelete(index: number): void {
-        
-        if (index < 0){
-            throw new NotAcceptableException(`No se aceptan valores negativos`);
-        }
-
         this.database[index].delete_at = Date.now(); 
 
     }

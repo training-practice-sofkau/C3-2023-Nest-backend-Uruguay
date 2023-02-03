@@ -59,7 +59,6 @@ export class DepositService {
 
     const deposit = this.depositRepository.findByDataRange(dataRange.min,dataRange.max);//el historial de todas las cuenta en ese rango
     
-
     const depo = deposit.filter((depo) => depo.id === depositId);//Mismo rango pero para el id del parametro
     return depo;
   }

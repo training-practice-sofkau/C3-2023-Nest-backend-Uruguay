@@ -30,7 +30,7 @@ export class CustomerRepository
 //-----------------------------------------------------------------------------------------------------
   update(id: string, entity: CustomerEntity): CustomerEntity {
 
-    const indexCurrentEntity = this.database.findIndex(
+    let indexCurrentEntity = this.database.findIndex(
       (item) => item.id === id && typeof item.daletedAt === 'undefined');
 
     if (indexCurrentEntity != -1)

@@ -5,6 +5,7 @@ import { CreateTransferDto } from '../dto/transfer.dto';
 import { dataRangeDto } from '../dto/dataRange.dto';
 import { paginationDto } from '../dto/Pagination.dto';
 import { AccountService } from '../../../account/capaLogicaDeNegocio/service';
+import { PaginationModel } from 'src/module/base/models';
 
 @Injectable()
 export class TransferService {
@@ -47,27 +48,29 @@ export class TransferService {
   /**
    * Obtener historial de transacciones de salida de una cuenta
    */
-  getHistoryOut(accountId: string,pagination?: paginationDto,dataRange?: dataRangeDto): TransferEntity[] {//dataRange:DataRangeModel
+  getHistoryOut(accountId: string,dataRange?: dataRangeDto,pagination?: paginationDto): TransferEntity[] {//dataRange:DataRangeModel
     dataRange = {
       ...{min: 0 ,max: Date.now()},
       ...dataRange
     }
 
-    const transferHistory = this.TransferRepo.findOutcomeByDataRange(accountId,dataRange.min,dataRange?.max);
-    const transfercuentaHistory = transferHistory.filter((account) => account.id === accountId);
-    return transfercuentaHistory;
+
+    return this.TransferRepo.findOutcomeByDataRange(accountId, dataRange.min, dataRange.max,pagination);
+
 
   }
 
   /**
    * Obtener historial de transacciones de entrada en una cuenta
    */
-  getHistoryIn(accountId: string,pagination?: paginationDto,dataRange?: dataRangeDto): TransferEntity[] {//dataRange?: DataRangeModel
+  getHistoryIn(accountId: string,dataRange?: dataRangeDto,pagination?: paginationDto): TransferEntity[] {//dataRange?: DataRangeModel
     dataRange = {
       ...{min: 0 ,max: Date.now()},
       ...dataRange
     }
-    const transferHistory = this.TransferRepo.findIncomeByDataRange(accountId,dataRange?.min,dataRange?.max);
+    const transferHistory = this.TransferRepo.findIncomeByDataRange(
+      accountId,dataRange?.min,dataRange?.
+      max,pagination);
     const transfercuentaHistory = transferHistory.filter((account) => account.id === accountId);
     return transfercuentaHistory;
   }
@@ -75,9 +78,9 @@ export class TransferService {
   /**
    * Obtener historial de transacciones de una cuenta
    */
-  getHistory(accountId: string,pagination: paginationDto,dataRange?: dataRangeDto): TransferEntity[] {//dataRange?: 
-    let InHisotry = this.getHistoryIn(accountId,pagination,dataRange);
-    let outHistory =  this.getHistoryOut(accountId,pagination,dataRange);
+  getHistory(accountId: string,dataRange?: dataRangeDto,pagination?: paginationDto): TransferEntity[] {//dataRange?: 
+    let InHisotry = this.getHistoryIn(accountId,dataRange,pagination);
+    let outHistory =  this.getHistoryOut(accountId,dataRange,pagination);
     let TotalHistory = InHisotry.concat(outHistory); 
     return TotalHistory;
   }

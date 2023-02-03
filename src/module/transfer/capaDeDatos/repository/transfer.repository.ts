@@ -2,6 +2,8 @@ import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/c
 import { TransferEntity } from '../entity/transfer.entities';
 import { TransferRepositoryInterface } from './transfer-repository.interface';
 import { BaseRepository } from '../../../base/repositories';
+import { paginationDto } from '../../capaLogicaDeNegocio/dto';
+import { PaginationModel } from 'src/module/base/models';
 
 @Injectable()
 export class TransferRepository
@@ -43,16 +45,13 @@ export class TransferRepository
     }
     
     private hardDelete(index: number): void {
-    
-        if (index < 0 )throw new NotAcceptableException(`No se aceptan valores negativos`);
-        this.database.splice(index,1);
+
+        this.database.splice(index);
     }
     
     private softDelete(index: number): void {
-    
-        if (index < 0) throw new NotAcceptableException(`No se aceptan valores negativos`);
-        
-        this.database[index].delete_at = new Date; 
+
+        this.database[index].delete_at = Date.now(); 
     }
 
     findAll(): TransferEntity[] {
@@ -74,12 +73,17 @@ export class TransferRepository
         accountId: string,
         dateInit: Date | number,
         dateEnd: Date | number,
+        pagination?: paginationDto
     ): TransferEntity[] {
+        pagination = {
+            ... {offset: 0, limit: 10},
+            ... pagination
+          }
         const rango  = this.database.filter(
             item => item.outcome.id === accountId 
             && item.date_time>=dateInit 
             && item.date_time === dateEnd 
-            && typeof  item.delete_at === `undefined`);
+            && typeof  item.delete_at === `undefined`).slice(pagination.offset, pagination.offset + (pagination.limit || 0));;
         if(typeof rango === `undefined`)throw new NotFoundException();
         return rango;
     }
@@ -87,14 +91,20 @@ export class TransferRepository
     findIncomeByDataRange(
         accountId: string,
         dateInit: Date | number,
-        dateEnd: Date | number):
+        dateEnd: Date | number,
+        pagination?: paginationDto):
         TransferEntity[] {
-        const rango  = this.database.filter(item => item.income.id === accountId 
-            && item.date_time>=dateInit && 
-            item.date_time <= dateEnd &&
-            typeof  item.delete_at === `undefined`);
-        if(typeof rango === `undefined`)throw new NotFoundException();
-        return rango;
+            pagination = {
+                ... {offset: 0, limit: 10},
+                ... pagination
+              }
+            const rango  = this.database.filter(
+                item => item.income.id === accountId 
+                && item.date_time>=dateInit 
+                && item.date_time <= dateEnd 
+                && typeof  item.delete_at === `undefined`).slice(pagination.offset, pagination.offset + (pagination.limit || 0));;
+            if(typeof rango === `undefined`)throw new NotFoundException();
+            return rango;
     }
 
 }
