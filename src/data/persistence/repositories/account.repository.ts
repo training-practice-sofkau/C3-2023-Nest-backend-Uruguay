@@ -13,16 +13,20 @@ export class AccountRepository extends BankInternalControl<AccountEntity> implem
         
     /**
      * Adds a new Account entity to the Array of accounts
-     * @param entity new object to be inserted in the array
+     * @param account new object to be inserted in the array
      * @returns new entity added
      */
-    register(entity: AccountEntity): AccountEntity {
+    register(account: AccountEntity): AccountEntity {
 
         try { // try to add the entity to the array
 
-            this.database.push(entity);
+            const newAccount = this.database.push(account);
+            
+            this.manage(newAccount).subscribe(newAccountCreated => { 
+                console.log(`Notification: New Account: ${account.id} created!`) 
+            });
 
-            return this.database.at(-1) ?? entity; // all good, returns the new entity 
+            return this.database.at(-1) ?? account; // all good, returns the new entity 
 
         } catch (err) { // something went wrong, push didn't work
 

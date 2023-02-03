@@ -1,4 +1,4 @@
-import { IsAlphanumeric, IsEmail, IsNotEmpty, IsNumberString, IsString, IsUUID, Matches, Min } from "class-validator";
+import { IsAlphanumeric, IsEmail, IsNotEmpty, IsNumberString, IsString, IsUUID } from "class-validator";
 
 export class SignUpDto{
 
@@ -26,4 +26,7 @@ export class SignUpDto{
     @IsNotEmpty({message:'This value cannot be empty!'})       
     password: string;
     
+    @IsUUID(4, {message:'The value provided is not a UUID valid!' })
+    @IsNotEmpty({message:'This value cannot be empty!'})
+    accountTypeId: string;
 }

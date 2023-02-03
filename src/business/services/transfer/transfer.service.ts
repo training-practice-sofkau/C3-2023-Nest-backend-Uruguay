@@ -11,7 +11,7 @@ export class TransferService {
 
   constructor(
     private readonly transferRepository: TransferRepository,
-    private readonly accountService: AccountService) {}
+    private readonly accountService: AccountService) { }
 
   /**
    * Make a new transfer between accounts - OK
@@ -23,10 +23,10 @@ export class TransferService {
   createTransfer(transfer: CreateTransferDto): TransferEntity {
 
     // validate that origin account has enough balance
-    if(this.accountService.getBalance(transfer.outcome) >= transfer.amount){    
+    if (this.accountService.getBalance(transfer.outcome) >= transfer.amount) {
 
       //validate account is active
-      if(this.accountService.getState(transfer.income)){
+      if (this.accountService.getState(transfer.income)) {
 
         const newTransfer = new TransferEntity();
 
@@ -34,20 +34,20 @@ export class TransferService {
         newTransfer.income = transfer.income;
         newTransfer.amount = transfer.amount;
         newTransfer.reason = transfer.reason;
-            
-        const transferDone =  this.transferRepository.register(newTransfer);
-        
-        if( transferDone){
+
+        const transferDone = this.transferRepository.register(newTransfer);
+
+        if (transferDone) {
 
           this.accountService.removeBalance(transfer.outcome, transfer.amount);
-          this.accountService.addBalance(transfer.income, transfer.amount);          
+          this.accountService.addBalance(transfer.income, transfer.amount);
           return transferDone;
         }
-      }  
+      }
     }
-    
+
     throw new InternalServerErrorException("Not enough Balance or Destination account inactive. Null Transfer! ");
-    
+
   }
 
   /**
@@ -59,11 +59,11 @@ export class TransferService {
    * @return {*}  {TransferEntity[]}
    * @memberof TransferService
    */
-  getHistoryOut(accountId: string, 
-                pagination?: PaginationModel<TransferEntity>, 
-                dataRange?: DataRangeModel): TransferEntity[] {
+  getHistoryOut(accountId: string,
+    pagination?: PaginationModel<TransferEntity>,
+    dataRange?: DataRangeModel): TransferEntity[] {
 
-    return this.transferRepository.findBy("outcome",accountId, pagination, dataRange);;
+    return this.transferRepository.findBy("outcome", accountId, pagination, dataRange);
 
   }
 
@@ -76,11 +76,11 @@ export class TransferService {
    * @return {*}  {TransferEntity[]}
    * @memberof TransferService
    */
-  getHistoryIn(accountId: string, 
-              paginator?: PaginationModel<TransferEntity>, 
-              dataRange?: DataRangeModel): TransferEntity[] {
-    
-    return this.transferRepository.findBy("income",accountId, paginator, dataRange); ;
+  getHistoryIn(accountId: string,
+    paginator?: PaginationModel<TransferEntity>,
+    dataRange?: DataRangeModel): TransferEntity[] {
+
+    return this.transferRepository.findBy("income", accountId, paginator, dataRange);
   }
 
   /**
@@ -92,31 +92,25 @@ export class TransferService {
    * @return {*}  {TransferEntity[]}
    * @memberof TransferService
    */
-  getHistory(accountId: string, 
-            pagination?: PaginationModel<TransferEntity>, 
-            dataRange?: DataRangeModel): TransferEntity[] {   
+  getHistory(accountId: string,
+    pagination?: PaginationModel<TransferEntity>,
+    dataRange?: DataRangeModel): TransferEntity[] {    
 
-    let history= [];
-   
-    history = this.getHistoryOut(accountId, pagination, dataRange);
-
-    if(this.getHistoryIn(accountId).length > 0){       
-          history.concat(this.getHistoryIn(accountId, pagination, dataRange));
-    }
+    let history = this.transferRepository.getAllTransfersById(accountId, pagination, dataRange);    
 
     return history;
-
   }
-
-  /**
-   * Deletes the transfer that matches de given ID - OK
-   *
-   * @param {string} transferId
-   * @memberof TransferService
-   */
-  deleteTransfer(transferId: string, soft?: boolean): void {
-        
-    this.transferRepository.delete(transferId, soft); //TODO: Soft Delete by Default, implement hard/soft selection. 
     
-  }
+
+/**
+ * Deletes the transfer that matches de given ID - OK
+ *
+ * @param {string} transferId
+ * @memberof TransferService
+ */
+deleteTransfer(transferId: string, soft ?: boolean): void {
+
+  this.transferRepository.delete(transferId, soft); //TODO: Soft Delete by Default, implement hard/soft selection. 
+
+}
 }

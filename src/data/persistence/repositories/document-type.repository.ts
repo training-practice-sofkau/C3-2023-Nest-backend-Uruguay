@@ -5,21 +5,30 @@ import { DocumentTypeEntity } from '../entities';
 import { BankInternalControl } from './base';
 import { DocumentTypeRepositoryInterface } from './interfaces';
 import { PaginationModel } from 'src/business/models';
+import { DocumentTypeDto } from '../../../business/dtos/document-type.dto';
 
 @Injectable()
 export class DocumentTypeRepository extends BankInternalControl <DocumentTypeEntity> implements DocumentTypeRepositoryInterface{
     
     /**
      * Adds a new DocumentType entity to the Array of DocumentTypes
-     * @param entity new object to be inserted in the array
+     * @param documentType new object to be inserted in the array
      * @returns new entity added
      */
-    register(entity: DocumentTypeEntity): DocumentTypeEntity {
+    register(documentType: DocumentTypeDto): DocumentTypeEntity {
         
-        try{ // try to add the entity to the array
+        try{ 
+            const newDocumentType = new DocumentTypeEntity();
+            newDocumentType.name = documentType.name;
+
             
-            const res = this.database.push(entity);            
-            return this.database.at(-1) ?? entity; // all good, returns the new added entity 
+            this.database.push(newDocumentType);      
+
+            this.manage(newDocumentType).subscribe(documentTypeCreated => { 
+                console.log(`Notification: New Document Type: ${newDocumentType.name} created!`) 
+            });
+
+            return this.database.at(-1) ?? newDocumentType; // all good, returns the new added entity 
 
         } catch (err){ // something went wrong, push didn't work
 
@@ -117,7 +126,7 @@ export class DocumentTypeRepository extends BankInternalControl <DocumentTypeEnt
 
         }catch(err){ // something wrong happened
 
-            throw new InternalServerErrorException(`Internal Error! (${err})`) // throws an internal Error
+            throw new InternalServerErrorException() // throws an internal Error
         }
     }
     

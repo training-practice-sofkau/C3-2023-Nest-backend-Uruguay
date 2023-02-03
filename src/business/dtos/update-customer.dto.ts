@@ -7,7 +7,6 @@ export class UpdateCustomerDto{
                      
     @IsNumberString()    
     document: string;
-
     
     @IsString()
     fullname: string;

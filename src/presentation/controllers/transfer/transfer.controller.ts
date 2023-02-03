@@ -7,13 +7,13 @@ import { CreateTransferDto } from 'src/business/dtos';
 @Controller('transfer')
 export class TransferController {
 
-    constructor( private transferService: TransferService) {}
+    constructor(private transferService: TransferService) { }
 
 
     // create tranfer
     // TODO: implement newTranferDTO to use instead of transferModel
     @Post('register')
-    async createTransfer(@Body() transfer: CreateTransferDto): Promise<TransferEntity>{
+    async createTransfer(@Body() transfer: CreateTransferDto): Promise<TransferEntity> {
 
         return await this.transferService.createTransfer(transfer);
     }
@@ -21,37 +21,51 @@ export class TransferController {
     // get history by origin account
     //TODO: see how to send values for pagination and date range ( look for info and methods )
     @Get('from/:id')
-    async getTransfersFromOriginAccount(@Param('id', ParseUUIDPipe) accountId: string): Promise<TransferEntity[]> {
+    getTransfersFromOriginAccount(@Param('id', ParseUUIDPipe) accountId: string,
+        @Query('limit') limit?: number)
+        : TransferEntity[] {
 
-        return await this.transferService.getHistoryOut(accountId);
-    }   
+        const page = new PaginationEntity();
+        page.limit = limit;
+        page.offset = 0;
+
+        return this.transferService.getHistoryOut(accountId, page);
+    }
 
     // get history by destination account
     //TODO: see how to send values for pagination and date range ( look for info and methods )
     @Get('to/:id')
-    async getTransfersToDestinationAccount(@Param('id', ParseUUIDPipe) accountId: string): Promise<TransferEntity[]> {
-      
-        //const page= new PaginationEntity();
-        //page.offset = 0;
-        //page.limit= limit;
+    getTransfersToDestinationAccount(@Param('id', ParseUUIDPipe) accountId: string,
+        @Query('limit') limit?: number)
+        : TransferEntity[] {
 
-        return this.transferService.getHistoryIn(accountId);
-    }   
+        const page = new PaginationEntity();
+        page.offset = 0;
+        page.limit = limit;
+
+        return this.transferService.getHistoryIn(accountId, page);
+    }
 
 
     // get historical in and out trasnfers for an account
     //TODO: see how to send values for pagination and date range ( look for info and methods )
     @Get('getAll/:id')
-    async getAllTransfersByAccount(@Param('id', ParseUUIDPipe) accountId: string): Promise<TransferEntity[]> {
+    getAllTransfersByAccount(@Param('id', ParseUUIDPipe) accountId: string,
+        @Query('limit') limit?: number)
+        : TransferEntity[] {
 
-        return await this.transferService.getHistory(accountId);
-    }   
+        const page = new PaginationEntity();
+        page.offset = 0;
+        page.limit = limit;
+
+        return this.transferService.getHistory(accountId, page);
+    }
 
     // delete transfer ( Only soft delete from here )
     @Delete('delete/:id')
     async deleteTransfer(@Param('id', ParseUUIDPipe) transferId: string,
-                        @Query('soft', ParseBoolPipe) soft?: boolean): Promise<void> {
-                            
+        @Query('soft', ParseBoolPipe) soft?: boolean): Promise<void> {
+
         await this.transferService.deleteTransfer(transferId);
     }
 
