@@ -1,26 +1,25 @@
 import { Body, Controller, Post, Get, Query } from '@nestjs/common';
-import { AccountService, CustomerService } from '../../business/services';
+import { AccountService } from '../../business/services';
 import { BalanceDto, ChangeAccountDto, ChangeStateDto, CreateAccountDto } from '../../business/dtos';
 import { ApiTags } from '@nestjs/swagger';
 import { AccountEntity, AccountTypeEntity } from '../../data/persistence';
+import { PaginationDto } from '../../business/dtos/pagination.dto';
+import { UpdateAccountDto } from '../../business/dtos/update-account.dto';
 
 @ApiTags('account')
 @Controller('api/account')
 export class AccountController {
 
-    constructor(private readonly accountService: AccountService, private readonly customerService: CustomerService) {}
+    constructor(private readonly accountService: AccountService) {}
 
-    @Post('/create-account')
-    createAccount(@Body() account: CreateAccountDto) {
-        const newAccount = new AccountEntity();
-        const newAccountType = new AccountTypeEntity();
-        newAccountType.name = account.accountTypeName;
+    @Post('/create')
+    createAccount(@Body() account: CreateAccountDto): AccountEntity {
+        return this.accountService.createAccount(account);
+    }
 
-        newAccount.accountType = newAccountType;
-        newAccount.balance = account.balance;
-        newAccount.customer = this.customerService.getCustomerInfo(account.customerId);
-        const newAccountFinal = this.accountService.createAccount(newAccount);
-        return newAccountFinal;
+    @Post('/update')
+    updateAccount(@Body() account: UpdateAccountDto) {
+        return this.accountService.updateAccount(account)
     }
 
     @Get('/get-balance')
@@ -49,26 +48,26 @@ export class AccountController {
     }
 
     @Post('/change-state')
-    changeState(@Body() account: ChangeStateDto): string {
-        return this.accountService.changeState(account).toString();
+    changeState(@Body() account: ChangeStateDto): AccountEntity {
+        return this.accountService.changeState(account);
     }
 
-    @Get('/get-account-by-id')
+    @Get('/get-by-id')
     getAccountById(@Query('account') account: string): AccountEntity {
         return this.accountService.getAccountById(account);
     }
 
-    @Get('/get-account-by-customer-id')
+    @Get('/get-by-customer-id')
     getAccountByCostumerId(@Query('customer') customer: string): AccountEntity[] {
         return this.accountService.getAccountByCustomerId(customer);
     }
 
-    @Get('/get-account-type-by-id')
+    @Get('/get-account-type-by-account-id')
     getAccountTypeById(@Query('account') account: string): AccountTypeEntity {
         return this.accountService.getAccountTypeById(account);
     }
 
-    @Get('/get-account-type-with-id')
+    @Get('/get-account-type-by-id')
     getAccountTypeWithId(@Query('accountType') accountType: string): AccountTypeEntity {
         return this.accountService.getAccountTypeWithId(accountType);
     }
@@ -78,8 +77,23 @@ export class AccountController {
         return this.accountService.changeAccountType(accountType);
     }
 
-    @Get('/delete-account')
-    deleteAccount(@Query('account') account: string): boolean {
-        return this.accountService.deleteAccount(account);
+    @Get('/delete')
+    deleteAccount(@Query('account') account: string, @Query('soft') soft?: boolean): boolean {
+        return this.accountService.deleteAccount(account, soft);
+    }
+
+    @Get('/get-soft-deleteds')
+    findSoftDeletedAccounts(): AccountEntity[] {
+        return this.accountService.findSoftDeletedAccounts();
+    }
+
+    @Get('/get-all')
+    findAllAccounts(pagination?: PaginationDto): AccountEntity[] {
+        return this.accountService.findAllAccounts(pagination);
+    }
+
+    @Get('/get-all-account-types')
+    findAllAccountTypes(pagination?: PaginationDto): AccountTypeEntity[] {
+        return this.accountService.findAllAccountTypes(pagination);
     }
 }

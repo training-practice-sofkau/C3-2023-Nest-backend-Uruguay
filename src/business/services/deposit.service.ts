@@ -1,27 +1,37 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
-import { DepositEntity, DepositRepository } from '../../data/persistence';
-import { BalanceDto, DateRangeDto, PaginationDto } from '../../business/dtos';
-import { AccountService } from '.';
+import { AccountRepository, DepositEntity, DepositRepository } from '../../data/persistence';
+import { CreateDepositDto, DateRangeDto, PaginationDto } from '../../business/dtos';
 
 @Injectable()
 export class DepositService {
 
-  constructor(private readonly depositRepository: DepositRepository, private readonly accountService: AccountService) {}
+  private readonly depositRepository: DepositRepository;
+  private readonly accountRepository: AccountRepository;
 
-  createDeposit(deposit: DepositEntity): DepositEntity {
-    const newBalance = new BalanceDto();
-    newBalance.accountId = deposit.account.id;
-    newBalance.amount = deposit.amount;
-    this.accountService.addBalance(newBalance);
-    return this.depositRepository.register(deposit);
+  constructor() {
+    this.depositRepository = DepositRepository.getInstance();
+    this.accountRepository = AccountRepository.getInstance();
   }
 
-  deleteDeposit(depositId: string): boolean {
+  createDeposit(deposit: CreateDepositDto): DepositEntity {
+    const newDeposit = new DepositEntity();
+    newDeposit.account = this.accountRepository.findOneById(deposit.accountId);
+    newDeposit.amount = deposit.balance;
+    newDeposit.dateTime = deposit.dateTime || new Date();
+
+    if (newDeposit.account){
+      newDeposit.account.balance += Math.abs(deposit.balance);
+      this.accountRepository.update(newDeposit.account.id, newDeposit.account);
+      return this.depositRepository.register(newDeposit);
+    } else throw new NotFoundException();
+  }
+
+  deleteDeposit(depositId: string, soft?: boolean): boolean {
     const current = this.depositRepository.findOneById(depositId);
     if (current){
       try{
-        this.depositRepository.delete(depositId);
+        this.depositRepository.delete(depositId, soft?.valueOf());
         return true;
       } catch {
         return false;
@@ -39,5 +49,13 @@ export class DepositService {
     if (dataRange){
       return this.depositRepository.findByDataRange(accountId, dataRange?.dateInit, dataRange?.dateEnd, pagination);
     } else return this.depositRepository.findByAccountId(accountId, pagination);
+  }
+
+  findSoftDeletedDeposits() : DepositEntity[] {
+    return this.depositRepository.findSoftDeletedDeposits();
+  }
+
+  findAllDeposits(pagination?: PaginationDto) : DepositEntity[] {
+    return this.depositRepository.findAll(pagination);
   }
 }

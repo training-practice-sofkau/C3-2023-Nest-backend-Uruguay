@@ -8,6 +8,15 @@ import { PaginationModel } from '../../models';
 @Injectable()
 export class TransferRepository extends GeneralCRUD<TransferEntity> implements ITransferRepositoryInterface {
 
+  public static instance: TransferRepository;
+
+  public static getInstance(): TransferRepository {
+    if (!TransferRepository.instance) {
+      TransferRepository.instance = new TransferRepository();
+    }
+    return TransferRepository.instance;
+  }
+
   register(entity: TransferEntity): TransferEntity {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;
@@ -41,7 +50,7 @@ export class TransferRepository extends GeneralCRUD<TransferEntity> implements I
   }
 
   private softDelete(index: number): void {
-    this.database[index].deletedAt = Date.now();
+    this.database[index].deletedAt = new Date();
   }
 
   findAll(paginator?: PaginationModel): TransferEntity[] {
@@ -104,5 +113,13 @@ export class TransferRepository extends GeneralCRUD<TransferEntity> implements I
       );
       if (finded == undefined) throw new NotFoundException();
       return finded.slice(paginator?.offset, paginator?.limit);
+  }
+
+  findSoftDeletedTransfers(): TransferEntity[] {
+    let finded = this.database.filter(
+      (item) => item.deletedAt !== undefined
+    );
+    if (finded == undefined) throw new NotFoundException();
+    return finded;
   }
 }

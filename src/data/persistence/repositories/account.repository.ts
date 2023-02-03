@@ -8,6 +8,15 @@ import { PaginationModel } from '../../models';
 @Injectable()
 export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAccountRepository, IDisableable<AccountEntity>, INameable<AccountEntity> {
 
+  public static instance: AccountRepository;
+
+  public static getInstance(): AccountRepository {
+    if (!AccountRepository.instance) {
+      AccountRepository.instance = new AccountRepository();
+    }
+    return AccountRepository.instance;
+  }
+
   register(entity: AccountEntity): AccountEntity {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;
@@ -48,7 +57,7 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
   }
 
   private softDelete(index: number): void {
-    this.database[index].deletedAt = Date.now();
+    this.database[index].deletedAt = new Date();
     // This will be work but the main Repository instance its not exist
     // MainAccountTypeRepository().delete(this.database[index].accountType.id, true);
     // And optional deposits remove sentence
@@ -57,7 +66,7 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
     // });
   }
 
-  findAll(paginator: PaginationModel): AccountEntity[] {
+  findAll(paginator?: PaginationModel): AccountEntity[] {
     let finded = this.database.filter(
         (item) => item.deletedAt == undefined
     );
@@ -92,7 +101,6 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
           item.deletedAt == undefined &&
           item.customer.deletedAt == undefined
     );
-    console.log(finded);
     if (finded == undefined) throw new NotFoundException();
     return finded;
   }
@@ -112,6 +120,14 @@ export class AccountRepository extends GeneralCRUD<AccountEntity> implements IAc
         (item) => 
           item.customer.fullName == name &&
           item.deletedAt == undefined
+    );
+    if (finded == undefined) throw new NotFoundException();
+    return finded;
+  }
+
+  findSoftDeletedAccounts(): AccountEntity[] {
+    let finded = this.database.filter(
+      (item) => item.deletedAt !== undefined
     );
     if (finded == undefined) throw new NotFoundException();
     return finded;

@@ -1,27 +1,23 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { AccountService, DepositService } from '../../business/services';
-import { CreateDepositDto, HistoryDto } from '../../business/dtos';
+import { DepositService } from '../../business/services';
+import { CreateDepositDto, HistoryDto, PaginationDto } from '../../business/dtos';
 import { DepositEntity } from '../../data/persistence';
 
 @ApiTags('deposit')
 @Controller('api/deposit')
 export class DepositController {
 
-    constructor(private readonly depositService: DepositService, private readonly accountService: AccountService) {}
+    constructor(private readonly depositService: DepositService) {}
 
-    @Post('/create-deposit')
+    @Post('/create')
     createDeposit(@Body() deposit: CreateDepositDto) {
-        const newDeposit = new DepositEntity();
-        newDeposit.account = this.accountService.getAccountById(deposit.accountId);
-        newDeposit.amount = deposit.balance;
-        newDeposit.dateTime = deposit.dateTime || Date.now(); 
-        return this.depositService.createDeposit(newDeposit);
+        return this.depositService.createDeposit(deposit);
     }
     
-    @Get('/delete-deposit')
-    deleteDeposit(@Query('deposit') deposit: string): boolean {
-        return this.depositService.deleteDeposit(deposit);
+    @Get('/delete')
+    deleteDeposit(@Query('deposit') deposit: string, @Query('soft') soft?: boolean): boolean {
+        return this.depositService.deleteDeposit(deposit, soft);
     }
     
     @Post('/get-history')
@@ -29,4 +25,13 @@ export class DepositController {
         return this.depositService.getHistory(history.id, history.pagination, history.datarange);
     }
 
+    @Get('/get-soft-deleteds')
+    findSoftDeletedDeposits(): DepositEntity[] {
+        return this.depositService.findSoftDeletedDeposits();
+    }
+
+    @Get('/get-all')
+    findAllDeposits(pagination?: PaginationDto): DepositEntity[] {
+        return this.depositService.findAllDeposits(pagination);
+    }
 }

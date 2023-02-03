@@ -1,24 +1,40 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
-import { AccountRepository, AccountTypeRepository } from '../../data/persistence';
+import { AccountRepository, AccountTypeRepository, CustomerRepository } from '../../data/persistence';
 import { AccountEntity, AccountTypeEntity } from '../../data/persistence/entities';
 
 // Data Transfer Object
-import { BalanceDto, ChangeAccountDto, ChangeStateDto } from '../../business/dtos';
+import { BalanceDto, ChangeAccountDto, ChangeStateDto, CreateAccountDto, PaginationDto } from '../../business/dtos';
+import { UpdateAccountDto } from '../dtos/update-account.dto';
 
 
 @Injectable()
 export class AccountService {
+  
+  private readonly accountTypeRepository: AccountTypeRepository;
+  private readonly accountRepository: AccountRepository;
+  private readonly customerRepository: CustomerRepository;
 
-  constructor(private readonly accountRepository: AccountRepository, private readonly accountTypeRepository: AccountTypeRepository) {}
-
-  createAccount(account: AccountEntity): AccountEntity {
-    return this.accountRepository.register(account);
+  constructor() {
+    this.accountRepository = AccountRepository.getInstance();
+    this.accountTypeRepository = AccountTypeRepository.getInstance();
+    this.customerRepository = CustomerRepository.getInstance();
   }
 
-  getAccountTypeRepo(): AccountTypeRepository {
-    return this.accountTypeRepository;
+  createAccount(account: CreateAccountDto): AccountEntity {
+    const newAccount = new AccountEntity();
+    const newAccountType = new AccountTypeEntity();
+    newAccountType.name = account.accountTypeName;
+
+    newAccount.accountType = newAccountType;
+    newAccount.balance = account.balance;
+    newAccount.customer = this.customerRepository.findOneById(account.customerId);
+    return this.accountRepository.register(newAccount);
   }
+
+  //getAccountTypeRepo(): AccountTypeRepository {
+  //  return this.accountTypeRepository;
+  //}
 
   getBalance(accountId: string): number {
     return this.accountRepository.findOneById(accountId).balance;
@@ -26,9 +42,9 @@ export class AccountService {
 
   addBalance(balance: BalanceDto): boolean {
     const current = this.accountRepository.findOneById(balance.accountId);
-    current.balance += Math.abs(balance.amount);
     if (current){
       try{
+        current.balance += Math.abs(balance.amount);
         this.accountRepository.update(balance.accountId, current);
         return true;
       } catch {
@@ -37,22 +53,34 @@ export class AccountService {
     } else {
       return false;
     }
-
   }
 
   removeBalance(balance: BalanceDto): boolean {
     const current = this.accountRepository.findOneById(balance.accountId);
     current.balance -= Math.abs(balance.amount);
     if (current){
-      try{
+      if (current.balance >= 0) {
         this.accountRepository.update(balance.accountId, current);
         return true;
-      } catch {
+      } else {
         return false;
       }
     } else {
       return false;
     }
+  }
+
+  updateAccount(account: UpdateAccountDto): AccountEntity {
+    const oldAccount = this.accountRepository.findOneById(account.AccountId);
+    if (oldAccount) {
+      oldAccount.balance = account.balance;
+      oldAccount.accountType.name = account.accountTypeName
+      oldAccount.customer = this.customerRepository.findOneById(account.customerId);
+      if (oldAccount.customer){
+        this.accountTypeRepository.update(oldAccount.accountType.id, oldAccount.accountType);
+        return this.accountRepository.update(account.AccountId, oldAccount);
+      } else throw new NotFoundException();
+    } else throw new NotFoundException();
   }
 
   verifyAmountIntoBalance(balance: BalanceDto): boolean {
@@ -64,15 +92,12 @@ export class AccountService {
     return this.accountRepository.findOneById(accountId).state;
   }
 
-  changeState(account: ChangeStateDto): boolean {
-    const current = this.accountRepository.findOneById(account.accountId);
-    current.state = account.state;
-    try{
-      this.accountRepository.update(account.accountId, current);
-      return true;
-    } catch {
-      return false;
-    } 
+  changeState(account: ChangeStateDto): AccountEntity {
+    const current = this.accountRepository.findOneById(account.id);
+    if (current){
+      current.state = account.state;
+      return this.accountRepository.update(account.id, current);
+    } else throw new NotFoundException();
   }
 
   getAccountById(accountId: string): AccountEntity {
@@ -104,7 +129,7 @@ export class AccountService {
     const current = this.accountRepository.findOneById(accountId);
     if (current){
       try{
-        this.accountRepository.delete(accountId, soft);
+        this.accountRepository.delete(accountId, soft?.valueOf());
         return true;
       } catch {
         return false;
@@ -112,5 +137,17 @@ export class AccountService {
     } else {
       return false;
     }
+  }
+
+  findSoftDeletedAccounts() : AccountEntity[] {
+    return this.accountRepository.findSoftDeletedAccounts();
+  }
+
+  findAllAccounts(pagination?: PaginationDto) : AccountEntity[] {
+    return this.accountRepository.findAll(pagination);
+  }
+
+  findAllAccountTypes(pagination?: PaginationDto) : AccountTypeEntity[] {
+    return this.accountTypeRepository.findAll(pagination);
   }
 }

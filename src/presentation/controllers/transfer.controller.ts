@@ -1,38 +1,23 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { AccountService, TransferService } from '../../business/services';
-import { CreateTransferDto, HistoryDto } from '../../business/dtos';
+import { TransferService } from '../../business/services';
+import { CreateTransferDto, HistoryDto, PaginationDto } from '../../business/dtos';
 import { TransferEntity } from '../../data/persistence';
-import { BalanceDto } from '../../business/dtos/balance.dto';
 
 @ApiTags('transfer')
 @Controller('api/transfer')
 export class TransferController {
 
-    constructor(private readonly transferService: TransferService, private readonly accountService: AccountService) {}
+    constructor(private readonly transferService: TransferService) {}
 
-    @Post('/create-transfer')
-    createTransfer(@Body() transfer: CreateTransferDto) {
-        const balance = new BalanceDto();
-        balance.accountId = transfer.incomeId;
-        balance.amount = transfer.balance;
-        if (this.accountService.verifyAmountIntoBalance(balance)) {
-            const newTransfer = new TransferEntity();
-            newTransfer.balance = transfer.balance;
-            newTransfer.income = this.accountService.getAccountById(transfer.incomeId);
-            newTransfer.outcome = this.accountService.getAccountById(transfer.outcomeId);
-            newTransfer.reason = transfer.reason;
-            newTransfer.dateTime = transfer.dateTime || Date.now();
-            this.accountService.removeBalance(balance);
-            balance.accountId = transfer.outcomeId;
-            this.accountService.addBalance(balance);
-            return this.transferService.createTransfer(newTransfer);
-        }
+    @Post('/create')
+    createTransfer(@Body() transfer: CreateTransferDto): TransferEntity {
+        return this.transferService.createTransfer(transfer);
     }
     
-    @Get('/delete-transfer')
-    deleteTransfer(@Query('transfer') transfer: string): boolean {
-        return this.transferService.deleteTransfer(transfer);
+    @Get('/delete')
+    deleteTransfer(@Query('transfer') transfer: string, @Query('soft') soft?: boolean): boolean {
+        return this.transferService.deleteTransfer(transfer, soft);
     }
     
     @Post('/get-history')
@@ -48,5 +33,15 @@ export class TransferController {
     @Post('/get-history-in')
     getHistoryIn(@Body() history: HistoryDto): TransferEntity[] {
         return this.transferService.getHistoryIn(history.id, history.pagination, history.datarange);
+    }
+
+    @Get('/get-soft-deleteds')
+    findSoftDeletedTransfers(): TransferEntity[] {
+        return this.transferService.findSoftDeletedTransfers();
+    }
+
+    @Get('/get-all')
+    findAllTransfers(pagination?: PaginationDto): TransferEntity[] {
+        return this.transferService.findAllTransfers();
     }
 }

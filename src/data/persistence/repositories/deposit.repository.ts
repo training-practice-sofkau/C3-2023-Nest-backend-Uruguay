@@ -8,6 +8,15 @@ import { PaginationModel } from '../../models';
 @Injectable()
 export class DepositRepository extends GeneralCRUD<DepositEntity> implements IDepositRepository {
 
+  public static instance: DepositRepository;
+
+  public static getInstance(): DepositRepository {
+    if (!DepositRepository.instance) {
+      DepositRepository.instance = new DepositRepository();
+    }
+    return DepositRepository.instance;
+  }
+
   register(entity: DepositEntity): DepositEntity {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;
@@ -41,7 +50,7 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> implements IDe
   }
 
   private softDelete(index: number): void {
-    this.database[index].deletedAt = Date.now();
+    this.database[index].deletedAt = new Date();
   }
 
   findAll(paginator?: PaginationModel): DepositEntity[] {
@@ -82,5 +91,13 @@ export class DepositRepository extends GeneralCRUD<DepositEntity> implements IDe
     );
     if (finded == undefined) throw new NotFoundException();
     return finded.slice(paginator?.offset, paginator?.limit);
+  }
+
+  findSoftDeletedDeposits(): DepositEntity[] {
+    let finded = this.database.filter(
+      (item) => item.deletedAt !== undefined
+    );
+    if (finded == undefined) throw new NotFoundException();
+    return finded;
   }
 }
