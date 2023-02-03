@@ -3,6 +3,7 @@ import { CustomerDtos } from 'src/business/dtos';
 import { CustomerEntity } from 'src/Data';
 import { CustomerRepository } from 'src/Data/persistence';
 import { AccountRepository } from '../../../Data/persistence/repositories/account.repository';
+import { AccountEntity } from '../../../Data/persistence/entities/account.entity';
 
 @Injectable()
 export class CustomerService {
@@ -46,6 +47,8 @@ export class CustomerService {
    * @memberof CustomerService
    */
   unsubscribe(id: string): boolean {
+    let account = this.AccountRepository.findByCustomerr(id)
+    this.AccountRepository.delete(account.id, true)
     this.CustomerRepository.delete(id)
     return true
 
