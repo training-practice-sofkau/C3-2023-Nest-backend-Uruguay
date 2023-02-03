@@ -56,8 +56,7 @@ findAll(pagination: PaginationModel): AccountEntity[] {
 
 findOneById(id: string):AccountEntity {
     const currentEntity = this.database.findIndex(
-        (item) => item.id === id 
-      );
+        (item) => item.id === id);
 
       if(currentEntity == -1){
         throw new NotFoundException(`Id : ${id}(account) no existe`);

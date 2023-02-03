@@ -31,6 +31,7 @@ export class TransferService {
 
     return this.TransferRepo.register(newTransfer);
   }
+  
 
   /**
    * Obtener historial de transacciones de salida de una cuenta

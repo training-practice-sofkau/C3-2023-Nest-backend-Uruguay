@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, forwardRef } from '@nestjs/common';
 import { AccountService } from 'src/module/account/capaLogicaDeNegocio/service';
 import { DepositEntity } from '../../capaDeDato/entity';
-import { depositDto } from '../dto';
+import { DepositDto } from '../dto';
 import { DataRangeModel, PaginationModel } from 'src/module/base/models';
 import { DepositRepository } from '../../capaDeDato/repository';
 
@@ -16,7 +16,7 @@ export class DepositService {
     private readonly accountService: AccountService){}
 
 
-  createDeposit(deposit: depositDto): DepositEntity {
+  createDeposit(deposit: DepositDto): DepositEntity {
 
     const account = this.accountService.getById(deposit.accountId);
 

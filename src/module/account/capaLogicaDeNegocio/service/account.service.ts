@@ -77,14 +77,22 @@ export class AccountService {
 
   addBalance(accountId: string, amount: AccountDTO): void {
     const account = this.accountRepository.findOneById(accountId);
+    
     if(typeof amount.balance != 'undefined')
     account.balance += amount.balance;
 
     this.accountRepository.update(accountId,account);
   }
 
+  removeBalanceAll(accountId: string): void {
+    const account = this.accountRepository.findOneById(accountId);
+    account.balance -= account.balance;
+
+    this.accountRepository.update(accountId, account);
+  }
+
   removeBalance(accountId: string, amount: AccountDTO): void {
-    if(typeof amount.balance === 'undefined') throw new NotAcceptableException();
+    if(typeof amount.balance === 'undefined') throw new NotAcceptableException(`Balance indefinido ${amount}`);
 
     if(this.verifyAmountIntoBalance(accountId,amount.balance) === false) 
     throw new NotAcceptableException(`El monto : ${amount}
@@ -140,8 +148,10 @@ export class AccountService {
     if(entity.balance != 0) throw new Error(`No se puede borrar
     la cuenta porque el balance no es 0 `);
 
-    if(sof) this.accountRepository.delete(accountId,sof);
-    if(!sof)this.accountRepository.delete(accountId);
+    if(sof) 
+    this.accountRepository.delete(accountId,sof);
+    if(!sof)
+    this.accountRepository.delete(accountId);
   }
 
   findAllAccountTypes(): AccountTypeEntity[] {

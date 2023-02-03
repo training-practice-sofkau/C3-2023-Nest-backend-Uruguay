@@ -1,32 +1,37 @@
 import { Controller, Post ,Body, Get, Param, Delete } from '@nestjs/common';
 import { DepositService } from '../../capaLogicaDeNegocio/service';
-import { depositDto } from '../../capaLogicaDeNegocio/dto';
+import { DepositDto } from '../../capaLogicaDeNegocio/dto';
 import { DepositEntity } from '../../capaDeDato/entity';
+import { DataRangeModel, PaginationModel } from 'src/module/base/models';
 
 
 @Controller('deposit')
 export class DepositController {
-    constructor(private readonly depositServer : DepositService){}
+    constructor(private readonly depositService : DepositService){}
     // FALTA > getHistory(depositId: string , pagination?: PaginationModel,dataRange?: DataRangeModel): DepositEntity[]
-    @Post(`create`)
-    createDeposit(@Body() newDeposit : depositDto):DepositEntity{
-        return this.depositServer.createDeposit(newDeposit);
-    }
-    @Get(`all`) // Tiene que pasarle un rango (Pagination)
-    findAll():DepositEntity[]{
-        return this.depositServer.findAll();
-    }
-    
-    @Delete(`delete/:id/:sof`)//pero sof es boolean es negativo o positivo
-    deleteDepositSof(@Param(`id`) depositId : string ,
-     @Param(`sof`) depositSof : boolean){
-        return this.depositServer.deleteDeposit(depositId,depositSof);
-        
+    @Post('/create')
+    createDeposit(@Body() deposit: DepositDto): DepositEntity {
+        return this.depositService.createDeposit(deposit);
     }
 
-    @Delete(`delete/:id`)
-    deleteDepositHard(@Param(`id`) depositId : string ){
-        return this.depositServer.deleteDeposit(depositId);
+    @Get('/find-all')
+    findAll(): DepositEntity[] {
+        return this.depositService.findAll();
+    }
+
+    @Delete('/soft-delete/:id')
+    softDelete(@Param('id') id: string): void {
+        this.depositService.deleteDeposit(id, true);
+    }
+
+    @Delete('/hard-delete/:id')
+    hardDelete(@Param('id') id: string): void {
+        this.depositService.deleteDeposit(id);
+    }
+
+    @Get('/get-history/:id')
+    getHistory(@Param('id') id: string, @Body() pagination: PaginationModel, @Body() dateRange?: DataRangeModel): DepositEntity[] {
+        return this.depositService.getHistory(id,pagination,dateRange);
     }
     
 

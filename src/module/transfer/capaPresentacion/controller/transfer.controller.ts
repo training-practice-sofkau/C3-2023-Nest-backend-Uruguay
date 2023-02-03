@@ -10,18 +10,15 @@ import { PaginationModel, DataRangeModel } from 'src/module/base/models';
 export class TransferController {
     constructor(private readonly transferService: TransferService){}
 
-    //getHistory(accountId: string,pagination: PaginationModel,dataRange?: DataRangeModel): TransferEntity[] {//dataRange?: 
-    //getHistoryOut(accountId: string,pagination?: PaginationModel,dataRange?: DataRangeModel): TransferEntity[] {//dataRange:DataRangeModel
-    
     @Post('/create')
     createTransfer(@Body() transfer: CreateTransferDto): TransferEntity {
         return this.transferService.createTransfer(transfer);
     }
 
-    // @Get('/find-all')
-    // findAll(@Body() paginator: PaginationModel): TransferEntity[] {
-    //     return this.transferService.findAll(paginator);
-    // }
+    @Get('/find-all')
+    findAll(@Body() paginator: PaginationModel): TransferEntity[] {
+        return this.transferService.findAll();
+    }
 
     @Get('/get-history-out/:id')
     getHistoryOut(@Param('id') id: string,@Body() pagination: PaginationModel,@Body() dataRange?: DataRangeModel): TransferEntity[] {

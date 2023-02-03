@@ -94,7 +94,11 @@ export class AccountController {//extends ObservableHandel
         return this.accountService.verifyAmountIntoBalance(accountId,amount);
     }
 
-    
+    @Post('/remove-all-balance/:accountId')
+    removeAllBalance(@Param('accountId') accountId: string): void {
+        return this.accountService.removeBalanceAll(accountId);
+    }
+
     @Delete(`/delete-balance/:id`)
     removeBalance(accountId: string,@Body() amount: AccountDTO): void {
         return this.accountService.removeBalance(accountId,amount);
@@ -104,8 +108,6 @@ export class AccountController {//extends ObservableHandel
     addBalance(@Param(`id`)accountId: string,@Body() amount: AccountDTO): void{
         return this.accountService.addBalance(accountId,amount);
     }
-
-
 
     @Get(`/state/:id`)
     getState(@Param(`id`) accountId: string): boolean{
