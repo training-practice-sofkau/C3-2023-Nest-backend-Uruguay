@@ -63,7 +63,7 @@ export class AccountService {
         accountUpdated.balance -= amount;
         this.accountRepository.update(accountId, accountUpdated);
       }
-      throw new ForbiddenException('The amount to remove cannot be greater than the balance');
+      else throw new ForbiddenException('The amount to remove cannot be greater than the balance');
       
     } catch (error) {
       throw new HttpException(error.message, error.status);
@@ -132,15 +132,15 @@ export class AccountService {
   /**
    * Borrar una cuenta
    */
-  deleteAccount(accountId: string): void {
-    this.accountRepository.delete(accountId);
+  deleteAccount(accountId: string): string {
+    return this.accountRepository.delete(accountId);
   }
   
   /**
    * Borrar una cuenta de forma lógica
    */
-  softDeleteAccount(accountId: string): void {
-    this.accountRepository.delete(accountId, true);
+  softDeleteAccount(accountId: string): string {
+    return this.accountRepository.delete(accountId, true);
   }
 
   /**
@@ -223,4 +223,16 @@ export class AccountService {
   findOneAccountType(id: string): AccountTypeEntity {
     return this.accountTypeRepository.findOneById(id);
   }
+
+//   findByState(state: boolean): AccountTypeEntity[] {
+//     const currentEntities = this.database.filter((item) => item.state === state);
+//     if (currentEntities) return currentEntities;
+//     else throw new NotFoundException();
+// }
+
+// findByName(name: string): AccountTypeEntity[] {
+//     const currentEntities = this.database.filter((item) => item.name === name);
+//     if (currentEntities) return currentEntities;
+//     else throw new NotFoundException();
+// }
 }

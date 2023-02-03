@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { DataRangeModel, PaginationModel, TransferModel } from '../../../data/models';
+import { DataRangeModel, PaginationModel } from '../../../data/models';
 import { TransferEntity } from '../../../data/persistence/entities';
 import { AccountRepository } from '../../../data/persistence/repositories/account.repository';
 import { TransferRepository,  } from '../../../data/persistence/repositories';
@@ -18,19 +18,17 @@ export class TransferService {
    * Crear una transferencia entre cuentas del banco
    */
   createTransfer(transfer: TransferDto): TransferEntity {
-    this.accountService.removeBalance(transfer.outcome, transfer.amount);
-    this.accountService.addBalance(transfer.income, transfer.amount);
-    
-    let accountIncome = this.accountService.findOneAccountById(transfer.income);
-    let accountOutcome = this.accountService.findOneAccountById(transfer.outcome);
-    
-    let newTransfer = new TransferEntity();
-    newTransfer.income = accountIncome;
-    newTransfer.outcome = accountOutcome;
+    const newTransfer = new TransferEntity();
+    newTransfer.income = this.accountRepository.findOneById(transfer.income);
+    newTransfer.outcome = this.accountRepository.findOneById(transfer.outcome);
     newTransfer.amount = transfer.amount;
     newTransfer.reason = transfer.reason;
 
     this.transferRepository.register(newTransfer);
+    
+    this.accountService.addBalance(transfer.income, transfer.amount);
+    this.accountService.removeBalance(transfer.outcome, transfer.amount);
+
     return newTransfer;
   }
 
@@ -128,15 +126,15 @@ export class TransferService {
    * @param {string} transferId
    * @memberof TransferService
    */
-  deleteTransfer(transferId: string): void {
-    this.transferRepository.delete(transferId);
+  deleteTransfer(transferId: string): string {
+    return this.transferRepository.delete(transferId);
   }
 
   /**
    * Borrar una transacción de forma lógica
    */
-  softDeleteTransfer(transferId: string): void {
-    this.transferRepository.delete(transferId, true);
+  softDeleteTransfer(transferId: string): string {
+    return this.transferRepository.delete(transferId, true);
   }
 
 

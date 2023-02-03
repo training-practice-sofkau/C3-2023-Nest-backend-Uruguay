@@ -27,22 +27,32 @@ export class TransferRepository
         } as TransferEntity;
     }
 
-    delete(id: string, soft?: boolean): void {
+    delete(id: string, soft?: boolean): string {
         const indexCurrentEntity = this.database.findIndex(
             (item) => item.id === id && typeof item.deletedAt === 'undefined',
         );
         if (indexCurrentEntity === -1) throw new NotFoundException();
-        soft ?
-            this.softDelete(indexCurrentEntity) :
-            this.hardDelete(indexCurrentEntity);
+        
+        if(soft) {
+            return this.softDelete(indexCurrentEntity);
+        }
+        return this.hardDelete(indexCurrentEntity);
     }
 
-    private hardDelete(index: number): void {
-        this.database.splice(index, 1);
+    private hardDelete(index: number): string {
+        try {
+            this.database.splice(index, 1);
+        } catch (error) {
+            return 'The transfer could not be deleted';
+        }
+        return 'The transfer was successfully deleted';
     }
 
-    private softDelete(index: number): void {
+    private softDelete(index: number): string {
         this.database[index].deletedAt = new Date();
+
+        if(this.database[index].deletedAt) return 'The transfer was successfully soft deleted'
+        return 'The transfer could not be soft deleted';
     }
 
     findAll(): TransferEntity[] {

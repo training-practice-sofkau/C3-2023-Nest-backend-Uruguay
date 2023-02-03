@@ -41,15 +41,15 @@ export class DepositService {
   /**
    * Borrar un deposito
    */
-  deleteDeposit(depositId: string): void {
-    this.depositRepository.delete(depositId);
+  deleteDeposit(depositId: string): string {
+    return this.depositRepository.delete(depositId);
   }
   
   /**
    * Borrar un deposito de forma lógica
    */
-  softDeleteDeposit(depositId: string): void {
-    this.depositRepository.delete(depositId, true);
+  softDeleteDeposit(depositId: string): string {
+    return this.depositRepository.delete(depositId, true);
   }
 
   /**

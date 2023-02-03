@@ -38,14 +38,14 @@ export class DepositController {
 
     @Patch(':id/soft')
     @UsePipes(new ValidationPipe())
-    softDeleteDeposit(@Param('id', ParseUUIDPipe) id: string): void {
-        this.depositService.softDeleteDeposit(id);
+    softDeleteDeposit(@Param('id', ParseUUIDPipe) id: string): string {
+        return this.depositService.softDeleteDeposit(id);
     }
 
     @Delete(':id')
     @UsePipes(new ValidationPipe())
-    hardDeleteDeposit(@Param('id', ParseUUIDPipe) id: string): void {
-        this.depositService.deleteDeposit(id);
+    hardDeleteDeposit(@Param('id', ParseUUIDPipe) id: string): string {
+        return this.depositService.deleteDeposit(id);
     }
 
     @Get(':accountId')

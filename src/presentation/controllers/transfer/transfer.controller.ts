@@ -33,18 +33,26 @@ export class TransferController {
     }
 
     @Delete(':id')
-    deleteTransfer(@Param('id', ParseUUIDPipe) id: string): void {
-        this.transferService.deleteTransfer(id);
+    deleteTransfer(@Param('id', ParseUUIDPipe) id: string): string {
+        return this.transferService.deleteTransfer(id);
     }
 
     @Patch(':id/soft')
-    softDeleteTransfer(@Param('id', ParseUUIDPipe) id: string): void {
-        this.transferService.softDeleteTransfer(id);
+    softDeleteTransfer(@Param('id', ParseUUIDPipe) id: string): string {
+        return this.transferService.softDeleteTransfer(id);
     }
 
     @Put(':id')
     @UsePipes(new ValidationPipe())
     updateTransfer(
+        @Param('id', ParseUUIDPipe)id: string,
+        @Body() transfer: UpdateTransferDto): TransferEntity {
+        return this.transferService.updateTransfer(id, transfer);
+    }
+
+    @Patch(':id')
+    @UsePipes(new ValidationPipe())
+    updateTransferSomeProperties(
         @Param('id', ParseUUIDPipe)id: string,
         @Body() transfer: UpdateTransferDto): TransferEntity {
         return this.transferService.updateTransfer(id, transfer);
@@ -61,7 +69,7 @@ export class TransferController {
         return this.transferService.findOneTransferById(id);
     }
     
-    @Get(':idOutcome/:dateInit/:dateEnd')
+    @Get('out/:idOutcome/:dateInit/:dateEnd')
     @UsePipes(new ValidationPipe())
     findTransfersOutcomeByDataRange(
         @Param('idOutcome', ParseUUIDPipe) accountId: string,
@@ -71,7 +79,7 @@ export class TransferController {
         return this.transferService.findTransfersOutcomeByDataRange(accountId, dateInit, dateEnd);
     }
     
-    @Get(':idIncome/:dateInit/:dateEnd')
+    @Get('in/:idIncome/:dateInit/:dateEnd')
     @UsePipes(new ValidationPipe())
     findTransfersIncomeByDataRange(
         @Param('idIncome', ParseUUIDPipe) accountId: string,

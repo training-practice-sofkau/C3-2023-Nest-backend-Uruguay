@@ -35,14 +35,14 @@ export class CustomerController {
 
     @Patch(':id/soft')
     @UsePipes(new ValidationPipe())
-    softDeleteCustomer(@Param('id', ParseUUIDPipe) id: string): void {
+    softDeleteCustomer(@Param('id', ParseUUIDPipe) id: string): string {
         return this.customerService.softDeleteCustomer(id);
     }
 
     @Delete(':id')
     @UsePipes(new ValidationPipe())
-    hardDeleteCustomer(@Param('id', ParseUUIDPipe) id: string): void {
-        this.customerService.deleteCustomer(id);
+    hardDeleteCustomer(@Param('id', ParseUUIDPipe) id: string): string {
+        return this.customerService.deleteCustomer(id);
     }
 
     

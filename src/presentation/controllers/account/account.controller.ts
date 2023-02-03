@@ -106,14 +106,14 @@ export class AccountController {
 
     @Patch(':id/soft')
     @UsePipes(new ValidationPipe())
-    softDeleteAccount(@Param('id', ParseUUIDPipe) id: string): void {
-        this.accountService.softDeleteAccount(id);
+    softDeleteAccount(@Param('id', ParseUUIDPipe) id: string): string {
+        return this.accountService.softDeleteAccount(id);
     }
 
     @Delete(':id')
     @UsePipes(new ValidationPipe())
-    hardDeleteAccount(@Param('id', ParseUUIDPipe) id: string): void {
-        this.accountService.deleteAccount(id);
+    hardDeleteAccount(@Param('id', ParseUUIDPipe) id: string): string {
+        return this.accountService.deleteAccount(id);
     }
 
     @Post('type')

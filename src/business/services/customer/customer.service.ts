@@ -99,15 +99,15 @@ export class CustomerService {
   /**
    * Borrar un cliente
    */
-  deleteCustomer(customerId: string): void {
-    this.customerRepository.delete(customerId);
+  deleteCustomer(customerId: string): string {
+    return this.customerRepository.delete(customerId);
   }
   
   /**
    * Borrar un cliente de forma lógica
    */
-  softDeleteCustomer(customerId: string): void {
-    this.customerRepository.delete(customerId, true);
+  softDeleteCustomer(customerId: string): string {
+    return this.customerRepository.delete(customerId, true);
   }
 
   /**
