@@ -45,8 +45,7 @@ export class SegurityService {
 
   signUp(user: SignUpDto): string {
 
-    //const documentType = this.documentTypeRepository.findOneById(user.documentTypeId);
-    const documentType = new DocumentTypeEntity();
+    const documentType = this.documentTypeRepository.findOneById(user.documentTypeId);
     documentType.id = user.documentTypeId;
 
     const newCustomer = new CustomerEntity();
@@ -71,12 +70,12 @@ export class SegurityService {
 
       if (!account) throw new InternalServerErrorException();
 
-      return jwt.sign(
-        { email: user.email, password: user.password },
-        process.env.TOKEN_SECRET || 'tokentest',
-        );
-    // return 'token'
-    } return 'token';//else throw new InternalServerErrorException();
+      
+    //return 'token'
+    }return jwt.sign(
+      { email: user.email, password: user.password },
+      process.env.TOKEN_SECRET || 'tokentest',
+      );
   }
 
   signOut(JWToken: string , res:Response): void {

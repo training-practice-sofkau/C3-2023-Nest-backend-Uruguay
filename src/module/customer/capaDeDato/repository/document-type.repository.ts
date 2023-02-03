@@ -9,7 +9,7 @@ import { DocumentTypeEntity } from '../entity/document-type-Entity';
 export class DocumentTypeRepository extends BaseRepository<DocumentTypeEntity> implements DocumentTypeRepositoryInterface{
 
     register(entity: DocumentTypeEntity): DocumentTypeEntity {
-        const indexCurrentEntity = this.database.findIndex((item) => item.id === entity.id);
+        const indexCurrentEntity = this.database.findIndex((item) => item.id === entity.id );
         if (indexCurrentEntity != -1) throw new NotFoundException(`The Document:${entity.id} ya existe`);
 
         this.database.push(entity);
@@ -51,16 +51,12 @@ export class DocumentTypeRepository extends BaseRepository<DocumentTypeEntity> i
         return this.database[currentEntity];
     }
 
-
     findByState(state: boolean): DocumentTypeEntity[] {
-        
-        return this.database.filter(
-        (item) => item.state === state);
+        return this.database.filter((item) => item.state === state);
     }
 
     findByName(name: string): DocumentTypeEntity[] {
-        return this.database.filter(
-        (item) => item.name === name);
+        return this.database.filter((item) => item.name === name);
     }
 
 }

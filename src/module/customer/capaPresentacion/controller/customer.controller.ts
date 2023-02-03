@@ -28,7 +28,7 @@ export class CustomerController {
         return this.customerService.getCustomerInfo(customerId);
     }
 
-    @Post(`/document-type/create`)
+    @Post(`/document-type/create`)//Hecho
     createDocumentType(@Body()documentType : DocumentTypeDto):DocumentTypeEntity{
         return this.customerService.createDocumentType(documentType);
     }
