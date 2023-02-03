@@ -135,9 +135,10 @@ export class AccountService {
   }
 
 
-  changeAccountType(accountId: string,accountTypeId: string,): AccountTypeEntity {
+  changeAccountType(accountId: string,accountTypeId: AccountDTO,): AccountTypeEntity {
     const account = this.accountRepository.findOneById(accountId);
-    account.account_type_id = this.accountTypeRepository.findOneById(accountTypeId);
+    if(typeof accountTypeId.accountType === `undefined`) throw new Error(`Tipo de cuenta undefined`); 
+    account.account_type_id = this.accountTypeRepository.findOneById(accountTypeId.accountType);
     this.accountRepository.update(accountId,account);
     return account.account_type_id; 
   }

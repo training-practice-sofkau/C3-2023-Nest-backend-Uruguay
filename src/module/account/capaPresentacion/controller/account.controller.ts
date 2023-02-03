@@ -67,9 +67,9 @@ export class AccountController {//extends ObservableHandel
         this.accountService.deleteAccount(accountId);
     }
 
-    @Put(`/changeAccountType/:accountId/:accountTypeId`)
+    @Put(`/changeAccountType/:accountId`)
     changeAccountType(@Param(`accountId`)accountId: string,
-        @Param(`accountTypeId`)accountTypeId: string,): AccountTypeEntity {
+        @Body()accountTypeId: AccountDTO,): AccountTypeEntity {
             return this.accountService.changeAccountType(accountId,accountTypeId);
         }
 
