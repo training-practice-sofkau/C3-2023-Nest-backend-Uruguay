@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 
 import { CustomerEntity, DocumentTypeEntity } from '../../../data/persistence/entities';
 import { CustomerRepository } from '../../../data/persistence/repositories';
@@ -18,6 +18,8 @@ export class CustomerService {
   createCustomer(customer: CustomerDto): CustomerEntity {
 
     const documentTypeExisting = this.documentTypeRepository.findOneById(customer.documentType);
+
+    if(documentTypeExisting.state === false) throw new NotFoundException('DocumentType is not available');
 
     const newACustomer = new CustomerEntity();
     newACustomer.fullName = customer.fullName;
@@ -51,6 +53,9 @@ export class CustomerService {
     if(customer.document) customerUpdated.document = customer.document;
     if(customer.documentType) {
       let documentTypeExisting = this.documentTypeRepository.findOneById(customer.documentType);
+
+      if(documentTypeExisting.state === false) throw new NotFoundException('DocumentType is not available');
+
       customerUpdated.documentType = documentTypeExisting;
     }
     if(customer.email) customerUpdated.email = customer.email;

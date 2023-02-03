@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException, HttpException, Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, HttpException, Injectable, NotFoundException } from '@nestjs/common';
 
 import { AccountEntity, AccountTypeEntity } from '../../../data/persistence/entities';
 import { AccountRepository, AccountTypeRepository, CustomerRepository } from '../../../data/persistence/repositories';
@@ -16,6 +16,8 @@ export class AccountService {
    */
   createAccount(account: AccountDto): AccountEntity {
     const accountTypeExisting  = this.accountTypeRepository.findOneById(account.accountType);
+    if(accountTypeExisting.state === false) throw new NotFoundException('Accountype is not available');
+
     const customerExisting = this.customerRepository.findOneById(account.customer);
     
     let newAccount = new AccountEntity();
@@ -170,6 +172,9 @@ export class AccountService {
 
     if(account.accountType) {
       const accountTypeExisting = this.accountTypeRepository.findOneById(account.accountType);
+
+      if(accountTypeExisting.state === false) throw new NotFoundException('Accountype is not available');
+
       accountUpdated.accountType = accountTypeExisting;
     }
     if(account.customer) {
