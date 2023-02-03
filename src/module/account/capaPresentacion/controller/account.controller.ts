@@ -99,8 +99,8 @@ export class AccountController {//extends ObservableHandel
         return this.accountService.removeBalanceAll(accountId);
     }
 
-    @Delete(`/delete-balance/:id`)
-    removeBalance(accountId: string,@Body() amount: AccountDTO): void {
+    @Delete(`/delete-balance/:id/:amoun`)
+    removeBalance(@Param(`id`)accountId: string,@Param(`amoun`) amount: number): void {
         return this.accountService.removeBalance(accountId,amount);
     }
 

@@ -91,16 +91,16 @@ export class AccountService {
     this.accountRepository.update(accountId, account);
   }
 
-  removeBalance(accountId: string, amount: AccountDTO): void {
-    if(typeof amount.balance === 'undefined') throw new NotAcceptableException(`Balance indefinido ${amount}`);
+  removeBalance(accountId: string, amount: number): void {
+    if(typeof amount === 'undefined') throw new NotAcceptableException(`Balance indefinido ${amount}`);
 
-    if(this.verifyAmountIntoBalance(accountId,amount.balance) === false) 
+    if(this.verifyAmountIntoBalance(accountId,amount) === false) 
     throw new NotAcceptableException(`El monto : ${amount}
     es incorrecto , verifique que el monto ingresado no sea inferior a 0, o superior al  
     balance de la cuenta`); 
     const account = this.accountRepository.findOneById(accountId);
 
-    account.balance -= amount.balance;
+    account.balance -= amount;
 
     this.accountRepository.update(accountId,account);
   }

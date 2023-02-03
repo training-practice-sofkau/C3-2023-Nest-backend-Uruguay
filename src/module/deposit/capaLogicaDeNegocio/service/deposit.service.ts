@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, forwardRef } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException, forwardRef } from '@nestjs/common';
 import { AccountService } from 'src/module/account/capaLogicaDeNegocio/service';
 import { DepositEntity } from '../../capaDeDato/entity';
 import { DepositDto } from '../dto';
@@ -25,7 +25,16 @@ export class DepositService {
     newDeposit.amount = deposit.amount;
     newDeposit.date_time = Date.now();
     
-    return this.depositRepository.register(newDeposit);
+    const ResultadoDeposito = this.depositRepository.register(newDeposit);
+
+    if(!ResultadoDeposito) 
+      throw new InternalServerErrorException
+      (`No se pudo realizar el deposito de forma correcta`);
+
+      account.balance += deposit.amount;
+
+      return ResultadoDeposito;
+
   }
 
   findAll(): DepositEntity[] {

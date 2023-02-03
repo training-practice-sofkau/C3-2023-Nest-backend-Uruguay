@@ -1,4 +1,4 @@
-import { Inject, Injectable, forwardRef } from '@nestjs/common';
+import { Inject, Injectable, InternalServerErrorException, forwardRef } from '@nestjs/common';
 import { TransferRepository } from '../../capaDeDatos/repository/transfer.repository';
 import { TransferEntity } from '../../capaDeDatos/entity/transfer.entities';
 import { CreateTransferDto } from '../dto/transfer.dto';
@@ -29,7 +29,15 @@ export class TransferService {
     newTransfer.reason = transfer.reason;
     newTransfer.date_time = Date.now();
 
-    return this.TransferRepo.register(newTransfer);
+    const transferEntity = this.TransferRepo.register(newTransfer);
+    
+    if(!transferEntity) throw new InternalServerErrorException(`No se pudo realizar la transaccion de forma correcta`);
+      
+    newOucome.balance -=transfer.amount;
+    
+    newIncome.balance += transfer.amount;
+    
+    return transferEntity;
   }
 
   findAll(): TransferEntity[] {
