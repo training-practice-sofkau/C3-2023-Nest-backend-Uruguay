@@ -1,4 +1,4 @@
 export interface DataRangeModel {
-    offset: number | Date;
-    limit: number | Date;
+    start: number | Date;
+    end: number | Date;
 }

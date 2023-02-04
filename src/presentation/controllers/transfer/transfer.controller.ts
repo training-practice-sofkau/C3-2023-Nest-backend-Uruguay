@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, Put, Query, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, Put, Query, UsePipes, ValidationPipe, ParseIntPipe } from '@nestjs/common';
 
 import { TransferService } from '../../../business/services';
 import { TransferEntity } from '../../../data/persistence/entities';
@@ -12,8 +12,9 @@ export class TransferController {
     @UsePipes(new ValidationPipe())
     getTransfersAccount(
         @Param('id', ParseUUIDPipe) id: string,
-        @Query() pagination?: PaginationDto|undefined): TransferEntity[] {
-            return this.transferService.getHistory(id, pagination);
+        @Body() datarange: DataRangeDto|undefined,
+        @Query() pagination: PaginationDto|undefined): TransferEntity[] {
+            return this.transferService.getHistory(id, pagination, datarange);
     }
     
     @Post()
@@ -24,14 +25,20 @@ export class TransferController {
 
     @Get('in/:id')
     @UsePipes(new ValidationPipe())
-    getTransfersAccountIn(@Param('id', ParseUUIDPipe) id: string): TransferEntity[] {
-        return this.transferService.getHistoryIn(id);
+    getTransfersAccountIn(
+        @Param('id', ParseUUIDPipe) id: string,
+        @Body() datarange: DataRangeDto|undefined,
+        @Query() pagination: PaginationDto|undefined): TransferEntity[] {
+        return this.transferService.getHistoryIn(id,pagination, datarange);
     }
 
     @Get('out/:id')
     @UsePipes(new ValidationPipe())
-    getTransfersAccountOut(@Param('id', ParseUUIDPipe) id: string): TransferEntity[] {
-        return this.transferService.getHistoryOut(id);
+    getTransfersAccountOut(
+        @Param('id', ParseUUIDPipe) id: string,
+        @Body() datarange: DataRangeDto|undefined,
+        @Query() pagination: PaginationDto|undefined): TransferEntity[] {
+        return this.transferService.getHistoryOut(id, pagination, datarange);
     }
 
     @Delete(':id')
@@ -75,8 +82,8 @@ export class TransferController {
     @UsePipes(new ValidationPipe())
     findTransfersOutcomeByDataRange(
         @Param('idOutcome', ParseUUIDPipe) accountId: string,
-        @Param('dateInit') dateInit: Date,
-        @Param('dateEnd') dateEnd: Date
+        @Param('dateInit', ParseIntPipe) dateInit: number,
+        @Param('dateEnd', ParseIntPipe) dateEnd: number
     ): TransferEntity[] {
         return this.transferService.findTransfersOutcomeByDataRange(accountId, dateInit, dateEnd);
     }
@@ -85,8 +92,8 @@ export class TransferController {
     @UsePipes(new ValidationPipe())
     findTransfersIncomeByDataRange(
         @Param('idIncome', ParseUUIDPipe) accountId: string,
-        @Param('dateInit') dateInit: Date,
-        @Param('dateEnd') dateEnd: Date
+        @Param('dateInit', ParseIntPipe) dateInit: number,
+        @Param('dateEnd', ParseIntPipe) dateEnd: number
     ): TransferEntity[] {
         return this.transferService.findTransfersIncomeByDataRange(accountId, dateInit, dateEnd);
     }

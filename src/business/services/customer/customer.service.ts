@@ -116,10 +116,10 @@ export class CustomerService {
    */
   findAllCustomers(pagination?: PaginationDto): CustomerEntity[] {
     const customers = this.customerRepository.findAll();
-    let customersPaginated: CustomerEntity[] =[];
+    let customersPaginated = customers;
 
-    if(pagination) {
-      return customersPaginated = customers.slice(pagination.offset, pagination.limit);
+    if(pagination?.offset) {
+      return customersPaginated = customersPaginated.slice(pagination.offset, pagination.limit);
     }
     return customers;
   }

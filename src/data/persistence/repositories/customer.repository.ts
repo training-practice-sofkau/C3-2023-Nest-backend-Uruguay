@@ -54,7 +54,7 @@ export class CustomerRepository
   }
 
   private softDelete(index: number): string {
-      this.database[index].deletedAt = new Date();
+      this.database[index].deletedAt = Date.now();
       
       this.observableHandler.handle(this.database[index]).subscribe(customer => console.log(customer));
 

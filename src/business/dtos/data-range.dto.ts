@@ -2,10 +2,8 @@ import { IsDate, IsNotEmpty, IsOptional } from "class-validator";
 
 export class DataRangeDto {
     @IsNotEmpty()
-    @IsDate()
-    start: Date;
+    start: number | Date;
 
     @IsNotEmpty()
-    @IsDate()
-    end: Date;
+    end: number | Date;
 }

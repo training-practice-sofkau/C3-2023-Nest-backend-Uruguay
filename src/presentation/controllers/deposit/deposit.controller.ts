@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UsePipes, ValidationPipe, ParseUUIDPipe, Post, Body, Delete, Put, Patch, Query } from '@nestjs/common';
+import { Controller, Get, Param, UsePipes, ValidationPipe, ParseUUIDPipe, Post, Body, Delete, Put, Patch, Query, ParseIntPipe } from '@nestjs/common';
 
 import { DepositEntity } from '../../../data/persistence/entities';
 import { DepositService } from '../../../business/services';
@@ -12,8 +12,9 @@ export class DepositController {
     @UsePipes(new ValidationPipe())
     getDepositsAccount(
         @Param('id', ParseUUIDPipe) id: string,
-        @Query() pagination?: PaginationDto|undefined): DepositEntity[] {
-            return this.depositService.getHistory(id, pagination);
+        @Body() datarange: DataRangeDto|undefined,
+        @Query() pagination: PaginationDto|undefined): DepositEntity[] {
+            return this.depositService.getHistory(id, pagination, datarange);
     }
 
     @Post()
@@ -55,8 +56,8 @@ export class DepositController {
     @Get(':dateInit/:dateEnd')
     @UsePipes(new ValidationPipe())
     getHistoryByDataRange(
-        @Param('dateInit') dateInit: Date,
-        @Param('dateEnd') dateEnd: Date): DepositEntity[] {
+        @Param('dateInit', ParseIntPipe) dateInit: number,
+        @Param('dateEnd', ParseIntPipe) dateEnd: number): DepositEntity[] {
         return this.depositService.getHistoryByDataRange(dateInit, dateEnd);
     }
 }

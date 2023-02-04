@@ -148,10 +148,10 @@ export class AccountService {
    */
   findAllAccounts(pagination?: PaginationDto): AccountEntity[] {
     const accounts = this.accountRepository.findAll();
-    let accountsPaginated: AccountEntity[] =[];
+    let accountsPaginated = accounts;
 
-    if(pagination) {
-      return accountsPaginated = accounts.slice(pagination.offset, pagination.limit);
+    if(pagination?.offset) {
+      return accountsPaginated = accountsPaginated.slice(pagination.offset, pagination.limit);
     }
     return accounts;
   }

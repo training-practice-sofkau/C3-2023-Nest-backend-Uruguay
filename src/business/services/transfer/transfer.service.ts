@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 
-import { DataRangeModel, PaginationModel } from '../../../data/models';
 import { TransferEntity } from '../../../data/persistence/entities';
 import { AccountRepository } from '../../../data/persistence/repositories/account.repository';
 import { TransferRepository,  } from '../../../data/persistence/repositories';
@@ -37,24 +36,21 @@ export class TransferService {
    */
   getHistoryOut(
     accountId: string,
-    pagination?: PaginationModel,
-    dataRange?: DataRangeModel,
+    pagination?: PaginationDto,
+    dataRange?: DataRangeDto,
   ): TransferEntity[] {
     let transfers = this.transferRepository.findAll();
     let transfersOfAccount = transfers.filter(transfer => transfer.outcome.id === accountId)
     let transfersFiltered = transfersOfAccount;
 
-    if(pagination) {
+    if(pagination?.offset) {
       transfersFiltered = transfersFiltered.slice(pagination.offset, pagination.limit);
     }
     
-    if(dataRange) {
-      if(typeof dataRange.offset === 'number') dataRange.offset = new Date(dataRange.offset);
-      if(typeof dataRange.limit === 'number') dataRange.limit = new Date(dataRange.limit);
-
-      transfersFiltered = transfersFiltered.filter(
-        (transfer) => transfer.dateTime >= dataRange.offset && transfer.dateTime <= dataRange.limit
-      )
+    if(dataRange?.start) {
+      transfersFiltered = transfersFiltered.filter((transfer) => {
+        transfer.dateTime >= dataRange.start && transfer.dateTime <= dataRange.end
+      });
     }
     return transfersFiltered;
   }
@@ -64,23 +60,20 @@ export class TransferService {
    */
   getHistoryIn(
     accountId: string,
-    pagination?: PaginationModel,
-    dataRange?: DataRangeModel,
+    pagination?: PaginationDto,
+    dataRange?: DataRangeDto,
   ): TransferEntity[] {
     let transfers = this.transferRepository.findAll();
     let transfersOfAccount = transfers.filter(transfer => transfer.income.id === accountId)
     let transfersFiltered = transfersOfAccount;
 
-    if(pagination) {
+    if(pagination?.offset) {
       transfersFiltered = transfersFiltered.slice(pagination.offset, pagination.limit);
     }
     
-    if(dataRange) {
-      if(typeof dataRange.offset === 'number') dataRange.offset = new Date(dataRange.offset);
-      if(typeof dataRange.limit === 'number') dataRange.limit = new Date(dataRange.limit);
-
+    if(dataRange?.start) {
       transfersFiltered = transfersFiltered.filter(
-        (transfer) => transfer.dateTime >= dataRange.offset && transfer.dateTime <= dataRange.limit
+        (transfer) => transfer.dateTime >= dataRange.start && transfer.dateTime <= dataRange.start
       )
     }
     return transfersFiltered;
@@ -105,11 +98,11 @@ export class TransferService {
 
     let transfersFiltered = transfersAccount;
 
-    if(pagination) {
+    if(pagination?.offset) {
       transfersFiltered = transfersFiltered.slice(pagination.offset, pagination.limit);
     }
     
-    if(dataRange) {
+    if(dataRange?.start) {
       transfersFiltered = transfersFiltered.filter(
         (transfer) => transfer.dateTime >= dataRange.start && transfer.dateTime <= dataRange.end
       );

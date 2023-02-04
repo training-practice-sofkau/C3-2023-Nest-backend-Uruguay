@@ -58,7 +58,7 @@ export class AccountRepository
     }
 
     private softDelete(index: number): string {
-        this.database[index].deletedAt = new Date();
+        this.database[index].deletedAt = Date.now();
 
         if(this.database[index].deletedAt) return 'The account was successfully soft deleted'
         return 'The account could not be soft deleted';

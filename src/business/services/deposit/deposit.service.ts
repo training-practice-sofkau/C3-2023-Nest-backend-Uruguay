@@ -65,11 +65,11 @@ export class DepositService {
     let depositsOfAccount = deposits.filter(deposit => deposit.account.id === accountId)
     let depositsFiltered = depositsOfAccount;
 
-    if(pagination) {
+    if(pagination?.offset) {
       depositsFiltered = depositsFiltered.slice(pagination.offset, pagination.limit);
     }
 
-    if(dataRange) {
+    if(dataRange?.start) {
       depositsFiltered = depositsFiltered.filter(
         deposit => deposit.dateTime >= dataRange.start && deposit.dateTime <= dataRange.end
         );

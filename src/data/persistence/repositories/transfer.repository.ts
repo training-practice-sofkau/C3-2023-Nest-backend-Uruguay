@@ -49,7 +49,7 @@ export class TransferRepository
     }
 
     private softDelete(index: number): string {
-        this.database[index].deletedAt = new Date();
+        this.database[index].deletedAt = Date.now();
 
         if(this.database[index].deletedAt) return 'The transfer was successfully soft deleted'
         return 'The transfer could not be soft deleted';
@@ -88,10 +88,6 @@ export class TransferRepository
         dateInit: Date | number,
         dateEnd: Date | number,
     ): TransferEntity[] {
-
-        if(typeof dateInit === 'number') dateInit = new Date(dateInit);
-        if(typeof dateEnd === 'number') dateEnd = new Date(dateEnd);
-        
         const transfers = this.database.filter(
             (transfer) => transfer.income.id === accountId
                 && transfer.dateTime >= dateInit

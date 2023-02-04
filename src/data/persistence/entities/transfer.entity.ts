@@ -9,6 +9,6 @@ export class TransferEntity implements TransferModel{
     income: AccountEntity;
     amount: number;
     reason: string;
-    dateTime = new Date();
+    dateTime = Date.now();
     deletedAt?: number | Date | undefined;
 }

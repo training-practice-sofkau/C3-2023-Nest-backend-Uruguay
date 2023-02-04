@@ -49,7 +49,7 @@ export class DepositRepository
     }
 
     private softDelete(index: number): string {
-        this.database[index].deletedAt = new Date();
+        this.database[index].deletedAt = Date.now();
 
         if(this.database[index].deletedAt) return 'The deposit was successfully soft deleted'
         return 'The deposit could not be soft deleted';
@@ -78,10 +78,6 @@ export class DepositRepository
         dateInit: Date | number,
         dateEnd: Date | number,
     ): DepositEntity[] {
-        
-        if(typeof dateInit === 'number') dateInit = new Date(dateInit);
-        if(typeof dateEnd === 'number') dateEnd = new Date(dateEnd);
-
         const deposits = this.database.filter(
             (deposit) => deposit.dateTime <= dateInit
             && deposit.dateTime >= dateEnd

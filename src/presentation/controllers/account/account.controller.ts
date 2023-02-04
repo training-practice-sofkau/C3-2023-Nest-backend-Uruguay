@@ -14,7 +14,7 @@ export class AccountController {
 
     @Get()
     @UsePipes(new ValidationPipe())
-    findAll(@Query() pagination?: PaginationDto|undefined): AccountEntity[] {
+    findAll(@Query() pagination: PaginationDto|undefined): AccountEntity[] {
         return this.accountService.findAllAccounts(pagination);
     }
 
