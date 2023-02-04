@@ -9,27 +9,22 @@ import { JwtService } from '@nestjs/jwt';
 import { ObservableHandler } from '../../observable';
 
   // Data transfer objects
-  import { SignOutDto, SignUpDto, SignInDto } from '../../dtos';
+  import { AccountDto, CustomerDto, SignOutDto, SignUpDto, SignInDto } from '../../dtos';
 
   // Models
   
   // Repositories
-  import { CustomerRepository, DocumentTypeRepository } from '../../../data/persistence/repositories';
   
   // Services
-  import { AccountService } from '../../services';
+  import { AccountService, CustomerService } from '../../services';
   
   // Entities
-  import {
-    CustomerEntity,
-  } from '../../../data/persistence/entities';
   
   @Injectable()
   export class SecurityService extends ObservableHandler{
     constructor(
-      private readonly customerRepository: CustomerRepository,
-      private readonly documentTypeRepository: DocumentTypeRepository,
       private readonly accountService: AccountService,
+      private readonly customerService: CustomerService,
       private jwtService: JwtService
     ) {
       super();
@@ -39,7 +34,7 @@ import { ObservableHandler } from '../../observable';
      * Identificarse en el sistema
      */
     signIn(user: SignInDto): string {
-      const answer = this.customerRepository.findOneByEmailAndPassword(
+      const answer = this.customerService.findOneByEmailAndPassword(
         user.username,
         user.password,
       );
@@ -53,22 +48,22 @@ import { ObservableHandler } from '../../observable';
      * Crear usuario en el sistema
      */
     signUp(user: SignUpDto): string {
+    
+      const newCustomer: CustomerDto = {
+        documentType: user.documentTypeId,
+        document: user.document,
+        fullName: user.fullName,
+        email: user.email,
+        phone:user.phone,
+        password: user.password,
+        avatarUrl: undefined
+      };
       
-      const documentType = this.documentTypeRepository.findOneById(user.documentTypeId)
-
-      const newCustomer = new CustomerEntity();
-      newCustomer.documentType = documentType;
-      newCustomer.document = user.document;
-      newCustomer.fullName = user.fullName;
-      newCustomer.email = user.email;
-      newCustomer.phone = user.phone;
-      newCustomer.password = user.password;
-      
-      const customer = this.customerRepository.register(newCustomer);
+      const customer = this.customerService.createCustomer(newCustomer);
   
       if (customer) {
         
-        const newAccount = { 
+        const newAccount: AccountDto = { 
           customer: customer.id,
           accountType: user.accountTypeId,
         };
@@ -80,8 +75,9 @@ import { ObservableHandler } from '../../observable';
         const token: string = this.jwtService.sign({id: account.id});
         
         if (account) return token;
-        else throw new InternalServerErrorException({statusCode: 500, message: 'account cannot be created'});
-      } else throw new InternalServerErrorException({statusCode: 500, message: 'Customer cannot be register'});
+        else throw new InternalServerErrorException({statusCode: 500, message: 'Account cannot be created'});
+      }
+      else throw new InternalServerErrorException({statusCode: 500, message: 'Customer cannot be register'});
     }
   
     /**
@@ -91,7 +87,7 @@ import { ObservableHandler } from '../../observable';
       const customer = this.jwtService.verify(JWToken.jwt);
       
       if(customer) {
-        const answer = this.customerRepository.findOneByEmailAndPassword(
+        const answer = this.customerService.findOneByEmailAndPassword(
           customer.username,
           customer.password,
         );

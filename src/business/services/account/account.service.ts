@@ -19,7 +19,8 @@ export class AccountService {
     if(accountTypeExisting.state === false) throw new NotFoundException('Accountype is not available');
 
     const customerExisting = this.customerRepository.findOneById(account.customer);
-    
+    if(customerExisting.state === false) throw new NotFoundException('Customer is not available');
+
     let newAccount = new AccountEntity();
     newAccount.accountType = accountTypeExisting;
     newAccount.customer = customerExisting;
@@ -179,6 +180,8 @@ export class AccountService {
     }
     if(account.customer) {
       const customerExisting = this.customerRepository.findOneById(account.customer);
+      if(customerExisting.state === false) throw new NotFoundException('Customer is not available');
+
       accountUpdated.customer = customerExisting;
     }
     if(account.balance) {
@@ -194,10 +197,13 @@ export class AccountService {
   }
 
   createAccountType(dto: AccountTypeDto): AccountTypeEntity {
+    const accountTypes = this.accountTypeRepository.findAll();
+    const nameExisting = accountTypes.findIndex(accountType => accountType.name === dto.name);
+    if(nameExisting != -1) throw new ForbiddenException('An account type with that name already exists');
+    
     let newAccountType = new AccountTypeEntity();
-
     newAccountType.name = dto.name;
-    newAccountType.state = dto.state;
+    if(dto.state != undefined) newAccountType.state = dto.state;
 
     this.accountTypeRepository.register(newAccountType)
     return newAccountType;
@@ -205,9 +211,13 @@ export class AccountService {
 
   updateAccountType(id: string, dto: AccountTypeDto | PatchAccountTypeDto): AccountTypeEntity {
     let accountTypeUpdated = this.accountTypeRepository.findOneById(id);
-    
-    if(dto.name) accountTypeUpdated.name = dto.name;
-    if(dto.state) accountTypeUpdated.state = dto.state;
+    if(dto.name) {
+      const accountTypes = this.accountTypeRepository.findAll();
+      const nameExisting = accountTypes.findIndex(accountType => accountType.name === dto.name);
+      if(nameExisting != -1) throw new ForbiddenException('An account type with that name already exists');
+      accountTypeUpdated.name = dto.name;
+    }
+    if(dto.state != undefined) accountTypeUpdated.state = dto.state;
 
     return this.accountTypeRepository.update(id, accountTypeUpdated);
   }

@@ -166,10 +166,13 @@ export class CustomerService {
 
   
   createDocumentType(dto: DocumentTypeDto): DocumentTypeEntity {
+    const documentTypes = this.documentTypeRepository.findAll();
+    const nameExisting = documentTypes.findIndex(documentType => documentType.name === dto.name);
+    if(nameExisting != -1) throw new ForbiddenException('A document type with that name already exists');
+    
     let newDocumentType = new DocumentTypeEntity();
-
     newDocumentType.name = dto.name;
-    newDocumentType.state = dto.state;
+    if(dto.state != undefined) newDocumentType.state = dto.state;
 
     this.documentTypeRepository.register(newDocumentType);
     return newDocumentType;
@@ -177,9 +180,13 @@ export class CustomerService {
 
   updateDocumentType(id: string, dto: DocumentTypeDto | PAtchDocumentTypeDto): DocumentTypeEntity {
     let documentTypeUpdated = this.documentTypeRepository.findOneById(id);
-    
-    if(dto.name) documentTypeUpdated.name = dto.name;
-    if(dto.state) documentTypeUpdated.state = dto.state;
+    if(dto.name) {
+      const documentTypes = this.documentTypeRepository.findAll();
+    const nameExisting = documentTypes.findIndex(documentType => documentType.name === dto.name);
+    if(nameExisting != -1) throw new ForbiddenException('A document type with that name already exists');
+    documentTypeUpdated.name = dto.name;
+    }
+    if(dto.state != undefined) documentTypeUpdated.state = dto.state;
 
     return this.documentTypeRepository.update(id, documentTypeUpdated);
   }

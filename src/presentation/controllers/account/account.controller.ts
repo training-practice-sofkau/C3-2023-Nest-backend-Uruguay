@@ -144,7 +144,7 @@ export class AccountController {
         return this.accountService.deleteAccountType(id);
     }
 
-    @Get('type')
+    @Get('type/all')
     getAllAccountType(@Query() pagination: PaginationDto|undefined): AccountTypeEntity[] {
         return this.accountService.findAllAccountType(pagination);
     }
@@ -156,13 +156,13 @@ export class AccountController {
 
     @Get('type/state/:state')
     @UsePipes(new ValidationPipe())
-    getAccountTypeByState(@Param('state', ParseBoolPipe) state: boolean): AccountTypeEntity[] {
+    getAccountTypesByState(@Param('state', ParseBoolPipe) state: boolean): AccountTypeEntity[] {
         return this.accountService.findAccountTypeByState(state);
     }
 
     @Get('type/name/:name')
     @UsePipes(new ValidationPipe())
-    getAccountTypeByName(@Param('name') name: string): AccountTypeEntity[] {
+    getAccountTypesByName(@Param('name') name: string): AccountTypeEntity[] {
         return this.accountService.findAccountTypeByName(name);
     }
 }
