@@ -125,8 +125,8 @@ export class CustomerController {
     }
 
     @Get('document/type')
-    getAllDocumentType(): DocumentTypeEntity[] {
-        return this.customerService.findAllDocumentType();
+    getAllDocumentType(@Query() pagination: PaginationDto|undefined): DocumentTypeEntity[] {
+        return this.customerService.findAllDocumentType(pagination);
     }
     @Get('document/type/:id')
     @UsePipes(new ValidationPipe())

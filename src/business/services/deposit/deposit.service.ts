@@ -66,10 +66,13 @@ export class DepositService {
     let depositsFiltered = depositsOfAccount;
 
     if(pagination?.offset) {
-      depositsFiltered = depositsFiltered.slice(pagination.offset, pagination.limit);
+      depositsFiltered = depositsFiltered.slice(pagination.offset, pagination.limit || undefined);;
     }
 
-    if(dataRange?.start) {
+    if(dataRange?.start && dataRange.end) {
+      if(typeof dataRange.start != 'number') dataRange.start = dataRange.start.getTime();
+      if(typeof dataRange.end != 'number') dataRange.end = dataRange.end.getTime();
+
       depositsFiltered = depositsFiltered.filter(
         deposit => deposit.dateTime >= dataRange.start && deposit.dateTime <= dataRange.end
         );

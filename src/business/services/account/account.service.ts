@@ -151,7 +151,7 @@ export class AccountService {
     let accountsPaginated = accounts;
 
     if(pagination?.offset) {
-      return accountsPaginated = accountsPaginated.slice(pagination.offset, pagination.limit);
+      return accountsPaginated = accountsPaginated.slice(pagination.offset, pagination.limit || undefined);;
     }
     return accounts;
   }
@@ -195,10 +195,10 @@ export class AccountService {
 
   createAccountType(dto: AccountTypeDto): AccountTypeEntity {
     let newAccountType = new AccountTypeEntity();
-    newAccountType = {
-        ...newAccountType,
-        ...dto
-    }
+
+    newAccountType.name = dto.name;
+    newAccountType.state = dto.state;
+
     this.accountTypeRepository.register(newAccountType)
     return newAccountType;
   }
@@ -217,8 +217,15 @@ export class AccountService {
     return 'Account type was successfully deleted';
   }
 
-  findAllAccountType(): AccountTypeEntity[] {
-    return this.accountTypeRepository.findAll();
+  findAllAccountType(pagination?: PaginationDto): AccountTypeEntity[] {
+    let allAccountTypes = this.accountTypeRepository.findAll();
+
+    let accountTypesFiltered = allAccountTypes;
+
+    if(pagination?.offset) {
+      accountTypesFiltered = accountTypesFiltered.slice(pagination.offset, pagination.limit || undefined);
+    }
+    return accountTypesFiltered;
   }
 
   findOneAccountType(id: string): AccountTypeEntity {

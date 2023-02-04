@@ -145,8 +145,8 @@ export class AccountController {
     }
 
     @Get('type')
-    getAllAccountType(): AccountTypeEntity[] {
-        return this.accountService.findAllAccountType();
+    getAllAccountType(@Query() pagination: PaginationDto|undefined): AccountTypeEntity[] {
+        return this.accountService.findAllAccountType(pagination);
     }
     @Get('type/:id')
     @UsePipes(new ValidationPipe())

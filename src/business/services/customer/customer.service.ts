@@ -119,9 +119,9 @@ export class CustomerService {
     let customersPaginated = customers;
 
     if(pagination?.offset) {
-      return customersPaginated = customersPaginated.slice(pagination.offset, pagination.limit);
+      return customersPaginated = customersPaginated.slice(pagination.offset, pagination.limit || undefined);;
     }
-    return customers;
+    return customersPaginated;
   }
 
   /**
@@ -168,10 +168,9 @@ export class CustomerService {
   createDocumentType(dto: DocumentTypeDto): DocumentTypeEntity {
     let newDocumentType = new DocumentTypeEntity();
 
-    newDocumentType = {
-      ...newDocumentType,
-      ...dto
-    }
+    newDocumentType.name = dto.name;
+    newDocumentType.state = dto.state;
+
     this.documentTypeRepository.register(newDocumentType);
     return newDocumentType;
   }
@@ -190,8 +189,15 @@ export class CustomerService {
     return 'Document type was successfully deleted';
   }
 
-  findAllDocumentType(): DocumentTypeEntity[] {
-    return this.documentTypeRepository.findAll();
+  findAllDocumentType(pagination?: PaginationDto): DocumentTypeEntity[] {
+    let allDocumentTypes = this.documentTypeRepository.findAll();
+
+    let ocumentTypesPaginated = allDocumentTypes;
+
+    if(pagination?.offset) {
+      return ocumentTypesPaginated = ocumentTypesPaginated.slice(pagination.offset, pagination.limit || undefined);;
+    }
+    return ocumentTypesPaginated;
   }
 
   findOneDocumentType(id: string): DocumentTypeEntity {

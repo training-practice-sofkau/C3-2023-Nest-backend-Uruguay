@@ -44,10 +44,13 @@ export class TransferService {
     let transfersFiltered = transfersOfAccount;
 
     if(pagination?.offset) {
-      transfersFiltered = transfersFiltered.slice(pagination.offset, pagination.limit);
+      transfersFiltered = transfersFiltered.slice(pagination.offset, pagination.limit || undefined);;
     }
     
-    if(dataRange?.start) {
+    if(dataRange?.start && dataRange.end) {
+      if(typeof dataRange.start != 'number') dataRange.start = dataRange.start.getTime();
+      if(typeof dataRange.end != 'number') dataRange.end = dataRange.end.getTime();
+
       transfersFiltered = transfersFiltered.filter((transfer) => {
         transfer.dateTime >= dataRange.start && transfer.dateTime <= dataRange.end
       });
@@ -68,10 +71,13 @@ export class TransferService {
     let transfersFiltered = transfersOfAccount;
 
     if(pagination?.offset) {
-      transfersFiltered = transfersFiltered.slice(pagination.offset, pagination.limit);
+      transfersFiltered = transfersFiltered.slice(pagination.offset, pagination.limit || undefined);;
     }
     
-    if(dataRange?.start) {
+    if(dataRange?.start && dataRange.end) {
+      if(typeof dataRange.start != 'number') dataRange.start = dataRange.start.getTime();
+      if(typeof dataRange.end != 'number') dataRange.end = dataRange.end.getTime();
+
       transfersFiltered = transfersFiltered.filter(
         (transfer) => transfer.dateTime >= dataRange.start && transfer.dateTime <= dataRange.start
       )
@@ -99,10 +105,13 @@ export class TransferService {
     let transfersFiltered = transfersAccount;
 
     if(pagination?.offset) {
-      transfersFiltered = transfersFiltered.slice(pagination.offset, pagination.limit);
+      transfersFiltered = transfersFiltered.slice(pagination.offset, pagination.limit || undefined);;
     }
     
-    if(dataRange?.start) {
+    if(dataRange?.start && dataRange.end) {
+      if(typeof dataRange.start != 'number') dataRange.start = dataRange.start.getTime();
+      if(typeof dataRange.end != 'number') dataRange.end = dataRange.end.getTime();
+
       transfersFiltered = transfersFiltered.filter(
         (transfer) => transfer.dateTime >= dataRange.start && transfer.dateTime <= dataRange.end
       );
@@ -139,8 +148,24 @@ updateTransfer(id: string, dto: UpdateTransferDto): TransferEntity {
     return transferUpdated;
 }
 
-getAllTransfers(): TransferEntity[] {
-    return this.transferRepository.findAll();
+getAllTransfers(pagination?: PaginationDto, dataRange?: DataRangeDto): TransferEntity[] {
+    let allTransfers = this.transferRepository.findAll();
+
+    let transfersFiltered = allTransfers;
+
+    if(pagination?.offset) {
+      transfersFiltered = transfersFiltered.slice(pagination.offset, pagination.limit || undefined);
+    }
+    
+    if(dataRange?.start && dataRange.end) {
+      if(typeof dataRange.start != 'number') dataRange.start = dataRange.start.getTime();
+      if(typeof dataRange.end != 'number') dataRange.end = dataRange.end.getTime();
+
+      transfersFiltered = transfersFiltered.filter(
+        (transfer) => transfer.dateTime >= dataRange.start && transfer.dateTime <= dataRange.end
+      );
+    }
+    return transfersFiltered;
 }
 
 findOneTransferById(id: string): TransferEntity {
