@@ -153,7 +153,7 @@ export class AccountService {
     if(pagination?.offset) {
       return accountsPaginated = accountsPaginated.slice(pagination.offset, pagination.limit || undefined);;
     }
-    return accounts;
+    return accountsPaginated;
   }
 
   /**
