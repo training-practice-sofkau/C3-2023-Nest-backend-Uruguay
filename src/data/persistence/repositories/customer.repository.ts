@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 
 import { CustomerEntity } from '../entities';
 import { BaseRepository } from './base';
@@ -14,6 +14,10 @@ export class CustomerRepository
     }
 
   register(entity: CustomerEntity): CustomerEntity {
+    const documentExisting = this.database.findIndex(customer => customer.document === entity.document);
+
+    if(documentExisting != -1) throw new ForbiddenException('A customer with that document already exists');
+
     this.database.push(entity);
     return this.database.at(-1) ?? entity;
   }

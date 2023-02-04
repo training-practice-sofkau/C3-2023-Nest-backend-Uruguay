@@ -12,7 +12,7 @@ export class DocumentTypeRepository
   register(entity: DocumentTypeEntity): DocumentTypeEntity {
     const nameExisting = this.database.findIndex(documentType => documentType.name === entity.name);
 
-    if(nameExisting != -1) throw new ForbiddenException();
+    if(nameExisting != -1) throw new ForbiddenException('A document type with that name already exists');
     
     this.database.push(entity);
     return this.database.at(-1) ?? entity;

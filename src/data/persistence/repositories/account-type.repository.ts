@@ -12,7 +12,7 @@ export class AccountTypeRepository
     register(entity: AccountTypeEntity): AccountTypeEntity {
         const nameExisting = this.database.findIndex(accountType => accountType.name === entity.name);
 
-        if(nameExisting != -1) throw new ForbiddenException();
+        if(nameExisting != -1) throw new ForbiddenException('An account type with that name already exists');
 
         this.database.push(entity);
         return this.database.at(-1) ?? entity;
