@@ -31,7 +31,7 @@ export class DepositController {
 
     @Patch(':id')
     @UsePipes(new ValidationPipe())
-    updateDepositSomeProperties(@Param('id', ParseUUIDPipe) id: string, @Body() newdDeposit: DepositDto): DepositEntity {
+    updateDepositOneProperty(@Param('id', ParseUUIDPipe) id: string, @Body() newdDeposit: DepositDto): DepositEntity {
         return this.depositService.updateDeposit(id, newdDeposit);
     }
 
@@ -47,11 +47,17 @@ export class DepositController {
         return this.depositService.deleteDeposit(id);
     }
 
-    @Get(':accountId')
+    @Get()
     @UsePipes(new ValidationPipe())
-    getHistoryByAccountId(@Param('accountId', ParseUUIDPipe) accountId: string): DepositEntity[] {
-        return this.depositService.getHistoryByAccountId(accountId);
-      }
+    getAllDeposits(@Query() pagination: PaginationDto|undefined): DepositEntity[] {
+        return this.depositService.getAllDeposits(pagination);
+    }
+
+    @Get(':id')
+    @UsePipes(new ValidationPipe())
+    getOneDepositById(@Param('id', ParseUUIDPipe) id: string): DepositEntity {
+        return this.depositService.getOneDepositById(id);
+    }
     
     @Get(':dateInit/:dateEnd')
     @UsePipes(new ValidationPipe())

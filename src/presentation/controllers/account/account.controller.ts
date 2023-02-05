@@ -14,7 +14,7 @@ export class AccountController {
 
     @Get()
     @UsePipes(new ValidationPipe())
-    findAll(@Query() pagination: PaginationDto|undefined): AccountEntity[] {
+    findAllAccounts(@Query() pagination: PaginationDto|undefined): AccountEntity[] {
         return this.accountService.findAllAccounts(pagination);
     }
 
@@ -100,8 +100,9 @@ export class AccountController {
 
     @Patch(':id')
     @UsePipes(new ValidationPipe())
-    updateSomePropertiesAccount(@Param('id', ParseUUIDPipe) id: string ,@Body() account: UpdateAccountDto): AccountEntity {
-        return this.accountService.updatedAccount(id, account);
+    updateSomePropertiesAccount(
+        @Param('id', ParseUUIDPipe) id: string ,@Body() account: UpdateAccountDto): AccountEntity {
+            return this.accountService.updatedAccount(id, account);
     }
 
     @Patch(':id/soft')
@@ -145,8 +146,8 @@ export class AccountController {
     }
 
     @Get('type/all')
-    getAllAccountType(@Query() pagination: PaginationDto|undefined): AccountTypeEntity[] {
-        return this.accountService.findAllAccountType(pagination);
+    getAllAccountTypes(@Query() pagination: PaginationDto|undefined): AccountTypeEntity[] {
+        return this.accountService.findAllAccountTypes(pagination);
     }
     @Get('type/:id')
     @UsePipes(new ValidationPipe())
@@ -157,12 +158,12 @@ export class AccountController {
     @Get('type/state/:state')
     @UsePipes(new ValidationPipe())
     getAccountTypesByState(@Param('state', ParseBoolPipe) state: boolean): AccountTypeEntity[] {
-        return this.accountService.findAccountTypeByState(state);
+        return this.accountService.findAccountTypesByState(state);
     }
 
     @Get('type/name/:name')
     @UsePipes(new ValidationPipe())
     getAccountTypesByName(@Param('name') name: string): AccountTypeEntity[] {
-        return this.accountService.findAccountTypeByName(name);
+        return this.accountService.findAccountTypesByName(name);
     }
 }

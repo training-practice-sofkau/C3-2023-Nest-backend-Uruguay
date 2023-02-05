@@ -10,7 +10,7 @@ export class CustomerController {
 
     @Get()
     @UsePipes(new ValidationPipe())
-    findAll(@Query() paginaton?: PaginationDto|undefined): CustomerEntity[] {
+    findAllCustomers(@Query() paginaton?: PaginationDto|undefined): CustomerEntity[] {
         return this.customerService.findAllCustomers(paginaton);
     }
 
@@ -87,12 +87,12 @@ export class CustomerController {
         
     @Get('state/:state')
     @UsePipes(new ValidationPipe())
-    findCustomerByState(@Param('state', ParseBoolPipe) state: boolean): CustomerEntity[] {
+    findCustomersByState(@Param('state', ParseBoolPipe) state: boolean): CustomerEntity[] {
         return this.customerService.findByState(state);
     }
     
     @Get('fullname/:fullname')
-    findCustomerByFullName(@Param('fullname') fullname: string): CustomerEntity[] {
+    findCustomersByFullName(@Param('fullname') fullname: string): CustomerEntity[] {
         return this.customerService.findByFullName(fullname);
     }
 
@@ -125,7 +125,7 @@ export class CustomerController {
     }
 
     @Get('document/type')
-    getAllDocumentType(@Query() pagination: PaginationDto|undefined): DocumentTypeEntity[] {
+    getAllDocumentTypes(@Query() pagination: PaginationDto|undefined): DocumentTypeEntity[] {
         return this.customerService.findAllDocumentType(pagination);
     }
     @Get('document/type/:id')

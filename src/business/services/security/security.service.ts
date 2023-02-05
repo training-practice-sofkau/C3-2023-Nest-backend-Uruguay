@@ -17,6 +17,7 @@ import { ObservableHandler } from '../../observable';
   
   // Services
   import { AccountService, CustomerService } from '../../services';
+import { NotFoundException } from '@nestjs/common';
   
   // Entities
   
@@ -34,6 +35,8 @@ import { ObservableHandler } from '../../observable';
      * Identificarse en el sistema
      */
     signIn(user: SignInDto): string {
+      const customerExisting = this.customerService.getCustomerInfo(user.id);
+      
       const answer = this.customerService.findOneByEmailAndPassword(
         user.username,
         user.password,

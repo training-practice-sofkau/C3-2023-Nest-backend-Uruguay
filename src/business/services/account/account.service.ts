@@ -197,26 +197,19 @@ export class AccountService {
   }
 
   createAccountType(dto: AccountTypeDto): AccountTypeEntity {
-    const accountTypes = this.accountTypeRepository.findAll();
-    const nameExisting = accountTypes.findIndex(accountType => accountType.name === dto.name);
-    if(nameExisting != -1) throw new ForbiddenException('An account type with that name already exists');
-    
     let newAccountType = new AccountTypeEntity();
+
     newAccountType.name = dto.name;
     if(dto.state != undefined) newAccountType.state = dto.state;
 
     this.accountTypeRepository.register(newAccountType)
+    
     return newAccountType;
   }
 
   updateAccountType(id: string, dto: AccountTypeDto | PatchAccountTypeDto): AccountTypeEntity {
     let accountTypeUpdated = this.accountTypeRepository.findOneById(id);
-    if(dto.name) {
-      const accountTypes = this.accountTypeRepository.findAll();
-      const nameExisting = accountTypes.findIndex(accountType => accountType.name === dto.name);
-      if(nameExisting != -1) throw new ForbiddenException('An account type with that name already exists');
-      accountTypeUpdated.name = dto.name;
-    }
+    if(dto.name) accountTypeUpdated.name = dto.name;
     if(dto.state != undefined) accountTypeUpdated.state = dto.state;
 
     return this.accountTypeRepository.update(id, accountTypeUpdated);
@@ -227,7 +220,7 @@ export class AccountService {
     return 'Account type was successfully deleted';
   }
 
-  findAllAccountType(pagination?: PaginationDto): AccountTypeEntity[] {
+  findAllAccountTypes(pagination?: PaginationDto): AccountTypeEntity[] {
     let allAccountTypes = this.accountTypeRepository.findAll();
 
     let accountTypesFiltered = allAccountTypes;
@@ -242,11 +235,11 @@ export class AccountService {
     return this.accountTypeRepository.findOneById(id);
   }
 
-  findAccountTypeByState(state: boolean): AccountTypeEntity[] {
+  findAccountTypesByState(state: boolean): AccountTypeEntity[] {
     return this.accountTypeRepository.findByState(state);
   }
   
-  findAccountTypeByName(name: string): AccountTypeEntity[] {
+  findAccountTypesByName(name: string): AccountTypeEntity[] {
     return this.accountTypeRepository.findByName(name);
   }
 }

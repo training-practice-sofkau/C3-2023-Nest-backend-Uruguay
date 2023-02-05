@@ -68,8 +68,8 @@ export class TransferController {
     }
 
     @Get()
-    getAllTransfers(): TransferEntity[] {
-        return this.transferService.getAllTransfers();
+    getAllTransfers(@Query() pagination: PaginationDto|undefined): TransferEntity[] {
+        return this.transferService.getAllTransfers(pagination);
     }
     
     @Get(':id')
@@ -78,7 +78,7 @@ export class TransferController {
         return this.transferService.findOneTransferById(id);
     }
     
-    @Get('out/:idOutcome/:dateInit/:dateEnd')
+    @Get('out/:outcome/:dateInit/:dateEnd')
     @UsePipes(new ValidationPipe())
     findTransfersOutcomeByDataRange(
         @Param('idOutcome', ParseUUIDPipe) accountId: string,
@@ -88,7 +88,7 @@ export class TransferController {
         return this.transferService.findTransfersOutcomeByDataRange(accountId, dateInit, dateEnd);
     }
     
-    @Get('in/:idIncome/:dateInit/:dateEnd')
+    @Get('in/:income/:dateInit/:dateEnd')
     @UsePipes(new ValidationPipe())
     findTransfersIncomeByDataRange(
         @Param('idIncome', ParseUUIDPipe) accountId: string,

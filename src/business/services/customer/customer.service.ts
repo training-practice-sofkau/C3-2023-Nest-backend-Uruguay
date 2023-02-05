@@ -1,41 +1,47 @@
 import { HttpException, Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 
 import { CustomerEntity, DocumentTypeEntity } from '../../../data/persistence/entities';
-import { CustomerRepository } from '../../../data/persistence/repositories';
+import { CustomerRepository, DocumentTypeRepository } from '../../../data/persistence/repositories';
 import { PaginationDto, CustomerDto, DocumentTypeDto, UpdateCustomerDto } from '../../dtos';
-import { DocumentTypeRepository } from '../../../data/persistence/repositories/document-type.repository';
 import { PAtchDocumentTypeDto } from '../../dtos/patch-document-type.dto';
+import { AccountService } from '../../services';
 
 @Injectable()
 export class CustomerService {
 
   constructor(
     private readonly customerRepository: CustomerRepository,
-    private readonly documentTypeRepository: DocumentTypeRepository) {}
+    private readonly documentTypeRepository: DocumentTypeRepository,
+    private readonly accountService: AccountService) {}
 
   /**
    * Crear una cliente
    */
   createCustomer(customer: CustomerDto): CustomerEntity {
 
-    const documentTypeExisting = this.documentTypeRepository.findOneById(customer.documentType);
-
+    let documentTypeExisting = this.documentTypeRepository.findOneById(customer.documentType);
     if(documentTypeExisting.state === false) throw new NotFoundException('DocumentType is not available');
-
-    const newACustomer = new CustomerEntity();
-    newACustomer.fullName = customer.fullName;
 
     let documentExisting = this.customerRepository.findAll()
       .findIndex(customerExisting => customerExisting.document === customer.document);
-
     if(documentExisting != -1) throw new ForbiddenException('This document is already used by another costumer');
+    
+    let emailExisting = this.customerRepository.findAll()
+      .findIndex(customerExisting => customerExisting.email === customer.email);
+    if(emailExisting != -1) throw new ForbiddenException('This email is already used by another costumer');
 
+    let phoneExisting = this.customerRepository.findAll()
+      .findIndex(customerExisting => customerExisting.phone === customer.phone);
+    if(phoneExisting != -1) throw new ForbiddenException('This phone is already used by another costumer');
+    
+    const newACustomer = new CustomerEntity();
+    
+    newACustomer.fullName = customer.fullName;
     newACustomer.document = customer.document;
     newACustomer.documentType = documentTypeExisting;
     newACustomer.email = customer.email;
     newACustomer.password = customer.password;
     newACustomer.phone = customer.phone;
-    
     if(customer.avatarUrl) newACustomer.avatarUrl = customer.avatarUrl;
 
     return this.customerRepository.register(newACustomer);
@@ -54,32 +60,39 @@ export class CustomerService {
    */
   updatedCustomer(id: string, customer: UpdateCustomerDto): CustomerEntity {
     let customerUpdated = this.customerRepository.findOneById(id);
-
-    if(customer.avatarUrl) customerUpdated.avatarUrl = customer.avatarUrl;
-    if(customer.daletedAt) customerUpdated.deletedAt = customer.daletedAt;
-
+    
     if(customer.document){
       let documentExisting = this.customerRepository.findAll()
       .findIndex(customerExisting => customerExisting.document === customer.document);
-      
       if(documentExisting != -1) throw new ForbiddenException('This document is already used by another costumer');
-      
       customerUpdated.document = customer.document;
     }
 
     if(customer.documentType) {
       let documentTypeExisting = this.documentTypeRepository.findOneById(customer.documentType);
-
       if(documentTypeExisting.state === false) throw new NotFoundException('DocumentType is not available');
-
       customerUpdated.documentType = documentTypeExisting;
     }
     
-    if(customer.email) customerUpdated.email = customer.email;
+    if(customer.email) {
+      let emailExisting = this.customerRepository.findAll()
+      .findIndex(customerExisting => customerExisting.email === customer.email);
+      if(emailExisting != -1) throw new ForbiddenException('This email is already used by another costumer');
+      customerUpdated.email = customer.email;
+    }
+
+    if(customer.phone) {
+      let phoneExisting = this.customerRepository.findAll()
+        .findIndex(customerExisting => customerExisting.phone === customer.phone);
+      if(phoneExisting != -1) throw new ForbiddenException('This phone is already used by another costumer');
+      customerUpdated.phone = customer.phone;
+    }
+
     if(customer.fullName) customerUpdated.fullName = customer.fullName;
     if(customer.password) customerUpdated.password = customer.password;
     if(customer.state != undefined) customerUpdated.state = customer.state;
-    if(customer.phone) customerUpdated.phone = customer.phone;
+    if(customer.avatarUrl) customerUpdated.avatarUrl = customer.avatarUrl;
+    if(customer.daletedAt) customerUpdated.deletedAt = customer.daletedAt;
     
     return this.customerRepository.update(id, customerUpdated);
   }
@@ -101,6 +114,14 @@ export class CustomerService {
    * Borrar un cliente
    */
   deleteCustomer(customerId: string): string {
+    let accounts = this.accountService.findAllAccounts();
+    let accountsCustomerWithBalance = accounts.filter(account => 
+      account.customer.id === customerId && account.balance > 0);
+
+    if(accountsCustomerWithBalance.length > 0) {
+      throw new ForbiddenException('The customer has at least one account with balance');
+    }
+
     return this.customerRepository.delete(customerId);
   }
   
@@ -108,6 +129,14 @@ export class CustomerService {
    * Borrar un cliente de forma lógica
    */
   softDeleteCustomer(customerId: string): string {
+    let accounts = this.accountService.findAllAccounts();
+    let accountsCustomerWithBalance = accounts.filter(account => 
+      account.customer.id === customerId && account.balance > 0);
+
+    if(accountsCustomerWithBalance.length > 0) {
+      throw new ForbiddenException('The customer has at least one account with balance');
+    }
+
     return this.customerRepository.delete(customerId, true);
   }
 
@@ -166,26 +195,20 @@ export class CustomerService {
 
   
   createDocumentType(dto: DocumentTypeDto): DocumentTypeEntity {
-    const documentTypes = this.documentTypeRepository.findAll();
-    const nameExisting = documentTypes.findIndex(documentType => documentType.name === dto.name);
-    if(nameExisting != -1) throw new ForbiddenException('A document type with that name already exists');
-    
     let newDocumentType = new DocumentTypeEntity();
+
     newDocumentType.name = dto.name;
     if(dto.state != undefined) newDocumentType.state = dto.state;
 
     this.documentTypeRepository.register(newDocumentType);
+
     return newDocumentType;
   }
 
   updateDocumentType(id: string, dto: DocumentTypeDto | PAtchDocumentTypeDto): DocumentTypeEntity {
     let documentTypeUpdated = this.documentTypeRepository.findOneById(id);
-    if(dto.name) {
-      const documentTypes = this.documentTypeRepository.findAll();
-    const nameExisting = documentTypes.findIndex(documentType => documentType.name === dto.name);
-    if(nameExisting != -1) throw new ForbiddenException('A document type with that name already exists');
-    documentTypeUpdated.name = dto.name;
-    }
+    
+    if(dto.name) documentTypeUpdated.name = dto.name;
     if(dto.state != undefined) documentTypeUpdated.state = dto.state;
 
     return this.documentTypeRepository.update(id, documentTypeUpdated);

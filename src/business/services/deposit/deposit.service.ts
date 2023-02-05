@@ -60,13 +60,11 @@ export class DepositService {
     pagination?: PaginationDto,
     dataRange?: DataRangeDto,
   ): DepositEntity[] {
-
-    let deposits = this.depositRepository.findAll();
-    let depositsOfAccount = deposits.filter(deposit => deposit.account.id === accountId)
+    let depositsOfAccount = this.depositRepository.findByAccountId(accountId);
     let depositsFiltered = depositsOfAccount;
 
     if(pagination?.offset) {
-      depositsFiltered = depositsFiltered.slice(pagination.offset, pagination.limit || undefined);;
+      depositsFiltered = depositsFiltered.slice(pagination.offset, pagination.limit || undefined);
     }
 
     if(dataRange?.start && dataRange.end) {
@@ -80,8 +78,20 @@ export class DepositService {
     return depositsFiltered;
   }
 
-  getHistoryByAccountId(accountId: string): DepositEntity[] {
-    return this.depositRepository.findByAccountId(accountId);
+  getAllDeposits(pagination?: PaginationDto): DepositEntity[] {
+      let allDeposits = this.depositRepository.findAll();
+
+      let depositsFiltered = allDeposits;
+      
+      if(pagination?.offset) {
+        depositsFiltered = depositsFiltered.slice(pagination.offset, pagination.limit || undefined);
+      }
+
+      return depositsFiltered;
+  }
+
+  getOneDepositById(depositId: string): DepositEntity {
+    return this.depositRepository.findOneById(depositId);
   }
 
   getHistoryByDataRange(dateInit: Date | number, dateEnd: Date | number): DepositEntity[] {

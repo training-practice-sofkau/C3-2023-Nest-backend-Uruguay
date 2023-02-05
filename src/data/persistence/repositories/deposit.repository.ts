@@ -69,7 +69,7 @@ export class DepositRepository
 
     findByAccountId(accountId: string): DepositEntity[] {
         const currentEntities = this.database.filter(
-            (item) => item.id === accountId && typeof item.deletedAt === 'undefined');
+            (item) => item.account.id === accountId && typeof item.deletedAt === 'undefined');
         if (currentEntities) return currentEntities;
         throw new NotFoundException();
     }
@@ -79,8 +79,8 @@ export class DepositRepository
         dateEnd: Date | number,
     ): DepositEntity[] {
         const deposits = this.database.filter(
-            (deposit) => deposit.dateTime <= dateInit
-            && deposit.dateTime >= dateEnd
+            (deposit) => deposit.dateTime >= dateInit
+            && deposit.dateTime <= dateEnd
             && typeof deposit.deletedAt === 'undefined');
         if (deposits) return deposits;
         throw new NotFoundException();
