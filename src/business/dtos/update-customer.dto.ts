@@ -19,6 +19,7 @@ export class UpdateCustomerDto {
 
     @IsOptional()
     @IsEmail()
+    @IsNotEmpty()
     email: string;
 
     @IsOptional()

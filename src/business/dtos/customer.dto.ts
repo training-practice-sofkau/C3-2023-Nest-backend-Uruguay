@@ -9,6 +9,7 @@ export class CustomerDto {
     documentType: string;
 
     @IsString()
+    @IsNotEmpty()
     document: string;
 
     @IsString()
