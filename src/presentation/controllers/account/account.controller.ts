@@ -117,6 +117,25 @@ export class AccountController {
         return this.accountService.deleteAccount(id);
     }
 
+    @Get('state/:state')
+    @UsePipes(new ValidationPipe())
+    getAccountsByState(@Param('state', ParseBoolPipe) state: boolean): AccountEntity[] {
+        return this.accountService.findAccountsByState(state);
+    }
+
+    @Get('customer/:id')
+    @UsePipes(new ValidationPipe())
+    getAccountsByCustomer(@Param('id', ParseUUIDPipe) id: string): AccountEntity[] {
+        return this.accountService.findAccountsByCustomer(id);
+    }
+
+    @Get('accounttype/:accountTypeId')
+    @UsePipes(new ValidationPipe())
+    getAccountsByAccountType(@Param('accountTypeId', ParseUUIDPipe) accountTypeId: string): AccountEntity[] {
+        return this.accountService.findAccountsByAccountType(accountTypeId);
+    }
+
+
     @Post('type')
     @UsePipes(new ValidationPipe())
     createAccountType(@Body() accountType: AccountTypeDto): AccountTypeEntity {

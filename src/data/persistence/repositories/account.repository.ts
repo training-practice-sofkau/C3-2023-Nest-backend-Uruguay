@@ -87,14 +87,14 @@ export class AccountRepository
 
     findByCustomer(customerId: string): AccountEntity[] {
         const currentEntities = this.database.filter(
-            (item) => item.id === customerId && typeof item.deletedAt === 'undefined');
+            (item) => item.customer.id === customerId && typeof item.deletedAt === 'undefined');
         if (currentEntities) return currentEntities;
         else throw new NotFoundException();
     }
 
     findByAccountType(accountTypeId: string): AccountEntity[] {
         const currentEntities = this.database.filter(
-            (item) => item.id === accountTypeId && typeof item.deletedAt === 'undefined');
+            (item) => item.accountType.id === accountTypeId && typeof item.deletedAt === 'undefined');
         if (currentEntities) return currentEntities;
         else throw new NotFoundException();
     }

@@ -196,6 +196,19 @@ export class AccountService {
     return this.accountRepository.update(id, accountUpdated);
   }
 
+
+  findAccountsByState(state: boolean): AccountEntity[] {
+    return this.accountRepository.findByState(state);
+  }
+
+  findAccountsByCustomer(customerId: string): AccountEntity[] {
+    return this.accountRepository.findByCustomer(customerId);
+
+  }findAccountsByAccountType(accountType: string): AccountEntity[] {
+    return this.accountRepository.findByAccountType(accountType);
+  }
+
+
   createAccountType(dto: AccountTypeDto): AccountTypeEntity {
     let newAccountType = new AccountTypeEntity();
 
