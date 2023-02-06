@@ -68,8 +68,8 @@ export class DepositService {
     }
 
     if(dataRange?.start && dataRange.end) {
-      if(typeof dataRange.start != 'number') dataRange.start = dataRange.start.getTime();
-      if(typeof dataRange.end != 'number') dataRange.end = dataRange.end.getTime();
+      if(dataRange.start instanceof Date) dataRange.start = dataRange.start.getTime();
+      if(dataRange.end instanceof Date) dataRange.end = dataRange.end.getTime();
 
       depositsFiltered = depositsFiltered.filter(
         deposit => deposit.dateTime >= dataRange.start && deposit.dateTime <= dataRange.end

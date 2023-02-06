@@ -48,8 +48,8 @@ export class TransferService {
     }
     
     if(dataRange?.start && dataRange.end) {
-      if(typeof dataRange.start != 'number') dataRange.start = dataRange.start.getTime();
-      if(typeof dataRange.end != 'number') dataRange.end = dataRange.end.getTime();
+      if(dataRange.start instanceof Date) dataRange.start = dataRange.start.getTime();
+      if(dataRange.end instanceof Date) dataRange.end = dataRange.end.getTime();
 
       transfersFiltered = transfersFiltered.filter((transfer) => {
         transfer.dateTime >= dataRange.start && transfer.dateTime <= dataRange.end
@@ -75,8 +75,8 @@ export class TransferService {
     }
     
     if(dataRange?.start && dataRange.end) {
-      if(typeof dataRange.start != 'number') dataRange.start = dataRange.start.getTime();
-      if(typeof dataRange.end != 'number') dataRange.end = dataRange.end.getTime();
+      if(dataRange.start instanceof Date) dataRange.start = dataRange.start.getTime();
+      if(dataRange.end instanceof Date) dataRange.end = dataRange.end.getTime();
 
       transfersFiltered = transfersFiltered.filter(
         (transfer) => transfer.dateTime >= dataRange.start && transfer.dateTime <= dataRange.start
@@ -109,8 +109,8 @@ export class TransferService {
     }
     
     if(dataRange?.start && dataRange.end) {
-      if(typeof dataRange.start != 'number') dataRange.start = dataRange.start.getTime();
-      if(typeof dataRange.end != 'number') dataRange.end = dataRange.end.getTime();
+      if(dataRange.start instanceof Date) dataRange.start = dataRange.start.getTime();
+      if(dataRange.end instanceof Date) dataRange.end = dataRange.end.getTime();
 
       transfersFiltered = transfersFiltered.filter(
         (transfer) => transfer.dateTime >= dataRange.start && transfer.dateTime <= dataRange.end
@@ -158,8 +158,8 @@ getAllTransfers(pagination?: PaginationDto, dataRange?: DataRangeDto): TransferE
     }
     
     if(dataRange?.start && dataRange.end) {
-      if(typeof dataRange.start != 'number') dataRange.start = dataRange.start.getTime();
-      if(typeof dataRange.end != 'number') dataRange.end = dataRange.end.getTime();
+      if(dataRange.start instanceof Date) dataRange.start = dataRange.start.getTime();
+      if(dataRange.end instanceof Date) dataRange.end = dataRange.end.getTime();
 
       transfersFiltered = transfersFiltered.filter(
         (transfer) => transfer.dateTime >= dataRange.start && transfer.dateTime <= dataRange.end
