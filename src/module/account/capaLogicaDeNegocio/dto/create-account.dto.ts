@@ -1,10 +1,10 @@
-import { IsUUID } from 'class-validator';
+import {IsString } from 'class-validator';
 
 export class CreateAccountdto{
 
-    @IsUUID(4, { message: "this must to be uuid" })
+    @IsString()
     accountTypeId: string;
 
-    @IsUUID(4, { message: "this must to be uuid" })
+    @IsString()
     customer: string;
 }

@@ -10,6 +10,9 @@ import { AccountTypeEntity } from '../entity';
 export class AccountTypeRepository
     extends BaseRepository<AccountTypeEntity>
     implements AccountTypeRepositoryInterface {
+  static getInstance(): AccountTypeRepository {
+    throw new Error('Method not implemented.');
+  }
 
   register(entity: AccountTypeEntity):AccountTypeEntity  {
     const indexCurrentEntity = this.database.findIndex(
@@ -52,10 +55,10 @@ export class AccountTypeRepository
   }
 
   findOneById(id: string):AccountTypeEntity{
-      let currentEntity = this.database.findIndex(
-          (Entity) => Entity.id === id);
-      if (currentEntity === -1) throw new NotFoundException(`id :${id} no found`);
-      return this.database[currentEntity];
+      let currentEntity = this.database.find(
+          (Entity) => Entity.id == id);
+      if (!currentEntity) throw new NotFoundException(`id :${id} no found`);
+      return currentEntity;
   }
 
   findByState(state: boolean): AccountTypeEntity[] {

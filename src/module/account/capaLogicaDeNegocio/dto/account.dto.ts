@@ -1,17 +1,14 @@
-import { IsString, IsNumber, IsPositive, IsBoolean } from 'class-validator';
+import { IsBoolean, IsNumber, IsPositive, IsString } from "class-validator";
 
+export class AccountDTO {
 
-export class AccountDto {
+    @IsString({message: 'Id String Required'})
+    accountType?: string;
 
-    @IsString()
-    id: string;
-    @IsString()
-    customer: string;
-    @IsString()
-    accountType: string;
-    @IsNumber()
-    @IsPositive()
-    balance: number;
-    @IsBoolean()
-    state: boolean;
+    @IsNumber(undefined, {message: 'Balance: Se requiere que numero'})
+    @IsPositive({message: 'Balance: Se requiere que sea Numero'})
+    balance?: number;
+  
+    @IsBoolean({message: 'State: Se requiere que sea Boolean'})
+    state?: boolean;
 }

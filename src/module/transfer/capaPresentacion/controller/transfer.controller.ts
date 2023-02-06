@@ -2,48 +2,45 @@ import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { TransferService } from '../../capaLogicaDeNegocio/service/transfer.service';
 import { CreateTransferDto } from '../../capaLogicaDeNegocio/dto/transfer.dto';
 import { TransferEntity } from '../../capaDeDatos/entity/transfer.entities';
-import { paginationDto } from '../../capaLogicaDeNegocio/dto/Pagination.dto';
-import { dataRangeDto } from '../../capaLogicaDeNegocio/dto/dataRange.dto';
+import { PaginationModel, DataRangeModel } from 'src/module/base/models';
+import { paginationDto } from '../../capaLogicaDeNegocio/dto';
 
 @Controller('transfer')
 export class TransferController {
     constructor(private readonly transferService: TransferService){}
 
-    //getHistory(accountId: string,pagination: PaginationModel,dataRange?: DataRangeModel): TransferEntity[] {//dataRange?: 
-    //getHistoryOut(accountId: string,pagination?: PaginationModel,dataRange?: DataRangeModel): TransferEntity[] {//dataRange:DataRangeModel
-    
-    @Get(`getHistoyIn/:id/:pag/:range`)
-    getHistoryIn(
-        @Param(`id`)accountId: string,
-        @Param(`pag`)pagination?: paginationDto,
-        @Param(`range`)dataRange?: dataRangeDto)
-        : TransferEntity[] {
-            return this.transferService.getHistoryIn(accountId,pagination,dataRange);
-        }
-    
-    @Get(`getHistoyIn/:id/:pag/:range`)
-    getHistoryOut(
-        @Param(`id`)accountId: string,
-        @Param(`pag`)pagination?: paginationDto,
-        @Param(`range`)dataRange?: dataRangeDto)
-        : TransferEntity[] {
-        return this.transferService.getHistoryOut(accountId,pagination,dataRange);
-        }
-
-
-    @Post(`create`)
-    createTrensfer(@Body() newTransfer : CreateTransferDto):TransferEntity{
-        return this.transferService.createTransfer(newTransfer);
+    @Post('/create')
+    createTransfer(@Body() transfer: CreateTransferDto): TransferEntity {
+        return this.transferService.createTransfer(transfer);
     }
 
-    @Delete(`deleteSof/:id/:sof`)
-    deleteTransfer(@Param(`id`) transferId : string,
-    @Param(`sof`) transferSof : boolean){
-        return this.transferService.deleteTransfer(transferId,transferSof);
+    @Get('/find-all')
+    findAll(): TransferEntity[] {
+        return this.transferService.findAll();
     }
 
-    @Delete(`deleteHard/:id`)
-    deleteTransferHard(@Param(`id`) transferId : string){
-        return this.transferService.deleteTransfer(transferId);
+    @Get('/get-history-out/:id')
+    getHistoryOut(@Param('id') id: string,@Body() pagination: PaginationModel,@Body() dataRange?: DataRangeModel): TransferEntity[] {
+        return this.transferService.getHistoryOut(id, dataRange,pagination);
+    }
+
+    @Get('/get-history-in/:id')
+    getHistoryIn(@Param('id') id: string,@Body() pagination: paginationDto,@Body() dataRange?: DataRangeModel): TransferEntity[] {
+        return this.transferService.getHistoryIn(id, dataRange, pagination);
+    }
+    
+    @Get('/get-history/:id')
+    getHistory(@Param('id') id: string, pagination: paginationDto, dataRange?: DataRangeModel): TransferEntity[] {
+        return this.transferService.getHistory(id, dataRange, pagination);
+    }
+
+    @Delete('/soft-delete/:id')
+    softDeleteTransfer(@Param('id') id: string): void {
+        this.transferService.deleteTransfer(id, true);
+    }
+
+    @Delete('/hard-delete/:id')
+    hardDeleteTransfer(@Param('id') id: string): void {
+        this.transferService.deleteTransfer(id);
     }
 }

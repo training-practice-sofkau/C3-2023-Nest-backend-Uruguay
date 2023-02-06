@@ -12,13 +12,15 @@ import { BaseRepository } from 'src/module/base/repositories';
 export class CustomerRepository
   extends BaseRepository<CustomerEntity>
   implements CustomerRepositoryInterface {
+  static getInstance(): CustomerRepository {
+    throw new Error('Method not implemented.');
+  }
  //-----------------------------------------------------------------------------------------------------
 //HECHA
   register(entity: CustomerEntity): CustomerEntity {
 
     const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === entity.id && typeof item.daletedAt === 'undefined',
-    );
+      (item) => item.id === entity.id && typeof item.daletedAt === 'undefined');
 
     if (indexCurrentEntity != -1) throw new NotFoundException(`El cliente ya existe`);
 
@@ -28,9 +30,8 @@ export class CustomerRepository
 //-----------------------------------------------------------------------------------------------------
   update(id: string, entity: CustomerEntity): CustomerEntity {
 
-    const indexCurrentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.daletedAt === 'undefined',
-    );
+    let indexCurrentEntity = this.database.findIndex(
+      (item) => item.id === id && typeof item.daletedAt === 'undefined');
 
     if (indexCurrentEntity != -1)
       this.database[indexCurrentEntity] = {
@@ -49,9 +50,7 @@ export class CustomerRepository
 
     if (indexCurrentEntity === -1) throw new NotFoundException(`No se encontro cliente para eliminar`);
 
-    soft
-      ? this.softDelete(indexCurrentEntity)
-      : this.hardDelete(indexCurrentEntity);
+    soft? this.softDelete(indexCurrentEntity): this.hardDelete(indexCurrentEntity);
   }
 
   private hardDelete(index: number): void {
@@ -59,7 +58,7 @@ export class CustomerRepository
   }
 
   private softDelete(index: number): void {
-    this.database[index].daletedAt = new Date;
+    this.database[index].daletedAt = Date.now();
   }
 
   
@@ -67,9 +66,8 @@ export class CustomerRepository
 
   findAll(): CustomerEntity[] {
     let allCustomer = this.database.filter(
-      (item) => typeof item.daletedAt === 'undefined'
-    );
-    if(allCustomer === undefined) throw new NotFoundException(`Customer Not found`);
+      (item) => typeof item.daletedAt === 'undefined');
+    if(!allCustomer) throw new NotFoundException(`Customer Not found`);
     return allCustomer;
   }
 
@@ -77,8 +75,7 @@ export class CustomerRepository
 
   findOneById(id: string): CustomerEntity {
     const currentEntity = this.database.findIndex(
-      (item) => item.id === id && typeof item.daletedAt === 'undefined',
-    );
+      (item) => item.id === id && typeof item.daletedAt === 'undefined');
     if (currentEntity === -1) throw new NotFoundException();
 
     return this.database[currentEntity];
@@ -91,7 +88,7 @@ export class CustomerRepository
       (item) =>
         item.email === email &&
         item.password === password &&
-        typeof item.daletedAt === 'undefined',
+        typeof item.daletedAt === 'undefined'
     );
     if(indexCurrentEntity === -1) throw new NotFoundException(`Email : ${email} and password: ${password} Not found`);
     return this.database[indexCurrentEntity];
@@ -109,8 +106,7 @@ export class CustomerRepository
       (item) =>
       item.documentType.id === documentTypeId &&
       item.document === document &&
-      typeof item.daletedAt === 'undefined',
-    );
+      typeof item.daletedAt === 'undefined');
     if(indexCurrentEntity === -1){
       throw new NotFoundException(`No se encontraron los datos`);
     }
@@ -125,7 +121,7 @@ export class CustomerRepository
     const indexCurrentEntity = this.database.findIndex(
       (item) =>
         item.email === email &&
-        typeof item.daletedAt === 'undefined',
+        typeof item.daletedAt === 'undefined'
     );
 
     if(indexCurrentEntity === -1){
@@ -141,7 +137,7 @@ export class CustomerRepository
     const indexCurrentEntity = this.database.findIndex(
       (item) =>
         item.phone === phone &&
-        typeof item.daletedAt === 'undefined',
+        typeof item.daletedAt === 'undefined'
     );
 
     if(indexCurrentEntity === -1){

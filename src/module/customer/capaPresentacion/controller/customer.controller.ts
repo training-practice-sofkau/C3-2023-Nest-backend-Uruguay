@@ -1,15 +1,16 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put } from '@nestjs/common';
 import { CustomerService } from '../../capaLogicaDeNegocio/service/customer.service';
 import { CustomerEntity } from '../../capaDeDato/entity/customer.entity';
 import { CustomerDto } from '../../capaLogicaDeNegocio/dto';
 import { DocumentTypeEntity } from '../../capaDeDato/entity';
 import { DocumentTypeDto } from '../../capaLogicaDeNegocio/dto/documentType.dto';
+import { CustomerStateDTO } from '../../capaLogicaDeNegocio/dto/customerStateDto';
 
 @Controller('customer')
 export class CustomerController {
     constructor(private readonly customerService : CustomerService ){}
 
-
+    //Para Modo Prueba
     @Post("/create")//HECHO
     createCustomer(@Body() customer : CustomerDto){
         return this.customerService.createCustomer(customer);
@@ -27,7 +28,7 @@ export class CustomerController {
         return this.customerService.getCustomerInfo(customerId);
     }
 
-    @Post(`/document-type/create`)
+    @Post(`/document-type/create`)//Hecho
     createDocumentType(@Body()documentType : DocumentTypeDto):DocumentTypeEntity{
         return this.customerService.createDocumentType(documentType);
     }
@@ -52,25 +53,19 @@ export class CustomerController {
     }
 
 
-    @Delete(`/deleteSof/:id/:soft`)
-    deleteCustomerSof(@Param(`id`)customerId: string,
-    @Param(`soft`) soft?: boolean): void {
-        return this.customerService.deleteCustomer(customerId,soft);
+    @Delete('/soft-delete/:id')
+    unsuscribe(@Param('id') id: string): void {
+        this.customerService.deleteCustomer(id);
     }
-    
-    @Delete(`/deleteHard/:id`)
-    deleteCustomerHard(@Param(`id`)customerId: string): void {
-        return this.customerService.deleteCustomer(customerId);
-
+    @Delete('/hard-delete/:id')
+    hardDelete(@Param('id') id: string): void {
+        this.customerService.deleteCustomer(id);
     }
 
-    @Put(`/changeState/:customerId/:state`)
-    changeState(@Param(`customerId`)customerId: string ,
-    @Param(`state`)state: boolean): void {
-        return this.customerService.changeState(customerId,state);
+    @Patch('/change-state/:id')
+    changeState(@Param('id') id: string, @Body() state: CustomerStateDTO): void {
+        this.customerService.changeState(id, state);
     }
-
-
 
     @Get(`/unsubscribe/:id`)
     unsubscribe(@Param(`id`) id: string): boolean {

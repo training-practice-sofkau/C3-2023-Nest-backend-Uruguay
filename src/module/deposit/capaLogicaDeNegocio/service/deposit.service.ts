@@ -1,7 +1,7 @@
-import { Injectable, NotFoundException, forwardRef } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException, forwardRef } from '@nestjs/common';
 import { AccountService } from 'src/module/account/capaLogicaDeNegocio/service';
 import { DepositEntity } from '../../capaDeDato/entity';
-import { depositDto } from '../dto';
+import { DepositDto } from '../dto';
 import { DataRangeModel, PaginationModel } from 'src/module/base/models';
 import { DepositRepository } from '../../capaDeDato/repository';
 
@@ -16,7 +16,7 @@ export class DepositService {
     private readonly accountService: AccountService){}
 
 
-  createDeposit(deposit: depositDto): DepositEntity {
+  createDeposit(deposit: DepositDto): DepositEntity {
 
     const account = this.accountService.getById(deposit.accountId);
 
@@ -25,7 +25,16 @@ export class DepositService {
     newDeposit.amount = deposit.amount;
     newDeposit.date_time = Date.now();
     
-    return this.depositRepository.register(newDeposit);
+    const ResultadoDeposito = this.depositRepository.register(newDeposit);
+
+    if(!ResultadoDeposito) 
+      throw new InternalServerErrorException
+      (`No se pudo realizar el deposito de forma correcta`);
+
+      account.balance += deposit.amount;
+
+      return ResultadoDeposito;
+
   }
 
   findAll(): DepositEntity[] {
@@ -50,7 +59,6 @@ export class DepositService {
 
     const deposit = this.depositRepository.findByDataRange(dataRange.min,dataRange.max);//el historial de todas las cuenta en ese rango
     
-
     const depo = deposit.filter((depo) => depo.id === depositId);//Mismo rango pero para el id del parametro
     return depo;
   }

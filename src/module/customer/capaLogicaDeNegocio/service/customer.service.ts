@@ -6,18 +6,17 @@ import { AccountService } from 'src/module/account/capaLogicaDeNegocio/service';
 import { DocumentTypeEntity } from '../../capaDeDato/entity';
 import { DocumentTypeRepository } from '../../capaDeDato/repository';
 import { DocumentTypeDto } from '../dto/documentType.dto';
+import { CustomerStateDTO } from '../dto/customerStateDto';
 
 @Injectable()
-export class CustomerService {
+export class CustomerService {31
+  
 
   constructor(
     private readonly customerRepository: CustomerRepository,
     private readonly documentTypeRepository: DocumentTypeRepository,
     private readonly accountService: AccountService) {}
 
-  /**
-   * Obtener información de un cliente
-   */
   createCustomer(customer: CustomerDto):CustomerEntity {
     const documentType = new DocumentTypeEntity();
     documentType.id = customer.documentType;
@@ -59,9 +58,8 @@ export class CustomerService {
   findByIdDocumentType(id : string):DocumentTypeEntity{
     return this.documentTypeRepository.findOneById(id);
   }
-  /**
-   * Actualizar información de un cliente
-   */
+  
+
   updatedCustomer(id: string, newCustomer: CustomerDto ): CustomerEntity{
     let customer = this.customerRepository.findOneById(id);
     
@@ -81,19 +79,14 @@ export class CustomerService {
     
   }
 
-  /**
-   * Dar de baja a un cliente en el sistema
-   */
+  
   unsubscribe(id: string): boolean {
 
     const accounts = this.accountService.findByCustomer(id);
 
     const index = accounts.findIndex((account) => account.balance != 0);
 
-    if (index != -1)
-      throw new Error(
-        'Cannot Delete this Customer. Your accounts need a balance of 0',
-      );
+    if (index != -1)throw new Error( 'La cuenta tiene balance 0 ', );
       
     this.customerRepository.delete(id, true);
 
@@ -101,9 +94,9 @@ export class CustomerService {
 
   }
 
-  changeState(customerId: string ,state: boolean): void {
+  changeState(customerId: string ,state: CustomerStateDTO): void {
     const customer = this.customerRepository.findOneById(customerId);
-    customer.state = state;
+    customer.state = state.state;
 
     this.customerRepository.update(customerId, customer);
   }

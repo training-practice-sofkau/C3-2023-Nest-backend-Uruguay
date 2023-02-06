@@ -7,7 +7,7 @@ export class DepositEntity implements DepositModel  {
     
     id = uuid();
     account: AccountEntity;
-    amount: number;
+    amount: number ;
     date_time: Date | number;
     delete_at: Date | number;
 }
