@@ -4,7 +4,8 @@ import { AccountTypeModel } from '../../models';
 
 export class AccountTypeEntity implements AccountTypeModel{
     id = uuid();
-    state: true  | false;;
+    state: boolean;
     name: string;   
+    
 
 }

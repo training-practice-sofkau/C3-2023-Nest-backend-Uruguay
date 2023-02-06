@@ -45,7 +45,7 @@ export class CustomerRepository
         ...entity,
         id,
       } as CustomerEntity;
-    else throw new NotFoundException();
+    else throw new NotFoundException('The data is not in our database');
     return this.database[indexCurrentEntity];
   }
 
@@ -66,7 +66,7 @@ export class CustomerRepository
         item.email === email &&
         item.password === password ,
     );
-    return indexCurrentEntity >= -1 ? true : false;
+    return indexCurrentEntity >= 0 ? true : false;
   }
 
   findOneByDocumentTypeAndDocument(

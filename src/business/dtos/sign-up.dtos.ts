@@ -4,6 +4,7 @@ export class SignUpDto {
 
   @IsUUID(4, { message: 'This must be a valid UUID version 4' })
   documentTypeId: string;
+ 
 
   @IsNumberString(undefined,{ message: 'This must be a string of numbers' })
   document: string;
@@ -19,4 +20,9 @@ export class SignUpDto {
 
   @IsString({ message: 'This must be a string' })
   password: string;
+ 
+  accountTypeName: string;
+
+  state = true;
+
 }

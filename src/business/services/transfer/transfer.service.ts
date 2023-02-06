@@ -2,11 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { TransferDto } from 'src/business/dtos';
 import { TransferEntity, PaginationModel, DataRangeModel } from 'src/Data';
 import { TransferRepository } from 'src/Data/persistence';
+import { AccountService } from '../account/account.service';
 
 
 @Injectable()
 export class TransferService {
-  constructor(private readonly TransferRepository: TransferRepository) {}
+  constructor(private readonly TransferRepository: TransferRepository,private readonly AccountService: AccountService ) {}
   /**
    * Crear una transferencia entre cuentas del banco
    *
@@ -16,9 +17,13 @@ export class TransferService {
    */
   createTransfer(transfer: TransferDto): TransferEntity {
     const newtransfer = new TransferEntity();
-    newtransfer.outcome = transfer.outcome
-    newtransfer.transferAmount = transfer.transferAmount;
+    
+    newtransfer.outcome = this.AccountService.removeBalance(transfer.outcome.id, transfer.transferAmount)
+    newtransfer.income =  this.AccountService.addBalance(transfer.income.id, transfer.transferAmount)
+    newtransfer.transferAmount = transfer.transferAmount
+    newtransfer.transferReason = transfer.transferReason
     newtransfer.state = true;
+    console.log(newtransfer)
     return this.TransferRepository.register(newtransfer);
   }
 
@@ -36,25 +41,27 @@ export class TransferService {
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    let transfer = this.TransferRepository.searchByAttributes(
-      'id',
-      accountId,
-    );    
-
+    let transfers;
     if (dataRange) {
       let { dateInit, dateEnd = Date.now() } = dataRange;
-      transfer = transfer.filter(
+      transfers = this.TransferRepository.findIncomeByDataRange(accountId, dateInit, dateEnd);
+    } else {
+      transfers = this.TransferRepository.findOneById(accountId);
+    }
+
+    if (dataRange) {
+      transfers = transfers.filter(
         (transfer) =>
-        transfer.dateTime >= dateInit &&
-        transfer.dateTime <= dateEnd,
+          transfer.dateTime >= dataRange.dateInit &&
+          transfer.dateTime <= dataRange.dateEnd,
       );
     }
+
     if (pagination) {
       let { offset = 0, limit = 0 } = pagination;
-      transfer = transfer.slice(offset, offset + limit);
+      transfers = transfers.slice(offset, offset + limit);
     }
-    
-    return transfer;
+    return transfers;
   }
 
   /**
@@ -71,20 +78,24 @@ export class TransferService {
     pagination?: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    let transfer = this.TransferRepository.searchByAttributes('id', accountId);
+    let transfers;
+    transfers = this.TransferRepository.findOneById(accountId);
+        
+    if (pagination) {
+      let { offset = 0, limit = 0 } = pagination;
+      transfers = transfers.slice(offset, offset + limit);
+    }
+
     if (dataRange) {
       let { dateInit, dateEnd = Date.now() } = dataRange;
-      transfer = transfer.filter(
+      transfers = transfers.filter(
         (transfer) =>
           transfer.dateTime >= dateInit &&
           transfer.dateTime <= dateEnd,
       );
     }
-    if (pagination) {
-      let { offset = 0, limit = 0 } = pagination;
-      transfer = transfer.slice(offset, offset + limit);
-    }
-    return transfer;
+
+    return transfers;
   }
 
   /**
@@ -101,22 +112,29 @@ export class TransferService {
     pagination: PaginationModel,
     dataRange?: DataRangeModel,
   ): TransferEntity[] {
-    let transfer = this.TransferRepository.searchByAttributes('id', accountId);
+    let transfers;
     if (dataRange) {
       let { dateInit, dateEnd = Date.now() } = dataRange;
-      transfer = transfer.filter(
+      transfers = this.TransferRepository.findOutcomeByDataRange(accountId, dateInit, dateEnd);
+    } else {
+      transfers = this.TransferRepository.findOneById(accountId);
+    }
+
+    if (dataRange) {
+      transfers = transfers.filter(
         (transfer) =>
-          transfer.dateTime >= dateInit &&
-          transfer.dateTime <= dateEnd,
+          transfer.dateTime >= dataRange.dateInit &&
+          transfer.dateTime <= dataRange.dateEnd,
       );
     }
 
     if (pagination) {
       let { offset = 0, limit = 0 } = pagination;
-      transfer = transfer.slice(offset, offset + limit);
+      transfers = transfers.slice(offset, offset + limit);
     }
-    return transfer;
+    return transfers;
   }
+
 
   /**
    * Borrar una transacción

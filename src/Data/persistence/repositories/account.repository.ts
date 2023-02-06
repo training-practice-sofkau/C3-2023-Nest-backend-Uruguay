@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { AccountEntity } from '../entities';
+import { NewaccountDto } from 'src/business/dtos/newAccountDto';
+import { AccountEntity, AccountTypeEntity, CustomerEntity } from '../entities';
 
 import { BaseRepository } from './base';
 import { AccountRepositoryInterface } from './interfaces';
@@ -17,7 +18,7 @@ export class AccountRepository
       (entity) => entity[attributes] === dataToSearch,
     );
     if (currentEntity) return currentEntity;
-    else throw new NotFoundException();
+    else throw new NotFoundException('The data is not in our database');
   }
 
   searchByAttributes(
@@ -28,14 +29,14 @@ export class AccountRepository
       (entity) => entity[attributes] === dataToSearch,
     );
     if (currentEntity) return currentEntity;
-    else throw new NotFoundException();
+    else throw new NotFoundException('The data is not in our database');
   }
 
   register(entity: AccountEntity): AccountEntity {
     this.database.push(entity);
     return this.database.at(-1) ?? entity;
   }
-
+ 
   update(id: string, entity: AccountEntity): AccountEntity {
     const indexCurrentEntity = this.database.findIndex(
       (item) => item.id === id && typeof item.deletedAt === 'undefined',
@@ -46,7 +47,7 @@ export class AccountRepository
         ...entity,
         id,
       } as AccountEntity;
-    else throw new NotFoundException();
+    else throw new NotFoundException('The data is not in our database');
     return this.database[indexCurrentEntity];
   }
 
@@ -70,9 +71,8 @@ export class AccountRepository
   }
 
   findAll(): AccountEntity[] {
-    return this.database.filter(
-      (item) => typeof item.deletedAt === 'undefined',
-    );
+    return this.database
+    ;
   }
 
   findByState(state: boolean): AccountEntity[] {
@@ -86,7 +86,15 @@ export class AccountRepository
       (item) => item.customer.id === customerId,
     );
     if (currentEntity) return currentEntity;
-    else throw new NotFoundException();
+    else throw new NotFoundException('The data is not in our database');
   }  
 
+  findByCustomerr(customerId: string): AccountEntity {
+    const currentEntity = this.database.find(
+      (item) => item.customer.id === customerId,
+    );
+    if (currentEntity) return currentEntity;
+    else throw new NotFoundException('The data is not in our database');
+  } 
+  
 }

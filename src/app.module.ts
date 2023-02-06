@@ -5,6 +5,7 @@ import { AccountRepository, AccountTypeRepository, DepositRepository, TransferRe
 import { SecurityController, CustomerController, AccountController, DepositController, TransferController } from './presentation';
 
 
+
 @Module({
   imports: [],
   controllers: [
@@ -13,6 +14,7 @@ import { SecurityController, CustomerController, AccountController, DepositContr
     AccountController,
     DepositController,    
     TransferController,
+    
   ],
   providers: [
     AccountService,
@@ -26,6 +28,8 @@ import { SecurityController, CustomerController, AccountController, DepositContr
     TransferRepository,
     DocumentTypeRepository,
     CustomerRepository,
+    
+
   ],
 })
 export class AppModule {}

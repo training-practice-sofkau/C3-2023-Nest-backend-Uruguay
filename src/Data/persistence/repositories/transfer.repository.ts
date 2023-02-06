@@ -17,7 +17,7 @@ export class TransferRepository
       (entity) => entity[attributes] === dataToSearch,
     );
     if (currentEntity) return currentEntity;
-    else throw new NotFoundException();
+    else throw new NotFoundException('The data is not in our database');
   }
   searchByAttributes(
     attributes: keyof TransferEntity,
@@ -27,7 +27,7 @@ export class TransferRepository
       (entity) => entity[attributes] === dataToSearch,
     );
     if (currentEntity) return currentEntity;
-    else throw new NotFoundException();
+    else throw new NotFoundException('The data is not in our database');
   }
   register(entity: TransferEntity): TransferEntity {
     this.database.push(entity);
@@ -44,7 +44,7 @@ export class TransferRepository
         ...entity,
         id,
       } as TransferEntity;
-    else throw new NotFoundException();
+    else throw new NotFoundException('The id does not exist in the database.');
     return this.database[indexCurrentEntity];
   }
 
@@ -85,13 +85,14 @@ export class TransferRepository
         item.id === accountId,
     );
     if (currentEntity) return currentEntity;
-    else throw new NotFoundException();
+    else throw new NotFoundException('The id does not exist in the database.');
   }
 
   findIncomeByDataRange(
     accountId: string,
     dateInit: Date | number,
     dateEnd: Date | number,
+    
   ): TransferEntity[] {
     let currentEntity = this.database.filter(
       (item) =>
@@ -100,6 +101,14 @@ export class TransferRepository
         item.id === accountId,
     );
     if (currentEntity) return currentEntity;
-    else throw new NotFoundException();
+    else throw new NotFoundException('The id does not exist in the database.');
+  }
+
+  findOneById(id: string): TransferEntity[] {
+    const transfer = this.database.filter(
+      (item) => item.id === id,
+    );
+    if (transfer) return transfer;
+    else throw new NotFoundException('The id does not exist in the database.');
   }
 }

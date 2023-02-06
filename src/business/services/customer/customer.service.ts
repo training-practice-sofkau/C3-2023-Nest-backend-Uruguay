@@ -2,12 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { CustomerDtos } from 'src/business/dtos';
 import { CustomerEntity } from 'src/Data';
 import { CustomerRepository } from 'src/Data/persistence';
+import { AccountRepository } from '../../../Data/persistence/repositories/account.repository';
+import { AccountEntity } from '../../../Data/persistence/entities/account.entity';
 
 @Injectable()
 export class CustomerService {
 
   constructor(
-    private readonly CustomerRepository: CustomerRepository,    ) {}
+    private readonly CustomerRepository: CustomerRepository,    private readonly AccountRepository: AccountRepository,    ) {}
+   
 
   /**
    * Obtener información de un cliente
@@ -30,6 +33,9 @@ export class CustomerService {
    * @memberof CustomerService
    */
   updatedCustomer(id: string, customer: CustomerDtos): CustomerEntity {
+    let account = this.AccountRepository.findByCustomerr(id)
+    customer.id = account.customer.id
+    account.customer =  customer
     return  this.CustomerRepository.update(id, customer)
   }
 
@@ -41,8 +47,10 @@ export class CustomerService {
    * @memberof CustomerService
    */
   unsubscribe(id: string): boolean {
+    let account = this.AccountRepository.findByCustomerr(id)
+    this.AccountRepository.delete(account.id, true)
     this.CustomerRepository.delete(id)
-    return this.CustomerRepository.searchByAttributesforOne("id", id).state 
+    return true
 
   }
 }
