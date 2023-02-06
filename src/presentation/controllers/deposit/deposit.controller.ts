@@ -1,8 +1,8 @@
-import { Controller, Get, Param, UsePipes, ValidationPipe, ParseUUIDPipe, Post, Body, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Param, UsePipes, ValidationPipe, ParseUUIDPipe, Post, Body, Delete, Put, Patch, Query, ParseIntPipe } from '@nestjs/common';
 
 import { DepositEntity } from '../../../data/persistence/entities';
 import { DepositService } from '../../../business/services';
-import { DepositDto } from '../../../business/dtos';
+import { PaginationDto, DataRangeDto, DepositDto } from '../../../business/dtos';
 
 @Controller('deposit')
 export class DepositController {
@@ -10,8 +10,11 @@ export class DepositController {
 
     @Get('account/:id')
     @UsePipes(new ValidationPipe())
-    getDeposits(@Param('id', ParseUUIDPipe) id: string): DepositEntity[] {
-        return this.depositService.getHistory(id);
+    getDepositsAccount(
+        @Param('id', ParseUUIDPipe) id: string,
+        @Body() datarange: DataRangeDto|undefined,
+        @Query() pagination: PaginationDto|undefined): DepositEntity[] {
+            return this.depositService.getHistory(id, pagination, datarange);
     }
 
     @Post()
@@ -22,12 +25,45 @@ export class DepositController {
 
     @Put(':id')
     @UsePipes(new ValidationPipe())
-    putDeposit(@Param('id', ParseUUIDPipe) id: string, @Body() newdDeposit: DepositDto): DepositEntity {
+    updateDeposit(@Param('id', ParseUUIDPipe) id: string, @Body() newdDeposit: DepositDto): DepositEntity {
         return this.depositService.updateDeposit(id, newdDeposit);
     }
 
+    @Patch(':id')
+    @UsePipes(new ValidationPipe())
+    updateDepositOneProperty(@Param('id', ParseUUIDPipe) id: string, @Body() newdDeposit: DepositDto): DepositEntity {
+        return this.depositService.updateDeposit(id, newdDeposit);
+    }
+
+    @Patch(':id/soft')
+    @UsePipes(new ValidationPipe())
+    softDeleteDeposit(@Param('id', ParseUUIDPipe) id: string): string {
+        return this.depositService.softDeleteDeposit(id);
+    }
+
     @Delete(':id')
-    deleteDepositById(@Param('id', ParseUUIDPipe) id: string): void {
-        this.depositService.deleteDeposit(id);
+    @UsePipes(new ValidationPipe())
+    hardDeleteDeposit(@Param('id', ParseUUIDPipe) id: string): string {
+        return this.depositService.deleteDeposit(id);
+    }
+
+    @Get()
+    @UsePipes(new ValidationPipe())
+    getAllDeposits(@Query() pagination: PaginationDto|undefined): DepositEntity[] {
+        return this.depositService.getAllDeposits(pagination);
+    }
+
+    @Get(':id')
+    @UsePipes(new ValidationPipe())
+    getOneDepositById(@Param('id', ParseUUIDPipe) id: string): DepositEntity {
+        return this.depositService.getOneDepositById(id);
+    }
+    
+    @Get(':dateInit/:dateEnd')
+    @UsePipes(new ValidationPipe())
+    getHistoryByDataRange(
+        @Param('dateInit', ParseIntPipe) dateInit: number,
+        @Param('dateEnd', ParseIntPipe) dateEnd: number): DepositEntity[] {
+        return this.depositService.getHistoryByDataRange(dateInit, dateEnd);
     }
 }

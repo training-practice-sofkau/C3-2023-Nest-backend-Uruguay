@@ -1,43 +1,39 @@
-import { IsUUID, IsBoolean, IsDate, IsEmail, IsNotEmpty, IsOptional, IsPhoneNumber, IsString } from 'class-validator';
+import { IsUUID, IsBoolean, IsDate, IsEmail, IsNotEmpty, IsOptional, IsPhoneNumber, IsString, Length } from 'class-validator';
 
-import { DocumentTypeModel } from '../../data/models';
+import { DocumentTypeEntity } from '../../data/persistence/entities';
 
 export class CustomerDto {
 
-    @IsOptional()
-    @IsUUID(4,{message: 'uuid must to be a valid v4 UUID'})
-    id: string;
-
     @IsNotEmpty()
-    documentType: DocumentTypeModel;
+    @IsString({message: 'documentType must to be a valid id'})
+    documentType: string;
 
     @IsString()
+    @IsNotEmpty()
     document: string;
 
     @IsString()
+    @IsNotEmpty()
     fullName: string;
 
     @IsEmail()
+    @IsNotEmpty()
     email: string;
 
-    @IsPhoneNumber('UY', {message: 'phoneNumber must to be a uruguayan valid phone number'})
-    @IsString()
-    phone: string;
-
+    @IsPhoneNumber('UY', {message: 'phone must to be a uruguayan valid phone number'})
     @IsString()
     @IsNotEmpty()
+    phone: string;
+
+    @IsNotEmpty({ message: 'the password is required.' })
+    @IsString()
+    @Length(5, 30)
     password: string;
     
     @IsOptional()
     @IsString()
-    avatarUrl?: string | undefined;
+    @IsNotEmpty()
+    avatarUrl: string | undefined;
 
-    @IsOptional()
-    @IsBoolean()
-    state: boolean;
-
-    @IsOptional()
-    @IsDate()
-    daletedAt?: number | Date | undefined;
 
 }

@@ -1,26 +1,29 @@
-import { BadRequestException, ForbiddenException, HttpException, Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, HttpException, Injectable, NotFoundException } from '@nestjs/common';
 
-import { PaginationModel } from '../../../data/models';
 import { AccountEntity, AccountTypeEntity } from '../../../data/persistence/entities';
-import { AccountRepository, AccountTypeRepository } from '../../../data/persistence/repositories';
-import { AccountDto } from '../../dtos';
+import { AccountRepository, AccountTypeRepository, CustomerRepository } from '../../../data/persistence/repositories';
+import { AccountDto, AccountTypeDto, UpdateAccountDto, PaginationDto, PatchAccountTypeDto } from '../../dtos';
 
 @Injectable()
 export class AccountService {
   constructor(
     private readonly accountRepository: AccountRepository,
-    private readonly accountTypeRepository: AccountTypeRepository) {}
+    private readonly accountTypeRepository: AccountTypeRepository,
+    private readonly customerRepository: CustomerRepository) {}
 
   /**
    * Crear una cuenta
    */
   createAccount(account: AccountDto): AccountEntity {
-    let newAccount = new AccountEntity();
+    const accountTypeExisting  = this.accountTypeRepository.findOneById(account.accountType);
+    if(accountTypeExisting.state === false) throw new NotFoundException('Accountype is not available');
 
-    newAccount = {
-      ...newAccount,
-      ...account
-    };
+    const customerExisting = this.customerRepository.findOneById(account.customer);
+    if(customerExisting.state === false) throw new NotFoundException('Customer is not available');
+
+    let newAccount = new AccountEntity();
+    newAccount.accountType = accountTypeExisting;
+    newAccount.customer = customerExisting;
 
     return this.accountRepository.register(newAccount);
   }
@@ -54,14 +57,14 @@ export class AccountService {
    */
   removeBalance(accountId: string, amount: number): void {
     try {
+      if(amount <= 0) throw new BadRequestException('The amount must be greater than 0');
+
       if (this.verifyAmountIntoBalance(accountId, amount)) {
         let accountUpdated = this.accountRepository.findOneById(accountId);
         accountUpdated.balance -= amount;
         this.accountRepository.update(accountId, accountUpdated);
       }
-      else {
-        throw new ForbiddenException('The amount to remove cannot be greater than the balance');
-      }
+      else throw new ForbiddenException('The amount to remove cannot be greater than the balance');
       
     } catch (error) {
       throw new HttpException(error.message, error.status);
@@ -130,36 +133,34 @@ export class AccountService {
   /**
    * Borrar una cuenta
    */
-  deleteAccount(accountId: string): void {
-    this.accountRepository.delete(accountId);
+  deleteAccount(accountId: string): string {
+    return this.accountRepository.delete(accountId);
   }
   
   /**
    * Borrar una cuenta de forma lógica
    */
-  softDeleteAccount(accountId: string): void {
-    const accountUpdated = this.accountRepository.findOneById(accountId);
-    accountUpdated.deletedAt = Date.now();
-    this.accountRepository.update(accountId, accountUpdated);
+  softDeleteAccount(accountId: string): string {
+    return this.accountRepository.delete(accountId, true);
   }
 
   /**
    * Obtener todas las cuentas
    */
-  findAllAccounts(pagination?: PaginationModel): AccountDto[] {
+  findAllAccounts(pagination?: PaginationDto): AccountEntity[] {
     const accounts = this.accountRepository.findAll();
-    let accountsPaginated: AccountDto[] =[];
+    let accountsPaginated = accounts;
 
-    if(pagination) {
-      return accountsPaginated = accounts.slice(pagination.offset, pagination.limit);
+    if(pagination?.offset) {
+      return accountsPaginated = accountsPaginated.slice(pagination.offset, pagination.limit || undefined);;
     }
-    return accounts;
+    return accountsPaginated;
   }
 
   /**
    * Obtener una cuenta por id
    */
-  findOneAccountById(id: string): AccountDto {
+  findOneAccountById(id: string): AccountEntity {
     const account = this.accountRepository.findOneById(id);
     return account;
   }
@@ -167,7 +168,91 @@ export class AccountService {
   /**
    * Actualizar información de una cuenta
    */
-  updatedAccount(id: string, account: AccountDto): AccountEntity {
-    return this.accountRepository.update(id, account);
+  updatedAccount(id: string, account: UpdateAccountDto): AccountEntity {
+    let accountUpdated  = this.accountRepository.findOneById(id);
+
+    if(account.accountType) {
+      const accountTypeExisting = this.accountTypeRepository.findOneById(account.accountType);
+
+      if(accountTypeExisting.state === false) throw new NotFoundException('Accountype is not available');
+
+      accountUpdated.accountType = accountTypeExisting;
+    }
+    if(account.customer) {
+      const customerExisting = this.customerRepository.findOneById(account.customer);
+      if(customerExisting.state === false) throw new NotFoundException('Customer is not available');
+
+      accountUpdated.customer = customerExisting;
+    }
+    if(account.balance) {
+      accountUpdated.balance = account.balance;
+    }
+    if(account.deletedAt) {
+      accountUpdated.deletedAt = account.deletedAt;
+    }
+    if(account.state != undefined) {
+      accountUpdated.state = account.state;
+    }
+    return this.accountRepository.update(id, accountUpdated);
+  }
+
+
+  findAccountsByState(state: boolean): AccountEntity[] {
+    return this.accountRepository.findByState(state);
+  }
+
+  findAccountsByCustomer(customerId: string): AccountEntity[] {
+    return this.accountRepository.findByCustomer(customerId);
+
+  }findAccountsByAccountType(accountType: string): AccountEntity[] {
+    return this.accountRepository.findByAccountType(accountType);
+  }
+
+
+  createAccountType(dto: AccountTypeDto): AccountTypeEntity {
+    let newAccountType = new AccountTypeEntity();
+
+    newAccountType.name = dto.name;
+    if(dto.state != undefined) newAccountType.state = dto.state;
+
+    this.accountTypeRepository.register(newAccountType)
+    
+    return newAccountType;
+  }
+
+  updateAccountType(id: string, dto: AccountTypeDto | PatchAccountTypeDto): AccountTypeEntity {
+    let accountTypeUpdated = this.accountTypeRepository.findOneById(id);
+    if(dto.name) accountTypeUpdated.name = dto.name;
+    if(dto.state != undefined) accountTypeUpdated.state = dto.state;
+
+    return this.accountTypeRepository.update(id, accountTypeUpdated);
+  }
+
+  deleteAccountType(id: string): string {
+    this.accountTypeRepository.delete(id);
+    return 'Account type was successfully deleted';
+  }
+
+  findAllAccountTypes(pagination?: PaginationDto): AccountTypeEntity[] {
+    let allAccountTypes = this.accountTypeRepository.findAll();
+
+    let accountTypesFiltered = allAccountTypes;
+
+    if(pagination?.offset) {
+      accountTypesFiltered = accountTypesFiltered.slice(pagination.offset, pagination.limit || undefined);
+    }
+    return accountTypesFiltered;
+  }
+
+  findOneAccountType(id: string): AccountTypeEntity {
+    return this.accountTypeRepository.findOneById(id);
+  }
+
+  findAccountTypesByState(state: boolean): AccountTypeEntity[] {
+    return this.accountTypeRepository.findByState(state);
+  }
+  
+  findAccountTypesByName(name: string): AccountTypeEntity[] {
+    return this.accountTypeRepository.findByName(name);
   }
 }

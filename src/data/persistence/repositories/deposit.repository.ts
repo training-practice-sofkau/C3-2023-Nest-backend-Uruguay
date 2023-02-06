@@ -15,7 +15,7 @@ export class DepositRepository
         return this.database.at(-1) ?? entity;
     }
 
-    update(id: string, entity: DepositDto): DepositEntity {
+    update(id: string, entity: DepositEntity): DepositEntity {
         const indexCurrentEntity = this.database.findIndex(
             (item) => item.id === id && typeof item.deletedAt === 'undefined'
         );
@@ -27,22 +27,32 @@ export class DepositRepository
           } as DepositEntity;
       }
 
-    delete(id: string, soft?: boolean): void {
+    delete(id: string, soft?: boolean): string {
         const indexCurrentEntity = this.database.findIndex(
             (item) => item.id === id && typeof item.deletedAt === 'undefined'
         );
         if(indexCurrentEntity === -1) throw new NotFoundException();
-        soft ?
-        this.softDelete(indexCurrentEntity) :
-        this.hardDelete(indexCurrentEntity);
+        
+        if(soft) {
+            return this.softDelete(indexCurrentEntity);
+        }
+        return this.hardDelete(indexCurrentEntity);
     }
 
-    private hardDelete(index: number): void {
-        this.database.splice(index, 1);
+    private hardDelete(index: number): string {
+        try {
+            this.database.splice(index, 1);
+        } catch (error) {
+            return 'The deposit could not be deleted';
+        }
+        return 'The deposit was successfully deleted';
     }
 
-    private softDelete(index: number): void {
+    private softDelete(index: number): string {
         this.database[index].deletedAt = Date.now();
+
+        if(this.database[index].deletedAt) return 'The deposit was successfully soft deleted'
+        return 'The deposit could not be soft deleted';
     }
 
     findAll(): DepositEntity[] {
@@ -59,7 +69,7 @@ export class DepositRepository
 
     findByAccountId(accountId: string): DepositEntity[] {
         const currentEntities = this.database.filter(
-            (item) => item.id === accountId && typeof item.deletedAt === 'undefined');
+            (item) => item.account.id === accountId && typeof item.deletedAt === 'undefined');
         if (currentEntities) return currentEntities;
         throw new NotFoundException();
     }
@@ -69,8 +79,8 @@ export class DepositRepository
         dateEnd: Date | number,
     ): DepositEntity[] {
         const deposits = this.database.filter(
-            (deposit) => deposit.dateTime <= dateInit
-            && deposit.dateTime >= dateEnd
+            (deposit) => deposit.dateTime >= dateInit
+            && deposit.dateTime <= dateEnd
             && typeof deposit.deletedAt === 'undefined');
         if (deposits) return deposits;
         throw new NotFoundException();

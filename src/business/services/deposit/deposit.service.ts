@@ -1,44 +1,55 @@
 import { Injectable } from '@nestjs/common';
 
-import { DataRangeModel, PaginationModel } from '../../../data/models/';
-import { DepositRepository } from '../../../data//persistence/repositories';
+import { AccountRepository, DepositRepository } from '../../../data//persistence/repositories';
 import { DepositEntity } from '../../../data/persistence/entities';
-import { DepositDto } from '../../dtos';
+import { DataRangeDto, DepositDto, PaginationDto } from '../../dtos';
 
 @Injectable()
 export class DepositService {
-  constructor(private readonly depositRepository: DepositRepository) {}
+  constructor(
+    private readonly depositRepository: DepositRepository,
+    private readonly accountRepository: AccountRepository) {}
 
   /**
    * Crear un deposito
    */
   createDeposit(deposit: DepositDto): DepositEntity {
-    const newDeposit = new DepositEntity();
-    newDeposit.account = deposit.account;
+    let newDeposit = new DepositEntity();
+    newDeposit.account = this.accountRepository.findOneById(deposit.account);
     newDeposit.amount = deposit.amount;
 
-    return this.depositRepository.register(newDeposit);
+    this.depositRepository.register(newDeposit)
+    
+    let accountUpdated = newDeposit.account
+    accountUpdated.balance += deposit.amount;
+    this.accountRepository.update(accountUpdated.id, accountUpdated);
+
+    return newDeposit;
   }
 
   /**
    * Actualizar un deposito
    */
   updateDeposit(id: string, newDeposit: DepositDto): DepositEntity {
-    return this.depositRepository.update(id, newDeposit);
+    let depositUpdated = this.depositRepository.findOneById(id);
+    if(newDeposit.account) depositUpdated.account = this.accountRepository.findOneById(newDeposit.account);
+    if(newDeposit.amount) depositUpdated.amount = newDeposit.amount;
+    
+    return this.depositRepository.update(id, depositUpdated);
   }
 
   /**
    * Borrar un deposito
    */
-  deleteDeposit(depositId: string): void {
-    this.depositRepository.delete(depositId);
+  deleteDeposit(depositId: string): string {
+    return this.depositRepository.delete(depositId);
   }
   
   /**
    * Borrar un deposito de forma lógica
    */
-  softDeleteDeposit(depositId: string): void {
-    this.depositRepository.delete(depositId, true);
+  softDeleteDeposit(depositId: string): string {
+    return this.depositRepository.delete(depositId, true);
   }
 
   /**
@@ -46,16 +57,44 @@ export class DepositService {
    */
   getHistory(
     accountId: string,
-    pagination?: PaginationModel,
-    dataRange?: DataRangeModel,
+    pagination?: PaginationDto,
+    dataRange?: DataRangeDto,
   ): DepositEntity[] {
-    let deposits = this.depositRepository.findAll();
-    let depositsOfAccount = deposits.filter(deposit => deposit.account.id === accountId)
-    let depositsPaginated: DepositEntity[] = [];
+    let depositsOfAccount = this.depositRepository.findByAccountId(accountId);
+    let depositsFiltered = depositsOfAccount;
 
-    if(pagination) {
-      return depositsPaginated = depositsOfAccount.slice(pagination.offset, pagination.limit);
+    if(pagination?.offset) {
+      depositsFiltered = depositsFiltered.slice(pagination.offset, pagination.limit || undefined);
     }
-    return depositsOfAccount;
+
+    if(dataRange?.start && dataRange.end) {
+      if(dataRange.start instanceof Date) dataRange.start = dataRange.start.getTime();
+      if(dataRange.end instanceof Date) dataRange.end = dataRange.end.getTime();
+
+      depositsFiltered = depositsFiltered.filter(
+        deposit => deposit.dateTime >= dataRange.start && deposit.dateTime <= dataRange.end
+        );
+    }
+    return depositsFiltered;
+  }
+
+  getAllDeposits(pagination?: PaginationDto): DepositEntity[] {
+      let allDeposits = this.depositRepository.findAll();
+
+      let depositsFiltered = allDeposits;
+      
+      if(pagination?.offset) {
+        depositsFiltered = depositsFiltered.slice(pagination.offset, pagination.limit || undefined);
+      }
+
+      return depositsFiltered;
+  }
+
+  getOneDepositById(depositId: string): DepositEntity {
+    return this.depositRepository.findOneById(depositId);
+  }
+
+  getHistoryByDataRange(dateInit: Date | number, dateEnd: Date | number): DepositEntity[] {
+    return this.depositRepository.findByDataRange(dateInit, dateEnd);
   }
 }
